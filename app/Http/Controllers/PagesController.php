@@ -79,10 +79,7 @@ class PagesController extends Controller
             } else {
                 $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->get();
             }
-        }
-        $blog_posts = DB::connection('mysql2')->select('select * from wp_posts where post_type="post" ORDER BY post_date DESC LIMIT 3');
-        $blog_posts_attachments = DB::connection('mysql2')->select('select * from wp_posts where post_type="attachment"');
-        
+        }        
 
         $BannerCities = ['Adelaide', 'Auckland', 'Brisbane', 'Canberra', 'Darwin', 'Hobart', 'Melbourne', 'Perth', 'Sydney'];
         $siteConfiguration = SiteConfiguration::all();
@@ -117,7 +114,7 @@ class PagesController extends Controller
         
         $testimonials = Testimonial::where('project_site', url())->get();
         $isiosDevice = stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'iphone');
-        return view('pages.home', compact('geoIpArray', 'investments', 'investors', 'projects', 'BannerCities', 'blog_posts', 'blog_posts_attachments', 'currentUserRole', 'siteConfiguration','color', 'admin_access', 'testimonials', 'isiosDevice', 'ebConfiguration'));
+        return view('pages.home', compact('geoIpArray', 'investments', 'investors', 'projects', 'BannerCities', 'currentUserRole', 'siteConfiguration','color', 'admin_access', 'testimonials', 'isiosDevice', 'ebConfiguration'));
     }
 
     /**
