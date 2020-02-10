@@ -47,7 +47,7 @@ class Admin
             }
             else{
                 if(!$user->roles->contains('role', 'master')){
-                    if($user->email == "info@estatebaron.com"){
+                    if($user->email == "info@konkrete.io"){
 
                     }
                     else{

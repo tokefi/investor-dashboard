@@ -22,7 +22,7 @@ class SendInvestorNotificationEmail extends Job implements SelfHandling, ShouldQ
 {
     use InteractsWithQueue, SerializesModels;
     protected $mailer;
-    protected $from = 'info@estatebaron.com';
+    protected $from = 'info@konkrete.io';
     protected $to;
     protected $bcc;
     protected $view;

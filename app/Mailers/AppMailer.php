@@ -22,7 +22,7 @@ class AppMailer
     }
 
     protected $mailer;
-    protected $from = 'info@estatebaron.com';
+    protected $from = 'info@konkrete.io';
     protected $to;
     protected $bcc;
     protected $view;
@@ -93,7 +93,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.regNotification';
         $this->subject = 'New User Sign Up '.$investor->first_name.' '.$investor->last_name.' '.$investor->phone_number;
@@ -111,7 +110,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.regNotificationOther';
         $this->subject = 'New User Sign Up '.$investor->first_name.' '.$investor->last_name.' '.$investor->phone_number;
@@ -129,7 +127,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.admin';
         $this->subject = 'Application Received for '.$project->title;
@@ -147,7 +144,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.subdivide';
         $this->subject = 'Received a subdivide request';
@@ -164,7 +160,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.projectSubmit';
         $this->subject = 'New Project Submitted';
@@ -182,7 +177,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.idVerification';
         $this->subject = 'Received an verification request';
@@ -273,7 +267,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.adminInvoice';
         if($investment->project->share_vs_unit) {
@@ -353,7 +346,6 @@ class AppMailer
                 array_push($recipients, $user->email);
             }
         }
-        $this->bcc = 'abhi.mahavarkar@gmail.com';
         $this->to = $recipients;
         $this->view = 'emails.upcomingProjectInterestNotification';
         $this->subject = 'User Expressed Interest in '.$project->title;

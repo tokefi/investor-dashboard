@@ -470,7 +470,7 @@ Configuration | Dashboard | @parent
                                 </label>
                             </div>
                             <div class="col-md-10">
-                                {!! Form::text('from', null, array('placeholder'=>'Enter MAIL_FROM (info@estatebaron.com)', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'mail_from','required' => 'required')) !!}
+                                {!! Form::text('from', null, array('placeholder'=>'Enter MAIL_FROM (info@konkrete.io)', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'mail_from','required' => 'required')) !!}
                                 {!! $errors->first('from', '<small class="text-danger">:message</small>') !!}
                                 <br>
                             </div>
@@ -482,7 +482,7 @@ Configuration | Dashboard | @parent
                                 </label>
                             </div>
                             <div class="col-md-4">
-                                {!! Form::text('username', null, array('placeholder'=>'Enter email (info@estatebaron.com)', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'mail_username','required' => 'required')) !!}
+                                {!! Form::text('username', null, array('placeholder'=>'Enter email (info@konkrete.io)', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'mail_username','required' => 'required')) !!}
                                 {!! $errors->first('username', '<small class="text-danger">:message</small>') !!}
                                 <br>
                             </div>

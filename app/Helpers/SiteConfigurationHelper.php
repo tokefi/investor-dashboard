@@ -44,7 +44,7 @@ class SiteConfigurationHelper
 
     public static function overrideMailerConfig()
     {
-        $from = 'info@estatebaron.com';
+        $from = 'info@konkrete.io';
         $siteconfig = SiteConfigurationHelper::getConfigurationAttr();
         $config = $siteconfig->mailSetting()->first();
         if($config) {

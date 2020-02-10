@@ -586,7 +586,7 @@ class DashboardController extends Controller
         $setupEmail = isset($mailSettings->from) ? $mailSettings->from : (\Config::get('mail.from.address'));
         $setupEmailName = $siteConfiguration->title_text ? $siteConfiguration->title_text : (\Config::get('mail.from.name'));
 
-        if($setupEmail == "info@estatebaron.com") {
+        if($setupEmail == "info@konkrete.io") {
             Session::flash('message', '<div class="alert alert-danger text-center">Please setup your email configurations first. <br>You can do that from <b><a href="'.route('dashboard.configurations').'">Configurations tab</a> > Mailer Email</b>.</div>');
             return redirect()->back();
         }
@@ -1049,7 +1049,7 @@ class DashboardController extends Controller
         if(filter_var(\Config::get('mail.sendmail'), FILTER_VALIDATE_EMAIL)){
             $fromMail = \Config::get('mail.sendmail');
         } else{
-            $fromMail = 'info@estatebaron.com';
+            $fromMail = 'info@konkrete.io';
         }
 
         //Disable SSL Check
@@ -1550,7 +1550,7 @@ class DashboardController extends Controller
         // START: Don't allow using this functionality unless admin sets his own mailer settings.
         $mailSettings = $this->siteConfiguration->mailSetting()->first();
         $setupEmail = isset($mailSettings->from) ? $mailSettings->from : (\Config::get('mail.from.address'));
-        if($setupEmail == "info@estatebaron.com") {
+        if($setupEmail == "info@konkrete.io") {
             Session::flash('message', '<div class="alert alert-danger text-center">Please setup your email configurations first. <br>You can do that from <b><a href="'.route('dashboard.configurations').'">Configurations tab</a> > Mailer Email</b>.</div>');
             return redirect()->back();
         }

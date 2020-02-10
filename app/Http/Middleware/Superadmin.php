@@ -32,7 +32,7 @@ class Superadmin
                 }
             }
             else{
-                if($user->email == "info@estatebaron.com"){
+                if($user->email == "info@konkrete.io"){
                 }
                 else{
                     if($user->registration_site != url()){
