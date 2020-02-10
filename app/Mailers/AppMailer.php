@@ -544,7 +544,7 @@ class AppMailer
             $this->overrideMailerConfig();
         }
         $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron')->to($this->to)->subject($this->subject);
+            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->subject($this->subject);
         });
     }
 
@@ -556,7 +556,7 @@ class AppMailer
             $this->overrideMailerConfig();
         }
         $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron')->to($this->to)->subject($this->subject)->attach($this->pathToFile);
+            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->subject($this->subject)->attach($this->pathToFile);
         });
     }
 
@@ -568,7 +568,7 @@ class AppMailer
             $this->overrideMailerConfig();
         }
         $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron')->to($this->to)->bcc($this->bcc)->subject($this->subject);
+            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->bcc($this->bcc)->subject($this->subject);
         });
     }
 }
