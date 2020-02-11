@@ -938,15 +938,11 @@ class SiteConfigurationsController extends Controller
     {
         $this->validate($request, array(
             'funding_section_title1' => 'required',
-            'funding_section_title2' => 'required',
             'funding_section_btn1_text' => 'required',
-            'funding_section_btn2_text' => 'required',
         ));
         SiteConfiguration::where('project_site', url())->first()->update([
             'funding_section_title1' => trim(preg_replace('/\s+/', ' ', $request->funding_section_title1)),
-            'funding_section_title2' => trim(preg_replace('/\s+/', ' ', $request->funding_section_title2)),
             'funding_section_btn1_text' => $request->funding_section_btn1_text,
-            'funding_section_btn2_text' => $request->funding_section_btn2_text,
         ]);
         return redirect()->back();
     }
