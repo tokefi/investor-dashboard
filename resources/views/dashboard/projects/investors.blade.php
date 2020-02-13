@@ -245,9 +245,12 @@
 												<td>@if($investment->wholesaleInvestment)<a href="#" data-toggle="modal" data-target="#trigger{{$investment->wholesaleInvestment->investment_investor_id}}">Investment Info</a> @else NA @endif</td>
 												@endif
 												<td>
-													<a href="{{route('dashboard.project.application', [$investment->id])}}" target="_blank">
-														View Application Form
+													<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
+														Application form
 													</a>
+													{{-- <a href="{{route('dashboard.project.application', [$investment->id])}}" target="_blank">
+														View Application Form
+													</a> --}}
 												</td>
 												<td>
 													@if($investment->interested_to_buy) Yes @else No @endif
