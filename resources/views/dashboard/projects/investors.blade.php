@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <style type="text/css">
-	.dividend-confirm-table td{ padding: 10px 20px; }
-	.dividend-confirm-table{ margin-left:auto;margin-right:auto; }
+	.dividend-confirm-table td, .repurchase-confirm-table td{ padding: 10px 20px; }
+	.dividend-confirm-table, .repurchase-confirm-table{ margin-left:auto;margin-right:auto; }
 	.success-icon {
 		border: 1px solid;
 		padding: 2px;
@@ -343,7 +343,7 @@
 					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<!-- <ul class="list-group">Hello</ul> -->
 						<div class="share-registry-actions">
-							<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>
+							{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
 							<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
 							<button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button>
 						</div>
@@ -352,12 +352,12 @@
 							<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
 							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 						</form>
-						<form action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
+						<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
 							{{csrf_field()}}
 							<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> %  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
 							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 						</form>
-						<form action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
+						<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
 							{{csrf_field()}}
 							<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
 							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
@@ -653,6 +653,86 @@
 		</div>
 	</div>
 </div>
+
+<!--Fixed Dividend confirm Modal -->
+<div id="fixed_dividend_confirm_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:90%;">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">CONFIRM FIXED DIVIDEND</h4>
+			</div>
+			<div class="modal-body" style="padding: 15px 30px;">
+				<p class="text-center">
+					<i><small>** Please check and confirm the below dividend details.</small></i>
+				</p><br>
+				<div class="text-center">
+					<h2>{{$project->title}}</h2>
+					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+				</div><br>
+				<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
+					<tbody>
+						<tr>
+							<td><b>Dividend Rate: </b></td>
+							<td><small><span id="modal_fixed_dividend_rate"></span>%</small></td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<h2 class="text-center">Dividend calculation preview</h2><br>
+				<div id="fixed_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+					<!-- Render through JS -->
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="submit_fixed_dividend_confirmation">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Rupurchase confirm Modal -->
+<div id="repurchase_confirm_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:90%;">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">CONFIRM REPURCHASE</h4>
+			</div>
+			<div class="modal-body" style="padding: 15px 30px;">
+				<p class="text-center">
+					<i><small>** Please check and confirm the below repurchase details.</small></i>
+				</p><br>
+				<div class="text-center">
+					<h2>{{$project->title}}</h2>
+					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+				</div><br>
+				<table class="table-striped repurchase-confirm-table" border="0" cellpadding="10">
+					<tbody>
+						<tr>
+							<td><b>Repurchase Rate: </b></td>
+							<td><small><span id="modal_repurchase_rate"></span>$</small></td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<h2 class="text-center">Repurchase calculation preview</h2><br>
+				<div id="repurchase_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+					<!-- Render through JS -->
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="submit_repurchase_confirmation">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 @stop
 
 @section('js-section')
@@ -901,6 +981,19 @@
 		// Submit dividend form
 		$('#submit_dividend_confirmation').on('click', function(e) {
 			$('#declare_dividend_form').submit();
+			$('.loader-overlay').show();
+		});
+
+		// Submit Fixed dividend form
+		$('#submit_fixed_dividend_confirmation').on('click', function(e) {
+			$('#declare_fixed_dividend_form').submit();
+			$('.loader-overlay').show();
+		});
+
+		// Submit repurchase form
+		$('#submit_repurchase_confirmation').on('click', function(e) {
+			$('#declare_repurchase_form').submit();
+			$('.loader-overlay').show();
 		});
 
 		// Apply date picker to html elements to select date
@@ -969,40 +1062,104 @@
 	// Declare fixed dividend
 	function declareFixedDividend(){
 		$('.declare-fixed-dividend-btn').click(function(e){
+			e.preventDefault();
 			var dividendPercent = $('#fixed_dividend_percent').val();
 			dividendPercent = dividendPercent.toString();
 			var investorsList = $('.investors-list').val();
+			var project_id = {{$project->id}};
 
 			if(dividendPercent == ''){
-				e.preventDefault();
 				alert('Before declaration please enter dividend percent.');
+				return;
 			}
 			else {
 				if(investorsList == ''){
-					e.preventDefault();
 					alert('Please select atleast one @if($project->share_vs_unit) share @else unit @endif registry record.');
+					return;
 				}
 			}
+
+			// Show confirm box
+			$('.loader-overlay').show();
+			$.ajax({
+				url: '/dashboard/projects/'+project_id+'/investment/previewFixedDividend',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {
+					investors_list: investorsList,
+					dividend_percent: dividendPercent
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+			}).done(function(data){
+				$('.loader-overlay').hide();
+				if(data.status) {
+					$('#fixed_dividend_calculation_preview_table').html(data.data);
+
+					$('#modal_fixed_dividend_rate').html(dividendPercent);
+					
+					$('#fixed_dividend_confirm_modal').modal({
+						keyboard: false,
+						backdrop: 'static'
+					});
+
+				} else {
+					alert(data.message);
+				}
+			});
 		});
 	}
 
 	// repurchase shares
 	function repurchaseShares(){
 		$('.declare-repurchase-btn').click(function(e){
+			e.preventDefault();
 			var repurchaseRate = $('#repurchase_rate').val();
 			repurchaseRate = repurchaseRate.toString();
 			var investorsList = $('.investors-list').val();
-
+			var project_id = '{{$project->id}}';
+			
 			if(repurchaseRate == ''){
-				e.preventDefault();
 				alert('Before declaration please enter repurchase rate.');
+				return;
 			}
 			else {
 				if(investorsList == ''){
-					e.preventDefault();
 					alert('Please select atleast one @if($project->share_vs_unit) share @else unit @endif registry record.');
+					return;
 				}
 			}
+
+			//Show confirm box
+			$('.loader-overlay').show();
+			$.ajax({
+				url: '/dashboard/projects/'+project_id+'/investment/previewrepurchase',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {
+					investors_list: investorsList,
+					repurchase_rate: repurchaseRate
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+			}).done(function(data){
+				$('.loader-overlay').hide();
+				if(data.status) {
+					$('#repurchase_calculation_preview_table').html(data.data);
+
+					$('#modal_repurchase_rate').html(repurchaseRate);
+					
+					$('#repurchase_confirm_modal').modal({
+						keyboard: false,
+						backdrop: 'static'
+					});
+
+				} else {
+					alert(data.message);
+				}
+			});
 		});
 	}
 

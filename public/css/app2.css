@@ -651,13 +651,13 @@ input[type="radio"] {
   z-index: 10000;
   background-color: rgba(255,255,255,0.3); /*dim the background*/
 }
-.overlay-loader-image{
-	top: 40%;
-    left: 45%;
-    position: absolute;
-}
 #loader-image{
-	width: 100%;
+	position: fixed;
+    height: 64px;
+    width: 64px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 .edit-img-button-style{
 	width: 35px;

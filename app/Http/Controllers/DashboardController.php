@@ -1711,4 +1711,75 @@ class DashboardController extends Controller
             'data' => $tableContent
         ]);
     }
+
+    public function getFixedDividendPreviewData(Request $request, $projectId)
+    {
+        $investorList = $request->investors_list;
+        $dividendPercent = $request->dividend_percent;
+        $project = Project::findOrFail($projectId);
+
+        $tableContent = '';
+
+        if($investorList != '') {
+            $investors = explode(',', $investorList);
+            $investments = InvestmentInvestor::findMany($investors);
+            $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
+
+            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
+            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Investor Dividend amount</td></tr></thead>';
+            $tableContent .= '<tbody>';
+
+            foreach ($investments as $key => $investment) {
+                $investorAc = ($investment->investingJoint) ? $investment->investingJoint->account_name : $investment->user->account_name;
+                $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
+                $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
+                $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->amount . '<br></td><td>' . round($investment->amount * ((int)$dividendPercent/100)) . '<br></td></tr>';
+            }
+
+            $tableContent .= '</tbody></table>';
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successful.',
+            'data' => $tableContent
+        ]);
+    }
+
+    public function getRepurchasePreviewData(Request $request, $projectId) {
+        $investorList = $request->investors_list;
+        $repurchaseRate = $request->repurchase_rate;
+        $project = Project::findOrFail($projectId);
+
+        $tableContent = '';
+
+        if($investorList != '') {
+            $investors = explode(',', $investorList);
+            $investments = InvestmentInvestor::findMany($investors);
+            $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
+
+            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
+            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Investor Repurchase amount</td></tr></thead>';
+            $tableContent .= '<tbody>';
+
+            foreach ($investments as $key => $investment) {
+                $investorAc = ($investment->investingJoint) ? $investment->investingJoint->account_name : $investment->user->account_name;
+                $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
+                $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
+                $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->amount . '<br></td><td>' . round($investment->amount * $repurchaseRate, 2) . '<br></td></tr>';
+            }
+
+            $tableContent .= '</tbody></table>';
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successful.',
+            'data' => $tableContent
+        ]);
+    }
 }
