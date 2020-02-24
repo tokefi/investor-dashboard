@@ -8,10 +8,10 @@
 <div class="container">
 	<br><br>
 	<div class="row">
-		<div class="col-md-2">
+		{{--<div class="col-md-2">
 			@include('dashboard.includes.sidebar', ['active'=>2])
-		</div>
-		<div class="col-md-10">
+		</div>--}}
+		<div class="col-md-12">
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif

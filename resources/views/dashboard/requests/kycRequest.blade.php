@@ -12,10 +12,10 @@ Projects | Dashboard | @parent
 <div class="container">
 	<br>
 	<div class="row">
-		<div class="col-md-2">
+		{{--<div class="col-md-2">
 			@include('dashboard.includes.sidebar', ['active'=>9])
-		</div>
-		<div class="col-md-10">
+		</div>--}}
+		<div class="col-md-12">
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped" id="requestsTable">
 					<thead>

@@ -10,10 +10,10 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 <div class="container">
 	<br>
 	<div class="row">
-		<div class="col-md-2">
+		{{--<div class="col-md-2">
 			@include('dashboard.includes.sidebar', ['active'=>1])
-		</div>
-		<div class="col-md-10 well">
+		</div>--}}
+		<div class="col-md-12 well">
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif

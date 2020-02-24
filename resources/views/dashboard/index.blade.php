@@ -8,10 +8,10 @@ Dashboard | @parent
 <div class="container">
 	<br>
 	<div class="row">
-		<div class="col-md-2">
+		{{--<div class="col-md-2">
 			@include('dashboard.includes.sidebar', ['active'=>1])
-		</div>
-		<div class="col-md-10">
+		</div>--}}
+		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-offset-1 col-md-10">
 					<div class="row" style="padding-top:1.2em;">
