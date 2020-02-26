@@ -680,12 +680,12 @@ class DashboardController extends Controller
                 $investments = InvestmentInvestor::findMany($investors);
 
                 // Add the records to project progress table
-                ProjectProg::create([
-                    'project_id' => $projectId,
-                    'updated_date' => Carbon::now(),
-                    'progress_description' => 'Dividend Declaration',
-                    'progress_details' => 'A Dividend of '.$dividendPercent.'% annualized for the duration between '.date('m-d-Y', strtotime($startDateFormatted)).' and '.date('m-d-Y', strtotime($endDateFormatted)).' has been declared.'
-                ]);
+                // ProjectProg::create([
+                //     'project_id' => $projectId,
+                //     'updated_date' => Carbon::now(),
+                //     'progress_description' => 'Dividend Declaration',
+                //     'progress_details' => 'A Dividend of '.$dividendPercent.'% annualized for the duration between '.date('m-d-Y', strtotime($startDateFormatted)).' and '.date('m-d-Y', strtotime($endDateFormatted)).' has been declared.'
+                // ]);
 
                 // send dividend email to admins
                 $csvPath = $this->exportDividendCSV($investments, $dividendPercent, $dateDiff, $project);
@@ -772,12 +772,12 @@ class DashboardController extends Controller
             $investments = InvestmentInvestor::findMany($investors);
 
             // Add the records to project progress table
-            ProjectProg::create([
-                'project_id' => $projectId,
-                'updated_date' => Carbon::now(),
-                'progress_description' => 'Fixed Dividend Declaration',
-                'progress_details' => 'A Fixed Dividend of '.$dividendPercent.'% has been declared.'
-            ]);
+            // ProjectProg::create([
+            //     'project_id' => $projectId,
+            //     'updated_date' => Carbon::now(),
+            //     'progress_description' => 'Fixed Dividend Declaration',
+            //     'progress_details' => 'A Fixed Dividend of '.$dividendPercent.'% has been declared.'
+            // ]);
 
             // send dividend email to admins
             $csvPath = $this->exportFixedDividendCSV($investments, $dividendPercent, $project);
@@ -874,19 +874,19 @@ class DashboardController extends Controller
 
             // Add the records to project progress table
             if($project->share_vs_unit) {
-                ProjectProg::create([
-                    'project_id' => $projectId,
-                    'updated_date' => Carbon::now(),
-                    'progress_description' => 'Repurchase Declaration',
-                    'progress_details' => 'Shares Repurchased by company at $'.$repurchaseRate.' per share.'
-                ]);
+                // ProjectProg::create([
+                //     'project_id' => $projectId,
+                //     'updated_date' => Carbon::now(),
+                //     'progress_description' => 'Repurchase Declaration',
+                //     'progress_details' => 'Shares Repurchased by company at $'.$repurchaseRate.' per share.'
+                // ]);
             }else {
-                ProjectProg::create([
-                    'project_id' => $projectId,
-                    'updated_date' => Carbon::now(),
-                    'progress_description' => 'Repurchase Declaration',
-                    'progress_details' => 'Units Repurchased by company at $'.$repurchaseRate.' per unit.'
-                ]);
+                // ProjectProg::create([
+                //     'project_id' => $projectId,
+                //     'updated_date' => Carbon::now(),
+                //     'progress_description' => 'Repurchase Declaration',
+                //     'progress_details' => 'Units Repurchased by company at $'.$repurchaseRate.' per unit.'
+                // ]);
             }
 
             // send dividend email to admins
