@@ -33,7 +33,7 @@ class BulkEmailHelper
             $email = new SendgridMail();
             $email->setFrom($setupEmail, $setupEmailName);
             $email->setSubject($subject);
-            $email->addTo($setupEmail);
+            $email->addTo('diggy@konkrete.io');
             $email->addContent("text/html", $content);
 
             foreach ($singleChunk as $personalization) {
