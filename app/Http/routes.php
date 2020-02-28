@@ -307,4 +307,5 @@ Route::post('/projects/prospectus', ['as'=>'projects.prospectus', 'uses'=>'Proje
 Route::get('/dashboard/prospectus/downloads', ['as'=>'dashboard.prospectus.downloads', 'uses'=>'DashboardController@prospectusDownloads']);
 Route::post('/dashboard/project/interest/link', ['as'=>'dashboard.project.interest.link', 'uses'=>'DashboardController@sendEoiLink']);
 Route::post('/dashboard/project/upload/offerdoc', ['as' => 'dashboard.upload.offerDoc', 'uses' => 'DashboardController@uploadOfferDoc']);
+Route::post('/configuration/project/editSharePerUnitPriceValue', ['as'=>'configuration.project.editSharePerUnitPriceValue', 'uses'=>'ProjectsController@editSharePerUnitPriceValue']);
 

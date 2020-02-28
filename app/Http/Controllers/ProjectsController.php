@@ -1078,4 +1078,18 @@ class ProjectsController extends Controller
             return $data;
         }
     }
+
+    public function editSharePerUnitPriceValue(Request $request)
+    {
+        // dd('hi',$request->projectId,$request->newLabelText,$request->effect);
+        $newLabelText = $request->newLabelText;
+        $projectId = $request->projectId;
+        $effectScope = $request->effect;
+        if($projectId!='' && $newLabelText!=''){
+            $projectConfiguration = Project::where('id',$projectId)->first();
+            // dd($projectConfiguration);
+            $projectConfiguration->update([$effectScope => $newLabelText]);
+            return array('status' => 1, 'newLabelText' => $newLabelText);
+        }
+    }
 }

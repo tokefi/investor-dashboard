@@ -24,44 +24,44 @@
 {!! Html::style('/assets/plugins/summernote/summernote.css') !!}
 @parent
 <style>
-#map {
-	height: 350px;
-}
-.blur {
-	color: transparent;
-	text-shadow: 0 0 5px rgba(0,0,0,0.9);
-	-webkit-filter: blur(5px);
-	-moz-filter: blur(5px);
-	-o-filter: blur(5px);
-	-ms-filter: blur(5px);
-	filter: blur(5px);
-}
-.btn-hover-default-color:hover{
-	color: #000 !important;
-}
-.edit-pencil-style{
-	padding: 6px 7px;
-	border: 2px solid #fff;
-	border-radius: 50px;
-	color: #fff;
-	cursor: pointer;
-}
-.btn-n1 {
-	color: white;
-}
-.btn-n1:hover {
-	color: black;
-}
-@media screen and (max-width: 768px) {
-	#terms_accepted_button{
-		font-size: 12px;
+	#map {
+		height: 350px;
 	}
-}
-@media screen and (max-width: 320px){
-	#terms_accepted_button{
-		font-size: 10px;
+	.blur {
+		color: transparent;
+		text-shadow: 0 0 5px rgba(0,0,0,0.9);
+		-webkit-filter: blur(5px);
+		-moz-filter: blur(5px);
+		-o-filter: blur(5px);
+		-ms-filter: blur(5px);
+		filter: blur(5px);
 	}
-}
+	.btn-hover-default-color:hover{
+		color: #000 !important;
+	}
+	.edit-pencil-style{
+		padding: 6px 7px;
+		border: 2px solid #fff;
+		border-radius: 50px;
+		color: #fff;
+		cursor: pointer;
+	}
+	.btn-n1 {
+		color: white;
+	}
+	.btn-n1:hover {
+		color: black;
+	}
+	@media screen and (max-width: 768px) {
+		#terms_accepted_button{
+			font-size: 12px;
+		}
+	}
+	@media screen and (max-width: 320px){
+		#terms_accepted_button{
+			font-size: 10px;
+		}
+	}
 </style>
 @stop
 
@@ -185,92 +185,96 @@
 							@endif
 							@endif
 							<div class="row text-left">
-								<div class="col-md-3 col-sm-3 col-xs-6" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif>
-								<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
+								<div class="col-md-2 col-sm-2 col-xs-4" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif">
+									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-4 " style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
+									<h4 class="font-bold @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-value @endif @endif" style="font-size:1.375em;color:#fff;" effect="share_per_unit_price">${{$project->share_per_unit_price}}</h4>
+									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_label_text">Share/Unit Price</h6>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-4 duration" style="@if(!$project->projectconfiguration->show_duration) display:none; @endif border-right: thin solid #ffffff;">
+									<h4 class="font-bold project-hold-period-field" style="font-size:1.375em;color:#fff;">{{$project->investment->hold_period}}</h4><h6 class="font-regular" style="font-size: 0.875em; color: #fff;">Months</h6>
+								</div>
+
+								@if(Auth::guest())
+								@else
+								@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
+								<div class="text-center">
+									<input type="checkbox" class="toggle-elements" action="expected_return" autocomplete="off" data-label-text="ExpectedReturn" data-size="mini" @if($project->projectconfiguration->show_expected_return) checked value="1" @else value="0" @endif>
+								</div>
+								@endif
+								@endif
+								<div class="col-md-3 col-sm-3 col-xs-6 expected_return" style="@if(!$project->projectconfiguration->show_expected_return) display:none; @endif @if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
+									<h4 class="font-bold project-returns-field" style="font-size:1.375em;color:#fff;">{{$project->investment->projected_returns}}%</h4>
+									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
+								</div>
+
+								<div class="col-md-3 col-sm-3 col-xs-6 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
+									<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
+										@if($project->investment) {{$number_of_investors}} @else ### @endif
+									</h4>
+									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Investors</h6>
+								</div>
+								@if(Auth::guest())
+								@else
+								@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
+								<div class="text-right">
+									<input type="checkbox" class="toggle-elements" action="project_investor_count" autocomplete="off" data-label-text="InvestorCount" data-size="mini" @if($project->projectconfiguration->show_project_investor_count) checked value="1" @else value="0" @endif>
+								</div>
+								@endif
+								@endif
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-6 duration" style="@if(!$project->projectconfiguration->show_duration) display:none; @endif border-right: thin solid #ffffff;>
-							<h4 class="font-bold project-hold-period-field" style="font-size:1.375em;color:#fff;">{{$project->investment->hold_period}}</h4><h6 class="font-regular" style="font-size: 0.875em; color: #fff;">Months</h6>
+							@endif
 						</div>
 
-						@if(Auth::guest())
-						@else
-						@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-						<div class="text-center">
-							<input type="checkbox" class="toggle-elements" action="expected_return" autocomplete="off" data-label-text="ExpectedReturn" data-size="mini" @if($project->projectconfiguration->show_expected_return) checked value="1" @else value="0" @endif>
-						</div>
-						@endif
-						@endif
-						<div class="col-md-3 col-sm-3 col-xs-6 expected_return" style="@if(!$project->projectconfiguration->show_expected_return) display:none; @endif @if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
-							<h4 class="font-bold project-returns-field" style="font-size:1.375em;color:#fff;">{{$project->investment->projected_returns}}%</h4>
-							<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
-						</div>
-
-						<div class="col-md-3 col-sm-3 col-xs-6 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
-							<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
-								@if($project->investment) {{$number_of_investors}} @else ### @endif
-							</h4>
-							<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Investors</h6>
+						<div class="project-progress-section" style="@if(!$project->projectconfiguration->show_project_progress) display: none; @endif">
+							<div class="progress" style="height:10px; border-radius:0px;background-color:#cccccc; margin: 10px 0 20px;">
+								<div class="progress-bar progress-bar-warning second_color_btn" role="progressbar" aria-valuenow="{{$completed_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{$completed_percent}}%">
+								</div>
+							</div>
+							<span class="font-regular" style="font-size:1em;color:#fff; margin-top:-10px;">
+								@if($project->investment)
+								${{number_format($pledged_amount)}} raised of $<span class="project-goal-amount-field">{{number_format($project->investment->goal_amount)}}</span>
+								@endif
+							</span>
 						</div>
 						@if(Auth::guest())
 						@else
 						@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
 						<div class="text-right">
-							<input type="checkbox" class="toggle-elements" action="project_investor_count" autocomplete="off" data-label-text="InvestorCount" data-size="mini" @if($project->projectconfiguration->show_project_investor_count) checked value="1" @else value="0" @endif>
+							<input type="checkbox" class="project-progress-switch" autocomplete="off" data-label-text="ShowProgress" data-size="mini" @if($project->projectconfiguration->show_project_progress) checked value="1" @else value="0" @endif>
 						</div>
 						@endif
 						@endif
 					</div>
-					@endif
-				</div>
-
-				<div class="project-progress-section" style="@if(!$project->projectconfiguration->show_project_progress) display: none; @endif">
-					<div class="progress" style="height:10px; border-radius:0px;background-color:#cccccc; margin: 10px 0 20px;">
-						<div class="progress-bar progress-bar-warning second_color_btn" role="progressbar" aria-valuenow="{{$completed_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{$completed_percent}}%">
-						</div>
-					</div>
-					<span class="font-regular" style="font-size:1em;color:#fff; margin-top:-10px;">
+					<div class="col-md-4 col-md-offset-3 project-invest-button-field" style="margin-top:0%;" id="express_interest">
+						<br>
 						@if($project->investment)
-						${{number_format($pledged_amount)}} raised of $<span class="project-goal-amount-field">{{number_format($project->investment->goal_amount)}}</span>
+						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
+							@if($project->is_funding_closed)
+							Funding Closed
+							@elseif($project->button_label)
+							<?php echo $project->button_label; ?>
+							@else
+							Invest Now
+							@endif
+						</b></a>
+						<h6><small style="font-size:0.85em; color:#fff;">* Note that this is a No Obligation Expression of interest, you get to review the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif before making any decisions</small></h6>
+						@else
+						<a href="{{route('projects.interest', [$project])}}" class="btn btn-block btn-primary" disabled>NO Investment Policy Yet</a>
 						@endif
-					</span>
+						@if(Auth::guest())
+						@else
+						@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
+						<div class="text-center hide" >
+							<input type="checkbox" class="project-payment-switch" action="payment_switch" autocomplete="off" data-label-text="PaymentMethod" data-size="mini" @if($project->projectconfiguration->payment_switch) checked value="1" @else value="0" @endif>
+						</div>
+						@endif
+						@endif
+					</div>
 				</div>
-				@if(Auth::guest())
-				@else
-				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-				<div class="text-right">
-					<input type="checkbox" class="project-progress-switch" autocomplete="off" data-label-text="ShowProgress" data-size="mini" @if($project->projectconfiguration->show_project_progress) checked value="1" @else value="0" @endif>
-				</div>
-				@endif
-				@endif
 			</div>
-			<div class="col-md-4 col-md-offset-3 project-invest-button-field" style="margin-top:0%;" id="express_interest">
-				<br>
-				@if($project->investment)
-				<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
-					@if($project->is_funding_closed)
-					Funding Closed
-					@elseif($project->button_label)
-					<?php echo $project->button_label; ?>
-					@else
-					Invest Now
-					@endif
-				</b></a>
-				<h6><small style="font-size:0.85em; color:#fff;">* Note that this is a No Obligation Expression of interest, you get to review the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif before making any decisions</small></h6>
-				@else
-				<a href="{{route('projects.interest', [$project])}}" class="btn btn-block btn-primary" disabled>NO Investment Policy Yet</a>
-				@endif
-				@if(Auth::guest())
-				@else
-				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-				<div class="text-center hide" >
-					<input type="checkbox" class="project-payment-switch" action="payment_switch" autocomplete="off" data-label-text="PaymentMethod" data-size="mini" @if($project->projectconfiguration->payment_switch) checked value="1" @else value="0" @endif>
-				</div>
-				@endif
-				@endif
-			</div>
-		</div>
-	</div>
-	<!-- 			<div class="offer-doclink"></div> -->
+			<!-- 			<div class="offer-doclink"></div> -->
 <!-- 			@if(Auth::guest())
 			@else
 			@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
@@ -1687,18 +1691,18 @@
 	</div>
 </section>
 <style type="text/css">
-.vote-input {
-	visibility:hidden;
-}
-.vote-input-label {
-	cursor: pointer;
-}
-.vote-input:checked + label {
-	color: red;
-}
-.vote-count {
-	display:inline;
-}
+	.vote-input {
+		visibility:hidden;
+	}
+	.vote-input-label {
+		cursor: pointer;
+	}
+	.vote-input:checked + label {
+		color: red;
+	}
+	.vote-count {
+		display:inline;
+	}
 </style>
 <section id="comments-list" class="chunk-box hide" style="padding-top:0px;">
 	<div class="container">
@@ -2254,6 +2258,7 @@
 		toggleProjectProgress();
 		toggleProjectElementsVisibiity();
 		editProjectPageLabelText();
+		editSharePerUnitPriceValue();
 		@if (Session::has('editable'))
 		setProjectDetailsEditable();
 		@endif
@@ -2915,6 +2920,45 @@ function deleteCarouselImage(){
 					$('.'+toggleAction).slideToggle();
 				}
 			});
+		});
+	}
+
+	function editSharePerUnitPriceValue(){
+		$('.edit-share-per-unit-price-value').click(function(){
+			var effect= $(this).attr('effect');
+			if(effect !=''){
+				if(effect == 'share_per_unit_price'){
+					$(this).html('$<input class="col-md-12" type="Integer" value="{{$project->share_per_unit_price}}" id="'+effect+'" style="color:#000; padding:0px;">');
+					$('#'+effect).select();
+				}
+				$('#'+effect).focusout(function(){
+					var baseElement = $(this);
+					var newLabelText = baseElement.val();
+					if(newLabelText != ''){
+						baseElement.css('border-color', '');
+						var projectId = '{{$project->id}}';
+						$('.loader-overlay').show();
+						$.ajax({
+							url: '/configuration/project/editSharePerUnitPriceValue',
+							type: 'POST',
+							dataType: 'JSON',
+							data: {effect, projectId, newLabelText},
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+							},
+						}).done(function(data){
+							console.log(data);
+							$('.loader-overlay').hide();
+							if(data.status){
+								baseElement.replaceWith(data.newLabelText);
+							}
+						});
+					} else {
+						$(this).css('border-color', '#ff0000');
+						$(this).focus();
+					}
+				});
+			}
 		});
 	}
 
