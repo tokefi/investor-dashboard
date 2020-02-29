@@ -1635,5 +1635,24 @@ class SiteConfigurationsController extends Controller
 
         return array('status' => true);
     }
+
+    public function editProjectShareUnitLabelText(Request $request)
+    {
+        $newLabelText = $request->newLabelText;
+        $projectId = $request->projectId;
+        $effectScope = $request->effect;
+        if($projectId!='' && $newLabelText!=''){
+            $projectConfigurationPartial = ProjectConfigurationPartial::where('project_id', (int)$projectId)->first();
+            if(!$projectConfigurationPartial)
+            {
+                $projectConfigurationPartial = new ProjectConfigurationPartial;
+                $projectConfigurationPartial->project_id = (int)$projectId;
+                $projectConfigurationPartial->save();
+                $projectConfigurationPartial = ProjectConfigurationPartial::where('project_id', (int)$projectId)->first();
+            }
+            $projectConfigurationPartial->update([$effectScope => $newLabelText]);
+            return array('status' => 1, 'newLabelText' => $newLabelText);
+        }
+    }
     
 }
