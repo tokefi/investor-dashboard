@@ -190,7 +190,7 @@
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 " style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
 									<h4 class="font-bold @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-value @endif @endif" style="font-size:1.375em;color:#fff;" effect="share_per_unit_price">${{$project->share_per_unit_price}}</h4>
-									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_label_text">Share/Unit Price</h6>
+									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 duration" style="@if(!$project->projectconfiguration->show_duration) display:none; @endif border-right: thin solid #ffffff;">
 									<h4 class="font-bold project-hold-period-field" style="font-size:1.375em;color:#fff;">{{$project->investment->hold_period}}</h4><h6 class="font-regular" style="font-size: 0.875em; color: #fff;">Months</h6>
@@ -2258,6 +2258,7 @@
 		toggleProjectProgress();
 		toggleProjectElementsVisibiity();
 		editProjectPageLabelText();
+		editProjectShareUnitLabelText();
 		editSharePerUnitPriceValue();
 		@if (Session::has('editable'))
 		setProjectDetailsEditable();
@@ -2940,6 +2941,45 @@ function deleteCarouselImage(){
 						$('.loader-overlay').show();
 						$.ajax({
 							url: '/configuration/project/editSharePerUnitPriceValue',
+							type: 'POST',
+							dataType: 'JSON',
+							data: {effect, projectId, newLabelText},
+							headers: {
+								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+							},
+						}).done(function(data){
+							console.log(data);
+							$('.loader-overlay').hide();
+							if(data.status){
+								baseElement.replaceWith(data.newLabelText);
+							}
+						});
+					} else {
+						$(this).css('border-color', '#ff0000');
+						$(this).focus();
+					}
+				});
+			}
+		});
+	}
+
+	function editProjectShareUnitLabelText(){
+		$('.edit-share-per-unit-price-text').click(function(){
+			var effect= $(this).attr('effect');
+			if(effect !=''){
+				if(effect == 'share_per_unit_price_label_text'){
+					$(this).html('<input class="col-md-12" type="text" value="{{$project->projectconfigurationpartial->share_per_unit_price_label_text }}" id="'+effect+'" style="color:#000; padding:0px;">');
+					$('#'+effect).select();
+				}
+				$('#'+effect).focusout(function(){
+					var baseElement = $(this);
+					var newLabelText = baseElement.val();
+					if(newLabelText != ''){
+						baseElement.css('border-color', '');
+						var projectId = '{{$project->id}}';
+						$('.loader-overlay').show();
+						$.ajax({
+							url: '/configuration/project/editProjectShareUnitLabelText',
 							type: 'POST',
 							dataType: 'JSON',
 							data: {effect, projectId, newLabelText},
