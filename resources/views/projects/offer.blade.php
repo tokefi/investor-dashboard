@@ -152,15 +152,15 @@ Offer Doc
 													This Application Form is important. If you are in doubt as to how to deal with it, please contact your professional adviser without delay. You should read the entire @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif carefully before completing this form. To meet the requirements of the Corporations Act, this Application Form must  not be distributed unless included in, or accompanied by, the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif.
 												</p>
 												<label>I/We apply for *</label>
-												<input type="number" name="amount_to_invest" class="form-control" onkeypress="return isNumber(event)" placeholder="Minimum Amount A${{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}" step="100" required value="@if(isset($eoi)) {{$eoi->investment_amount}} @endif">
+												<input type="number" name="amount_to_invest" class="form-control" onkeypress="return isNumber(event)" placeholder="Minimum Amount A {{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}" step="100" required value="@if(isset($eoi)) {{$eoi->investment_amount}} @endif">
 												@if($project->share_vs_unit == 1)
-												<h5>Number of Redeemable Preference Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												<h5>Number of Redeemable Preference Shares at ${{ $project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
 												@elseif($project->share_vs_unit == 2)
-												<h5>Number of Preference Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												<h5>Number of Preference Shares at ${{ $project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
 												@elseif($project->share_vs_unit == 3)
-												<h5>Number of Ordinary Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												<h5>Number of Ordinary Shares at ${{ $project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
 												@else
-												<h5>Number of Units at $1 per Unit or such lesser number of Units which may be allocated to me/us</h5>
+												<h5>Number of Units at ${{ $project->share_per_unit_price }} per Unit or such lesser number of Units which may be allocated to me/us</h5>
 												@endif
 												<label>I/We lodge full Application Money</label>
 												<input type="text" name="apply_for" class="form-control" placeholder="$5000" value="A$ @if(isset($eoi)) {{number_format(round($eoi->investment_amount, 2))}} @else 0.00 @endif" disabled="" style="width: 60%; background-color: #fff" id="application_money">
@@ -866,7 +866,8 @@ Offer Doc
 	$(document).ready(function(){
 		var qty=$("#apply_for");
 		qty.bind('keyup mouseup', function (){
-			var total='A$ '+qty.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			let value = qty.val() * parseFloat({{ $project->share_per_unit_price}});
+			var total='A$ '+value;
 			$("#application_money").val(total);
 		});
 	});

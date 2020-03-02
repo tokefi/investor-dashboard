@@ -136,6 +136,24 @@ $_SESSION['code'] = md5(microtime(true));
             text-decoration: underline !important;
         }
 
+        /** dropdown sub-menu */
+        .dropdown-submenu:hover>.dropdown-menu {
+            display: block;
+            min-width: 200px;
+        }
+        .dropdown-submenu {
+            position: relative;
+        }
+        .dashboard-submenu {
+            width: 240px;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        .dashboard-submenu li a {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
     </style>
 
     <!-- Google Analytics -->
@@ -220,7 +238,20 @@ $_SESSION['code'] = md5(microtime(true));
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master'))
-                            <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard</a></li>
+                            <li class="dropdown-submenu">
+                                <a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:5px 17px;">Dashboard <span class="caret"></span></a>
+                                <ul class="dropdown-menu dashboard-submenu">
+                                    <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
+                                </ul>
+                            </li>
                             @endif
                             <li class="nav-item"><a href="{{route('users.show',[Auth::user()])}}">Profile</a></li>
                             <li class="nav-item"><a href="{{route('users.logout')}}">Logout</a></li>
@@ -428,6 +459,11 @@ $_SESSION['code'] = md5(microtime(true));
         $('.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover').css('border-color', '#{{$color->heading_color}}');
         @endif
         @endif
+
+        /** dropdown submenu */
+        $('.dropdown-submenu .submenu-item').on('click', function(e) {
+            e.stopPropagation();
+        });
     });
     // function checkvalidi() {
     //     if ((document.getElementById('email').value != '')) {

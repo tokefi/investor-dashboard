@@ -142,6 +142,15 @@ $_SESSION['code'] = md5(microtime(true));
         .dropdown-submenu {
             position: relative;
         }
+        .dashboard-submenu {
+            width: 240px;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        .dashboard-submenu li a {
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
 
 
     </style>
@@ -228,7 +237,7 @@ $_SESSION['code'] = md5(microtime(true));
                             @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master'))
                             <li class="dropdown-submenu">
                                 <a class="submenu-item" tabindex="-1" href="javascript:void()">Dashboard <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu dashboard-submenu">
                                     <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li>
