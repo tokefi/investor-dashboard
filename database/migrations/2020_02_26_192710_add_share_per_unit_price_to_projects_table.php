@@ -13,7 +13,7 @@ class AddSharePerUnitPriceToProjectsTable extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->double('share_per_unit_price', 20,3)->default(1);
+            $table->double('share_per_unit_price', 20,2)->default(1);
         });
     }
 
