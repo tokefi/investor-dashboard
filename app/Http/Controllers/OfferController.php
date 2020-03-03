@@ -85,7 +85,7 @@ class OfferController extends Controller
             return redirect()->back()->withErrors(['Please enter amount in increments of $5 only']);
         }
         $validation_rules = array(
-            'amount_to_invest'   => 'required|integer',
+            'amount_to_invest'   => 'required|numeric',
             'line_1' => 'required',
             'state' => 'required',
             'postal_code' => 'required'
@@ -136,7 +136,7 @@ class OfferController extends Controller
         }else{
             $investingAs = $request->investing_as;
         }
-        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount,'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment]);
+        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment]);
         $investor = InvestmentInvestor::get()->last();
         if($user->idDoc != NULL && $user->idDoc->investing_as != 'Individual Investor'){
             $investing_joint = new InvestingJoint;
@@ -270,6 +270,8 @@ class OfferController extends Controller
     $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
     $this->dispatch(new SendReminderEmail($user,$project,$investor));
 
+    $amount = $amount * $project->share_per_unit_price;
+        
     return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'));
 }
 
