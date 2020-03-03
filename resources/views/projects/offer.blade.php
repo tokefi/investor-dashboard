@@ -866,7 +866,7 @@ Offer Doc
 	$(document).ready(function(){
 		let amount = $("#application_money");
 		amount.bind('keyup mouseup', function () {
-			let value = amount.val() / parseFloat({{ $project->share_per_unit_price}});
+			let value = (amount.val() / parseFloat({{ $project->share_per_unit_price}})).toFixed(2);
 			$("#apply_for").val(value);
 		});
 	});
