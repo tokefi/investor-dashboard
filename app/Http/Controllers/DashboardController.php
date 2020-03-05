@@ -1394,10 +1394,6 @@ class DashboardController extends Controller
         {
             return redirect()->back()->withErrors(['The amount to invest must be at least '.$min_amount_invest]);
         }
-        if((int)$request->amount_to_invest % 100 != 0)
-        {
-            return redirect()->back()->withErrors(['Please enter amount in increments of $100 only']);
-        }
         $validation_rules = array(
             'amount_to_invest'   => 'required|numeric',
             'line_1' => 'required',

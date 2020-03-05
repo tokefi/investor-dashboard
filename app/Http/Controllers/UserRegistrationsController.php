@@ -611,15 +611,10 @@ class UserRegistrationsController extends Controller
             if($request->request_form_project_id != NULL){
                 return redirect()->route('projects.interest.request',$request->project_id);
             }
-            dd('test');
             $min_amount_invest = $project->investment->minimum_accepted_amount;
             if((int)$request->investment_amount < (int)$min_amount_invest)
             {
                 return redirect()->back()->withErrors(['The amount to invest must be at least $'.$min_amount_invest]);
-            }
-            if((int)$request->investment_amount % 5 != 0)
-            {
-                return redirect()->back()->withErrors(['Please enter amount in increments of $5 only'])->withInput(['email'=>$request->email,'first_name'=>$request->first_name,'last_name'=>$request->last_name,'phone_number'=>$request->phone_number,'investment_amount'=>$request->investment_amount,'investment_period'=>$request->investment_period]);
             }
             if($project){
                 if($project->eoi_button && $request->eoi_project){
@@ -798,6 +793,8 @@ class UserRegistrationsController extends Controller
 
                     $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
                     $this->dispatch(new SendReminderEmail($user,$project,$investor));
+
+                    $amount = $amount * $project->share_per_unit_price;
 
                     return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'));
                 }
