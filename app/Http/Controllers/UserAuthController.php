@@ -201,15 +201,11 @@ class UserAuthController extends Controller
             {
                 return redirect()->back()->withErrors(['The amount to invest must be at least '.$min_amount_invest]);
             }
-            if((int)$request->amount_to_invest % 5 != 0)
-            {
-                return redirect()->back()->withErrors(['Please enter amount in increments of $5 only']);
-            }
             $validation_rules = array(
                 'joint_investor_id_doc'   => 'mimes:jpeg,jpg,png,pdf',
                 'trust_or_company_docs'   => 'mimes:jpeg,jpg,png,pdf',
                 'user_id_doc'   => 'mimes:jpeg,jpg,png,pdf',
-                'amount_to_invest'   => 'required|integer',
+                'amount_to_invest'   => 'required|numeric',
                 'line_1' => 'required',
                 'state' => 'required',
                 'postal_code' => 'required'
@@ -339,6 +335,7 @@ class UserAuthController extends Controller
         $investor->save();
         $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
         $this->dispatch(new SendReminderEmail($user,$project,$investor));
+        $amount = $amount * $project->share_per_unit_price;
         $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'))->render();
         return response()->json(array('success'=>true,'html'=>$viewHtml,'auth'=>$auth));
     }
