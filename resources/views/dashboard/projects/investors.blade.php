@@ -21,11 +21,18 @@
 		color: green;
 		margin-left: 0.8rem;
 	}
+	.issue-share-certi-btn, .money-received-btn {
+		white-space: pre-wrap !important;
+	}
+	#investorsTable, #shareRegistryTable, #transactionTable, #positionTable, #eoiTable, #expression_of_interest_table {
+		table-layout: fixed;
+    	word-wrap: break-word;
+	}
 </style>
 @stop
 
 @section('content-section')
-<div class="container">
+<div class="container-fluid">
 	<br>
 	<div class="row">
 		{{--<div class="col-md-2">
@@ -70,8 +77,6 @@
 								<th>Amount</th>
 								<th>Is Money Received</th>
 								<th>@if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
-								<th>Send Reminder Email</th>
-								<th>Investment Confirmation</th>
 								<th>Investor Document</th>
 								<th>Joint Investor</th>
 								<th>Company or Trust</th>
@@ -98,7 +103,7 @@
 												</a>
 												@endif
 												<td>
-													<div class="col-md-3 text-left">
+													<div class="text-left">
 														<a href="{{route('dashboard.users.show', [$investment->user_id])}}" >
 															<b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
 														</a>
@@ -106,10 +111,10 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2 text-right">{{$investment->created_at->toFormattedDateString()}}</div>
+													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
 												<td>
-													<div class="col-md-1">
+													<div class="">
 														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -121,7 +126,7 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2">
+													<div class="">
 														<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -134,7 +139,7 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2">
+													<div class="">
 														<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -148,47 +153,6 @@
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
 													</div>
-												</td>
-												<td>
-													@if($investment->money_received || $investment->accepted)
-													@else
-													<div class="col-md-1" style="text-align: right;">
-														@if(Session::has('action'))
-														@if(Session::get('action') == $investment->id)
-														<i class="fa fa-check" aria-hidden="true" style="color: #6db980;"></i>
-														@else
-														<a class="send-investment-reminder" href="{{route('dashboard.investment.reminder', [$investment->id])}}" style="cursor: pointer;" data-toggle="tooltip" title="Send Reminder"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
-														@endif
-														@else
-														<a class="send-investment-reminder" href="{{route('dashboard.investment.reminder', [$investment->id])}}" style="cursor: pointer;" data-toggle="tooltip" title="Send Reminder"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
-														@endif
-													</div>
-													@endif
-												</td>
-												<td>
-													@if($investment->money_received || $investment->accepted)
-													@else
-													<div class="col-md-1" style="text-align: right;">
-														<form action="{{route('dashboard.investment.confirmation', $investment->id)}}" method="POST" id="confirmationForm{{$investment->id}}">
-															{{method_field('PATCH')}}
-															{{csrf_field()}}
-															@if($investment->investment_confirmation == 1)
-															<span data-toggle="tooltip" title="Investment Confirmed"><i class="fa fa-check" aria-hidden="true" style="color: #6db980;"></i><i class="fa fa-money" aria-hidden="true" style="color: #6db980;"></i></span>
-															@else
-															<a id="confirmation{{$investment->id}}" data-toggle="tooltip" title="Investment Confirmation"><i class="fa fa-money" aria-hidden="true"></i></a>
-															<input class="hidden" name="investment_confirmation" value="1">
-															@endif
-															<input type="hidden" name="investor" value="{{$investment->user->id}}">
-														</form>
-														<script>
-															$(document).ready(function() {
-																$('#confirmation{{$investment->id}}').click(function(e){
-																	$('#confirmationForm{{$investment->id}}').submit();
-																});
-															});
-														</script>
-													</div>
-													@endif
 												</td>
 												<td>
 													@if($investment->userInvestmentDoc->where('type','normal_name')->last())
