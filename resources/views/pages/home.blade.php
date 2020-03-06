@@ -1095,7 +1095,7 @@
 					<br>
 					<div class="text-center funding-section-btn1-field" data-wow-duration="1.5s" data-wow-delay="0.4s">
 						<a id="second_color_venture" href="{{route('projects.create')}}" class="btn btn-default text-center font-regular second_color_btn btn-hover-default-color" style="padding: 8px 24px;font-size:22px;background-color:#fed405; border-radius:50px; letter-spacing:1px; color: #fff !important">
-							@if($siteConfiguration->funding_section_btn1_text != ''){!!$siteConfiguration->funding_section_btn1_text!!}@endif
+							@if($siteConfiguration->funding_section_btn1_text != ''){!!$siteConfiguration->funding_section_btn1_text!!} @else Submit Venture @endif
 						</a>
 					</div>
 					<br><br>
