@@ -123,13 +123,19 @@
 		}
 		.dashboard-submenu {
             width: 240px;
-            margin-top: 0;
             font-size: 16px;
         }
         .dashboard-submenu li a {
             padding-top: 5px;
             padding-bottom: 5px;
         }
+
+		@media (min-width: 768px) {
+			.dashboard-submenu {
+				margin-top: -36px;
+    			left: -237px !important;
+			}
+		}
 
 	</style>
 
