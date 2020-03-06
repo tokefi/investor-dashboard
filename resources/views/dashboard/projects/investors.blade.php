@@ -24,7 +24,7 @@
 	.issue-share-certi-btn, .money-received-btn {
 		white-space: pre-wrap !important;
 	}
-	#investorsTable, #shareRegistryTable, #transactionTable, #positionTable, #eoiTable, #expression_of_interest_table {
+	#investorsTable, #shareRegistryTable {
 		table-layout: fixed;
     	word-wrap: break-word;
 	}
