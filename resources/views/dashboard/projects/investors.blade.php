@@ -21,11 +21,25 @@
 		color: green;
 		margin-left: 0.8rem;
 	}
+	.issue-share-certi-btn, .money-received-btn {
+		word-wrap: break-word !important;
+		white-space: pre-wrap !important;
+	}
+
+	@media (min-width: 768px) {
+		.share-registry-table {
+			word-break: break-all;
+		}
+		.investors-table {
+			table-layout: fixed;
+			word-wrap: break-word;
+		}
+	}
 </style>
 @stop
 
 @section('content-section')
-<div class="container">
+<div class="container-fluid">
 	<br>
 	<div class="row">
 		{{--<div class="col-md-2">
@@ -61,7 +75,7 @@
 						}
 					</style>
 					<br><br>
-					<table class="table table-bordered table-striped" id="investorsTable" style="margin-top: 2em;">
+					<table class="table table-bordered table-striped investors-table" id="investorsTable" style="margin-top: 2em;">
 						<thead>
 							<tr>
 								<th>Unique ID</th>
@@ -70,8 +84,6 @@
 								<th>Amount</th>
 								<th>Is Money Received</th>
 								<th>@if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
-								<th>Send Reminder Email</th>
-								<th>Investment Confirmation</th>
 								<th>Investor Document</th>
 								<th>Joint Investor</th>
 								<th>Company or Trust</th>
@@ -98,7 +110,7 @@
 												</a>
 												@endif
 												<td>
-													<div class="col-md-3 text-left">
+													<div class="text-left">
 														<a href="{{route('dashboard.users.show', [$investment->user_id])}}" >
 															<b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
 														</a>
@@ -106,10 +118,10 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2 text-right">{{$investment->created_at->toFormattedDateString()}}</div>
+													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
 												<td>
-													<div class="col-md-1">
+													<div class="">
 														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -121,7 +133,7 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2">
+													<div class="">
 														<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -134,7 +146,7 @@
 													</div>
 												</td>
 												<td>
-													<div class="col-md-2">
+													<div class="">
 														<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -148,47 +160,6 @@
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
 													</div>
-												</td>
-												<td>
-													@if($investment->money_received || $investment->accepted)
-													@else
-													<div class="col-md-1" style="text-align: right;">
-														@if(Session::has('action'))
-														@if(Session::get('action') == $investment->id)
-														<i class="fa fa-check" aria-hidden="true" style="color: #6db980;"></i>
-														@else
-														<a class="send-investment-reminder" href="{{route('dashboard.investment.reminder', [$investment->id])}}" style="cursor: pointer;" data-toggle="tooltip" title="Send Reminder"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
-														@endif
-														@else
-														<a class="send-investment-reminder" href="{{route('dashboard.investment.reminder', [$investment->id])}}" style="cursor: pointer;" data-toggle="tooltip" title="Send Reminder"><i class="fa fa-clock-o" aria-hidden="true"></i></a>
-														@endif
-													</div>
-													@endif
-												</td>
-												<td>
-													@if($investment->money_received || $investment->accepted)
-													@else
-													<div class="col-md-1" style="text-align: right;">
-														<form action="{{route('dashboard.investment.confirmation', $investment->id)}}" method="POST" id="confirmationForm{{$investment->id}}">
-															{{method_field('PATCH')}}
-															{{csrf_field()}}
-															@if($investment->investment_confirmation == 1)
-															<span data-toggle="tooltip" title="Investment Confirmed"><i class="fa fa-check" aria-hidden="true" style="color: #6db980;"></i><i class="fa fa-money" aria-hidden="true" style="color: #6db980;"></i></span>
-															@else
-															<a id="confirmation{{$investment->id}}" data-toggle="tooltip" title="Investment Confirmation"><i class="fa fa-money" aria-hidden="true"></i></a>
-															<input class="hidden" name="investment_confirmation" value="1">
-															@endif
-															<input type="hidden" name="investor" value="{{$investment->user->id}}">
-														</form>
-														<script>
-															$(document).ready(function() {
-																$('#confirmation{{$investment->id}}').click(function(e){
-																	$('#confirmationForm{{$investment->id}}').submit();
-																});
-															});
-														</script>
-													</div>
-													@endif
 												</td>
 												<td>
 													@if($investment->userInvestmentDoc->where('type','normal_name')->last())
@@ -342,33 +313,38 @@
 
 					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<!-- <ul class="list-group">Hello</ul> -->
-						<div class="share-registry-actions">
-							{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
-							<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
-							<button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button>
+						<div>
+							<div class="share-registry-actions">
+								{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
+								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
+								<button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button>
+							</div>
+							<div class="clear-both">
+								<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> %  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
+									{{csrf_field()}}
+									<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
+								</form>
+							</div>
 						</div>
-						<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
-							{{csrf_field()}}
-							<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
-							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-						</form>
-						<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
-							{{csrf_field()}}
-							<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> %  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
-							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-						</form>
-						<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
-							{{csrf_field()}}
-							<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
-							<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-						</form>
-						<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
-							{{csrf_field()}}
-							<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
-						</form>
-						<br><br>
+						<br>
+						<br>
 						<div class="">
-							<table class="table table-bordered table-striped" id="shareRegistryTable">
+							<table class="table table-bordered table-striped share-registry-table" id="shareRegistryTable">
 								<thead>
 									<tr>
 										<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>

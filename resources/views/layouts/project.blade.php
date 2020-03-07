@@ -154,6 +154,13 @@ $_SESSION['code'] = md5(microtime(true));
             padding-bottom: 5px;
         }
 
+        @media (min-width: 768px) {
+			.dashboard-submenu {
+				margin-top: -36px;
+    			left: -237px !important;
+			}
+		}
+
     </style>
 
     <!-- Google Analytics -->
