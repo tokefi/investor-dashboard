@@ -798,7 +798,8 @@ class SiteConfigurationsController extends Controller
                 'project_description_txt' => 'required',
                 'project_goal_amount'=>'required|integer|min:1',
                 'project_min_investment_txt'=>'required|integer|min:5',
-                'prospectusDocument' => 'mimes:pdf'
+                'prospectusDocument' => 'mimes:pdf',
+                'project_share_per_unit_price' => 'required'
             ));
             if ($validator && $validator->fails()) {
                 throw new ValidationFailedException($validator->errors());
@@ -819,6 +820,7 @@ class SiteConfigurationsController extends Controller
                 'project_prospectus_text'=>$request->project_prospectus_txt,
                 'edit_disclaimer'=>$request->add_disclaimer_txt,
                 'custom_project_page_link'=>$request->custom_project_page_link,
+                'share_per_unit_price'=>$request->project_share_per_unit_price,
             ]);
             Investment::where('project_id', $projectId)->first()->update([
                 'fund_raising_close_date'=>$request->fund_raising_close_date,

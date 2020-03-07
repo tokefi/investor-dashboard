@@ -173,7 +173,7 @@
 					</div>
 				</div><br>
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<div class="" style="color:#fff;">
 							@if($project->investment)
 							@if(Auth::guest())
@@ -189,7 +189,7 @@
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 " style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
-									<h4 class="font-bold @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-value @endif @endif" style="font-size:1.375em;color:#fff;" effect="share_per_unit_price">${{$project->share_per_unit_price}}</h4>
+									<h4 class="font-bold project-share-per-unit-price" style="font-size:1.375em;color:#fff;">${{$project->share_per_unit_price}}</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 duration" style="@if(!$project->projectconfiguration->show_duration) display:none; @endif border-right: thin solid #ffffff;">
@@ -247,7 +247,7 @@
 						@endif
 						@endif
 					</div>
-					<div class="col-md-4 col-md-offset-3 project-invest-button-field" style="margin-top:0%;" id="express_interest">
+					<div class="col-md-4 col-md-offset-2 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<br>
 						@if($project->investment)
 						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
@@ -2259,7 +2259,6 @@
 		toggleProjectElementsVisibiity();
 		editProjectPageLabelText();
 		editProjectShareUnitLabelText();
-		editSharePerUnitPriceValue();
 		@if (Session::has('editable'))
 		setProjectDetailsEditable();
 		@endif
@@ -2921,45 +2920,6 @@ function deleteCarouselImage(){
 					$('.'+toggleAction).slideToggle();
 				}
 			});
-		});
-	}
-
-	function editSharePerUnitPriceValue(){
-		$('.edit-share-per-unit-price-value').click(function(){
-			var effect= $(this).attr('effect');
-			if(effect !=''){
-				if(effect == 'share_per_unit_price'){
-					$(this).html('$<input class="col-md-12" type="Integer" value="{{$project->share_per_unit_price}}" id="'+effect+'" style="color:#000; padding:0px;">');
-					$('#'+effect).select();
-				}
-				$('#'+effect).focusout(function(){
-					var baseElement = $(this);
-					var newLabelText = baseElement.val();
-					if(newLabelText != ''){
-						baseElement.css('border-color', '');
-						var projectId = '{{$project->id}}';
-						$('.loader-overlay').show();
-						$.ajax({
-							url: '/configuration/project/editSharePerUnitPriceValue',
-							type: 'POST',
-							dataType: 'JSON',
-							data: {effect, projectId, newLabelText},
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							},
-						}).done(function(data){
-							console.log(data);
-							$('.loader-overlay').hide();
-							if(data.status){
-								baseElement.replaceWith(data.newLabelText);
-							}
-						});
-					} else {
-						$(this).css('border-color', '#ff0000');
-						$(this).focus();
-					}
-				});
-			}
 		});
 	}
 
