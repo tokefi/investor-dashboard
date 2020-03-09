@@ -112,21 +112,21 @@ Offer Doc
 												<label class="form-label">Project SPV Name</label><br>
 												<i class="text-dark-grey">@if($projects_spv){{$projects_spv->spv_name}} @else - @endif</i>
 												<h5>Name of the Entity established as a Special Purpose Vehicle for this project that you are investing in</h5><br>
-												<label>User apply for *</label>
-												<input type="number" name="amount_to_invest" class="form-control" onkeypress="return isNumber(event)" placeholder="Minimum Amount A${{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" step="100" min="{{$project->investment->minimum_accepted_amount}}" required value="@if(isset($eoi)) {{$eoi->investment_amount}} @endif">
-												@if($project->share_vs_unit)
-												<h5>Number of Redeemable Preference Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
-												@else
-												<h5>Number of Units at $1 per Unit or such lesser number of Units which may be allocated to me/us</h5>
-												@endif
-												<br>
 												<label>User lodge full Application Money</label>
-												<input type="text" name="apply_for" class="form-control" placeholder="$5000" value="A$ @if(isset($eoi)) {{number_format(round($eoi->investment_amount, 2))}} @else 0.00 @endif" disabled="" style="width: 60%; background-color: #fff" id="application_money">
+												<input type="number" name="apply_for" class="form-control" placeholder="$5000" value="A$ @if(isset($eoi)) {{number_format(round($eoi->investment_amount * $project->share_per_unit_price, 2))}} @endif" step="0.01" min="{{$project->investment->minimum_accepted_amount * $project->share_per_unit_price}}" id="application_money">
+												<br>
+												<label>User apply for *</label>
+												<input type="text" readonly name="amount_to_invest" class="form-control" placeholder="Minimum Amount A${{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}" required value="@if(isset($eoi)) {{$eoi->investment_amount}} @endif">
+												@if($project->share_vs_unit)
+												<h5>Number of Redeemable Preference Shares at ${{ $project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												@else
+												<h5>Number of Units at ${{ $project->share_per_unit_price }} per Unit or such lesser number of Units which may be allocated to me/us</h5>
+												@endif
 												<input type="text" name="project_id" @if($projects_spv) value="{{$projects_spv->project_id}}" @endif hidden >
 											</div>
 										</div>
 									</div>
-									<br><br>
+									<br>
 									@if(!$user->idDoc)
 									<div class="row " id="section-2">
 										<div class="col-md-12">
@@ -557,11 +557,16 @@ Offer Doc
 		live:         true
 	});
 	$(document).ready(function(){
-		var qty=$("#apply_for");
-		qty.keyup(function(){
-			var total='A$ '+qty.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			$("#application_money").val(total);
+		let amount = $("#application_money");
+		amount.bind('keyup mouseup', function () {
+			let value = (amount.val() / parseFloat({{ $project->share_per_unit_price}})).toFixed(2);
+			$("#apply_for").val(value);
 		});
+		// var qty=$("#apply_for");
+		// qty.keyup(function(){
+		// 	var total='A$ '+qty.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		// 	$("#application_money").val(total);
+		// });
 	});
 	$(document).ready( function() {
 		$("input[name='investing_as']").on('change',function() {
