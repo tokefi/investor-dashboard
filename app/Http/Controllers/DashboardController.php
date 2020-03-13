@@ -788,7 +788,7 @@ class DashboardController extends Controller
             $subject = 'Fixed Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round($investment->amount * ((int)$dividendPercent/100));
+                $dividendAmount = round($investment->amount * (float)$dividendPercent);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
                 Transaction::create([
@@ -825,7 +825,8 @@ class DashboardController extends Controller
                             '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
-                            '%project_prospectus_text%' => $prospectusText
+                            '%project_prospectus_text%' => $prospectusText,
+                            '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit' 
                         ]
                     ]
                 );
@@ -1000,7 +1001,7 @@ class DashboardController extends Controller
                 $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
                 $investment->amount,
                 $dividendPercent,
-                round($investment->amount * ((int)$dividendPercent/100))
+                round($investment->amount * (float)$dividendPercent)
             ));
         }
 
@@ -1731,7 +1732,7 @@ class DashboardController extends Controller
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
 
-                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->amount . '<br></td><td>' . round($investment->amount * ((int)$dividendPercent/100)) . '<br></td></tr>';
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->amount . '<br></td><td>' . round($investment->amount * (float)$dividendPercent) . '<br></td></tr>';
             }
 
             $tableContent .= '</tbody></table>';

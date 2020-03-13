@@ -562,7 +562,7 @@
 
                               <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
                                 <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Please distribute the following fixed Dividend amounts to the following investors:<br><br>
-                                  <span style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#000;"><b>Rate: </b>{{$dividendPercent}}%</span><br><br>
+                                  <span style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#000;"><b>Rate: </b>{{$dividendPercent}} cents per @if($project->share_vs_unit) shares @else units @endif</span><br><br>
 
                                   <table align="left" border="1" cellpadding="4" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
                                     <thead style=" font-size: 13px; text-align: center;"><tr>
@@ -583,7 +583,7 @@
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->bsb}} @else {{$investment->user->bsb}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->account_number}} @else {{$investment->user->account_number}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$investment->amount}}</span><br></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{round($investment->amount * ((int)$dividendPercent/100))}}</span><br></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{round($investment->amount * (float)$dividendPercent)}}</span><br></td>
                                       </tr>
                                       @endforeach
                                     </tbody>

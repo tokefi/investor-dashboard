@@ -561,7 +561,7 @@
                                                     <strong><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-family:helvetica; font-weight:bolder; line-height:21px"><span style="font-size:20px">Hi %first_name%,</span></span></span></strong>
 
                                                     <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
-                                                        <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Congratulations! A Dividend of %dividend_percent%% has just been declared for %project_title%.</span><br><br>
+                                                        <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Congratulations! A Dividend of %dividend_percent% cents per %project_share_or_unit% has just been declared for %project_title%.</span><br><br>
                                     <span style="color:#000">Since you are a %share_type%, you will be receiving the Dividend amount in your nominated Bank account as follows. </span><br><br>
                                     <span style="color:#000"><b>User account Name: </b>%account_name%</span><br>
                                     <span style="color:#000"><b>User Bank name: </b>%bank_name%</span><br>
