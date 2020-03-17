@@ -64,8 +64,9 @@
 				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">@if($project->share_vs_unit) Share @else Unit @endif registry</h3></a></li>
 				<li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
 				<li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li>
-				<li><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
-				<li><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
@@ -576,6 +577,45 @@
 						</table>
 					</div>
 				</div>
+				<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
+					<div>
+						<table class="table table-bordered table-striped new-registry-table" id="new_registry_table">
+							<thead>
+								<tr>
+									<th>Project SPV Name</th>
+									<th>Investor Name</th>
+									<th>Phone</th>
+									<th>Email</th>
+									<th>Address</th>
+									<th>@if($project->share_vs_unit) Shares @else Units @endif</th>
+									<th>Price ($)</th>
+									<th>Market value ($)</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach ($newRegistries as $registry)
+									<tr>
+										<td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td>
+										<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
+										<td>{{$registry->user->phone_number}}</td>
+										<td>{{$registry->user->email}}</td>
+										<td>
+											{{$registry->user->line_1}},
+											{{$registry->user->line_2}},
+											{{$registry->user->city}},
+											{{$registry->user->state}},
+											{{$registry->user->country}},
+											{{$registry->user->postal_code}}
+										</td>
+										<td>{{ $registry->shares }}</td>
+										<td>{{ $project->share_per_unit_price }}</td>
+										<td>{{ $registry->shares * $project->share_per_unit_price }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
 
 			</div>
 		</div>
@@ -890,6 +930,9 @@
 			"iDisplayLength": 25
 		});
 		var expression_of_interest_table = $('#expression_of_interest_table').DataTable({
+			"iDisplayLength": 25
+		});
+		let newRegistryTable = $('#new_registry_table').DataTable({
 			"iDisplayLength": 25
 		});
 

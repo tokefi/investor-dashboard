@@ -561,8 +561,8 @@
                               <strong><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-family:helvetica; font-weight:bolder; line-height:21px"><span style="font-size:20px">Dear Admin(s),</span></span></span></strong>
 
                               <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Please distribute the following fixed Dividend amounts to the following investors:<br><br>
-                                  <span style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#000;"><b>Rate: </b>{{$dividendPercent}} cents per @if($project->share_vs_unit) shares @else units @endif</span><br><br>
+                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Please distribute the following Dividend amounts to the following investors:<br><br>
+                                  <span style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#000;"><b>Rate: </b>{{$dividendPercent}} cents per @if($project->share_vs_unit) share @else unit @endif</span><br><br>
 
                                   <table align="left" border="1" cellpadding="4" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
                                     <thead style=" font-size: 13px; text-align: center;"><tr>

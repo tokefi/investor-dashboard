@@ -203,17 +203,20 @@ class DashboardController extends Controller
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
         $investments = InvestmentInvestor::where('project_id', $project_id)->get();
-        $shareInvestments = InvestmentInvestor::where('project_id', $project_id)
-        ->where('accepted', 1)
-        ->orderBy('share_certificate_issued_at','ASC')
-        ->get();
+        $acceptedRegistries = InvestmentInvestor::where('project_id', $project_id)->where('accepted', 1);
+        
+        $shareInvestments = $acceptedRegistries->orderBy('share_certificate_issued_at','ASC')->get();
         $transactions = Transaction::where('project_id', $project_id)->get();
         $positions = Position::where('project_id', $project_id)->orderBy('effective_date', 'DESC')->get()->groupby('user_id');
         $projectsInterests = ProjectInterest::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
+        $newRegistries = $acceptedRegistries
+            ->select(['user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id')
+            ->get();
         // dd($positions);
         // dd($shareInvestments->last()->investingJoint);
-        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois'));
+        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries'));
     }
 
     public function editProject($project_id)
