@@ -211,6 +211,7 @@ class DashboardController extends Controller
         $projectsInterests = ProjectInterest::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $newRegistries = $acceptedRegistries
+            ->where('is_cancelled', false)
             ->select(['user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id')
             ->get();
