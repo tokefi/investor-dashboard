@@ -314,9 +314,9 @@
 
 					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<!-- <ul class="list-group">Hello</ul> -->
-						<div>
+						{{-- <div>
 							<div class="share-registry-actions">
-								{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
+								<!--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>-->
 								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
 								<button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button>
 							</div>
@@ -342,13 +342,12 @@
 								</form>
 							</div>
 						</div>
-						<br>
+						<br> --}}
 						<br>
 						<div class="">
 							<table class="table table-bordered table-striped share-registry-table" id="shareRegistryTable">
 								<thead>
 									<tr>
-										<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
 										<th>Unique ID</th>
 										{{-- <th>@if($project->share_vs_unit) Share @else Unit @endif numbers</th> --}}
 										<th>Project SPV Name</th>
@@ -372,7 +371,6 @@
 								<tbody>
 									@foreach($shareInvestments as $shareInvestment)
 									<tr @if($shareInvestment->is_cancelled) style="color: #CCC;" @endif>
-										<td class="text-center select-check hide">@if(!$shareInvestment->is_cancelled) <input type="checkbox" class="investor-check" name="" value="{{$shareInvestment->id}}"> @endif</td>
 										<td>INV{{$shareInvestment->id}}</td>
 										{{-- <td>@if($shareInvestment->share_number){{$shareInvestment->share_number}}@else{{'NA'}}@endif</td> --}}
 										<td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td>
@@ -579,9 +577,40 @@
 				</div>
 				<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
 					<div>
+						<div class="share-registry-actions">
+							{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
+							<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
+							{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
+						</div>
+						<div class="clear-both">
+							<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
+								{{csrf_field()}}
+								<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
+								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+							</form>
+							<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
+								{{csrf_field()}}
+								<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> cents per @if($project->share_vs_unit) share @else unit @endif  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
+								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+							</form>
+							<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
+								{{csrf_field()}}
+								<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
+								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+							</form>
+							<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
+								{{csrf_field()}}
+								<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
+							</form>
+						</div>
+					</div>
+					<br>
+					<br>
+					<div>
 						<table class="table table-bordered table-striped new-registry-table" id="new_registry_table">
 							<thead>
 								<tr>
+									<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
 									<th>Project SPV Name</th>
 									<th>Investor Name</th>
 									<th>Phone</th>
@@ -595,6 +624,7 @@
 							<tbody>
 								@foreach ($newRegistries as $registry)
 									<tr>
+										<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
 										<td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td>
 										<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
 										<td>{{$registry->user->phone_number}}</td>
@@ -1088,7 +1118,7 @@
 			var project_id = {{$project->id}};
 
 			if(dividendPercent == ''){
-				alert('Before declaration please enter dividend percent.');
+				alert('Before declaration please enter dividend.');
 				return;
 			}
 			else {

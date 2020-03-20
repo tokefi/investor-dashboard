@@ -212,7 +212,7 @@ class DashboardController extends Controller
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $newRegistries = $acceptedRegistries
             ->where('is_cancelled', false)
-            ->select(['user_id', \DB::raw("SUM(amount) as shares")])
+            ->select(['id', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id')
             ->get();
         // dd($positions);
@@ -773,7 +773,14 @@ class DashboardController extends Controller
 
         if($investorList != ''){
             $investors = explode(',', $investorList);
-            $investments = InvestmentInvestor::findMany($investors);
+            
+            $investments = InvestmentInvestor::whereIn('user_id', $investors)
+                ->where('project_id', $projectId)
+                ->where('accepted', 1)
+                ->where('is_cancelled', false)
+                ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+                ->groupBy('user_id')
+                ->get();;
 
             // Add the records to project progress table
             // ProjectProg::create([
@@ -792,7 +799,7 @@ class DashboardController extends Controller
             $subject = 'Fixed Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round($investment->amount * (float)$dividendPercent);
+                $dividendAmount = round($investment->shares * (float)$dividendPercent);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
                 Transaction::create([
@@ -1003,9 +1010,9 @@ class DashboardController extends Controller
                 $investment->investingJoint ? $investment->investingJoint->bank_name : $investment->user->bank_name,
                 $investment->investingJoint ? $investment->investingJoint->bsb : $investment->user->bsb,
                 $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
-                $investment->amount,
+                $investment->shares,
                 $dividendPercent,
-                round($investment->amount * (float)$dividendPercent)
+                round($investment->shares * (float)$dividendPercent)
             ));
         }
 
@@ -1723,7 +1730,13 @@ class DashboardController extends Controller
 
         if($investorList != '') {
             $investors = explode(',', $investorList);
-            $investments = InvestmentInvestor::findMany($investors);
+            $investments = InvestmentInvestor::whereIn('user_id', $investors)
+                ->where('project_id', $projectId)
+                ->where('accepted', 1)
+                ->where('is_cancelled', false)
+                ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+                ->groupBy('user_id')
+                ->get();
             $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
 
             $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
@@ -1736,7 +1749,7 @@ class DashboardController extends Controller
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
 
-                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->amount . '<br></td><td>' . round($investment->amount * (float)$dividendPercent) . '<br></td></tr>';
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>' . round($investment->shares * (float)$dividendPercent) . '<br></td></tr>';
             }
 
             $tableContent .= '</tbody></table>';
