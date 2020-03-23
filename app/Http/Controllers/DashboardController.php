@@ -796,7 +796,7 @@ class DashboardController extends Controller
 
             // send dividend emails to investors
             $sendgridPersonalization = [];
-            $subject = 'Fixed Dividend declared for '.$project->title;
+            $subject = 'Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
                 $dividendAmount = round($investment->shares * (float)$dividendPercent);

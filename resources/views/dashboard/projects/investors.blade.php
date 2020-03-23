@@ -82,6 +82,8 @@
 								<th>Unique ID</th>
 								<th>Investors Details</th>
 								<th>Investment Date</th>
+								<th>Shares</th>
+								<th>Price ($)</th>
 								<th>Amount</th>
 								<th>Is Money Received</th>
 								<th>@if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
@@ -121,17 +123,23 @@
 												<td>
 													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
-												<td>
+												<td class="text-center">
 													<div class="">
 														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
-															<a href="#edit" class="edit">${{number_format($investment->amount) }}</a>
+															<a href="#edit" class="edit">{{ round($investment->amount, 2) }}</a>
 
 															<input type="text" class="edit-input form-control" name="amount" id="amount" value="{{$investment->amount}}" style="width: 100px;">
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
 													</div>
+												</td>
+												<td class="text-center">
+													{{ $investment->buy_rate }}
+												</td>
+												<td class="text-center">
+													${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
 												</td>
 												<td>
 													<div class="">
@@ -359,6 +367,8 @@
 										<th>Email</th>
 										<th>Address</th>
 										<th>@if($project->share_vs_unit) Share @else Unit @endif face value</th>
+										<th>Price ($)</th>
+										<th>Amount</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
 										<th>TFN</th>
 										<th>Investment Documents</th>
@@ -389,7 +399,9 @@
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->postal_code}}@else{{$shareInvestment->user->postal_code}}@endif
 
 										</td>
-										<td>{{$shareInvestment->amount}}</td>
+										<td>{{round($shareInvestment->amount, 2)}}</td>
+										<td>{{ $shareInvestment->buy_rate }}</td>
+										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate, 2)) }}</td>
 										<td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Investment is repurchased</strong>
@@ -931,7 +943,7 @@
 
 
 		var shareRegistryTable = $('#shareRegistryTable').DataTable({
-			"order": [[5, 'desc'], [0, 'desc']],
+			"order": [[0, 'desc']],
 			"iDisplayLength": 50,
 			"aoColumnDefs": [
 			{
@@ -946,7 +958,7 @@
 			}
 		});
 		var investorsTable = $('#investorsTable').DataTable({
-			"order": [[5, 'desc'], [0, 'desc']],
+			"order": [[7, 'asc'], [0, 'desc']],
 			"iDisplayLength": 25
 		});
 		var transactionTable = $('#transactionTable').DataTable({
