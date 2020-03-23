@@ -179,8 +179,11 @@
 							@if(Auth::guest())
 							@else
 							@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-							<div class="text-center" style="margin-left: -9em;">
+							<div class="text-center" style="margin-left: -6em;">
 								<input type="checkbox" class="toggle-elements" action="duration" autocomplete="off" data-label-text="Duration" data-size="mini" @if($project->projectconfiguration->show_duration) checked value="1" @else value="0" @endif>
+							</div>
+							<div class="text-center" style="margin-left: -18em;">
+								<input type="checkbox" class="toggle-elements" action="share_per_unit_price" autocomplete="off" data-label-text="Share/Unit" data-size="mini" @if($project->projectconfiguration->show_share_per_unit_price) checked value="1" @else value="0" @endif>
 							</div>
 							@endif
 							@endif
@@ -188,7 +191,7 @@
 								<div class="col-md-2 col-sm-2 col-xs-4" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif">
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
 								</div>
-								<div class="col-md-2 col-sm-2 col-xs-4 " style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
+								<div class="col-md-2 col-sm-2 col-xs-4 share_per_unit_price" style="@if(!$project->projectconfiguration->show_share_per_unit_price) display:none; @endif border-right: thin solid #ffffff; ">
 									<h4 class="font-bold project-share-per-unit-price" style="font-size:1.375em;color:#fff;">${{$project->share_per_unit_price}}</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
 								</div>
