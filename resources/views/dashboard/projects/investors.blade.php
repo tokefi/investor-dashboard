@@ -60,13 +60,13 @@
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
-				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
+				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h4 class="text-center">Applications</h4></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h4 class="text-center">Accepted applications</h4></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
-				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h4 class="text-center">EOI (Coming Soon)</h4></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h4 class="text-center">Project EOI</h4></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h4 class="text-center">Registry</h4></a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
@@ -1159,7 +1159,7 @@
 					$('#fixed_dividend_calculation_preview_table').html(data.data);
 
 					$('#modal_fixed_dividend_rate').html(dividendPercent);
-					
+
 					$('#fixed_dividend_confirm_modal').modal({
 						keyboard: false,
 						backdrop: 'static'
@@ -1180,7 +1180,7 @@
 			repurchaseRate = repurchaseRate.toString();
 			var investorsList = $('.investors-list').val();
 			var project_id = '{{$project->id}}';
-			
+
 			if(repurchaseRate == ''){
 				alert('Before declaration please enter repurchase rate.');
 				return;
@@ -1211,7 +1211,7 @@
 					$('#repurchase_calculation_preview_table').html(data.data);
 
 					$('#modal_repurchase_rate').html(repurchaseRate);
-					
+
 					$('#repurchase_confirm_modal').modal({
 						keyboard: false,
 						backdrop: 'static'

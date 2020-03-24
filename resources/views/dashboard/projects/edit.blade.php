@@ -171,7 +171,7 @@ Edit {{$project->title}} | Dashboard | @parent
 													@foreach($project->children as $child)
 													<tr>
 														<td>{{App\Project::find($child->child)->title}}</td>
-														<td>{{$child->allocation}} %
+														<td class="text-center">{{$child->allocation}} %
 															<a class="pull-right" id="deleteChild" onclick="deleteChild({{$child->id}})">
 																<span class="glyphicon glyphicon-remove"></span>
 															</a>
@@ -179,6 +179,12 @@ Edit {{$project->title}} | Dashboard | @parent
 													</tr>
 													@endforeach
 												</tbody>
+												<tfoot>
+													<tr>
+														<th class="text-center">Total</th>
+														<th class="text-center" id="totalAllocation"> </th>
+													</tr>
+												</tfoot>
 											</table>
 										</div>
 									</div>
@@ -2130,6 +2136,8 @@ Edit {{$project->title}} | Dashboard | @parent
 			e.preventDefault();
 			$('#masterChildCollapse').collapse('show');
 		});
+		var totalPercAllocation = $('input[name="percentage[]"]').map(function () {return parseInt($(this).val());}).get();
+		$('#totalAllocation').html(totalPercAllocation.reduce((a, b) => a + b, 0)+' % &nbsp;&nbsp;&nbsp;&nbsp;');
 		$('#addMoreChild').on('click',function (t) {
 			t.preventDefault();
 			var proj = $('#childProjects').val();
