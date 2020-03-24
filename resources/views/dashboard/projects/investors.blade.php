@@ -60,10 +60,10 @@
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Investors</h3></a></li>
-				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">@if($project->share_vs_unit) Share @else Unit @endif registry</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
-				<li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li>
+				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
+				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
+				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
+				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
 				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
 				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
 				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
@@ -447,7 +447,7 @@
 
 					</div>
 
-					<div id="transactions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+					{{-- <div id="transactions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped text-center" id="transactionTable">
 								<thead>
@@ -504,7 +504,7 @@
 								</tbody>
 							</table>
 						</div>
-					</div>
+					</div> --}}
 					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped" id="eoiTable">
