@@ -132,6 +132,13 @@ class OfferController extends Controller
         }else{
             $investingAs = $request->investing_as;
         }
+        if($project->master_child){
+          foreach($project->children as $child){
+            $percAmount = $amount* ($child->allocation)/100;
+            $childProject = Project::find($child->child);
+            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>$percAmount, 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment,'master_investment'=>$project->id]);
+          }
+        }
         $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment]);
         $investor = InvestmentInvestor::get()->last();
         if($user->idDoc != NULL && $user->idDoc->investing_as != 'Individual Investor'){
@@ -267,7 +274,7 @@ class OfferController extends Controller
     $this->dispatch(new SendReminderEmail($user,$project,$investor));
 
     $amount = $amount * $project->share_per_unit_price;
-        
+
     return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'));
 }
 

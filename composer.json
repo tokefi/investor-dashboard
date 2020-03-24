@@ -9,7 +9,6 @@
         "laravel/framework": "5.1.*",
         "illuminate/html": "^5.0",
         "intervention/image": "^2.3",
-        "overtrue/laravel-lang": "dev-master",
         "alexpechkarev/google-geocoder": "^1.0",
         "chumper/datatable": "dev-develop",
         "pulkitjalan/geoip": "^2.1",

@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Investment;
 use App\ProjectFAQ;
 use App\ProjectProg;
+use App\MasterChild;
 use App\Http\Requests;
 use App\InvestingJoint;
 use App\ProjectSpvDetail;
@@ -343,7 +344,7 @@ class ProjectsController extends Controller
      */
     public function update(ProjectRequest $request, $id)
     {
-                //TODO::add transation
+        //TODO::add transation
         $project = Project::findOrFail($id);
         if($request->invite_only)
         {
@@ -394,7 +395,13 @@ class ProjectsController extends Controller
         }
 
         $project->invited_users()->attach(User::whereEmail($request->developerEmail)->first());
-
+        if($request->master_child == 1){
+            for($i=0; $i<count($request->child); $i++){
+                MasterChild::create(['master'=>$project->id,'child'=>$request->child[$i],'allocation'=>$request->percentage[$i]]);
+            }
+        }else{
+            MasterChild::where('master',$project->id)->delete();
+        }
         $param = array("address"=>$request->line_1.' '.$request->line_2.' '.$request->city.' '.$request->state.' '.$request->country);
         $response = \Geocoder::geocode('json', $param);
         if(json_decode($response)->status != 'ZERO_RESULTS') {
@@ -491,6 +498,8 @@ class ProjectsController extends Controller
         if(!$project->show_invest_now_button) {
             return redirect()->route('projects.show', $project);
         }
+        $isMaster = MasterChild::where('master',$project->id)->get();
+        // dd($isMaster);
         // if(Auth::user()->verify_id != 2){
         //     return redirect()->route('users.verification', Auth::user())->withMessage('<p class="alert alert-warning text-center alert-dismissible" role="alert"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> As part of our commitment to meeting Australian Securities Law we are required to do some additional user verification to meet Anti Money Laundering and Counter Terror Financing requirements.<br> This wont take long, promise!</p>');
         // }
@@ -522,7 +531,7 @@ class ProjectsController extends Controller
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment'));
             }
             if(!$project->eoi_button){
-                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment'));
             } else{
                 return response()->view('errors.404', [], 404);
             }
@@ -569,7 +578,7 @@ class ProjectsController extends Controller
             'phone_number' => 'required',
             'investment_amount' => 'required|numeric',
             'investment_period' => 'required',
-            ]);
+        ]);
         $request->merge(['country' => array_search($request->country_code, \App\Http\Utilities\Country::all())]);
         if($project){
             if($project->eoi_button){
@@ -586,7 +595,7 @@ class ProjectsController extends Controller
                     'country_code' => $request->country_code,
                     'country'=>$request->country,
                     'project_site' => url(),
-                    ]);
+                ]);
                 $mailer->sendProjectEoiEmailToAdmins($project, $eoi_data);
                 $mailer->sendProjectEoiEmailToUser($project, $user_info);
             }
@@ -784,7 +793,7 @@ class ProjectsController extends Controller
         $project = Project::where('id', $id);
         $result = $project->update([
             'add_additional_form_content' => $request->add_additional_form_content,
-            ]);
+        ]);
 
         return redirect()->back()->withMessage('Successfully Added Additional Form Content.');
     }
@@ -794,7 +803,7 @@ class ProjectsController extends Controller
         $project = Project::where('id', $id);
         $result = $project->update([
             'project_thumbnail_text' => $request->project_thumbnail_text,
-            ]);
+        ]);
         return redirect()->back();
     }
 
@@ -906,7 +915,7 @@ class ProjectsController extends Controller
             'spv_contact_number' => 'required',
             'spv_md_name' => 'required',
             // 'spv_logo_image_path' => 'required',
-            ]);
+        ]);
         //validate SPV logo
         $projectMedia = Media::where('project_id', $project_id)
         ->where('project_site', url())
@@ -915,7 +924,7 @@ class ProjectsController extends Controller
         if(!$projectMedia){
             $this->validate($request, [
                 'spv_logo' => 'required',
-                ]);
+            ]);
         }
         //Validate SPV MD Signature
         $projectMedia = Media::where('project_id', $project_id)
@@ -925,7 +934,7 @@ class ProjectsController extends Controller
         if(!$projectMedia){
             $this->validate($request, [
                 'spv_md_sign' => 'required',
-                ]);
+            ]);
         }
         $projectSpv = ProjectSpvDetail::where('project_id', $project_id)->first();
         if(!$projectSpv)
@@ -947,7 +956,7 @@ class ProjectsController extends Controller
             'spv_md_name' => $request->spv_md_name,
             'certificate_frame' => $request->certificate_frame,
             'spv_email' => $request->spv_email,
-            ]);
+        ]);
         if($spv_result)
         {
             if($request->spv_logo_image_path && $request->spv_logo_image_path != ''){
@@ -1007,7 +1016,7 @@ class ProjectsController extends Controller
     {
         $validation_rules = array(
             'project_sub_heading_image'   => 'required|mimes:jpeg,png,jpg',
-            );
+        );
         $validator = Validator::make($request->all(), $validation_rules);
         if($validator->fails()){
             return $resultArray = array('status' => 0, 'message' => 'The user image must be a file of type: jpeg,png,jpg');

@@ -224,6 +224,7 @@ class DashboardController extends Controller
     {
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
+        $masterChild = Project::where('master_child',0)->where('id','!=',$project->id)->get();
         if($project->project_site != url()){
             return redirect()->route('dashboard.projects')->withMessage('<p class="alert alert-warning text-center">Access Denied</p>');
         }
@@ -237,7 +238,7 @@ class DashboardController extends Controller
             $project->save();
         }
 
-        return view('dashboard.projects.edit', compact('project', 'investments','color'));
+        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild'));
     }
 
     public function activateUser($user_id)
@@ -277,7 +278,7 @@ class DashboardController extends Controller
             if($invitee) {
                 Credit::create(['user_id'=>$invitee->user_id, 'invite_id'=>$invitee->id, 'amount'=>$kyc_approval_konkrete, 'type'=>'KYC Confirmed by Admin', 'currency'=>'konkrete', 'project_site' => url()]);
             }
-            
+
             $refRel = ReferralRelationship::where('user_id',$user->id)->get()->first();
             if($refRel){
                 $refLink = ReferralLink::find($refRel->referral_link_id);
@@ -837,7 +838,7 @@ class DashboardController extends Controller
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
                             '%project_prospectus_text%' => $prospectusText,
-                            '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit' 
+                            '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit'
                         ]
                     ]
                 );

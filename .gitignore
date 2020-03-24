@@ -7,3 +7,4 @@ storage/
 .env
 .DS_Store
 /nbproject/private/
+/public/assets/images/media/
