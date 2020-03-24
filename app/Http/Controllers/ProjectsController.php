@@ -397,9 +397,10 @@ class ProjectsController extends Controller
         $project->invited_users()->attach(User::whereEmail($request->developerEmail)->first());
         if($request->master_child == 1){
             for($i=0; $i<count($request->child); $i++){
-                MasterChild::create(['master'=>$project->id,'child'=>$request->child[$i],'allocation'=>$request->percentage[$i]]);
+                MasterChild::firstOrCreate(['master'=>$project->id,'child'=>$request->child[$i],'allocation'=>$request->percentage[$i]]);
             }
-        }else{
+        }
+        if($request->master_child == 0){
             MasterChild::where('master',$project->id)->delete();
         }
         $param = array("address"=>$request->line_1.' '.$request->line_2.' '.$request->city.' '.$request->state.' '.$request->country);
@@ -476,6 +477,14 @@ class ProjectsController extends Controller
         //TODO::refactor
 
         return redirect()->back()->withMessage('<p class="alert alert-success text-center">Successfully Updated.</p>');
+    }
+
+    public function deleteChild($id)
+    {
+        $child = MasterChild::find($id);
+        $child->delete();
+        return $data = array('status' => 1, 'message' => 'Child project has been removed succesfully');
+
     }
 
     /**

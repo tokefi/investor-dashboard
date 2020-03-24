@@ -150,27 +150,38 @@ Edit {{$project->title}} | Dashboard | @parent
 									@else
 									<div class="btn-group project-progress-3way-switch" data-toggle="buttons">
 										<label class="btn btn-default masterClass @if($project->master_child == 1) active @endif" id="masterChild" data-id="1">
-											<input type="radio" name="master_child" value="1"> Master
+											<input type="radio" name="master_child" value="1" @if($project->master_child == 1) checked="checked" @endif> Master
 										</label>
 										<label class="btn btn-default @if($project->master_child == 0) active @endif" id="childMaster" data-id="0">
 											<input type="radio" name="master_child" value="0"> Child
 										</label>
 									</div>
 									@if($project->master_child)
-										<div class="jumbotron">
-											<div class="container">
-												@foreach($project->children as $child)
-												<div class="row well well-sm">
-													<div class="col-md-offset-2 col-md-4 ">
-														{{App\Project::find($child->child)->title}}
-													</div>
-													<div class="col-md-4 ">
-														{{$child->allocation}} %
-													</div>
-												</div>
-												@endforeach
-											</div>
+									<br><br>
+									<div class="jumbotron">
+										<div class="container">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th class="text-center">Projects</th>
+														<th class="text-center">Allocation</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach($project->children as $child)
+													<tr>
+														<td>{{App\Project::find($child->child)->title}}</td>
+														<td>{{$child->allocation}} %
+															<a class="pull-right" id="deleteChild" onclick="deleteChild({{$child->id}})">
+																<span class="glyphicon glyphicon-remove"></span>
+															</a>
+														</td>
+													</tr>
+													@endforeach
+												</tbody>
+											</table>
 										</div>
+									</div>
 									@endif
 									<div id="masterChildCollapse" class="collapse">
 										<div class="jumbotron">
@@ -194,7 +205,10 @@ Edit {{$project->title}} | Dashboard | @parent
 												<button class="btn btn-primary" id="addMoreChild">Add More</button>
 												<div class="row">
 													<div class="col-md-8 col-md-offset-2 selected-child-projects">
-
+														@foreach($project->children as $child)
+														<input type="hidden" name="child[]" value="{{$child->child}}">
+														<input type="hidden" name="percentage[]" value="{{$child->allocation}}">
+														@endforeach
 													</div>
 												</div>
 											</div>
@@ -2109,23 +2123,33 @@ Edit {{$project->title}} | Dashboard | @parent
 			$('#invite-developer').removeClass('hide');
 		});
 		console.log($('input[name=master_vs_child]').val());
-		@if($project->master_child == 0)
+		@if($project->master_child == 1)
+		$('#masterChildCollapse').collapse('show');
+		@endif
 		$('#masterChild').on('click',function (e) {
 			e.preventDefault();
 			$('#masterChildCollapse').collapse('show');
-			$('#addMoreChild').on('click',function (t) {
-				t.preventDefault();
-				var proj = $('#childProjects').val();
-				var projName = $('#childProjects option:selected').text();
-				var perc = $('#projectAllocationPerc').val();
-				var childs = $("input[name='child[]']")
-				.map(function(){return $(this).val();}).get();
-				if(childs.includes(proj)){
-					alert('Already added as a child, Choose another project');
-				}else{
+		});
+		$('#addMoreChild').on('click',function (t) {
+			t.preventDefault();
+			var proj = $('#childProjects').val();
+			var projName = $('#childProjects option:selected').text();
+			var perc = $('#projectAllocationPerc').val();
+			var childs = $("input[name='child[]']")
+			.map(function(){return $(this).val();}).get();
+			console.log(perc);
+			if(childs.includes(proj)){
+				alert('Already added as a child, Choose another project');
+			}else{
+				var totalPerc = $('input[name="percentage[]"]').map(function () {return parseInt($(this).val());}).get();
+				console.log(100 - totalPerc.reduce((a, b) => a + b, 0));
+				var remain = 100 - totalPerc.reduce((a, b) => a + b, 0);
+				if(remain > 0 && parseInt(perc) <= remain){
 					$('.selected-child-projects').append('<div class="well well-sm"><b>Project:</b><i> '+projName+'</i> &nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;'+perc+'<b>% Allocation</b> </div><input type="hidden" name="child[]" value="'+proj+'"><input type="hidden" name="percentage[]" value="'+perc+'">');
+				}else{
+					alert('Now only '+remain+'% can be allocated');
 				}
-			});
+			}
 		});
 		$('#childMaster').on('click',function (e) {
 			e.preventDefault();
@@ -2135,7 +2159,6 @@ Edit {{$project->title}} | Dashboard | @parent
 		$('form[name="statusUpdates"]').on('submit',function (e) {
 			if($('.masterClass').hasClass('active')){
 				var totalPerc = $('input[name="percentage[]"]').map(function () {return parseInt($(this).val());}).get();
-				console.log(totalPerc.reduce((a,b)=> a+b,0));
 				if(totalPerc.reduce((a, b) => a + b, 0) === 100){
 					console.log('Ok');
 				}else{
@@ -2144,7 +2167,6 @@ Edit {{$project->title}} | Dashboard | @parent
 				}
 			}
 		});
-		@endif
 		//Bootstrap switch to change project status
 
 		/*$("#is_coming_soon_checkbox").bootstrapSwitch();
