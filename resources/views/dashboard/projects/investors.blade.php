@@ -958,7 +958,7 @@
 			}
 		});
 		var investorsTable = $('#investorsTable').DataTable({
-			"order": [[7, 'asc'], [0, 'desc']],
+			"order": [[2, 'asc'], [0, 'desc']],
 			"iDisplayLength": 25
 		});
 		var transactionTable = $('#transactionTable').DataTable({
