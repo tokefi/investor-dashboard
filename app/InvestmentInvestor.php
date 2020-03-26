@@ -60,4 +60,8 @@ class InvestmentInvestor extends Model
     {
         return $this->hasOne('App\WholesaleInvestment');
     }
+    public function childInvestment()
+    {
+        return $this->hasMany('App\InvestmentInvestor','master_investment');
+    }
 }
