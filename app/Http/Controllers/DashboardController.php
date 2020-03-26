@@ -204,17 +204,17 @@ class DashboardController extends Controller
         $project = Project::findOrFail($project_id);
         $investments = InvestmentInvestor::where('project_id', $project_id)->get();
         $acceptedRegistries = InvestmentInvestor::where('project_id', $project_id)->where('accepted', 1);
-        
+
         $shareInvestments = $acceptedRegistries->orderBy('share_certificate_issued_at','ASC')->get();
         $transactions = Transaction::where('project_id', $project_id)->get();
         $positions = Position::where('project_id', $project_id)->orderBy('effective_date', 'DESC')->get()->groupby('user_id');
         $projectsInterests = ProjectInterest::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $newRegistries = $acceptedRegistries
-            ->where('is_cancelled', false)
-            ->select(['id', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
-            ->get();
+        ->where('is_cancelled', false)
+        ->select(['id', 'user_id', \DB::raw("SUM(amount) as shares")])
+        ->groupBy('user_id')
+        ->get();
         // dd($positions);
         // dd($shareInvestments->last()->investingJoint);
         return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries'));
@@ -393,9 +393,7 @@ class DashboardController extends Controller
                 $investment->share_certificate_path = "/app/invoices/Share-Certificate-".$investment->id.".pdf";
             }
             $investment->save();
-            // dd($investment);
-
-            // Save details to transaction table
+             // Save details to transaction table
             $noOfShares = $shareEnd-$shareInit;
             $transactionRate = $investment->amount/$noOfShares;
             Transaction::create([
@@ -408,6 +406,49 @@ class DashboardController extends Controller
                 'rate' => round($transactionRate,2),
                 'number_of_shares' => $noOfShares,
             ]);
+            if($investment->project->master_child){
+                $childInvestments = InvestmentInvestor::where('master_investment',$investment->id)->get();
+                foreach($childInvestments as $child){
+                    $investmentShares = InvestmentInvestor::where('project_id', $child->project_id)
+                    ->where('accepted', 1)
+                    ->orderBy('share_certificate_issued_at','DESC')->get()
+                    ->first();
+                    $shareInit = 0;
+                    if($investmentShares){
+                        if($investmentShares->share_number){
+                            $shareNumber = explode('-', $investmentShares->share_number);
+                            $shareInit = $shareNumber[1];
+                        }
+                    }
+                    $shareStart = $shareInit+1;
+                    $shareEnd = $shareInit+$child->amount;
+                    $shareCount = (string)($shareStart)."-".(string)($shareEnd);
+                    //Update current Investment and with the share certificate details
+                    $child->accepted = 1;
+                    $child->money_received = 1;
+                    $child->share_certificate_issued_at = Carbon::now();
+                    $child->share_number = $shareCount;
+                    if($child->project->share_vs_unit){
+                        $child->share_certificate_path = "/app/invoices/Share-Certificate-".$child->id.".pdf";
+                    }else{
+                        $child->share_certificate_path = "/app/invoices/Share-Certificate-".$child->id.".pdf";
+                    }
+                    $child->save();
+                    $noOfShares = $shareEnd-$shareInit;
+                    $transactionRate = $child->amount/$noOfShares;
+                    Transaction::create([
+                        'user_id' => $child->user_id,
+                        'project_id' => $child->project_id,
+                        'investment_investor_id' => $child->id,
+                        'transaction_type' => 'BUY',
+                        'transaction_date' => Carbon::now(),
+                        'amount' => round($child->amount,2),
+                        'rate' => round($transactionRate,2),
+                        'number_of_shares' => $noOfShares,
+                    ]);
+                }
+            }
+            // dd($investment);
 
             $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
             // if($investment->accepted) {
@@ -522,6 +563,13 @@ class DashboardController extends Controller
     public function investmentMoneyReceived(Request $request, AppMailer $mailer, $investment_id)
     {
         $investment = InvestmentInvestor::findOrFail($investment_id);
+        if($investment->project->master_child){
+            $childInvestments = InvestmentInvestor::where('master_investment',$investment->id)->get();
+            foreach($childInvestments as $child){
+                $child->money_received = 1;
+                $child->save();
+            }
+        }
         $investment->money_received = 1;
         $investment->save();
 
@@ -774,14 +822,14 @@ class DashboardController extends Controller
 
         if($investorList != ''){
             $investors = explode(',', $investorList);
-            
+
             $investments = InvestmentInvestor::whereIn('user_id', $investors)
-                ->where('project_id', $projectId)
-                ->where('accepted', 1)
-                ->where('is_cancelled', false)
-                ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-                ->groupBy('user_id')
-                ->get();;
+            ->where('project_id', $projectId)
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id')
+            ->get();;
 
             // Add the records to project progress table
             // ProjectProg::create([
@@ -1732,12 +1780,12 @@ class DashboardController extends Controller
         if($investorList != '') {
             $investors = explode(',', $investorList);
             $investments = InvestmentInvestor::whereIn('user_id', $investors)
-                ->where('project_id', $projectId)
-                ->where('accepted', 1)
-                ->where('is_cancelled', false)
-                ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-                ->groupBy('user_id')
-                ->get();
+            ->where('project_id', $projectId)
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id')
+            ->get();
             $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
 
             $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';

@@ -14,7 +14,7 @@ class AddFieldMasterInvestmentIdToInvestmentInvestorTable extends Migration
     {
         Schema::table('investment_investor', function(Blueprint $table) {
             $table->integer('master_investment')->unsigned()->nullable();
-            $table->foreign('master_investment')->references('id')->on('projects');
+            $table->foreign('master_investment')->references('id')->on('investment_investor');
         });
     }
 
@@ -26,6 +26,7 @@ class AddFieldMasterInvestmentIdToInvestmentInvestorTable extends Migration
     public function down()
     {
         Schema::table('investment_investor', function(Blueprint $table) {
+            $table->dropForeign('investment_investor_master_investment_foreign');
             $table->dropColumn('master_investment');
         });
     }

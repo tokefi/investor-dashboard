@@ -541,7 +541,7 @@ class UsersController extends Controller
         $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.applicationHtml',compact('investment','color','user','project','investing','shareEnd','shareStart'));
+        return view('pdf.applicationHtml',compact('investment','color','user','project','investing'));
     }
 
     public function usersNotifications($user_id)
