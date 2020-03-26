@@ -224,7 +224,7 @@ class DashboardController extends Controller
     {
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
-        $masterChild = Project::where('master_child',0)->where('id','!=',$project->id)->get();
+        $masterChild = Project::where('master_child',0)->where('id','!=',$project->id)->where('project_site',url())->get();
         if($project->project_site != url()){
             return redirect()->route('dashboard.projects')->withMessage('<p class="alert alert-warning text-center">Access Denied</p>');
         }
