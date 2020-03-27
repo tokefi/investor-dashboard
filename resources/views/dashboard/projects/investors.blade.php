@@ -60,13 +60,13 @@
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h4 class="text-center">Applications</h4></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h4 class="text-center">Accepted applications</h4></a></li>
+				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
+				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
-				<li style="width: 20%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h4 class="text-center">EOI (Coming Soon)</h4></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h4 class="text-center">Project EOI</h4></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h4 class="text-center">Registry</h4></a></li>
+				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
+				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
@@ -369,7 +369,7 @@
 										<th>@if($project->share_vs_unit) Share @else Unit @endif face value</th>
 										<th>Price ($)</th>
 										<th>Amount</th>
-										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
+										{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
 										<th>TFN</th>
 										<th>Investment Documents</th>
 										<th>Account Name</th>
@@ -402,7 +402,7 @@
 										<td>{{round($shareInvestment->amount, 2)}}</td>
 										<td>{{ $shareInvestment->buy_rate }}</td>
 										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate, 2)) }}</td>
-										<td>
+										{{-- <td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Investment is repurchased</strong>
 											@else
@@ -420,7 +420,7 @@
 											@endif
 											@endif
 											@endif
-										</td>
+										</td> --}}
 										<td>
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->tfn}} @else{{$shareInvestment->user->tfn}} @endif
 										</td>
@@ -446,6 +446,91 @@
 						</div>
 
 					</div>
+
+					<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
+						<div>
+							<div class="share-registry-actions">
+								{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
+								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
+								{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
+							</div>
+							<div class="clear-both">
+								<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> cents per @if($project->share_vs_unit) share @else unit @endif  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
+									{{csrf_field()}}
+									<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
+								</form>
+							</div>
+						</div>
+						<br>
+						<br>
+						<div>
+							<table class="table table-bordered table-striped new-registry-table" id="new_registry_table">
+								<thead>
+									<tr>
+										<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
+										<th>Project SPV Name</th>
+										<th>Investor Name</th>
+										<th>Phone</th>
+										<th>Email</th>
+										<th>Address</th>
+										<th>@if($project->share_vs_unit) Shares @else Units @endif</th>
+										<th>Price ($)</th>
+										<th>Market value ($)</th>
+										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach ($newRegistries as $registry)
+										<tr>
+											<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
+											<td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td>
+											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
+											<td>{{$registry->user->phone_number}}</td>
+											<td>{{$registry->user->email}}</td>
+											<td>
+												{{$registry->user->line_1}},
+												{{$registry->user->line_2}},
+												{{$registry->user->city}},
+												{{$registry->user->state}},
+												{{$registry->user->country}},
+												{{$registry->user->postal_code}}
+											</td>
+											<td>{{ $registry->shares }}</td>
+											<td>{{ $project->share_per_unit_price }}</td>
+											<td>{{ $registry->shares * $project->share_per_unit_price }}</td>
+											<td>
+												@if($project->share_vs_unit)
+												<a href="{{route('user.view.share', [base64_encode($registry->id)])}}" target="_blank">
+													Share Certificate
+												</a>
+												@else
+												<a href="{{route('user.view.unit', [base64_encode($registry->id)])}}" target="_blank">
+													Unit Certificate
+												</a>
+												@endif
+											</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
+	
 
 					{{-- <div id="transactions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
@@ -587,78 +672,7 @@
 						</table>
 					</div>
 				</div>
-				<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
-					<div>
-						<div class="share-registry-actions">
-							{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
-							<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
-							{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
-						</div>
-						<div class="clear-both">
-							<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
-								{{csrf_field()}}
-								<span class="declare-statement hide"><small>Issue Dividend at <input type="number" name="dividend_percent" id="dividend_percent" step="0.01">% annual for the duration of between <input type="text" name="start_date" id="start_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> and <input type="text" name="end_date" id="end_date" class="datepicker" placeholder="DD/MM/YYYY" readonly="readonly"> : <input type="submit" class="btn btn-primary declare-dividend-btn" value="Declare"></small></span>
-								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-							</form>
-							<form id="declare_fixed_dividend_form" action="{{route('dashboard.investment.declareFixedDividend', [$project->id])}}" method="POST">
-								{{csrf_field()}}
-								<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> cents per @if($project->share_vs_unit) share @else unit @endif  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
-								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-							</form>
-							<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
-								{{csrf_field()}}
-								<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
-								<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
-							</form>
-							<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
-								{{csrf_field()}}
-								<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
-							</form>
-						</div>
-					</div>
-					<br>
-					<br>
-					<div>
-						<table class="table table-bordered table-striped new-registry-table" id="new_registry_table">
-							<thead>
-								<tr>
-									<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
-									<th>Project SPV Name</th>
-									<th>Investor Name</th>
-									<th>Phone</th>
-									<th>Email</th>
-									<th>Address</th>
-									<th>@if($project->share_vs_unit) Shares @else Units @endif</th>
-									<th>Price ($)</th>
-									<th>Market value ($)</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach ($newRegistries as $registry)
-									<tr>
-										<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
-										<td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td>
-										<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
-										<td>{{$registry->user->phone_number}}</td>
-										<td>{{$registry->user->email}}</td>
-										<td>
-											{{$registry->user->line_1}},
-											{{$registry->user->line_2}},
-											{{$registry->user->city}},
-											{{$registry->user->state}},
-											{{$registry->user->country}},
-											{{$registry->user->postal_code}}
-										</td>
-										<td>{{ $registry->shares }}</td>
-										<td>{{ $project->share_per_unit_price }}</td>
-										<td>{{ $registry->shares * $project->share_per_unit_price }}</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-
+				
 			</div>
 		</div>
 	</div>

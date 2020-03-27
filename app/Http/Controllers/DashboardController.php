@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Credit;
 use App\Color;
 use App\Helpers\BulkEmailHelper;
+use App\Helpers\ModelHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Investment;
@@ -822,14 +823,8 @@ class DashboardController extends Controller
 
         if($investorList != ''){
             $investors = explode(',', $investorList);
-
-            $investments = InvestmentInvestor::whereIn('user_id', $investors)
-            ->where('project_id', $projectId)
-            ->where('accepted', 1)
-            ->where('is_cancelled', false)
-            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
-            ->get();;
+            
+            $investments = ModelHelper::getTotalInvestmentByUserAndProject($investors, $projectId);
 
             // Add the records to project progress table
             // ProjectProg::create([

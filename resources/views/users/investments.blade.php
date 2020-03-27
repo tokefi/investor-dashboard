@@ -34,7 +34,7 @@
 			<h3 class="text-center">My Investments</h3>
 			<div class="table-responsive text-center">
 				<table class="table table-bordered table-striped" id="investmentsTable">
-					<thead>
+					{{-- <thead>
 						<tr>
 							<th>Project Name</th>
 							<th>Investment Amount</th>
@@ -83,6 +83,38 @@
 								<td></td>
 								<td></td>
 							</tr>
+						@endforeach
+						@endif
+					</tbody> --}}
+					<thead>
+						<tr>
+							<th>Project Name</th>
+							<th>Project Address</th>
+							<th>Shares/units</th>
+							<th>Price ($)</th>
+							<th>Market Value</th>
+							<th>Link to share certificate</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if($investments->count())
+						@foreach($investments as $investment)
+						<tr>
+							<td>{{$investment->project->title}}</td>
+							<td>
+								{{$investment->project->location->line_1}}, 
+								{{$investment->project->location->line_2}}, 
+								{{$investment->project->location->city}}, 
+								{{$investment->project->location->postal_code}},
+								{{$investment->project->location->country}}
+							</td>
+							<td>{{$investment->shares}}</td>
+							<td>{{$investment->project->share_per_unit_price}}</td>
+							<td>${{number_format($investment->shares * $investment->project->share_per_unit_price)}}</td>
+							<td>
+								<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
+							</td>
+						</tr>
 						@endforeach
 						@endif
 					</tbody>

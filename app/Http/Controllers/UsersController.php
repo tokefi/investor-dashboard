@@ -471,8 +471,7 @@ class UsersController extends Controller
         if($user->id != $user_id){
             return redirect()->route('users.investments', $user)->withMessage('<p class="alert text-center alert-warning">You can not access that profile.</p>');
         }
-        $investments = InvestmentInvestor::where('user_id', $user->id)
-        ->where('project_site', url())->get();
+        $investments = \App\Helpers\ModelHelper::getTotalInvestmentByUser($user_id);
         return view('users.investments', compact('user','color', 'investments'));
     }
 
@@ -484,16 +483,21 @@ class UsersController extends Controller
     {
         $investment_id = base64_decode($investment_id);
         $color = Color::where('project_site',url())->first();
-        $investment = InvestmentInvestor::find($investment_id);
+        $investmentDetails = InvestmentInvestor::findOrFail($investment_id);
+        $userId = $investmentDetails->user_id;
+        $projectId = $investmentDetails->project_id;
+        $investmentDetails = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($userId), $projectId);
+        $investment = $investmentDetails->count() ? $investmentDetails->first() : null;
+        
         // dd($investment_id);
-        $shareStart = $investment->share_number;
-        $shareStart =  explode('-',$shareStart);
-        $shareEnd = $shareStart[1];
-        $shareStart = $shareStart[0];
-        $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
+        // $shareStart = $investment->share_number;
+        // $shareStart =  explode('-',$shareStart);
+        // $shareEnd = $shareStart[1];
+        // $shareStart = $shareStart[0];
+        // $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing','shareEnd','shareStart'));
+        return view('pdf.invoiceHtml',compact('investment','color','user','project'));
         // $pdf->setPaper('a4', 'landscape');
         // $pdf->setOptions(['Content-Type' => 'application/pdf','images' => true]);
         // return $pdf->stream('invoice.pdf',200,['Content-Type' => 'application/pdf','Content-Disposition' => 'inline']);
