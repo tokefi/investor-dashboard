@@ -451,7 +451,7 @@
 						<div>
 							<div class="share-registry-actions">
 								{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
-								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
+								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Dividend</button>
 								{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
 							</div>
 							<div class="clear-both">
@@ -733,7 +733,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM FIXED DIVIDEND</h4>
+				<h4 class="modal-title">CONFIRM DIVIDEND</h4>
 			</div>
 			<div class="modal-body" style="padding: 15px 30px;">
 				<p class="text-center">
