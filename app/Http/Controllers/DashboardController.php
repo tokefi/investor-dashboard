@@ -824,7 +824,7 @@ class DashboardController extends Controller
         if($investorList != ''){
             $investors = explode(',', $investorList);
             
-            $investments = ModelHelper::getTotalInvestmentByUserAndProject($investors, $projectId);
+            $investments = ModelHelper::getTotalInvestmentByUsersAndProject($investors, $projectId);
 
             // Add the records to project progress table
             // ProjectProg::create([
