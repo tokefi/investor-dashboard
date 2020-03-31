@@ -49,19 +49,19 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 												<p>
 													This Application Form is important. If you are in doubt as to how to deal with it, please contact your professional adviser without delay. You should read the entire @if($investment->project->project_prospectus_text!='') {{$investment->project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif carefully before completing this form. To meet the requirements of the Corporations Act, this Application Form must  not be distributed unless included in, or accompanied by, the @if($investment->project->project_prospectus_text!='') {{$investment->project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif.
 												</p>
-												<label>I/We apply for *</label>
-												<input type="number" name="amount_to_invest" class="form-control" onkeypress="return isNumber(event)" placeholder="Minimum Amount A${{$investment->project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$investment->project->investment->minimum_accepted_amount}}" step="5" required value="{{$investment->amount}}">
-												@if($investment->project->share_vs_unit == 1)
-												<h5>Number of Redeemable Preference Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
-												@elseif($investment->project->share_vs_unit == 2)
-												<h5>Number of Preference Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
-												@elseif($investment->project->share_vs_unit == 3)
-												<h5>Number of Ordinary Shares at $1 per Share or such lesser number of Shares which may be allocated to me/us</h5>
-												@else
-												<h5>Number of Units at $1 per Unit or such lesser number of Units which may be allocated to me/us</h5>
-												@endif
 												<label>I/We lodge full Application Money</label>
-												<input type="text" name="apply_for" class="form-control" placeholder="$5000" value="A$ {{number_format(round($investment->amount, 2))}}" disabled="" style="width: 60%; background-color: #fff" id="application_money">
+												<input type="number" name="apply_for" class="form-control" placeholder="$5000" value="{{ round($investment->amount * $investment->project->share_per_unit_price, 2) }}" style="width: 60%;" id="application_money" step="0.01" min="{{$investment->investment->minimum_accepted_amount * $investment->project->share_per_unit_price}}"><br>
+												<label>I/We apply for *</label>
+												<input type="text" readonly name="amount_to_invest" class="form-control" placeholder="Minimum Amount A${{$investment->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$investment->investment->minimum_accepted_amount}}" required value="{{$investment->amount}}">
+												@if($investment->project->share_vs_unit == 1)
+												<h5>Number of Redeemable Preference Shares at ${{ $investment->project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												@elseif($investment->project->share_vs_unit == 2)
+												<h5>Number of Preference Shares at ${{ $investment->project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												@elseif($investment->project->share_vs_unit == 3)
+												<h5>Number of Ordinary Shares at ${{ $investment->project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
+												@else
+												<h5>Number of Units at ${{ $investment->project->share_per_unit_price }} per Unit or such lesser number of Units which may be allocated to me/us</h5>
+												@endif
 												<input type="text" name="project_id" @if($investment->projects_spv) value="{{$investment->projects_spv->project_id}}" @endif hidden >
 											</div>
 										</div>
@@ -518,13 +518,14 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 			}
 		});
 
-		var qty=$("#apply_for");
-			qty.bind('keyup mouseup', function (){
-				var total='A$ '+qty.val().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-				$("#application_money").val(total);
-			});
-		
+		let amount=$("#application_money");
+		amount.bind('keyup mouseup', function (){
+			let value = (amount.val() / parseFloat({{ $investment->project->share_per_unit_price}})).toFixed(2);
+			$("#apply_for").val(value);
 		});
+		
+	});
+		
 
 </script>
 @stop
