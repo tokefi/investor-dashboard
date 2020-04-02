@@ -240,7 +240,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && !isset($clientApplication) && !$user->idDoc )
+									@if(!Auth::guest() && !isset($clientApplication) && !$user->idDoc && !App\Helpers\SiteConfigurationHelper::isSiteAgent()  )
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -252,7 +252,6 @@ Offer Doc
 												<input type="radio" name="investing_as" value="Trust or Company" > Company, Trust or SMSF<br>
 												<hr>
 											</div>
-
 										</div>
 									</div>
 									<div class="row " id="section-3">
@@ -299,7 +298,7 @@ Offer Doc
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
-												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
+												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>hi
 												<br>
 												<h4>Are you Investing as</h4>
 												<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
