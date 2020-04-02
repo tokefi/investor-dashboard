@@ -240,7 +240,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && !isset($clientApplication) && !$user->idDoc && !App\Helpers\SiteConfigurationHelper::isSiteAgent()  )
+									@if(!Auth::guest() && $user->idDoc )
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -298,7 +298,7 @@ Offer Doc
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
-												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>hi
+												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
 												<h4>Are you Investing as</h4>
 												<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
@@ -322,13 +322,13 @@ Offer Doc
 												<label>Given Name(s)</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && !isset($clientApplication) && $user->first_name) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif >
+														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif >
 													</div>
 												</div><br>
 												<label>Surname</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && !isset($clientApplication) && $user->last_name) value="{{$user->last_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_last_name}}" @endif>
+														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && $user->last_name) value="{{$user->last_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_last_name}}" @endif>
 													</div>
 												</div><br>
 											</div>
@@ -336,10 +336,10 @@ Offer Doc
 												<label>Joint Investor Details</label>
 												<div class="row">
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
+														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
 													</div>
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
+														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
 													</div>
 												</div>
 												<br>
@@ -501,7 +501,7 @@ Offer Doc
 																<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
 																	<select name="country" class="form-control">
 																		@foreach(\App\Http\Utilities\Country::all() as $country => $code)
-																		<option @if(!Auth::guest() && !isset($clientApplication) && $user->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
+																		<option @if(!Auth::guest() && $user->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
 																		@endforeach
 																	</select>
 																	{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
@@ -525,16 +525,16 @@ Offer Doc
 										<div class="col-md-12">
 											<div>
 												<label>Tax File Number (applicable to Australian investors only)</label>
-												<input type="text" class="form-control" name="tfn" placeholder="Tax File Number (applicable to Australian investors only)" @if(!Auth::guest()&& !isset($clientApplication) && $user->tfn) value="{{$user->tfn}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->tfn}}" @endif>
+												<input type="text" class="form-control" name="tfn" placeholder="Tax File Number (applicable to Australian investors only)" @if(!Auth::guest()&& $user->tfn) value="{{$user->tfn}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->tfn}}" @endif>
 												<p><small>You are not required to provide your TFN, but in it being unavailable we will be required to withhold tax at the highest marginal rate of 49.5% </small></p><br>
 												<div class="row">
 													<div class="col-md-6">
 														<label>Phone</label>
-														<input type="text" name="phone" class="form-control" placeholder="Phone" required @if(!Auth::guest()&& !isset($clientApplication) && $user->phone_number) value="{{$user->phone_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->phone_number}}" @endif>
+														<input type="text" name="phone" class="form-control" placeholder="Phone" required @if(!Auth::guest()&& $user->phone_number) value="{{$user->phone_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->phone_number}}" @endif>
 													</div>
 													<div class="col-md-6">
 														<label>Email</label>
-														<input type="text" name="email" id="offerEmail" class="form-control" placeholder="Email" required @if(!Auth::guest() && !isset($clientApplication) && $user->email)disabled value="{{$user->email}}" @endif @if(isset($eoi))disabled value="{{$user->email}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_email}}" @endif style="background:transparent;">
+														<input type="text" name="email" id="offerEmail" class="form-control" placeholder="Email" required @if(!Auth::guest() && $user->email)disabled value="{{$user->email}}" @endif @if(isset($eoi))disabled value="{{$user->email}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_email}}" @endif style="background:transparent;">
 													</div>
 												</div>
 											</div>
@@ -550,15 +550,15 @@ Offer Doc
 												<div class="row">
 													<div class="col-md-4">
 														<label>Account Name</label>
-														<input type="text" name="account_name" class="form-control" placeholder="Account Name"  @if(!Auth::guest()&& !isset($clientApplication) && $user->account_name) value="{{$user->account_name}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_name}}" @endif>
+														<input type="text" name="account_name" class="form-control" placeholder="Account Name"  @if(!Auth::guest()&& $user->account_name) value="{{$user->account_name}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_name}}" @endif>
 													</div>
 													<div class="col-md-4">
 														<label>BSB</label>
-														<input type="text" name="bsb" class="form-control" placeholder="BSB"  @if(!Auth::guest()&& !isset($clientApplication) && $user->bsb) value="{{$user->bsb}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->bsb}}" @endif>
+														<input type="text" name="bsb" class="form-control" placeholder="BSB"  @if(!Auth::guest()&& $user->bsb) value="{{$user->bsb}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->bsb}}" @endif>
 													</div>
 													<div class="col-md-4">
 														<label>Account Number</label>
-														<input type="text" name="account_number" class="form-control" placeholder="Account Number"  @if(!Auth::guest() && !isset($clientApplication) && $user->account_number) value="{{$user->account_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_number}}" @endif>
+														<input type="text" name="account_number" class="form-control" placeholder="Account Number"  @if(!Auth::guest() && $user->account_number) value="{{$user->account_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_number}}" @endif>
 													</div>
 												</div>
 
@@ -945,12 +945,12 @@ Offer Doc
 			}
 
 		});
-		@if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Individual Investor')
+		@if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Individual Investor')
 		$("input[value='Individual Investor']").trigger("initCheckboxes");
-		@elseif(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor')
+		@elseif(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor')
 		console.log($("input[name='investing_as']"));
 		$("input[value='Joint Investor']").trigger("click");
-		@elseif(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Trust or Company')
+		@elseif(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Trust or Company')
 		$("input[value='Trust or Company']").trigger("initCheckboxes");
 		@endif
 		// Slide and show the aml requirements section
