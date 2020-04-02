@@ -10,6 +10,7 @@ use App\IdImage;
 use App\IdDocument;
 use App\MailSetting;
 use App\UserRegistration;
+
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\TransportManager;
 use App\Helpers\SiteConfigurationHelper;
@@ -73,6 +74,17 @@ class AppMailer
 
         $this->deliver();
     }
+
+    public function sendApplicationRequestNotificationToClient(User $agent, Project $project, $clientApplication)
+    {
+        $this->to = $clientApplication->client_email;
+        $this->view = 'emails.requestToInvestorFromAgent';
+        $this->subject = $agent->first_name.' '.$agent->last_name.' is requesting investment application sign off';
+        $this->data = compact('agent','project','clientApplication');
+
+        $this->deliver();
+    }
+
 
     public function sendInterestNotificationDeveloper(Project $project, User $investor)
     {

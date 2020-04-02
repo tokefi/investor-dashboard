@@ -36,6 +36,14 @@ class SiteConfigurationHelper
     	return 0;
     }
 
+    public static function isSiteAgent()
+    {
+        if(Auth::user()->roles->contains('role','agent') && Auth::user()->registration_site==url()){
+            return 1;
+        }
+        return 0;
+    }
+
     public static function getSiteThemeColors()
     {
         $color = Color::where('project_site', url())->first();

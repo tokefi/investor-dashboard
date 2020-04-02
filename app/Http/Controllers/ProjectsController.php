@@ -37,6 +37,7 @@ use App\SiteConfiguration;
 use App\ProjectEOI;
 use App\ProspectusDownload;
 use App\Helpers\SiteConfigurationHelper;
+use App\AgentInvestmentApplication;
 
 class ProjectsController extends Controller
 {
@@ -538,6 +539,11 @@ class ProjectsController extends Controller
                 $user = User::find($request->uid);
                 $eoi = ProjectEOI::find($request->id);
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment'));
+            }
+            if($request->source == 'clientApplication'){
+                $action = '/offer/submit/'.$project_id.'/step1';
+                $clientApplication = AgentInvestmentApplication::findOrFail($request->id);
+                return view('projects.offer', compact('project','color','action','projects_spv', 'clientApplication','admin_investment'));
             }
             if(!$project->eoi_button){
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment'));

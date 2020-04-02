@@ -198,6 +198,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasMany('App\ProjectEOI');
     }
+    public function AgentInvestmentApplication()
+    {
+        return $this->hasMany('App\AgentInvestmentApplication');
+    }
     public function prospectus_download()
     {
         return $this->hasMany('App\ProspectusDownload');

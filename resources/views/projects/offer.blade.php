@@ -152,9 +152,9 @@ Offer Doc
 													This Application Form is important. If you are in doubt as to how to deal with it, please contact your professional adviser without delay. You should read the entire @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif carefully before completing this form. To meet the requirements of the Corporations Act, this Application Form must  not be distributed unless included in, or accompanied by, the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif.
 												</p>
 												<label>I/We lodge full Application Money *</label>
-												<input required type="number" name="apply_for" class="form-control" placeholder="$5000" value="@if(isset($eoi)) {{round($eoi->investment_amount * $project->share_per_unit_price, 2)}} @endif" style="width: 60%;" id="application_money" step="0.01" min="{{$project->investment->minimum_accepted_amount * $project->share_per_unit_price}}"><br>
+												<input required type="number" name="apply_for" class="form-control" placeholder="" @if(isset($eoi)) value="{{number_format(round($eoi->investment_amount * $project->share_per_unit_price, 2))}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->investment_amount * $project->share_per_unit_price }}" @endif style="width: 60%;" id="application_money" step="0.01" min="{{$project->investment->minimum_accepted_amount * $project->share_per_unit_price}}"><br>
 												<label>I/We apply for *</label>
-												<input type="text" readonly name="amount_to_invest" class="form-control" placeholder="Minimum Amount {{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}"  required value="@if(isset($eoi)) {{$eoi->investment_amount}} @endif">
+												<input type="text" readonly name="amount_to_invest" class="form-control" placeholder="Minimum Amount {{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}"  required @if(isset($eoi)) value="{{$eoi->investment_amount}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->investment_amount}}" @endif>
 												@if($project->share_vs_unit == 1)
 												<h5>Number of Redeemable Preference Shares at ${{ $project->share_per_unit_price }} per Share or such lesser number of Shares which may be allocated to me/us</h5>
 												@elseif($project->share_vs_unit == 2)
@@ -240,7 +240,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && !$user->idDoc)
+									@if(!Auth::guest() && !isset($clientApplication) && !$user->idDoc )
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -269,7 +269,7 @@ Offer Doc
 												<label>Given Name(s)</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" @endif>
+														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}"@endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif>
 													</div>
 												</div><br>
 												<label>Surname</label>
@@ -295,7 +295,7 @@ Offer Doc
 										</div>
 									</div>
 									@endif
-									@if(Auth::guest())
+									@if(Auth::guest()|| (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()))
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -307,7 +307,6 @@ Offer Doc
 												<input type="radio" name="investing_as" value="Trust or Company" > Company, Trust or SMSF<br>
 												<hr>
 											</div>
-
 										</div>
 									</div>
 									<div class="row " id="section-3">
@@ -324,13 +323,13 @@ Offer Doc
 												<label>Given Name(s)</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" @endif>
+														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && !isset($clientApplication) && $user->first_name) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif >
 													</div>
 												</div><br>
 												<label>Surname</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && $user->last_name) value="{{$user->last_name}}" @endif>
+														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && !isset($clientApplication) && $user->last_name) value="{{$user->last_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_last_name}}" @endif>
 													</div>
 												</div><br>
 											</div>
@@ -338,10 +337,10 @@ Offer Doc
 												<label>Joint Investor Details</label>
 												<div class="row">
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
+														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
 													</div>
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
+														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
 													</div>
 												</div>
 												<br>
@@ -463,11 +462,11 @@ Offer Doc
 														<div class="col-sm-12">
 															<div class="row">
 																<div class="col-sm-6 @if($errors->first('line_1')){{'has-error'}} @endif">
-																	{!! Form::text('line_1', isset($user->line_1) ? $user->line_1 : null, array('placeholder'=>'line 1', 'class'=>'form-control','required')) !!}
+																	{!! Form::text('line_1', isset($user->line_1) ? $user->line_1 : (isset($clientApplication->line_1)  ? $clientApplication->line_1 : null), array('placeholder'=>'line 1', 'class'=>'form-control','required')) !!}
 																	{!! $errors->first('line_1', '<small class="text-danger">:message</small>') !!}
 																</div>
 																<div class="col-sm-6 @if($errors->first('line_2')){{'has-error'}} @endif">
-																	{!! Form::text('line_2', isset($user->line_2) ? $user->line_2 : null, array('placeholder'=>'line 2', 'class'=>'form-control')) !!}
+																	{!! Form::text('line_2', isset($user->line_2) ? $user->line_2 : (isset($clientApplication->line_2)  ? $clientApplication->line_2 : null), array('placeholder'=>'line 2', 'class'=>'form-control')) !!}
 																	{!! $errors->first('line_2', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
@@ -480,11 +479,11 @@ Offer Doc
 														<div class="col-sm-12">
 															<div class="row">
 																<div class="col-sm-6 @if($errors->first('city')){{'has-error'}} @endif">
-																	{!! Form::text('city', isset($user->city) ? $user->city :null, array('placeholder'=>'City', 'class'=>'form-control','required')) !!}
+																	{!! Form::text('city', isset($user->city) ? $user->city :(isset($clientApplication->city)  ? $clientApplication->city : null), array('placeholder'=>'City', 'class'=>'form-control','required')) !!}
 																	{!! $errors->first('city', '<small class="text-danger">:message</small>') !!}
 																</div>
 																<div class="col-sm-6 @if($errors->first('state')){{'has-error'}} @endif">
-																	{!! Form::text('state', isset($user->state) ? $user->state : null, array('placeholder'=>'state', 'class'=>'form-control','required')) !!}
+																	{!! Form::text('state', isset($user->state) ? $user->state : (isset($clientApplication->state)  ? $clientApplication->state : null), array('placeholder'=>'state', 'class'=>'form-control','required')) !!}
 																	{!! $errors->first('state', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
@@ -497,20 +496,20 @@ Offer Doc
 														<div class="col-sm-12">
 															<div class="row">
 																<div class="col-sm-6 @if($errors->first('postal_code')){{'has-error'}} @endif">
-																	{!! Form::text('postal_code', isset($user->postal_code) ? $user->postal_code :null, array('placeholder'=>'postal code', 'class'=>'form-control','required')) !!}
+																	{!! Form::text('postal_code', isset($user->postal_code) ? $user->postal_code :(isset($clientApplication->postal_code)  ? $clientApplication->postal_code : null), array('placeholder'=>'postal code', 'class'=>'form-control','required')) !!}
 																	{!! $errors->first('postal_code', '<small class="text-danger">:message</small>') !!}
 																</div>
 																<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
 																	<select name="country" class="form-control">
 																		@foreach(\App\Http\Utilities\Country::all() as $country => $code)
-																		<option @if(!Auth::guest() && $user->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
+																		<option @if(!Auth::guest() && !isset($clientApplication) && $user->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
 																		@endforeach
 																	</select>
 																	{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
-														</div>
-													</div>
+														</div> 
+													</div> 
 												</div>
 												{{-- <br><br>
 												<div class="row">
@@ -527,16 +526,16 @@ Offer Doc
 										<div class="col-md-12">
 											<div>
 												<label>Tax File Number (applicable to Australian investors only)</label>
-												<input type="text" class="form-control" name="tfn" placeholder="Tax File Number (applicable to Australian investors only)" @if(!Auth::guest() && $user->tfn) value="{{$user->tfn}}" @endif>
+												<input type="text" class="form-control" name="tfn" placeholder="Tax File Number (applicable to Australian investors only)" @if(!Auth::guest()&& !isset($clientApplication) && $user->tfn) value="{{$user->tfn}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->tfn}}" @endif>
 												<p><small>You are not required to provide your TFN, but in it being unavailable we will be required to withhold tax at the highest marginal rate of 49.5% </small></p><br>
 												<div class="row">
 													<div class="col-md-6">
 														<label>Phone</label>
-														<input type="text" name="phone" class="form-control" placeholder="Phone" required @if(!Auth::guest() && $user->phone_number) value="{{$user->phone_number}}" @endif>
+														<input type="text" name="phone" class="form-control" placeholder="Phone" required @if(!Auth::guest()&& !isset($clientApplication) && $user->phone_number) value="{{$user->phone_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->phone_number}}" @endif>
 													</div>
 													<div class="col-md-6">
 														<label>Email</label>
-														<input type="text" name="email" id="offerEmail" class="form-control" placeholder="Email" required @if(!Auth::guest() && $user->email)disabled value="{{$user->email}}" @endif @if(isset($eoi))disabled value="{{$user->email}}" @endif style="background:transparent;">
+														<input type="text" name="email" id="offerEmail" class="form-control" placeholder="Email" required @if(!Auth::guest() && !isset($clientApplication) && $user->email)disabled value="{{$user->email}}" @endif @if(isset($eoi))disabled value="{{$user->email}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_email}}" @endif style="background:transparent;">
 													</div>
 												</div>
 											</div>
@@ -552,15 +551,15 @@ Offer Doc
 												<div class="row">
 													<div class="col-md-4">
 														<label>Account Name</label>
-														<input type="text" name="account_name" class="form-control" placeholder="Account Name"  @if(!Auth::guest() && $user->account_name) value="{{$user->account_name}}" @endif>
+														<input type="text" name="account_name" class="form-control" placeholder="Account Name"  @if(!Auth::guest()&& !isset($clientApplication) && $user->account_name) value="{{$user->account_name}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_name}}" @endif>
 													</div>
 													<div class="col-md-4">
 														<label>BSB</label>
-														<input type="text" name="bsb" class="form-control" placeholder="BSB"  @if(!Auth::guest() && $user->bsb) value="{{$user->bsb}}" @endif>
+														<input type="text" name="bsb" class="form-control" placeholder="BSB"  @if(!Auth::guest()&& !isset($clientApplication) && $user->bsb) value="{{$user->bsb}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->bsb}}" @endif>
 													</div>
 													<div class="col-md-4">
 														<label>Account Number</label>
-														<input type="text" name="account_number" class="form-control" placeholder="Account Number"  @if(!Auth::guest() && $user->account_number) value="{{$user->account_number}}" @endif>
+														<input type="text" name="account_number" class="form-control" placeholder="Account Number"  @if(!Auth::guest() && !isset($clientApplication) && $user->account_number) value="{{$user->account_number}}" @endif @if(isset($clientApplication)) value="{{  $clientApplication->account_number}}" @endif>
 													</div>
 												</div>
 
@@ -615,7 +614,25 @@ Offer Doc
 										</div>
 										<br>
 									</div>
-									<div class="row text-center">
+									@if(Auth::guest())
+									@else
+									<div class="row @if(! (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())) hide @endif">
+										
+										<div class="col-md-4">
+											submitting application as an Agent?
+										</div>
+										<div class="col-md-8">
+											<div class="switch-field ">
+												<input type="radio" id="switch_agent_on" name="agent_type" value="1" checked/>
+												<label for="switch_agent_on">ON</label>
+												<input type="radio" id="switch_agent_off" name="agent_type" value="0" />
+												<label for="switch_agent_off">OFF</label>
+											</div>
+										</div>
+									</div>
+									@endif
+
+									<div class="row text-center @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="typeAgentDiv">
 										<div class="col-md-8 col-md-offset-4">
 											<div class="switch-field">
 												<input type="radio" id="switch_left" name="signature_type" value="0" checked/>
@@ -632,9 +649,6 @@ Offer Doc
 									</div>
 									<script type="text/javascript" src="/assets/plugins/jSignature/flashcanvas.js"></script>
 									<script src="/assets/plugins/jSignature/jSignature.min.js"></script>
-									<div id="signature"><button class="btn pull-right" id="signatureClear">Clear</button></div>
-									<h4 class="text-center">Please Sign Here</h4>
-									<input type="hidden" name="signature_data" id="signature_data" value="">
 									<script>
 										$(document).ready(function() {
 											$("#signature").jSignature();
@@ -646,8 +660,24 @@ Offer Doc
 												var svgData = $(this).jSignature("getData", "image");
 												$('#signature_data').val(svgData[1]);
 											});
+
 										});
 									</script>
+									@if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) 
+									<script type="text/javascript">
+										$(document).ready(function() {
+											$("#signature").addClass('hidden');
+											$('#offerEmail').prop('disabled',false);
+										});
+									</script>
+									@endif @endif
+									<button class="btn pull-right @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="signatureClear">Clear</button>
+									<div class="" id="signature" >
+										
+									</div>
+									<h4 class="text-center @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="signh4">Please Sign Here</h4>
+									<input type="hidden" name="signature_data" id="signature_data" value="" >
+									
 									<br><br>
 
 									{{-- If admin is investing on behalf of the user--}}
@@ -916,12 +946,12 @@ Offer Doc
 			}
 
 		});
-		@if(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Individual Investor')
+		@if(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Individual Investor')
 		$("input[value='Individual Investor']").trigger("initCheckboxes");
-		@elseif(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor')
+		@elseif(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Joint Investor')
 		console.log($("input[name='investing_as']"));
 		$("input[value='Joint Investor']").trigger("click");
-		@elseif(!Auth::guest() && $user->idDoc && $user->idDoc->investing_as == 'Trust or Company')
+		@elseif(!Auth::guest() && !isset($clientApplication) && $user->idDoc && $user->idDoc->investing_as == 'Trust or Company')
 		$("input[value='Trust or Company']").trigger("initCheckboxes");
 		@endif
 		// Slide and show the aml requirements section
@@ -1148,17 +1178,34 @@ $(document).ready(function(){
 		backdrop: 'static',
 		keyboard: false
 	});
-	$('#switch_right').click(function () {
-		$('#typeSignatureDiv').removeClass('hidden');
+	$('#switch_agent_on').click(function () {
 		$('#signature').addClass('hidden');
-		$('#signature_data').prop('disabled',true);
-		$('#typeSignatureData').prop('disabled',false);
+		$('#typeAgentDiv').addClass('hidden');
+		$('#typeSignatureDiv').addClass('hidden');
+		$('#signh4').addClass('hidden');
+		$('#signatureClear').addClass('hidden');
+		$('#offerEmail').prop('disabled',false);
+	});
+	$('#switch_agent_off').click(function () {
+		$('#typeAgentDiv').removeClass('hidden');
+		$('#signature').removeClass('hidden');
+		$('#signh4').removeClass('hidden');
+		$('#signatureClear').removeClass('hidden');
+		$('#offerEmail').prop('disabled',true);
 	});
 	$('#switch_left').click(function () {
 		$('#signature').removeClass('hidden');
 		$('#typeSignatureDiv').addClass('hidden');
+		$('#signatureClear').removeClass('hidden');
 		$('#signature_data').prop('disabled',false);
 		$('#typeSignatureData').prop('disabled',true);
+	});
+	$('#switch_right').click(function () {
+		$('#typeSignatureDiv').removeClass('hidden');
+		$('#signature').addClass('hidden');
+		$('#signatureClear').addClass('hidden');
+		$('#signature_data').prop('disabled',true);
+		$('#typeSignatureData').prop('disabled',false);
 	});
 	$('#myform').submit(function(event) {
 		@if(Auth::guest())
