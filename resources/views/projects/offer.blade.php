@@ -262,7 +262,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && !$user->idDoc )
+									{{-- @if(!Auth::guest() && !$user->idDoc )
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -315,8 +315,8 @@ Offer Doc
 											</div>
 										</div>
 									</div>
-									@endif
-									@if(Auth::guest())
+									@endif --}}
+									{{-- @if(Auth::guest()) --}}
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -369,7 +369,7 @@ Offer Doc
 											</div>
 										</div>
 									</div>
-									@endif
+									{{-- @endif --}}
 									{{-- <div class="row" id="section-4" style="display: none;">
 										<div class="col-md-12">
 											<div id="trust_doc" style="display: none;">
