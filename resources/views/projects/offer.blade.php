@@ -128,8 +128,8 @@ Offer Doc
 								@if (Session::has('message'))
 								<div class="alert alert-success text-center">{{ Session::get('message') }}</div>
 								@endif
-								@if(Auth::guest() || (!(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())))
-								<div class="well text-center cursor-pointer fill-form-request-container">
+								@if(Auth::guest() || (!(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent() )))
+								<div class="well text-center cursor-pointer fill-form-request-container @if(isset($clientApplication) || isset($eoi)) hide @endif">
 									@if (Session::has('requestStatus'))
 									<i class="fa fa-check-circle-o fa-3x" aria-hidden="true" style="color: green;"></i><br>
 									<h3>Your request is submitted</h3>
@@ -139,7 +139,7 @@ Offer Doc
 									<a href="{{route('projects.interest.request', [$project->id])}}"><button type="button" class="btn btn-primary send-form-filling-request"><i class="fa fa-file-text fa-lg" aria-hidden="true"></i> &nbsp;&nbsp;Send Request</button></a>
 									@endif
 								</div>
-								<hr>
+								<hr class="@if(isset($clientApplication) || isset($eoi)) hide @endif">
 								@endif
 								<form action="{{route('offer.store')}}" rel="form" method="POST" enctype="multipart/form-data" id="myform">
 									{!! csrf_field() !!}
@@ -162,7 +162,7 @@ Offer Doc
 									<hr>
 									@endif
 									@endif
-									
+
 									<div class="row" id="section-1">
 										<div class="col-md-12">
 											<div>
