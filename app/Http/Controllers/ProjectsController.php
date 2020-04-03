@@ -543,7 +543,8 @@ class ProjectsController extends Controller
             if($request->source == 'clientApplication'){
                 $action = '/offer/submit/'.$project_id.'/step1';
                 $clientApplication = AgentInvestmentApplication::findOrFail($request->id);
-                return view('projects.offer', compact('project','color','action','projects_spv', 'clientApplication','admin_investment'));
+                $user = User::findOrFail($clientApplication->user_id);
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment'));
             }
             if(!$project->eoi_button){
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment'));

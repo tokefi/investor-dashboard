@@ -128,6 +128,7 @@ Offer Doc
 								@if (Session::has('message'))
 								<div class="alert alert-success text-center">{{ Session::get('message') }}</div>
 								@endif
+								@if(Auth::guest() || (!(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())))
 								<div class="well text-center cursor-pointer fill-form-request-container">
 									@if (Session::has('requestStatus'))
 									<i class="fa fa-check-circle-o fa-3x" aria-hidden="true" style="color: green;"></i><br>
@@ -139,8 +140,29 @@ Offer Doc
 									@endif
 								</div>
 								<hr>
+								@endif
 								<form action="{{route('offer.store')}}" rel="form" method="POST" enctype="multipart/form-data" id="myform">
 									{!! csrf_field() !!}
+									@if(Auth::guest())
+									@else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())
+									<div class="row  ">
+
+										<div class="col-md-4">
+											Submitting application as an Agent?
+										</div>
+										<div class="col-md-8">
+											<div class="switch-field ">
+												<input type="radio" id="switch_agent_on" name="agent_type" value="1" checked/>
+												<label for="switch_agent_on">ON</label>
+												<input type="radio" id="switch_agent_off" name="agent_type" value="0" />
+												<label for="switch_agent_off">OFF</label>
+											</div>
+										</div>
+									</div>
+									<hr>
+									@endif
+									@endif
+									
 									<div class="row" id="section-1">
 										<div class="col-md-12">
 											<div>
@@ -240,7 +262,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && $user->idDoc )
+									@if(!Auth::guest() && !$user->idDoc )
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -294,7 +316,7 @@ Offer Doc
 										</div>
 									</div>
 									@endif
-									@if(Auth::guest()|| (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()))
+									@if(Auth::guest())
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -613,24 +635,6 @@ Offer Doc
 										</div>
 										<br>
 									</div>
-									@if(Auth::guest())
-									@else
-									<div class="row @if(! (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())) hide @endif">
-										
-										<div class="col-md-4">
-											submitting application as an Agent?
-										</div>
-										<div class="col-md-8">
-											<div class="switch-field ">
-												<input type="radio" id="switch_agent_on" name="agent_type" value="1" checked/>
-												<label for="switch_agent_on">ON</label>
-												<input type="radio" id="switch_agent_off" name="agent_type" value="0" />
-												<label for="switch_agent_off">OFF</label>
-											</div>
-										</div>
-									</div>
-									@endif
-
 									<div class="row text-center @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="typeAgentDiv">
 										<div class="col-md-8 col-md-offset-4">
 											<div class="switch-field">
