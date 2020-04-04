@@ -144,7 +144,7 @@ Offer Doc
 								<form action="{{route('offer.store')}}" rel="form" method="POST" enctype="multipart/form-data" id="myform">
 									{!! csrf_field() !!}
 									@if(Auth::guest())
-									@else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())
+									@else @if((App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()))
 									<div class="row  ">
 
 										<div class="col-md-4">
@@ -262,7 +262,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && !isset($user->idDoc))
+									@if(!Auth::guest() && (!isset($user->idDoc) || (Auth::user()->roles->contains('role', 'admin')||Auth::user()->roles->contains('role', 'agent'))))
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -323,20 +323,20 @@ Offer Doc
 												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
 												<h4>Are you Investing as</h4>
-												<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
-												<input type="radio" name="investing_as" value="Joint Investor" > Joint Investor<br>
-												<input type="radio" name="investing_as" value="Trust or Company" > Company, Trust or SMSF<br>
+												<input type="radio" name="investing_as" value="Individual Investor" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Individual Investor')) checked @elseif(Auth::guest()) checked @endif> Individual Investor<br>
+												<input type="radio" name="investing_as" value="Joint Investor" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Joint Investor')) checked @endif> Joint Investor<br>
+												<input type="radio" name="investing_as" value="Trust or Company" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Trust or Company')) checked @endif> Company, Trust or SMSF<br>
 												<hr>
 											</div>
 										</div>
 									</div>
 									<div class="row " id="section-3">
 										<div class="col-md-12">
-											<div style="display: none;" id="company_trust">
+											<div @if(!(isset($clientApplication) && ($clientApplication->investing_as == 'Trust or Company'))) style="display: none;" @endif id="company_trust">
 												<label>Company of Trust Name</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled" >
+														<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Trust or Company')) value="{{ $clientApplication->investing_company }}" @endif>
 													</div>
 												</div><br>
 											</div>
@@ -354,14 +354,14 @@ Offer Doc
 													</div>
 												</div><br>
 											</div>
-											<div style="display: none;" id="joint_investor">
+											<div @if(!(isset($clientApplication) && ($clientApplication->investing_as == 'Joint Investor'))) style="display: none;" @endif id="joint_investor">
 												<label>Joint Investor Details</label>
 												<div class="row">
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
+														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Joint Investor')) value="{{ $clientApplication->joint_investor_first_name }}" readonly @endif>
 													</div>
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
+														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Joint Investor')) value="{{ $clientApplication->joint_investor_last_name }}"  readonly @endif>
 													</div>
 												</div>
 												<br>
@@ -370,6 +370,7 @@ Offer Doc
 										</div>
 									</div>
 									@endif
+
 									{{-- <div class="row" id="section-4" style="display: none;">
 										<div class="col-md-12">
 											<div id="trust_doc" style="display: none;">
@@ -1186,6 +1187,8 @@ $(document).ready(function(){
 		$('#typeAgentDiv').addClass('hidden');
 		$('#typeSignatureDiv').addClass('hidden');
 		$('#signh4').addClass('hidden');
+		$('#section-3').removeClass('hidden');
+		$('#section-2').removeClass('hidden');
 		$('#signatureClear').addClass('hidden');
 		$('#offerEmail').prop('disabled',false);
 	});
@@ -1193,6 +1196,8 @@ $(document).ready(function(){
 		$('#typeAgentDiv').removeClass('hidden');
 		$('#signature').removeClass('hidden');
 		$('#signh4').removeClass('hidden');
+		$('#section-3').addClass('hidden');
+		$('#section-2').addClass('hidden');
 		$('#signatureClear').removeClass('hidden');
 		$('#offerEmail').prop('disabled',true);
 	});

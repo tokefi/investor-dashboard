@@ -148,6 +148,21 @@ class OfferController extends Controller
                     'account_number'=>$request->account_number,
                     'project_site' => url(),
                 ]);
+
+        if($request->investing_as == 'Trust or Company'){
+          $clientApplication->investing_as = $request->investing_as;
+          $clientApplication->investing_company = $request->investing_company_name;
+          $clientApplication->save();
+        }elseif($request->investing_as == 'Joint Investor'){
+          $clientApplication->investing_as = $request->investing_as;
+          $clientApplication->joint_investor_first_name = $request->joint_investor_first;
+          $clientApplication->joint_investor_last_name = $request->joint_investor_last;
+          $clientApplication->save();
+        }else{
+          $clientApplication->investing_as = $request->investing_as;
+          $clientApplication->save();
+        }
+        // dd($clientApplication,$request->all());
         $mailer->sendApplicationRequestNotificationToClient($agent,$project,$clientApplication);
         return redirect()->back()->withMessage('Application Submitted Successfuliy');
       }
