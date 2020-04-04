@@ -262,7 +262,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									{{-- @if(!Auth::guest() && !$user->idDoc )
+									@if(!Auth::guest() && !isset($user->idDoc))
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -290,13 +290,13 @@ Offer Doc
 												<label>Given Name(s)</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}"@endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif>
+														<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && isset($user->first_name)) value="{{$user->first_name}}" @endif @if(isset($eoi))disabled value="{{$user->first_name}}"@endif @if(isset($clientApplication)) value="{{$clientApplication->client_first_name}}" @endif>
 													</div>
 												</div><br>
 												<label>Surname</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && $user->last_name) value="{{$user->last_name}}" @endif>
+														<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && isset($user->last_name)) value="{{$user->last_name}}" @endif @if(isset($clientApplication)) value="{{$clientApplication->client_last_name}}" @endif>
 													</div>
 												</div><br>
 											</div>
@@ -304,10 +304,10 @@ Offer Doc
 												<label>Joint Investor Details</label>
 												<div class="row">
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if($user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
+														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
 													</div>
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if($user->idDoc && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
+														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
 													</div>
 												</div>
 												<br>
@@ -315,8 +315,8 @@ Offer Doc
 											</div>
 										</div>
 									</div>
-									@endif --}}
-									{{-- @if(Auth::guest()) --}}
+									@endif
+									@if(Auth::guest())
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
@@ -358,10 +358,10 @@ Offer Doc
 												<label>Joint Investor Details</label>
 												<div class="row">
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && isset($user->idDoc->investing_as) == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
+														<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_first_name}}" readonly @endif>
 													</div>
 													<div class="col-md-6">
-														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && isset($user->idDoc->investing_as) == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
+														<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled" @if(!Auth::guest() && isset($user->idDoc) && $user->idDoc->investing_as == 'Joint Investor') value="{{$user->idDoc->joint_last_name}}" readonly @endif>
 													</div>
 												</div>
 												<br>
@@ -369,7 +369,7 @@ Offer Doc
 											</div>
 										</div>
 									</div>
-									{{-- @endif --}}
+									@endif
 									{{-- <div class="row" id="section-4" style="display: none;">
 										<div class="col-md-12">
 											<div id="trust_doc" style="display: none;">
