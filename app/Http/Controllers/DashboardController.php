@@ -54,7 +54,8 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin');
+        $this->middleware('admin',['except' => ['index']]);
+        
 
         $this->siteConfiguration = SiteConfiguration::where('project_site', url())->first();
     }
@@ -66,41 +67,48 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $color = Color::where('project_site',url())->first();
-        $users = User::where('registration_site',url());
-        $projects = Project::all();
-        $projects = $projects->where('project_site',url());
-        $notes = Note::all();
+        $user = \Illuminate\Support\Facades\Auth::User();
+        $roles = $user->roles;
+        // dd($user->roles);
+        if ($roles->contains('role', 'admin') || $roles->contains('role', 'master') || $roles->contains('role', 'agent')) {
+            $color = Color::where('project_site',url())->first();
+            $users = User::where('registration_site',url());
+            $projects = Project::all();
+            $projects = $projects->where('project_site',url());
+            $notes = Note::all();
         // $total_goal = Investment::all()->where('project_site',url())->sum('goal_amount');
         // $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('hide_investment', 0);
-        $activeP = $projects->where('project_site',url())->where('active', true);
-        $goal_amount = [];
-        $amount = [];
-        $funds_received = [];
+            $activeP = $projects->where('project_site',url())->where('active', true);
+            $goal_amount = [];
+            $amount = [];
+            $funds_received = [];
 
-        foreach ($activeP as $proj) {
-            $goal_amount[] = $proj->investment->goal_amount;
-            $investors = $proj->investors;
+            foreach ($activeP as $proj) {
+                $goal_amount[] = $proj->investment->goal_amount;
+                $investors = $proj->investors;
 
-            $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false);
-            foreach($pledged_investments as $pledged_investment){
-                $amount[] = $pledged_investment->amount;;
-            }
+                $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false);
+                foreach($pledged_investments as $pledged_investment){
+                    $amount[] = $pledged_investment->amount;;
+                }
 
-            $funds_received_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false)->where('money_received', true);
-            foreach($funds_received_investments as $funds_received_investment){
-                $funds_received[] = $funds_received_investment->amount;;
-            }
+                $funds_received_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false)->where('money_received', true);
+                foreach($funds_received_investments as $funds_received_investment){
+                    $funds_received[] = $funds_received_investment->amount;;
+                }
             // foreach($investors as $investor){
             //     $amount[] = $investor->getOriginal('pivot_amount');
             // }
+            }
+
+            $total_goal = array_sum($goal_amount);
+            $pledged_investments = array_sum($amount);
+            $total_funds_received = array_sum($funds_received);
+
+            return view('dashboard.index', compact('users', 'projects', 'pledged_investments', 'total_goal', 'notes','color', 'total_funds_received'));
         }
-
-        $total_goal = array_sum($goal_amount);
-        $pledged_investments = array_sum($amount);
-        $total_funds_received = array_sum($funds_received);
-
-        return view('dashboard.index', compact('users', 'projects', 'pledged_investments', 'total_goal', 'notes','color', 'total_funds_received'));
+        // return redirect()->route('users.show', $user)->withMessage('<p class="alert alert-warning text-center ">Admin Only</p>');
+        return redirect()->route('users.show', [$user])->withMessage('<p class="alert alert-warning text-center ">Admin Only</p>');
     }
 
     public function users(Request $request)
@@ -1211,8 +1219,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-             return new TransportManager($app);
-         });
+               return new TransportManager($app);
+           });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
