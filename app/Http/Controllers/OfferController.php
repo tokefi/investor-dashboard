@@ -127,27 +127,28 @@ class OfferController extends Controller
       }
       //Application submitted by agent
       if($request->agent_type){
+        // dd($project->retail_vs_wholesale);
         $agent = Auth::user();
         $clientApplication = AgentInvestmentApplication::create([
-                    'project_id' => $request->project_id,
-                    'user_id' => $user->id,
-                    'client_first_name' => $request->first_name,
-                    'client_last_name'=> $request->last_name,
-                    'client_email' => $request->email,
-                    'phone_number' => $request->phone,
-                    'investment_amount' => $request->apply_for,
-                    'country'=>$request->country,
-                    'line_1'=>$request->line_1,
-                    'line_2'=>$request->line_2,
-                    'city'=>$request->city,
-                    'state'=>$request->state,
-                    'postal_code'=>$request->postal_code,
-                    'tfn'=>$request->tfn,
-                    'account_name'=>$request->account_name,
-                    'bsb'=>$request->bsb,
-                    'account_number'=>$request->account_number,
-                    'project_site' => url(),
-                ]);
+          'project_id' => $request->project_id,
+          'user_id' => $user->id,
+          'client_first_name' => $request->first_name,
+          'client_last_name'=> $request->last_name,
+          'client_email' => $request->email,
+          'phone_number' => $request->phone,
+          'investment_amount' => $request->apply_for,
+          'country'=>$request->country,
+          'line_1'=>$request->line_1,
+          'line_2'=>$request->line_2,
+          'city'=>$request->city,
+          'state'=>$request->state,
+          'postal_code'=>$request->postal_code,
+          'tfn'=>$request->tfn,
+          'account_name'=>$request->account_name,
+          'bsb'=>$request->bsb,
+          'account_number'=>$request->account_number,
+          'project_site' => url(),
+        ]);
 
         if($request->investing_as == 'Trust or Company'){
           $clientApplication->investing_as = $request->investing_as;
@@ -161,6 +162,22 @@ class OfferController extends Controller
         }else{
           $clientApplication->investing_as = $request->investing_as;
           $clientApplication->save();
+        }
+        if(!$project->retail_vs_wholesale){
+
+          $clientApplication->wholesale_investing_as = $request->wholesale_investing_as;
+          if($request->wholesale_investing_as === 'Wholesale Investor (Net Asset $2,500,000 plus)'){
+                $clientApplication->accountant_name_and_firm = $request->accountant_name_firm_txt;
+            $clientApplication->accountant_professional_body_designation = $request->accountant_designation_txt;
+            $clientApplication->accountant_email = $request->accountant_email_txt;
+            $clientApplication->accountant_phone = $request->accountant_phone_txt;
+          }elseif($request->wholesale_investing_as === 'Sophisticated Investor'){
+            $clientApplication->experience_period = $request->experience_period_txt;
+            $clientApplication->equity_investment_experience_text = $request->equity_investment_experience_txt;
+            $clientApplication->unlisted_investment_experience_text = $request->unlisted_investment_experience_txt;
+            $clientApplication->understand_risk_text = $request->understand_risk_txt;
+          }
+             $clientApplication->save();
         }
         // dd($clientApplication,$request->all());
         $mailer->sendApplicationRequestNotificationToClient($agent,$project,$clientApplication);

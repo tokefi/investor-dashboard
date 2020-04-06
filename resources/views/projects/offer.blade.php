@@ -418,31 +418,31 @@ Offer Doc
 												<hr>
 												<b style="font-size: 1.1em;">Which option closely describes you?</b><br>
 												<div style="margin-left: 1.3em; margin-top: 5px;">
-													<input type="checkbox" name="wholesale_investing_as" value="Wholesale Investor (Net Asset $2,500,000 plus)" style="margin-right: 6px;" class="wholesale_invest_checkbox"><span class="check1">I have net assets of at least $2,500,000 or a gross income for each of the last two financial years of at least $250,000 a year.</span><br>
-													<input type="checkbox" name="wholesale_investing_as" value="Sophisticated Investor" style="margin-right: 6px;" class="wholesale_invest_checkbox"><span class="check1">I have experience as to: the merits of the offer; the value of the securities; the risk involved in accepting the offer; my own information needs; the adequacy of the information provided.</span><br>
-													<input type="checkbox" name="wholesale_investing_as" value="Inexperienced Investor" style="margin-right: 6px;" class="wholesale_invest_checkbox"><b><span class="check1">I have no experience in property, securities or similar</span></b><br>
+													<input type="checkbox" name="wholesale_investing_as" value="Wholesale Investor (Net Asset $2,500,000 plus)" style="margin-right: 6px;" class="wholesale_invest_checkbox" @if(isset($clientApplication) && $clientApplication->wholesale_investing_as === 'Wholesale Investor (Net Asset $2,500,000 plus)') checked @endif><span class="check1">I have net assets of at least $2,500,000 or a gross income for each of the last two financial years of at least $250,000 a year.</span><br>
+													<input type="checkbox" name="wholesale_investing_as" value="Sophisticated Investor" style="margin-right: 6px;" class="wholesale_invest_checkbox" @if(isset($clientApplication) && $clientApplication->wholesale_investing_as === 'Sophisticated Investor') checked @endif><span class="check1">I have experience as to: the merits of the offer; the value of the securities; the risk involved in accepting the offer; my own information needs; the adequacy of the information provided.</span><br>
+													<input type="checkbox" name="wholesale_investing_as" value="Inexperienced Investor" style="margin-right: 6px;" class="wholesale_invest_checkbox" @if(isset($clientApplication) && $clientApplication->wholesale_investing_as === 'Inexperienced Investor') checked @endif><b><span class="check1">I have no experience in property, securities or similar</span></b><br>
 												</div>
 											</div>
 										</div>
 
-										<div class="row" id="accountant_details_section" style="display: none;">
+										<div class="row" id="accountant_details_section" @if(isset($clientApplication) && $clientApplication->wholesale_investing_as === 'Wholesale Investor (Net Asset $2,500,000 plus)') show @else style="display: none;" @endif>
 											<br>
 											<div class="col-md-12">
 												<h4>Accountant's details</h4>
 												<p>Please provide the details of your accountant for verification of income and/or net asset position.</p>
 												<hr>
 												<label for="asd" class="form-label"><b>Name and firm of qualified accountant</b></label>
-												<input type="text" name="accountant_name_firm_txt" id="asd" class="form-control"><br />
+												<input type="text" name="accountant_name_firm_txt" id="asd" class="form-control" @if(isset($clientApplication)) value="{{  $clientApplication->accountant_name_and_firm }}" @endif><br />
 												<label for="asda" class="form-label"><b>Qualified accountant's professional body and membership designation</b></label>
-												<input type="text" name="accountant_designation_txt" id="asda" class="form-control"><br />
+												<input type="text" name="accountant_designation_txt" id="asda" class="form-control" @if(isset($clientApplication)) value="{{  $clientApplication->accountant_professional_body_designation }}" @endif><br />
 												<label for="asds" class="form-label"><b>Email</b></label>
-												<input type="email" name="accountant_email_txt" id="asds" class="form-control"><br />
+												<input type="email" name="accountant_email_txt" id="asds" class="form-control" @if(isset($clientApplication)) value="{{  $clientApplication->accountant_email }}" @endif><br />
 												<label for="asdd" class="form-label"><b>Phone</b></label>
-												<input type="number" name="accountant_phone_txt" id="asdd" class="form-control"><br />
+												<input type="number" name="accountant_phone_txt" id="asdd" class="form-control" @if(isset($clientApplication)) value="{{  $clientApplication->accountant_phone }}" @endif><br />
 											</div>
 										</div>
 
-										<div class="row" id="experienced_investor_information_section" style="display: none;">
+										<div class="row" id="experienced_investor_information_section" @if(isset($clientApplication) && $clientApplication->wholesale_investing_as === 'Sophisticated Investor') show @else style="display: none;" @endif>
 											<div class="col-md-12">
 												<br>
 												<h4>Experienced investor information</h4>
@@ -450,22 +450,22 @@ Offer Doc
 												<hr>
 
 												<label>Equity investment experience (please be as detailed and specific as possible):</label><br>
-												<textarea class="form-control" rows="5" name="equity_investment_experience_txt"></textarea><br>
+												<textarea class="form-control" rows="5" name="equity_investment_experience_txt"  >@if(isset($clientApplication)){{ $clientApplication->equity_investment_experience_text }}@endif</textarea><br>
 
 												<b>How much investment experience do you have? (tick appropriate)</b>
 												<div style="margin-left: 1.3em; margin-top: 5px;">
-													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Very little knowledge or experience" checked=""><span class="check1">Very little knowledge or experience</span><br>
-													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Some investment knowledge and understanding"><span class="check1">Some investment knowledge and understanding</span><br>
-													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Experienced private investor with good investment knowledge"><span class="check1">Experienced private investor with good investment knowledge</span><br>
-													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Business Investor"><span class="check1">Business Investor</span><br>
+													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Very little knowledge or experience" @if(isset($clientApplication) && ($clientApplication->equity_investment_experience_text === 'Very little knowledge or experience')) checked @else checked @endif><span class="check1">Very little knowledge or experience</span><br>
+													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Some investment knowledge and understanding" @if(isset($clientApplication) && ($clientApplication->experience_period === 'Some investment knowledge and understanding')) checked @endif><span class="check1">Some investment knowledge and understanding</span><br>
+													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Experienced private investor with good investment knowledge" @if(isset($clientApplication) && ($clientApplication->unlisted_investment_experience_text === 'Experienced private investor with good investment knowledge')) checked @endif><span class="check1">Experienced private investor with good investment knowledge</span><br>
+													<input type="radio" name="experience_period_txt" style="margin-right: 6px;" value="Business Investor" @if(isset($clientApplication) && ($clientApplication->understand_risk_text === 'Business Investor')) checked @endif><span class="check1">Business Investor</span><br>
 												</div>
 												<br>
 
 												<label>What experience do you have with unlisted invesments ?</label><br>
-												<textarea class="form-control" rows="5" name="unlisted_investment_experience_txt"></textarea><br>
+												<textarea class="form-control" rows="5" name="unlisted_investment_experience_txt">@if(isset($clientApplication)){{ $clientApplication->unlisted_investment_experience_text }}@endif</textarea><br>
 
 												<label>Do you clearly understand the risks of investing with this offer ?</label><br>
-												<textarea class="form-control" rows="5" name="understand_risk_txt"></textarea><br>
+												<textarea class="form-control" rows="5" name="understand_risk_txt">@if(isset($clientApplication)){{ $clientApplication->understand_risk_text }}@endif</textarea><br>
 
 											</div>
 										</div>
