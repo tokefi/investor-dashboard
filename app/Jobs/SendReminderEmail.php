@@ -62,14 +62,15 @@ class SendReminderEmail extends Job implements SelfHandling, ShouldQueue
                 array_push($recipients, $recipient->email);
             }
         }
-        $amount = $investor->amount;
+        // $amount = $investor->amount;
+        $amount = number_format(round($investor->amount * $investor->buy_rate, 2));
         $investing_as = $investor->investing_as;
         $investment_investor_id = $investor->id;
         $investing = InvestingJoint::where('investment_investor_id', $investment_investor_id)->get()->last();
         $this->from = SiteConfigurationHelper::overrideMailerConfig();
         $this->to = $recipients;
         $this->view = 'emails.admin';
-        $this->subject = $user->first_name.' '.$user->last_name.' has invested '.$amount.' in '.$project->title;
+        $this->subject = $user->first_name.' '.$user->last_name.' has invested $'.$amount.' in '.$project->title;
         $this->data = compact('project', 'investor' , 'investing_as','investing','user');
         $mailer->send($this->view, $this->data, function ($message) {
             $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron')->to($this->to)->subject($this->subject);

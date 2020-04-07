@@ -39,9 +39,12 @@ class SendInvestorNotificationEmail extends Job implements SelfHandling, ShouldQ
     public function __construct(User $user, Project $project, InvestmentInvestor $investor)
     {
         //
-        $this->investor = $user;
+        // $this->investor = $user;
+        // $this->project = $project;
+        // $this->investment = $investor;
+        $this->investor = $investor;
         $this->project = $project;
-        $this->investment = $investor;
+        $this->user = $user;
     }
 
     /**
@@ -51,8 +54,10 @@ class SendInvestorNotificationEmail extends Job implements SelfHandling, ShouldQ
      */
     public function handle(Mailer $mailer)
     {
-        $user = $this->investor;
-        $amount = $user->investments->last()->pivot->amount;
+        $investor = $this->investor;
+        $user = $investor->user;
+        // $amount = $user->investments->last()->pivot->amount;
+        $amount = number_format(round($investor->amount * $investor->buy_rate, 2));
         $investment = $user->investments->last()->pivot;
         $project = $this->project;
         $this->from = SiteConfigurationHelper::overrideMailerConfig();
