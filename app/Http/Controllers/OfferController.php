@@ -187,7 +187,7 @@ class OfferController extends Controller
         }
         // dd($clientApplication,$request->all());
         $mailer->sendApplicationRequestNotificationToClient($agent,$project,$clientApplication);
-        return redirect()->back()->withMessage('Application Submitted Successfuliy');
+        return view('projects.gform.confirmation', compact('clientApplication'));
       }
       $amount = floatval(str_replace(',', '', str_replace('A$ ', '', $request->amount_to_invest)));
         $amount_5 = $amount*0.05; //5 percent of investment
@@ -204,7 +204,6 @@ class OfferController extends Controller
               'agent_id' => $request->agent_id
             ]);
           }elseif($user->agent_id != $request->agent_id){
-            dd('hi');
             return redirect()->back()->withMessage('Agent changed. Application not submitted');
           }
         }
