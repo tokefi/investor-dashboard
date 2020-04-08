@@ -55,7 +55,7 @@ class DashboardController extends Controller
     {
         $this->middleware('auth');
         if(SiteConfigurationHelper::isSiteAgent()){
-            $this->middleware('admin',['except' => ['index','users','projects','edit','showUser']]); 
+            $this->middleware('admin',['except' => ['index','users','projects','edit','showUser','projectInvestors']]); 
         }else{
             $this->middleware('admin'); 
         }
