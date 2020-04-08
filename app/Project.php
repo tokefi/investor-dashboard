@@ -182,7 +182,7 @@ class Project extends Model
     {
         return $this->hasMany('App\ProjectEOI');
     }
-    public function AgentInvestmentApplication()
+    public function agentinvestmentapplication()
     {
         return $this->hasMany('App\AgentInvestmentApplication');
     }

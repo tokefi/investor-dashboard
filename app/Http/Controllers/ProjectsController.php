@@ -515,6 +515,7 @@ class ProjectsController extends Controller
         // }
         // dd($request->user_id);
         $admin_investment = 0;
+        $agent_investment = 0;
         if($project->investment){
             if(Auth::user() && $request->auid){
                 if(SiteConfigurationHelper::isSiteAdmin()){
@@ -538,16 +539,17 @@ class ProjectsController extends Controller
             if($request->source == 'eoi'){
                 $user = User::find($request->uid);
                 $eoi = ProjectEOI::find($request->id);
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment','agent_investment'));
             }
             if($request->source == 'clientApplication'){
-                $action = '/offer/submit/'.$project_id.'/step1';
+                // $action = '/offer/submit/'.$project_id.'/step1';
                 $clientApplication = AgentInvestmentApplication::findOrFail($request->id);
                 $user = User::where('email', $clientApplication->client_email)->where('registration_site', url())->first();
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment'));
+                $agent_investment = 1;
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment'));
             }
             if(!$project->eoi_button){
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment'));
             } else{
                 return response()->view('errors.404', [], 404);
             }

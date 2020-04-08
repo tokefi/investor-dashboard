@@ -25,7 +25,6 @@ Dashboard | @parent
 								</div>
 							</div>
 						</div>
-						@if(!Auth::user()->roles->contains('role', 'agent'))
 						<div class="col-md-4">
 							<div class="thumbnail text-center">
 								<div class="caption">
@@ -36,6 +35,7 @@ Dashboard | @parent
 								</div>
 							</div>
 						</div>
+						@if(!Auth::user()->roles->contains('role', 'agent'))
 						<div class="col-md-4">
 							<div class="thumbnail text-center">
 								<div class="caption" style="margin-bottom: 2.2em;">

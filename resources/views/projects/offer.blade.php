@@ -692,6 +692,13 @@ Offer Doc
 									@endif
 									@endif
 
+									@if($agent_investment)
+									@if($agent_investment == 1)
+									<input type="hidden" value="agent_investment" name="agent_investment">
+									<input type="hidden" value="{{$user->id}}" name="user_id">
+									<input type="hidden" value="{{ $clientApplication->user_id }}" name="agent_id">
+									@endif
+									@endif
 									<div class="row " id="11">
 										<div class="col-md-12">
 											<div>

@@ -54,8 +54,11 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin',['except' => ['index']]);
-        
+        if(SiteConfigurationHelper::isSiteAgent()){
+            $this->middleware('admin',['except' => ['index']]); 
+        }else{
+            $this->middleware('admin'); 
+        }
 
         $this->siteConfiguration = SiteConfiguration::where('project_site', url())->first();
     }
@@ -67,136 +70,133 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user = \Illuminate\Support\Facades\Auth::User();
-        $roles = $user->roles;
-        // dd($user->roles);
-        if ($roles->contains('role', 'admin') || $roles->contains('role', 'master') || $roles->contains('role', 'agent')) {
-            $color = Color::where('project_site',url())->first();
-            $users = User::where('registration_site',url());
-            $projects = Project::all();
-            $projects = $projects->where('project_site',url());
-            $notes = Note::all();
+        $color = Color::where('project_site',url())->first();
+        $users = User::where('registration_site',url());
+        $projects = Project::all();
+        $projects = $projects->where('project_site',url());
+        $notes = Note::all();
         // $total_goal = Investment::all()->where('project_site',url())->sum('goal_amount');
         // $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('hide_investment', 0);
-            $activeP = $projects->where('project_site',url())->where('active', true);
-            $goal_amount = [];
-            $amount = [];
-            $funds_received = [];
+        $activeP = $projects->where('project_site',url())->where('active', true);
+        $goal_amount = [];
+        $amount = [];
+        $funds_received = [];
 
-            foreach ($activeP as $proj) {
-                $goal_amount[] = $proj->investment->goal_amount;
-                $investors = $proj->investors;
+        foreach ($activeP as $proj) {
+            $goal_amount[] = $proj->investment->goal_amount;
+            $investors = $proj->investors;
 
-                $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false);
-                foreach($pledged_investments as $pledged_investment){
-                    $amount[] = $pledged_investment->amount;;
-                }
+            $pledged_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false);
+            foreach($pledged_investments as $pledged_investment){
+                $amount[] = $pledged_investment->amount;;
+            }
 
-                $funds_received_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false)->where('money_received', true);
-                foreach($funds_received_investments as $funds_received_investment){
-                    $funds_received[] = $funds_received_investment->amount;;
-                }
+            $funds_received_investments = InvestmentInvestor::all()->where('project_site',url())->where('project_id', $proj->id)->where('hide_investment', false)->where('money_received', true);
+            foreach($funds_received_investments as $funds_received_investment){
+                $funds_received[] = $funds_received_investment->amount;;
+            }
             // foreach($investors as $investor){
             //     $amount[] = $investor->getOriginal('pivot_amount');
             // }
-            }
+        }
 
+        if(SiteConfigurationHelper::isSiteAgent()){
+            $users = User::where('registration_site',url())->where('agent_id',\Illuminate\Support\Facades\Auth::User()->id);
+        }else{
+            $users = User::where('registration_site',url());
             $total_goal = array_sum($goal_amount);
             $pledged_investments = array_sum($amount);
             $total_funds_received = array_sum($funds_received);
-
-            return view('dashboard.index', compact('users', 'projects', 'pledged_investments', 'total_goal', 'notes','color', 'total_funds_received'));
         }
-        // return redirect()->route('users.show', $user)->withMessage('<p class="alert alert-warning text-center ">Admin Only</p>');
-        return redirect()->route('users.show', [$user])->withMessage('<p class="alert alert-warning text-center ">Admin Only</p>');
+        return view('dashboard.index', compact('users', 'projects', 'pledged_investments', 'total_goal', 'notes','color', 'total_funds_received'));
+}
+
+public function users(Request $request)
+{
+    $color = Color::where('project_site', url())->first();
+    $search = trim($request->get('search'));
+    $field = $request->get('field') != '' ? $request->get('field') : 'id';
+    $sort = $request->get('sort') != '' ? $request->get('sort') : 'asc';
+    $users = new User();
+    $users = $users->where('registration_site', url());
+    if ($search != '') {
+        $users = $users->where(function ($query) use ($search) {
+            $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%" . $search . "%"]);
+            $query->orWhereRaw("email LIKE ?", ["%" . $search . "%"]);
+            $query->orWhereRaw("phone_number LIKE ?", ["%" . $search . "%"]);
+        });
     }
+    $users = $users->orderBy($field, $sort)
+    ->paginate(30);
+    $projects = Project::where('project_site', url())->where('active', true)->where('eoi_button', false)->where('is_coming_soon', false)->get();
 
-    public function users(Request $request)
-    {
-        $color = Color::where('project_site', url())->first();
-        $search = trim($request->get('search'));
-        $field = $request->get('field') != '' ? $request->get('field') : 'id';
-        $sort = $request->get('sort') != '' ? $request->get('sort') : 'asc';
-        $users = new User();
-        $users = $users->where('registration_site', url());
-        if ($search != '') {
-            $users = $users->where(function ($query) use ($search) {
-                $query->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%" . $search . "%"]);
-                $query->orWhereRaw("email LIKE ?", ["%" . $search . "%"]);
-                $query->orWhereRaw("phone_number LIKE ?", ["%" . $search . "%"]);
-            });
-        }
-        $users = $users->orderBy($field, $sort)
-        ->paginate(30);
-        $projects = Project::where('project_site', url())->where('active', true)->where('eoi_button', false)->where('is_coming_soon', false)->get();
+    return view('dashboard.users.index', compact('users', 'color', 'projects'))->withPath('?search=' . urlencode($search) . '&field=' . $field . '&sort=' . $sort);
+}
 
-        return view('dashboard.users.index', compact('users', 'color', 'projects'))->withPath('?search=' . urlencode($search) . '&field=' . $field . '&sort=' . $sort);
-    }
+public function projects()
+{
+    $color = Color::where('project_site',url())->first();
+    $projects = Project::all();
+    $projects = $projects->where('project_site',url());
+    $pledged_investments = InvestmentInvestor::where('hide_investment', '0')->get();
 
-    public function projects()
-    {
-        $color = Color::where('project_site',url())->first();
-        $projects = Project::all();
-        $projects = $projects->where('project_site',url());
-        $pledged_investments = InvestmentInvestor::where('hide_investment', '0')->get();
+    return view('dashboard.projects.index', compact('projects', 'pledged_investments','color'));
+}
 
-        return view('dashboard.projects.index', compact('projects', 'pledged_investments','color'));
-    }
+public function test()
+{
+    $color = Color::where('project_site',url())->first();
+    return view('dashboard.users.test',compact('color'));
+}
 
-    public function test()
-    {
-        $color = Color::where('project_site',url())->first();
-        return view('dashboard.users.test',compact('color'));
-    }
+public function getDashboardUsers()
+{
+    $datatable = new Datatable();
+    return $datatable->collection(User::all())
+    ->showColumns('id')
+    ->addColumn('Details',function($model){
+        return $model;
+    })
+    ->showColumns('phone_number','email')
+    ->searchColumns('first_name')
+    ->orderColumns('id','first_name')
+    ->make();
+}
 
-    public function getDashboardUsers()
-    {
-        $datatable = new Datatable();
-        return $datatable->collection(User::all())
-        ->showColumns('id')
-        ->addColumn('Details',function($model){
-            return $model;
-        })
-        ->showColumns('phone_number','email')
-        ->searchColumns('first_name')
-        ->orderColumns('id','first_name')
-        ->make();
-    }
+public function getDashboardProjects()
+{
+    $datatable = new Datatable();
+    return $datatable->collection(Project::all())
+    ->showColumns('id', 'title', 'active', 'description')
+    ->searchColumns('title', 'description')
+    ->orderColumns('id','title', 'active')
+    ->make();
+}
 
-    public function getDashboardProjects()
-    {
-        $datatable = new Datatable();
-        return $datatable->collection(Project::all())
-        ->showColumns('id', 'title', 'active', 'description')
-        ->searchColumns('title', 'description')
-        ->orderColumns('id','title', 'active')
-        ->make();
-    }
+public function showUser($user_id)
+{
+    $color = Color::where('project_site',url())->first();
+    $user = User::findOrFail($user_id);
+    return view('dashboard.users.show', compact('user','color'));
+}
 
-    public function showUser($user_id)
-    {
-        $color = Color::where('project_site',url())->first();
-        $user = User::findOrFail($user_id);
-        return view('dashboard.users.show', compact('user','color'));
-    }
+public function usersInvestments($user_id)
+{
+    $color = Color::where('project_site',url())->first();
+    $user = User::findOrFail($user_id);
 
-    public function usersInvestments($user_id)
-    {
-        $color = Color::where('project_site',url())->first();
-        $user = User::findOrFail($user_id);
+    $projects = Project::where('project_site',url())
+    ->where('active', 1)
+    ->where('eoi_button', false)
+    ->where('is_coming_soon', false)
+    ->get();
 
-        $projects = Project::where('project_site',url())
-        ->where('active', 1)
-        ->where('eoi_button', false)
-        ->where('is_coming_soon', false)
-        ->get();
+    $investments = InvestmentInvestor::where('user_id', $user->id)
+    ->where('project_site', url())
+    ->get();
 
-        $investments = InvestmentInvestor::where('user_id', $user->id)
-        ->where('project_site', url())
-        ->get();
-
-        return view('dashboard.users.investments', compact('user','color', 'investments', 'projects'));
-    }
+    return view('dashboard.users.investments', compact('user','color', 'investments', 'projects'));
+}
 
 //Disabled in routes as well due to no usage
 /*    public function showProject($project_id)
