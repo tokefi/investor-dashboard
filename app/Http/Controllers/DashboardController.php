@@ -460,20 +460,20 @@ public function usersInvestments($user_id)
             // dd($investment);
 
             $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
-            // if($investment->accepted) {
+            if($investment->accepted) {
                 // $pdf = PDF::loadView('pdf.invoice', ['investment' => $investment, 'shareInit' => $shareInit, 'investing' => $investing, 'shareStart' => $shareStart, 'shareEnd' => $shareEnd]);
                 // $pdf->setPaper('a4', 'landscape');
-                // if($investment->project->share_vs_unit) {
-                //     $pdf->save(storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf');
-                //     $formLink = url().'/user/view/'.base64_encode($investment->id).'/share';
-                // }else {
-                //     $pdf->save(storage_path().'/app/invoices/Unit-Certificate-'.$investment->id.'.pdf');
-                //     $formLink = url().'/user/view/'.base64_encode($investment->id).'/unit';
-                // }
+                if($investment->project->share_vs_unit) {
+                    // $pdf->save(storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf');
+                    $formLink = url().'/user/view/'.base64_encode($investment->id).'/share';
+                }else {
+                    // $pdf->save(storage_path().'/app/invoices/Unit-Certificate-'.$investment->id.'.pdf');
+                    $formLink = url().'/user/view/'.base64_encode($investment->id).'/unit';
+                }
 
-                // $mailer->sendInvoiceToUser($investment,$formLink);
-                // $mailer->sendInvoiceToAdmin($investment,$formLink);
-            // }
+                $mailer->sendInvoiceToUser($investment,$formLink);
+                $mailer->sendInvoiceToAdmin($investment,$formLink);
+            }
             return redirect()->back()->withMessage('<p class="alert alert-success text-center">Successfully updated.</p>');
         }
     }

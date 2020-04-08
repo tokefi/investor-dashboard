@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use App\SiteConfiguration;
 use Barryvdh\DomPDF\Facade as PDF;
+use App\Transaction;
+
 
 class UsersController extends Controller
 {
@@ -471,8 +473,9 @@ class UsersController extends Controller
         if($user->id != $user_id){
             return redirect()->route('users.investments', $user)->withMessage('<p class="alert text-center alert-warning">You can not access that profile.</p>');
         }
+        $transactions = Transaction::where('user_id', $user_id)->get();
         $investments = \App\Helpers\ModelHelper::getTotalInvestmentByUser($user_id);
-        return view('users.investments', compact('user','color', 'investments'));
+        return view('users.investments', compact('user','color', 'investments', 'transactions'));
     }
 
     /**

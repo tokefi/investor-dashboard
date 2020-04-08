@@ -65,7 +65,7 @@
 				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
-				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">EOI (Coming Soon)</h3></a></li>
+				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
 				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
 			</ul>
 			<div class="tab-content">
@@ -619,13 +619,13 @@
 									<tr>
 										<th class="text-center">User Name</th>
 										<th>Application Link</th>
-										<th>Offer Document</th>
+										{{-- <th>Offer Document</th> --}}
 										<th class="text-center">User Email</th>
 										<th class="text-center">User Phone Number</th>
 										<th class="text-center">Amount</th>
 										<th class="text-center">Investment Expected</th>
 										<th class="text-center">EOI Timestamp</th>
-										<th>Interested to buy</th>
+										{{-- <th>Interested to buy</th> --}}
 									</tr>
 								</thead>
 								<tbody class="text-center">
@@ -633,40 +633,44 @@
 									<tr>
 										<td>{{$projectsEoi->user_name}}</td>
 										<td id="offer_link{{$projectsEoi->id}}">
-											@if($projectsEoi->offer_doc_path)
+											{{-- @if($projectsEoi->offer_doc_path) --}}
+											{{-- @if($projectsEoi->is_link_sent) --}}
+											@if($project->investment)
+											@if($project->investment->PDS_part_1_link && $project->active && !$project->is_coming_soon && !$project->is_funding_closed && !$project->eoi_button)
 											@if($projectsEoi->is_link_sent)
-											<a class="send-app-form-link" id="send_link{{$projectsEoi->id}}" href="javascript:void(0);" data="{{$projectsEoi->id}}"{{--  onclick="sendEOIAppFormLink()" --}}><b>Resend link</b></a>
+											<a class="send-app-form-link btn btn-primary" id="send_link{{$projectsEoi->id}}" href="javascript:void(0);" data="{{$projectsEoi->id}}"{{--  onclick="sendEOIAppFormLink()" --}}><b>Resend link</b></a>
 											@else
-											<a class="send-app-form-link" id="send_link{{$projectsEoi->id}}" href="javascript:void(0);" data="{{$projectsEoi->id}}"{{--  onclick="sendEOIAppFormLink()" --}}><b>Send link</b></a>
+											<a class="send-app-form-link btn btn-primary" id="send_link{{$projectsEoi->id}}" href="javascript:void(0);" data="{{$projectsEoi->id}}"{{--  onclick="sendEOIAppFormLink()" --}}><b>Accept EOI</b></a>
 											@endif
 											@else
 											<span class="text-danger"><small><small>Offer document must be uploaded before accepting the EOI request</small></small></span>
 											@endif
+											@endif
 										</td>
-										<td>
+										{{-- <td>
 											@if($projectsEoi->offer_doc_path)
 											<a href="{{$projectsEoi->offer_doc_path}}" id="uploaded_offer_doc_link{{$projectsEoi->id}}" target="_blank" download>
 												{{$projectsEoi->offer_doc_name}}
 											</a>
 											@endif
 											<div id="new_offer_doc_link{{$projectsEoi->id}}"></div>
-											<form{{--  action="{{route('dashboard.upload.offerDoc')}}" --}} class="upload_form" id="upload_form" rel="form" method="POST" enctype="multipart/form-data">
-											{!! csrf_field() !!}
-											<input type="file" name="offer_doc" id="offer_doc" required="required">
-											{!! $errors->first('offer_doc', '<small class="text-danger">:message</small>') !!}
-											<input type="hidden" name="eoi_id" value="{{$projectsEoi->id}}">
-											<input type="submit" name="upload_offer_doc" id="upload_offer_doc" value="Upload" class="btn btn-primary upload-offer-doc upload_offer_doc" data="{{$projectsEoi->id}}">
-										</form>
-									</td>
-									<td>{{$projectsEoi->user_email}}</td>
-									<td>{{$projectsEoi->phone_number}}</td>
-									<td>${{number_format($projectsEoi->investment_amount)}}</td>
-									<td>{{$projectsEoi->invesment_period}}</td>
-									<td>{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
-									<td>
-										@if($projectsEoi->interested_to_buy) Yes @else No @endif
-									</td>
-								</tr>
+											<form action="{{route('dashboard.upload.offerDoc')}}" class="upload_form" id="upload_form" rel="form" method="POST" enctype="multipart/form-data">
+												{!! csrf_field() !!}
+												<input type="file" name="offer_doc" id="offer_doc" required="required">
+												{!! $errors->first('offer_doc', '<small class="text-danger">:message</small>') !!}
+												<input type="hidden" name="eoi_id" value="{{$projectsEoi->id}}">
+												<input type="submit" name="upload_offer_doc" id="upload_offer_doc" value="Upload" class="btn btn-primary upload-offer-doc upload_offer_doc" data="{{$projectsEoi->id}}">
+											</form>
+										</td> --}}
+										<td>{{$projectsEoi->user_email}}</td>
+										<td>{{$projectsEoi->phone_number}}</td>
+										<td>${{number_format($projectsEoi->investment_amount)}}</td>
+										<td>{{$projectsEoi->invesment_period}}</td>
+										<td>{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
+										{{-- <td>
+											@if($projectsEoi->interested_to_buy) Yes @else No @endif
+										</td> --}}
+									</tr>
 								@endforeach
 							</tbody>
 						</table>
@@ -897,39 +901,39 @@
 			}
 		});
 
-		$('.upload_form').submit(function(e){
-			e.preventDefault();
-			$('.loader-overlay').show();
-			var eoi_id, offer_doc_path, offer_doc_name;
-			$.ajax({
-				url: '/dashboard/project/upload/offerdoc',
-				type: 'POST',
-				dataType: 'JSON',
-				data: new FormData(this),
-				processData: false,
-				contentType: false,
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				},
-			}).done(function(data){
-				console.log(data.message);
-				console.log(data.status);
-				console.log(data.eoi_id);
-				if(data){
-					$('#offer_link'+data.eoi_id).html('<a class="send-app-form-link" id="send_link'+data.eoi_id+'" href="javascript:void(0);" data="'+data.eoi_id+'"><b>Send link</b></a>');
-					$('#new_offer_doc_link'+data.eoi_id).html('<a href="'+data.offer_doc_path+'" target="_blank" download> '+data.offer_doc_name+'</a><i class="fa fa-check success-icon"></i>');
-					$('#uploaded_offer_doc_link'+data.eoi_id).hide();
-					$('.loader-overlay').hide();
-					alert(data.message);
-		        		// sendEOIAppFormLink();
-		        	}
-		        	else
-		        	{
-		        		alert('Something went wrong! Please try again.');
-		        		$('.loader-overlay').hide();
-		        	}
-		        });
-		});
+		// $('.upload_form').submit(function(e){
+		// 	e.preventDefault();
+		// 	$('.loader-overlay').show();
+		// 	var eoi_id, offer_doc_path, offer_doc_name;
+		// 	$.ajax({
+		// 		url: '/dashboard/project/upload/offerdoc',
+		// 		type: 'POST',
+		// 		dataType: 'JSON',
+		// 		data: new FormData(this),
+		// 		processData: false,
+		// 		contentType: false,
+		// 		headers: {
+		// 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		// 		},
+		// 	}).done(function(data){
+		// 		console.log(data.message);
+		// 		console.log(data.status);
+		// 		console.log(data.eoi_id);
+		// 		if(data){
+		// 			$('#offer_link'+data.eoi_id).html('<a class="send-app-form-link" id="send_link'+data.eoi_id+'" href="javascript:void(0);" data="'+data.eoi_id+'"><b>Send link</b></a>');
+		// 			$('#new_offer_doc_link'+data.eoi_id).html('<a href="'+data.offer_doc_path+'" target="_blank" download> '+data.offer_doc_name+'</a><i class="fa fa-check success-icon"></i>');
+		// 			$('#uploaded_offer_doc_link'+data.eoi_id).hide();
+		// 			$('.loader-overlay').hide();
+		// 			alert(data.message);
+		//         		// sendEOIAppFormLink();
+		//         	}
+		//         	else
+		//         	{
+		//         		alert('Something went wrong! Please try again.');
+		//         		$('.loader-overlay').hide();
+		//         	}
+		//         });
+		// });
 
 		//Hide application from admin dashboard
 
