@@ -128,7 +128,7 @@ Offer Doc
 								@if (Session::has('message'))
 								<div class="alert alert-success text-center">{{ Session::get('message') }}</div>
 								@endif
-								@if(Auth::guest() || (!(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent() )))
+								@if(Auth::guest() || (!Auth::guest() && !(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent() )))
 								<div class="well text-center cursor-pointer fill-form-request-container @if(isset($clientApplication) || isset($eoi)) hide @endif">
 									@if (Session::has('requestStatus'))
 									<i class="fa fa-check-circle-o fa-3x" aria-hidden="true" style="color: green;"></i><br>
@@ -152,7 +152,7 @@ Offer Doc
 										</div>
 										<div class="col-md-8">
 											<div class="switch-field ">
-												<input type="radio" id="switch_agent_on" name="agent_type" value="1" checked/>
+												<input type="radio" id="switch_agent_on" name="agent_type" @if($admin_investment) @if($admin_investment == 1) value="0" @else value="1" @endif @endif checked/>
 												<label for="switch_agent_on">ON</label>
 												<input type="radio" id="switch_agent_off" name="agent_type" value="0" />
 												<label for="switch_agent_off">OFF</label>
@@ -703,7 +703,7 @@ Offer Doc
 									<div class="row " id="11">
 										<div class="col-md-12">
 											<div>
-												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" @if((App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())) value="request sign off from investor" @else value="Submit" @endif id="offerSubmit">
+												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" @if(!auth::guest() && (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) && (!$admin_investment)) value="request sign off from investor" @else value="Submit" @endif id="offerSubmit">
 											</div>
 										</div>
 									</div>

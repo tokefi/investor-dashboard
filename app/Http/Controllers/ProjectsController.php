@@ -521,6 +521,11 @@ class ProjectsController extends Controller
                 if(SiteConfigurationHelper::isSiteAdmin()){
                     $user = User::findOrFail($request->auid);
                     $admin_investment = 1;
+                    $agent_type = 0;
+                }elseif(SiteConfigurationHelper::isSiteAgent()){
+                    $user = User::findOrFail($request->auid);
+                    $admin_investment = 0;
+                    $agent_type = 1;
                 }
                 else{
                     return redirect()->route('projects.interest', [$project->id])->withMessage('Only Admin can access that link.');
@@ -549,7 +554,7 @@ class ProjectsController extends Controller
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment'));
             }
             if(!$project->eoi_button){
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','$agent_type'));
             } else{
                 return response()->view('errors.404', [], 404);
             }
