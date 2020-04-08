@@ -51,6 +51,7 @@
 										<th>Amount</th>
 										<th>Rate</th>
 										<th>Number of shares</th>
+										<th>Agent Name</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -63,6 +64,7 @@
 										<td>${{$transaction->amount}}</td>
 										<td>{{$transaction->rate}}</td>
 										<td>{{$transaction->number_of_shares}}</td>
+										<td>@if($transaction->user->agent_id) <?php $agent= App\User::find($transaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $transaction->user->agent_id }} @else NA @endif </td>
 									</tr>
 									@endforeach
 								</tbody>

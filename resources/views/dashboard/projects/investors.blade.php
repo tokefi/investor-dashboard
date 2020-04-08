@@ -93,6 +93,7 @@
 								@if(!$project->retail_vs_wholesale)<th>Wholesale Investment</th>@endif
 								<th>Application Form</th>
 								<th>Interested to Buy</th>
+								<th>Agent name</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -235,6 +236,11 @@
 												<td>
 													@if($investment->interested_to_buy) Yes @else No @endif
 												</td>
+												<td>
+													@if($investment->user->agent_id) <?php $agent= App\User::find($investment->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $investment->user->agent_id }} @else NA @endif 
+												
+												
+												</td>
 											</tr>
 
 											<!-- Modal for wholesale investments-->
@@ -376,6 +382,7 @@
 										<th>BSB</th>
 										<th>Account Number</th>
 										<th>Action</th>
+										<th>Agent name</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -439,6 +446,7 @@
 											@endif
 											@endif
 										</td>
+										<td>@if($shareInvestment->user->agent_id) <?php $agent= App\User::find($shareInvestment->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $shareInvestment->user->agent_id }} @else NA @endif</td>
 									</tr>
 									@endforeach
 								</tbody>
@@ -492,6 +500,7 @@
 										<th>Price ($)</th>
 										<th>Market value ($)</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
+										<th>Agent name</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -524,6 +533,7 @@
 												</a>
 												@endif
 											</td>
+											<td> @if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
 										</tr>
 									@endforeach
 								</tbody>
