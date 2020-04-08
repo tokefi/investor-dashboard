@@ -699,10 +699,11 @@ Offer Doc
 									<input type="hidden" value="{{ $clientApplication->user_id }}" name="agent_id">
 									@endif
 									@endif
+
 									<div class="row " id="11">
 										<div class="col-md-12">
 											<div>
-												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" value="Submit" id="offerSubmit">
+												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" @if((App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent())) value="request sign off from investor" @else value="Submit" @endif id="offerSubmit">
 											</div>
 										</div>
 									</div>
@@ -1198,6 +1199,7 @@ $(document).ready(function(){
 		$('#section-2').removeClass('hidden');
 		$('#signatureClear').addClass('hidden');
 		$('#offerEmail').prop('disabled',false);
+		$('#offerSubmit').val('request sign off from investor');
 	});
 	$('#switch_agent_off').click(function () {
 		$('#typeAgentDiv').removeClass('hidden');
@@ -1207,6 +1209,7 @@ $(document).ready(function(){
 		$('#section-2').addClass('hidden');
 		$('#signatureClear').removeClass('hidden');
 		$('#offerEmail').prop('disabled',true);
+		$('#offerSubmit').val('submit');
 	});
 	$('#switch_left').click(function () {
 		$('#signature').removeClass('hidden');
