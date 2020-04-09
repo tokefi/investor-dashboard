@@ -27,6 +27,9 @@ class SiteConfigurationHelper
 
     public static function isSiteAdmin()
     {
+        if(Auth::guest()){
+            return 0;
+        }
         if(Auth::user()->roles->contains('role','admin') && Auth::user()->registration_site==url()){
             return 1;
         }
@@ -38,6 +41,9 @@ class SiteConfigurationHelper
 
     public static function isSiteAgent()
     {
+        if(Auth::guest()){
+            return 0;
+        }
         if(Auth::user()->roles->contains('role','agent') && Auth::user()->registration_site==url()){
             return 1;
         }
