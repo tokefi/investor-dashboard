@@ -51,7 +51,7 @@
 					@if (Session::has('message'))
 					{!! Session::get('message') !!}
 					@endif
-					<h3 class="text-center"><a href='{{ url() }}/projects/{{ $project->id }}'>{{$project->title}}</a>
+					<h3 class="text-center"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
 						<address class="text-center">
 							<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}
 							</small>
@@ -150,7 +150,7 @@
 															@if($investment->money_received || $investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
 															@else
-															<input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received">
+															<input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
 															@endif
 														</form>
 													</div>
@@ -165,7 +165,7 @@
 															@if($investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">@if($project->share_vs_unit) Share @else Unit @endif certificate issued</small></i>
 															@else
-															<input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate">
+															<input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
 															@endif
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
