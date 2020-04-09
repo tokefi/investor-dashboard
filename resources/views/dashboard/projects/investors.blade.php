@@ -51,7 +51,7 @@
 					@if (Session::has('message'))
 					{!! Session::get('message') !!}
 					@endif
-					<h3 class="text-center">{{$project->title}}
+					<h3 class="text-center"><a href='{{ url() }}/projects/{{ $project->id }}'>{{$project->title}}</a>
 						<address class="text-center">
 							<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}
 							</small>
