@@ -237,9 +237,7 @@
 													@if($investment->interested_to_buy) Yes @else No @endif
 												</td>
 												<td>
-													@if($investment->user->agent_id) <?php $agent= App\User::find($investment->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $investment->user->agent_id }} @else NA @endif 
-												
-												
+													@if($investment->agent_investment) <?php $agent= App\User::find($investment->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $investment->user->agent_id }} @else NA @endif 
 												</td>
 											</tr>
 
@@ -446,7 +444,7 @@
 											@endif
 											@endif
 										</td>
-										<td>@if($shareInvestment->user->agent_id) <?php $agent= App\User::find($shareInvestment->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $shareInvestment->user->agent_id }} @else NA @endif</td>
+										<td>@if($shareInvestment->agent_investment) <?php $agent= App\User::find($shareInvestment->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $shareInvestment->user->agent_id }} @else NA @endif</td>
 									</tr>
 									@endforeach
 								</tbody>
@@ -533,7 +531,7 @@
 												</a>
 												@endif
 											</td>
-											<td> @if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
+											<td> @if($registry->agent_investment) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
 										</tr>
 									@endforeach
 								</tbody>
