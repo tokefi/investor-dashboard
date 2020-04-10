@@ -531,7 +531,8 @@
 												</a>
 												@endif
 											</td>
-											<td> @if($registry->agent_investment) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
+											<td> 
+												@if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
 										</tr>
 									@endforeach
 								</tbody>

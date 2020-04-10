@@ -703,7 +703,7 @@ Offer Doc
 									<div class="row " id="11">
 										<div class="col-md-12">
 											<div>
-												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" @if(!auth::guest() && (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) && (!$admin_investment)) value="request sign off from investor" @else value="Submit" @endif id="offerSubmit">
+												<input type="submit" name="submitoffer" class="btn btn-primary btn-block" @if(!auth::guest() && (App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) && (!$admin_investment)) value="Request sign off from investor" @else value="Submit" @endif id="offerSubmit">
 											</div>
 										</div>
 									</div>
