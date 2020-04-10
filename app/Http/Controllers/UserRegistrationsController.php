@@ -75,220 +75,220 @@ class UserRegistrationsController extends Controller
      */
     public function store(Request $request, AppMailer $mailer)
     {//dd($request->has('ref'));
-        $color = Color::where('project_site',url())->first();
-        
-        if(!(\App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->allow_user_signup)) {
-            return redirect('/users/create')->withErrors(['signup' => 'The signup process is temporarily suspended.'])->withInput();
-        }
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email'
-        ]);
-        $request['role'] = 'investor';
-        $validator1 = Validator::make($request->all(), [
-            'email' => 'unique:users,email||unique:user_registrations,email',
-        ]);
-        if ($validator->fails()) {
-            return redirect('/users/create')
-            ->withErrors($validator)
-            ->withInput();
-        }
+    $color = Color::where('project_site',url())->first();
+
+    if(!(\App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->allow_user_signup)) {
+        return redirect('/users/create')->withErrors(['signup' => 'The signup process is temporarily suspended.'])->withInput();
+    }
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email'
+    ]);
+    $request['role'] = 'investor';
+    $validator1 = Validator::make($request->all(), [
+        'email' => 'unique:users,email||unique:user_registrations,email',
+    ]);
+    if ($validator->fails()) {
+        return redirect('/users/create')
+        ->withErrors($validator)
+        ->withInput();
+    }
 
         // Validate captcha only if the form has captcha feature
-        if($request->input('g-recaptcha-response') !== null) {
-            $validator2 = Validator::make($request->all(), [
-                'g-recaptcha-response' => 'required'
-            ]);
-            if ($validator2->fails()) {
-                return redirect('/users/create')
-                ->withErrors($validator2)
-                ->withInput();
-            }
-
-            // Verify Captcha
-            $recaptcha = new ReCaptcha(env('CAPTCHA_SECRET'));
-            $capResponse = $recaptcha->verify($request->get('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
-            if(!$capResponse->isSuccess()) {
-                return redirect('/users/create')->withErrors(['g-recaptcha-response'=> 'Recaptcha timeout or duplicate.'])->withInput();
-            }
-        }
-
-        if($validator1->fails()){
-            $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
-            $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
-            if(!$res1 && !$res2){
-                $originSite="";
-                if($user=User::where('email', $request->email)->first()){
-                    $originSite = $user->registration_site;
-                }
-                if($userReg=UserRegistration::where('email', $request->email)->first()){
-                    $originSite = $userReg->registration_site;
-                }
-                $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
-                if($request->eoiReg == 'eoiReg'){
-                    return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
-                }
-                return redirect('/users/create')->withErrors(['email'=> $errorMessage])->withInput();
-            }
-            else{
-                $errorMessage = 'This email is already registered but seems its not activated please activate email';
-                if($request->eoiReg == 'eoiReg'){
-                    if(!$request->next){
-                        return redirect()->back()->withMessage('<p>This email is already registered but seems its not activated please activate email</p>');
-                    }
-                    return redirect($request->next)->withMessage('<p>This email is already registered but seems its not activated please activate email</p>');
-                }
-                return redirect('/users/create')
-                ->withErrors($validator1)
-                ->withInput();
-            }
-        }
-        if($request->has('ref'))
-        {
-            $ref = request()->ref;
-            $request->request->add(['referral_code' => Request()->ref]);
-            $user = UserRegistration::create($request->all());
-            $mailer->sendRegistrationConfirmationTo($user,$ref);
-        }
-        elseif($request->eoiReg == 'eoiReg'){
-            $ref = false;
-            $color = Color::where('project_site',url())->first();
-            $eoi_token = mt_rand(100000, 999999);
-            $user = UserRegistration::create($request->all()+['eoi_token'=>$eoi_token]);
-            $mailer->sendRegistrationConfirmationTo($user,$ref);
-            $type = 'eoi';
-            // return view('users.registerCode',compact('color','type'));
-            return redirect()->route('users.register.view.code')->with(['color'=>$color,'type'=>$type]);
-        }
-        elseif($request->offerReg == 'offerReg'){
-            $ref =false;
-            $color = Color::where('project_site',url())->first();
-            $offerToken = mt_rad(100000, 999999);
-            $user = UserRegistration::create($request->all()+['offerToken' => $offerToken]);
-            $mailer->sendRegistrationConfirmationTo($user,$ref);
-            return view('users.registerCode',compact('color'));
-        }
-        else{
-            $ref = false;
-            $user = UserRegistration::create($request->all());
-            $mailer->sendRegistrationConfirmationTo($user,$ref);
-        }
-
-        // $intercom = IntercomBasicAuthClient::factory(array(
-        //     'app_id' => 'refan8ue',
-        //     'api_key' => '3efa92a75b60ff52ab74b0cce6a210e33e624e9a',
-        //     ));
-        // $intercom->createUser(array(
-        //     "email" => $user->email,
-        //     "custom_attributes" => array(
-        //         "active" => $user->active,
-        //         "token" => $user->token,
-        //         "role" => $user->role
-        //         ),
-        //     ));
-        return view('users.registrationSubmitted',compact('color'));
-    }
-
-    public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
-    {
-        $color = Color::where('project_site',url())->first();
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'role'=>'required'
+    if($request->input('g-recaptcha-response') !== null) {
+        $validator2 = Validator::make($request->all(), [
+            'g-recaptcha-response' => 'required'
         ]);
-        $validator1 = Validator::make($request->all(), [
-            'email' => 'unique:users,email||unique:user_registrations,email',
-        ]);
-        if ($validator->fails()) {
-            return redirect()
-            ->back()
-            ->withErrors($validator)
+        if ($validator2->fails()) {
+            return redirect('/users/create')
+            ->withErrors($validator2)
             ->withInput();
         }
-        if($validator1->fails()){
-            $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
-            $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
-            if(!$res1 && !$res2){
-                $originSite="";
-                if($user=User::where('email', $request->email)->first()){
-                    $originSite = $user->registration_site;
-                }
-                if($userReg=UserRegistration::where('email', $request->email)->first()){
-                    $originSite = $userReg->registration_site;
-                }
-                $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
-                return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
-            }
-            else{
-                $errorMessage = 'This email is already registered but seems its not activated please activate email';
-                return redirect()->back()->withMessage('This email is already registered but seems its not activated please activate email');
-            }
-        }
-        $project = Project::findOrFail($id);
-        if($project && $request->first_name !=''){
-            $ref =false;
-            $color = Color::where('project_site',url())->first();
-            $offerToken = mt_rand(100000, 999999);
-            $user = UserRegistration::create($request->all()+['eoi_token' => $offerToken,'registration_site'=>url(),'phone_number'=>$request->phone]);
-            if($user){
-                $offerData = '';
-                $i = 0;
-                while($offerData == '' && $i != 5){
-                    $offerData = OfferRegistration::create($request->all()+['user_registration_id'=>$user->id,'project_id'=>$project->id,'investment_id'=>$project->investment->id,'joint_fname'=>$request->joint_investor_first,'joint_lname'=>$request->joint_investor_last,'trust_company'=>$request->investing_company_name]);
-                    $i = $i+1;
-                }
-                if($offerData != ''){
-                    $mailer->sendRegistrationConfirmationTo($user,$ref);
-                    $type = 'offer';
-                    return $offerData;
-                }else{
-                    // $mailer->sendApplicationRegistrationFailTo($request,$user);
-                    return \Response::json(['error' => 'Sorry! We were not able to process the investment','data'=>$offerData], 404);
-                }
-            }
-        }
-        return Response::json(['error' => 'Sorry! We were not able to process the investment'], 404);
-        // $intercom = IntercomBasicAuthClient::factory(array(
-        //     'app_id' => 'refan8ue',
-        //     'api_key' => '3efa92a75b60ff52ab74b0cce6a210e33e624e9a',
-        //     ));
-        // $intercom->createUser(array(
-        //     "email" => $user->email,
-        //     "custom_attributes" => array(
-        //         "active" => $user->active,
-        //         "token" => $user->token,
-        //         "role" => $user->role
-        //         ),
-        //     ));
-    }
 
-    public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'role'=>'required',
-            'g-recaptcha-response' => 'required',
-            'password'=>'required|min:6|max:60'
-        ]);
-        $validator1 = Validator::make($request->all(), [
-            'email' => 'unique:users,email||unique:user_registrations,email',
-        ]);
-        if ($validator->fails()) {
-            return Response::json(['status' => false, 'message' => $validator->errors()->first()]);
-        }
-        $request['role'] = 'investor';
-        // Verify Captcha
+            // Verify Captcha
         $recaptcha = new ReCaptcha(env('CAPTCHA_SECRET'));
         $capResponse = $recaptcha->verify($request->get('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
         if(!$capResponse->isSuccess()) {
-            return Response::json(['status' => false, 'message'=> 'Recaptcha timeout or duplicate.']);
+            return redirect('/users/create')->withErrors(['g-recaptcha-response'=> 'Recaptcha timeout or duplicate.'])->withInput();
         }
+    }
 
-        if($validator1->fails()){
-            $activatedUser = User::where('email', $request->email)->first();
-            $nonActivatedUser = UserRegistration::where('email', $request->email)->first();
+    if($validator1->fails()){
+        $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
+        $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
+        if(!$res1 && !$res2){
+            $originSite="";
+            if($user=User::where('email', $request->email)->first()){
+                $originSite = $user->registration_site;
+            }
+            if($userReg=UserRegistration::where('email', $request->email)->first()){
+                $originSite = $userReg->registration_site;
+            }
+            $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
+            if($request->eoiReg == 'eoiReg'){
+                return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
+            }
+            return redirect('/users/create')->withErrors(['email'=> $errorMessage])->withInput();
+        }
+        else{
+            $errorMessage = 'This email is already registered but seems its not activated please activate email';
+            if($request->eoiReg == 'eoiReg'){
+                if(!$request->next){
+                    return redirect()->back()->withMessage('<p>This email is already registered but seems its not activated please activate email</p>');
+                }
+                return redirect($request->next)->withMessage('<p>This email is already registered but seems its not activated please activate email</p>');
+            }
+            return redirect('/users/create')
+            ->withErrors($validator1)
+            ->withInput();
+        }
+    }
+    if($request->has('ref'))
+    {
+        $ref = request()->ref;
+        $request->request->add(['referral_code' => Request()->ref]);
+        $user = UserRegistration::create($request->all());
+        $mailer->sendRegistrationConfirmationTo($user,$ref);
+    }
+    elseif($request->eoiReg == 'eoiReg'){
+        $ref = false;
+        $color = Color::where('project_site',url())->first();
+        $eoi_token = mt_rand(100000, 999999);
+        $user = UserRegistration::create($request->all()+['eoi_token'=>$eoi_token]);
+        $mailer->sendRegistrationConfirmationTo($user,$ref);
+        $type = 'eoi';
+            // return view('users.registerCode',compact('color','type'));
+        return redirect()->route('users.register.view.code')->with(['color'=>$color,'type'=>$type]);
+    }
+    elseif($request->offerReg == 'offerReg'){
+        $ref =false;
+        $color = Color::where('project_site',url())->first();
+        $offerToken = mt_rad(100000, 999999);
+        $user = UserRegistration::create($request->all()+['offerToken' => $offerToken]);
+        $mailer->sendRegistrationConfirmationTo($user,$ref);
+        return view('users.registerCode',compact('color'));
+    }
+    else{
+        $ref = false;
+        $user = UserRegistration::create($request->all());
+        $mailer->sendRegistrationConfirmationTo($user,$ref);
+    }
+
+        // $intercom = IntercomBasicAuthClient::factory(array(
+        //     'app_id' => 'refan8ue',
+        //     'api_key' => '3efa92a75b60ff52ab74b0cce6a210e33e624e9a',
+        //     ));
+        // $intercom->createUser(array(
+        //     "email" => $user->email,
+        //     "custom_attributes" => array(
+        //         "active" => $user->active,
+        //         "token" => $user->token,
+        //         "role" => $user->role
+        //         ),
+        //     ));
+    return view('users.registrationSubmitted',compact('color'));
+}
+
+public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
+{
+    $color = Color::where('project_site',url())->first();
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'role'=>'required'
+    ]);
+    $validator1 = Validator::make($request->all(), [
+        'email' => 'unique:users,email||unique:user_registrations,email',
+    ]);
+    if ($validator->fails()) {
+        return redirect()
+        ->back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+    if($validator1->fails()){
+        $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
+        $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
+        if(!$res1 && !$res2){
+            $originSite="";
+            if($user=User::where('email', $request->email)->first()){
+                $originSite = $user->registration_site;
+            }
+            if($userReg=UserRegistration::where('email', $request->email)->first()){
+                $originSite = $userReg->registration_site;
+            }
+            $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
+            return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
+        }
+        else{
+            $errorMessage = 'This email is already registered but seems its not activated please activate email';
+            return redirect()->back()->withMessage('This email is already registered but seems its not activated please activate email');
+        }
+    }
+    $project = Project::findOrFail($id);
+    if($project && $request->first_name !=''){
+        $ref =false;
+        $color = Color::where('project_site',url())->first();
+        $offerToken = mt_rand(100000, 999999);
+        $user = UserRegistration::create($request->all()+['eoi_token' => $offerToken,'registration_site'=>url(),'phone_number'=>$request->phone]);
+        if($user){
+            $offerData = '';
+            $i = 0;
+            while($offerData == '' && $i != 5){
+                $offerData = OfferRegistration::create($request->all()+['user_registration_id'=>$user->id,'project_id'=>$project->id,'investment_id'=>$project->investment->id,'joint_fname'=>$request->joint_investor_first,'joint_lname'=>$request->joint_investor_last,'trust_company'=>$request->investing_company_name]);
+                $i = $i+1;
+            }
+            if($offerData != ''){
+                $mailer->sendRegistrationConfirmationTo($user,$ref);
+                $type = 'offer';
+                return $offerData;
+            }else{
+                    // $mailer->sendApplicationRegistrationFailTo($request,$user);
+                return \Response::json(['error' => 'Sorry! We were not able to process the investment','data'=>$offerData], 404);
+            }
+        }
+    }
+    return Response::json(['error' => 'Sorry! We were not able to process the investment'], 404);
+        // $intercom = IntercomBasicAuthClient::factory(array(
+        //     'app_id' => 'refan8ue',
+        //     'api_key' => '3efa92a75b60ff52ab74b0cce6a210e33e624e9a',
+        //     ));
+        // $intercom->createUser(array(
+        //     "email" => $user->email,
+        //     "custom_attributes" => array(
+        //         "active" => $user->active,
+        //         "token" => $user->token,
+        //         "role" => $user->role
+        //         ),
+        //     ));
+}
+
+public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'role'=>'required',
+        'g-recaptcha-response' => 'required',
+        'password'=>'required|min:6|max:60'
+    ]);
+    $validator1 = Validator::make($request->all(), [
+        'email' => 'unique:users,email||unique:user_registrations,email',
+    ]);
+    if ($validator->fails()) {
+        return Response::json(['status' => false, 'message' => $validator->errors()->first()]);
+    }
+    $request['role'] = 'investor';
+        // Verify Captcha
+    $recaptcha = new ReCaptcha(env('CAPTCHA_SECRET'));
+    $capResponse = $recaptcha->verify($request->get('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
+    if(!$capResponse->isSuccess()) {
+        return Response::json(['status' => false, 'message'=> 'Recaptcha timeout or duplicate.']);
+    }
+
+    if($validator1->fails()){
+        $activatedUser = User::where('email', $request->email)->first();
+        $nonActivatedUser = UserRegistration::where('email', $request->email)->first();
 
             if($activatedUser) {  // If user email is registered.
 
@@ -636,8 +636,13 @@ class UserRegistrationsController extends Controller
                     $mailer->sendProjectEoiEmailToUser($project, $user_info);
                     return redirect()->route('users.success.eoi');
                 }else{
+                    dd($request->all());
                     $project = Project::findOrFail($request->project_id);
                     $user = Auth::user();
+                    $agent_investment = 0;
+                    if($request->agent_investment == 'agent_investment'){
+                        $agent_investment = 1;
+                    }
                     // If application store request received from request form
                     if($request->investment_request_id)
                     {
@@ -667,7 +672,17 @@ class UserRegistrationsController extends Controller
                     }else{
                         $investingAs = $request->investing_as;
                     }
-                    $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type]);
+                    //update agent for investor
+                    if($request->agent_investment == 'agent_investment'){
+                        if(!$user->agent_id){
+                            User::find($user->id)->update([
+                              'agent_id' => $request->agent_id
+                          ]);
+                        }elseif($user->agent_id != $request->agent_id){
+                            return redirect()->back()->withMessage('Agent changed. Application not submitted');
+                        }
+                    }
+                    $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type,'agent_investment'=>$agent_investment, 'agent_id'=>$request->agent_id]);
                     $investor = InvestmentInvestor::get()->last();
                     if($user->idDoc != NULL && $user->idDoc->investing_as != 'Individual Investor'){
                         $investing_joint = new InvestingJoint;
@@ -892,46 +907,46 @@ class UserRegistrationsController extends Controller
 
         if(isset($request->reg_first_name) && isset($request->reg_last_name)) {
            $validator = Validator::make($request->all(), [
-                'email' => 'required|email',
-                'first_name' => 'required',
-                'last_name' => 'required'
-            ]);
-        }
-        $validator1 = Validator::make($request->all(), [
-            'email' => 'unique:users,email||unique:user_registrations,email',
+            'email' => 'required|email',
+            'first_name' => 'required',
+            'last_name' => 'required'
         ]);
+       }
+       $validator1 = Validator::make($request->all(), [
+        'email' => 'unique:users,email||unique:user_registrations,email',
+    ]);
 
-        if ($validator->fails()) {
-            return Response::json(['success' => false, 'errors' => $validator->errors()]);
-        }
-
-        if($validator1->fails()){
-            $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
-            $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
-            if(!$res1 && !$res2){
-                $originSite="";
-                if($user=User::where('email', $request->email)->first()){
-                    $originSite = $user->registration_site;
-                }
-                if($userReg=UserRegistration::where('email', $request->email)->first()){
-                    $originSite = $userReg->registration_site;
-                }
-                $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
-                return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
-            }
-            else{
-                $errorMessage = 'This email is already registered but seems its not activated please activate email';
-                return redirect()->back()->withMessage('This email is already registered but seems its not activated please activate email');
-            }
-        }
-        $project = Project::findOrFail($id);
-        $ref =false;
-        $color = Color::where('project_site',url())->first();
-        $offerToken = mt_rand(100000, 999999);
-        $user = UserRegistration::create($request->all()+['eoi_token' => $offerToken,'registration_site'=>url(),'role'=>'investor']);
-        $mailer->sendRegistrationConfirmationTo($user,$ref);
-        return Response::json(['success' => true, 'data' => $request->all()]);
+       if ($validator->fails()) {
+        return Response::json(['success' => false, 'errors' => $validator->errors()]);
     }
+
+    if($validator1->fails()){
+        $res1 = User::where('email', $request->email)->where('registration_site', url())->first();
+        $res2 = UserRegistration::where('email', $request->email)->where('registration_site', url())->first();
+        if(!$res1 && !$res2){
+            $originSite="";
+            if($user=User::where('email', $request->email)->first()){
+                $originSite = $user->registration_site;
+            }
+            if($userReg=UserRegistration::where('email', $request->email)->first()){
+                $originSite = $userReg->registration_site;
+            }
+            $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
+            return redirect()->back()->withErrors(['email'=> $errorMessage])->withInput();
+        }
+        else{
+            $errorMessage = 'This email is already registered but seems its not activated please activate email';
+            return redirect()->back()->withMessage('This email is already registered but seems its not activated please activate email');
+        }
+    }
+    $project = Project::findOrFail($id);
+    $ref =false;
+    $color = Color::where('project_site',url())->first();
+    $offerToken = mt_rand(100000, 999999);
+    $user = UserRegistration::create($request->all()+['eoi_token' => $offerToken,'registration_site'=>url(),'role'=>'investor']);
+    $mailer->sendRegistrationConfirmationTo($user,$ref);
+    return Response::json(['success' => true, 'data' => $request->all()]);
+}
 
     /**
      * Calls the sendgrid library to save the user details to sendgrid contact

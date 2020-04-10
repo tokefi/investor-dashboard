@@ -213,7 +213,10 @@ class UserAuthController extends Controller
                 return  redirect()->back()->withErrors($validator);
             }
             $user = Auth::user();
-
+            $agent_investment = 0;
+            if($request->agent_investment == 'agent_investment'){
+                $agent_investment = 1;
+            }
         // If application store request received from request form
             if($request->investment_request_id)
             {
@@ -238,7 +241,17 @@ class UserAuthController extends Controller
             }
             $amount = floatval(str_replace(',', '', str_replace('A$ ', '', $request->amount_to_invest)));
         $amount_5 = $amount*0.05; //5 percent of investment
-        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$request->investing_as, 'signature_data'=>$request->signature_data,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type]);
+        //update agent for investor
+        if($request->agent_investment == 'agent_investment'){
+            if(!$user->agent_id){
+                User::find($user->id)->update([
+                  'agent_id' => $request->agent_id
+              ]);
+            }elseif($user->agent_id != $request->agent_id){
+                return redirect()->back()->withMessage('Agent changed. Application not submitted');
+            }
+        }
+        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$request->investing_as, 'signature_data'=>$request->signature_data,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type,'agent_investment'=>$agent_investment, 'agent_id'=>$request->agent_id]);
         $investor = InvestmentInvestor::get()->last();
         if($request->investing_as != 'Individual Investor'){
             $investing_joint = new InvestingJoint;

@@ -207,13 +207,13 @@ class OfferController extends Controller
             return redirect()->back()->withMessage('Agent changed. Application not submitted');
           }
         }
-        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment,'agent_investment'=>$agent_investment]);
+        $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment,'agent_investment'=>$agent_investment,'agent_id'=>$request->agent_id]);
         $investor = InvestmentInvestor::get()->last();
         if($project->master_child){
           foreach($project->children as $child){
             $percAmount = $amount* ($child->allocation)/100;
             $childProject = Project::find($child->child);
-            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>$percAmount, 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id]);
+            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>$percAmount, 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
           }
         }
         if($user->idDoc != NULL && $user->idDoc->investing_as != 'Individual Investor'){
