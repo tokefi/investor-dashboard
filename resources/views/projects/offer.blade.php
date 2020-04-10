@@ -695,7 +695,6 @@ Offer Doc
 									@if($agent_investment)
 									@if($agent_investment == 1)
 									<input type="hidden" value="agent_investment" name="agent_investment">
-									<input type="hidden" @if(!Auth::guest()) value="{{$user->id}}" @endif name="user_id">
 									<input type="hidden" value="{{ $clientApplication->user_id }}" name="agent_id">
 									@endif
 									@endif
