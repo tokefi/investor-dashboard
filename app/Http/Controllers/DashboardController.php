@@ -215,14 +215,18 @@ class DashboardController extends Controller
     {
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
-        $investments = InvestmentInvestor::where('project_id', $project_id)->get();
-        $acceptedRegistries = InvestmentInvestor::where('project_id', $project_id)->where('accepted', 1);
-
-        $shareInvestments = $acceptedRegistries->orderBy('share_certificate_issued_at','ASC')->get();
+        if(SiteConfigurationHelper::isSiteAgent()){
+            $investments = InvestmentInvestor::where('project_id', $project_id)->where('agent_id',\Illuminate\Support\Facades\Auth::User()->id)->get();
+            $acceptedRegistries = InvestmentInvestor::where('project_id', $project_id)->where('accepted', 1)->where('agent_id',\Illuminate\Support\Facades\Auth::User()->id);
+        }else{
+            $investments = InvestmentInvestor::where('project_id', $project_id)->get();
+            $acceptedRegistries = InvestmentInvestor::where('project_id', $project_id)->where('accepted', 1);
+        }
         $transactions = Transaction::where('project_id', $project_id)->get();
         $positions = Position::where('project_id', $project_id)->orderBy('effective_date', 'DESC')->get()->groupby('user_id');
         $projectsInterests = ProjectInterest::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
+        $shareInvestments = $acceptedRegistries->orderBy('share_certificate_issued_at','ASC')->get();
         $newRegistries = $acceptedRegistries
         ->where('is_cancelled', false)
         ->select(['id', 'user_id', \DB::raw("SUM(amount) as shares")])
@@ -1223,8 +1227,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-             return new TransportManager($app);
-         });
+               return new TransportManager($app);
+           });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
