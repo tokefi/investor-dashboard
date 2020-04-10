@@ -30,7 +30,7 @@ class UserRequest extends Request
                 'username'=>'max:255|unique:users,username',
                 'email'=>'required|email|max:255|unique:users,email',
                 'gender'=>'in:male,female|max:12',
-                'password'=>'required|min:6|max:60',
+                'password'=>'required|max:60',
                 'phone_number'=>'min:10',
                 'role'=>'required',
             ];

@@ -270,7 +270,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         'last_name' => 'required',
         'role'=>'required',
         'g-recaptcha-response' => 'required',
-        'password'=>'required|min:6|max:60'
+        'password'=>'required|max:60'
     ]);
     $validator1 = Validator::make($request->all(), [
         'email' => 'unique:users,email||unique:user_registrations,email',
@@ -454,7 +454,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
             'first_name' => 'required|min:1|max:50',
             'last_name' => 'required|min:1|max:50',
             'phone_number' => 'required|numeric',
-            'password' => 'required|min:6|max:60',
+            'password' => 'required|max:60',
             'token'=>'required',
             'country_code'=>'required'
         ]);
@@ -902,7 +902,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $color = Color::where('project_site',url())->first();
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password'=>'required|min:6|max:60'
+            'password'=>'required|max:60'
         ]);
 
         if(isset($request->reg_first_name) && isset($request->reg_last_name)) {
