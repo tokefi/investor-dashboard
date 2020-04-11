@@ -18,7 +18,7 @@ class Transaction extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id','project_id','investment_investor_id','transaction_type','transaction_date','amount','rate','number_of_shares'];
+    protected $fillable = ['user_id','project_id','transaction_type','transaction_date','amount','rate','number_of_shares'];
 
     public function user()
     {
@@ -30,8 +30,4 @@ class Transaction extends Model
     	return $this->belongsTo('App\Project');
     }
 
-    public function investmentInvestors()
-    {
-        return $this->belongsTo('App\InvestmentInvestor');
-    }
 }

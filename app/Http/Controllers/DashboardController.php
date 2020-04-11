@@ -41,6 +41,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use SendGrid\Mail\Mail as SendgridMail;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\RedemptionRequest;
+use App\RedemptionStatus;
 
 
 class DashboardController extends Controller
@@ -227,11 +229,7 @@ class DashboardController extends Controller
         $projectsInterests = ProjectInterest::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $projectsEois = ProjectEOI::where('project_id', $project_id)->orderBy('created_at', 'DESC')->get();
         $shareInvestments = $acceptedRegistries->orderBy('share_certificate_issued_at','ASC')->get();
-        $newRegistries = $acceptedRegistries
-        ->where('is_cancelled', false)
-        ->select(['id', 'user_id', \DB::raw("SUM(amount) as shares")])
-        ->groupBy('user_id')
-        ->get();
+        $newRegistries = ModelHelper::getTotalInvestmentByProject($project_id);
         // dd($positions);
         // dd($shareInvestments->last()->investingJoint);
         return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries'));
@@ -416,7 +414,6 @@ class DashboardController extends Controller
             Transaction::create([
                 'user_id' => $investment->user_id,
                 'project_id' => $investment->project_id,
-                'investment_investor_id' => $investment->id,
                 'transaction_type' => 'BUY',
                 'transaction_date' => Carbon::now(),
                 'amount' => round($investment->amount,2),
@@ -456,7 +453,6 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $child->user_id,
                         'project_id' => $child->project_id,
-                        'investment_investor_id' => $child->id,
                         'transaction_type' => 'BUY',
                         'transaction_date' => Carbon::now(),
                         'amount' => round($child->amount,2),
@@ -712,7 +708,6 @@ class DashboardController extends Controller
         Transaction::create([
             'user_id' => $investment->user_id,
             'project_id' => $investment->project_id,
-            'investment_investor_id' => $investment->id,
             'transaction_type' => 'CANCELLED',
             'transaction_date' => Carbon::now(),
             'amount' => round($investment->amount,2),
@@ -772,7 +767,6 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $investment->user_id,
                         'project_id' => $investment->project_id,
-                        'investment_investor_id' => $investment->id,
                         'transaction_type' => 'DIVIDEND',
                         'transaction_date' => Carbon::now(),
                         'amount' => $dividendAmount,
@@ -865,8 +859,7 @@ class DashboardController extends Controller
                 Transaction::create([
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
-                    'investment_investor_id' => $investment->id,
-                    'transaction_type' => 'FIXED DIVIDEND',
+                    'transaction_type' => 'DIVIDEND',
                     'transaction_date' => Carbon::now(),
                     'amount' => $dividendAmount,
                     'rate' => $dividendPercent,
@@ -985,7 +978,6 @@ class DashboardController extends Controller
                 Transaction::create([
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
-                    'investment_investor_id' => $investment->id,
                     'transaction_type' => 'REPURCHASE',
                     'transaction_date' => Carbon::now(),
                     'amount' => $repurchaseAmount,
@@ -1854,6 +1846,136 @@ class DashboardController extends Controller
             'status' => true,
             'message' => 'Successful.',
             'data' => $tableContent
+        ]);
+    }
+
+    public function getAllRedemptionRequests()
+    {
+        $color = Color::where('project_site',url())->first();
+        $redemptionRequests = RedemptionRequest::whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('dashboard.redemptions.requests', compact('redemptionRequests', 'color'));
+    }
+
+    public function acceptRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)
+    {
+        $validator = Validator::make($request->all(), [
+            'num_shares'    => 'numeric|required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $redemption = RedemptionRequest::findOrFail($redemptionId);
+
+        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($redemption->user_id, $redemption->project_id);
+
+        if ($request->num_shares < 1 || $request->num_shares > $redemption->request_amount || $request->num_shares > $investment->shares) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid redemption amount.'
+            ]);
+        }
+
+        if ($request->num_shares != $redemption->request_amount) {
+            // Partial redemption
+            $redemption->accepted_amount = $request->num_shares;
+            $redemption->price = $redemption->project->share_per_unit_price;
+            $redemption->status_id = RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE;
+            $redemption->comments = $request->comments;
+            $redemption->save();
+
+            // Create new redemption request with remaining amount
+            RedemptionRequest::create([
+                'user_id' => $redemption->user_id,
+                'project_id' => $redemption->project_id,
+                'request_amount' => ($redemption->request_amount - $request->num_shares),
+                'status_id' => RedemptionStatus::STATUS_PENDING
+            ]);
+        
+        } else {
+            // Whole amount redumption
+            $redemption->accepted_amount = $request->num_shares;
+            $redemption->price = $redemption->project->share_per_unit_price;
+            $redemption->status_id = RedemptionStatus::STATUS_APPROVED;
+            $redemption->comments = $request->comments;
+            $redemption->save();
+        }
+
+        Transaction::create([
+            'user_id' => $redemption->user_id,
+            'project_id' => $redemption->project_id,
+            'transaction_type' => 'REPURCHASE',
+            'transaction_date' => Carbon::now(),
+            'amount' => $redemption->accepted_amount * $redemption->price,
+            'rate' => $redemption->price,
+            'number_of_shares' => $redemption->accepted_amount,
+        ]);
+
+        $mailer->sendRedemptionRequestAcceptedToUser($redemption);
+        
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'shares' => $request->num_shares
+            ]
+        ]);
+    }
+
+    public function rejectRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)
+    {
+        $validator = Validator::make($request->all(), [
+            'comments'      => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $redemption = RedemptionRequest::findOrFail($redemptionId);
+        $redemption->price = $redemption->project->share_per_unit_price;
+        $redemption->status_id = RedemptionStatus::STATUS_REJECTED;
+        $redemption->comments = $request->comments;
+        $redemption->save();
+
+        $mailer->sendRedemptionRequestRejectedToUser($redemption);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'shares' => $request->num_shares
+            ]
+        ]);
+    }
+
+    public function moneySentForRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)
+    {
+        $redemption = RedemptionRequest::findOrFail($redemptionId);
+
+        if ($redemption->status_id != RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE && $redemption->status_id != RedemptionStatus::STATUS_APPROVED) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Accept the redemption first!'
+            ]);
+        }
+
+        $redemption->is_money_sent = 1;
+        $redemption->save();
+
+        $mailer->sendRedemptionMoneySentToUser($redemption);
+
+        return response()->json([
+            'status' => true
         ]);
     }
 }

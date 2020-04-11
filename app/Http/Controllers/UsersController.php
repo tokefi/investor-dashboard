@@ -28,7 +28,9 @@ use Intervention\Image\Facades\Image;
 use App\SiteConfiguration;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Transaction;
-
+use App\Helpers\ModelHelper;
+use App\RedemptionRequest;
+use App\RedemptionStatus;
 
 class UsersController extends Controller
 {
@@ -474,7 +476,8 @@ class UsersController extends Controller
             return redirect()->route('users.investments', $user)->withMessage('<p class="alert text-center alert-warning">You can not access that profile.</p>');
         }
         $transactions = Transaction::where('user_id', $user_id)->get();
-        $investments = \App\Helpers\ModelHelper::getTotalInvestmentByUser($user_id);
+        $investments = ModelHelper::getTotalInvestmentByUser($user_id);
+
         return view('users.investments', compact('user','color', 'investments', 'transactions'));
     }
 
@@ -489,7 +492,7 @@ class UsersController extends Controller
         $investmentDetails = InvestmentInvestor::findOrFail($investment_id);
         $userId = $investmentDetails->user_id;
         $projectId = $investmentDetails->project_id;
-        $investmentDetails = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($userId), $projectId);
+        $investmentDetails = ModelHelper::getTotalInvestmentByUsersAndProject(array($userId), $projectId);
         $investment = $investmentDetails->count() ? $investmentDetails->first() : null;
         
         // dd($investment_id);
@@ -700,5 +703,90 @@ class UsersController extends Controller
         }
 
         return response()->json(['status' => true]);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function requestRedemption(Request $request, AppMailer $mailer)
+    {
+        $validation_rules = array(
+            'num_shares'    => 'numeric|required',
+            'project_id'    => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $validation_rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $user = Auth::user();
+        $investment = ModelHelper::getTotalInvestmentByUserAndProject($user->id, $request->project_id);
+        
+        if ($request->num_shares < 1 || $request->num_shares > $investment->shares) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Redemption shares should be between 1 and ' . $investment->shares
+            ]);
+        }
+
+        $pendingRequest = RedemptionRequest::where('user_id', $user->id)
+            ->where('project_id', $request->project_id)
+            ->where('status_id', RedemptionStatus::STATUS_PENDING)
+            ->get();
+
+        if ($pendingRequest->count()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You already have a request in pending status!'
+            ]);
+        }
+
+        $project = Project::findOrFail($request->project_id);
+
+        // Create redemption record in DB
+        RedemptionRequest::create([
+            'user_id' => $user->id,
+            'project_id' => $request->project_id,
+            'request_amount' => $request->num_shares,
+            'status_id' => RedemptionStatus::STATUS_PENDING
+        ]);
+        
+        // Send email to admin
+        $mailer->sendRedemptionRequestEmailToAdmin($user, $project, $request->num_shares);
+
+        // Send email to user
+        $mailer->sendRedemptionRequestEmailToUser($user, $project, $request->num_shares);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'shares' => $request->num_shares
+            ]
+        ]);
+
+    }
+
+    public function redemptions($userId)
+    {
+        $color = Color::where('project_site',url())->first();
+        $user = Auth::user();
+        if($user->id != $userId){
+            return redirect()->route('users.redemptions', $user)->withMessage('<p class="alert text-center alert-warning">You can not access that profile.</p>');
+        }
+
+        $redemptions = RedemptionRequest::whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
+            ->where('user_id', $user->id)
+            ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('users.redemptionRequests', compact('user','color', 'redemptions'));
     }
 }
