@@ -41,86 +41,34 @@
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
 					<br><br>
 					<div class="table-responsive text-center">
-								<table class="table table-bordered table-striped text-center" id="transactionTable">
-								<thead>
-									<tr>
-										<th>Investor Name</th>
-										<th>Project Name</th>
-										<th>Transaction type</th>
-										<th>Date</th>
-										<th>Amount</th>
-										<th>Rate</th>
-										<th>Number of shares</th>
-										<th>Agent Name</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($transactions as $transaction)
-									<tr>
-										<td>{{$transaction->user->first_name}} {{$transaction->user->last_name}}</td>
-										<td>@if($transaction->project->projectspvdetail){{$transaction->project->title}}@endif</td>
-										<td class="text-center">@if($transaction->transaction_type == "DIVIDEND") {{"ANNUALIZED DIVIDEND"}} @else {{$transaction->transaction_type}} @endif</td>
-										<td>{{date('m-d-Y', strtotime($transaction->transaction_date))}}</td>
-										<td>${{$transaction->amount}}</td>
-										<td>{{$transaction->rate}}</td>
-										<td>{{$transaction->number_of_shares}}</td>
-										<td>@if($transaction->user->agent_id) <?php $agent= App\User::find($transaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $transaction->user->agent_id }} @else NA @endif </td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-								{{-- <thead>
-									<tr>
-										<th>Project Name</th>
-										<th>Investment Amount</th>
-										<th>Investment Date</th>
-										<th>Investment status</th>
-										<th>Link to share certificate</th>
-										<th>Link to application form</th>
-										<th>Returns received</th>
-										<th>Tax and Accounting Docs</th>
-									</tr>
-								</thead>
-								<tbody>
-									@if($investments->count())
-									@foreach($investments as $investment)
-										<tr @if($investment->is_cancelled) style="color: #CCC;" @endif>
-											<td>{{$investment->project->title}}</td>
-											<td>${{number_format($investment->amount)}}</td>
-											<td>{{$investment->created_at->toFormattedDateString()}}</td>
-											<td>
-												@if($investment->accepted)
-												Shares issued
-												@elseif($investment->money_received)
-												Funds committed
-												@elseif($investment->investment_confirmation)
-												Approved
-												@else
-												Applied
-												@endif
-											</td>
-											<td>
-												@if($investment->is_repurchased)
-												<strong>Investment is repurchased</strong>
-												@else
-												@if($investment->is_cancelled)
-												<strong>Investment record is cancelled</strong>
-												@else
-												@if($investment->accepted)
-												<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
-												@else
-												NA
-												@endif
-												@endif
-												@endif
-											</td>
-											<td><a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">Application form</a></td>
-											<td></td>
-											<td></td>
-										</tr>
-									@endforeach
-									@endif
-								</tbody> --}}
+						<table class="table table-bordered table-striped text-center" id="transactionTable">
+							<thead>
+								<tr>
+									<th>Investor Name</th>
+									<th>Project Name</th>
+									<th>Transaction type</th>
+									<th>Date</th>
+									<th>Amount</th>
+									<th>Rate</th>
+									<th>Number of shares</th>
+									<th>Agent Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($transactions as $transaction)
+								<tr>
+									<td>{{$transaction->user->first_name}} {{$transaction->user->last_name}}</td>
+									<td>@if($transaction->project->projectspvdetail){{$transaction->project->title}}@endif</td>
+									<td class="text-center">@if($transaction->transaction_type == "DIVIDEND") {{"ANNUALIZED DIVIDEND"}} @else {{$transaction->transaction_type}} @endif</td>
+									<td>{{date('m-d-Y', strtotime($transaction->transaction_date))}}</td>
+									<td>${{$transaction->amount}}</td>
+									<td>{{$transaction->rate}}</td>
+									<td>{{$transaction->number_of_shares}}</td>
+									<td>@if($transaction->user->agent_id) <?php $agent= App\User::find($transaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $transaction->user->agent_id }} @else NA @endif </td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
 					</div>
 				</div>
 
@@ -136,6 +84,7 @@
 										<th>Price ($)</th>
 										<th>Market Value</th>
 										<th>Link to share certificate</th>
+										<th>Redemptions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -156,6 +105,17 @@
 										<td>
 											<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
 										</td>
+										<td>
+											<form action="#" id="redemption_request_form">
+												<div class="input-group">
+													<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 100px;">
+													<div class="input-group-btn">
+														<input hidden name="project_id" value="{{$investment->project->id}}" />
+														<button class="btn btn-primary form-control" type="submit">Request</button>
+													</div>
+												</div>
+											</form>
+										</td>
 									</tr>
 									@endforeach
 									@endif
@@ -164,18 +124,7 @@
 						</div>
 					</div>
 				</div>
-				
 			</div>
-
-			{{-- <ul class="list-group">
-				@if($user->investments->count())
-				@foreach($user->investments as $project)
-				<a href="" class="list-group-item">{{$project->title}}</a>
-				@endforeach
-				@else
-				<li class="list-group-item text-center alert alert-warning">Not Shown any Interest</li>
-				@endif
-			</ul> --}}
 		</div>
 	</div>
 </div>
@@ -193,6 +142,36 @@
 			"order": [[5, 'desc'], [0, 'desc']],
 			"iDisplayLength": 50
 		});
+
+		$('#redemption_request_form').on('submit', function (e) {
+			e.preventDefault();
+			if (!confirm('Are you sure you want to submit redemption request?')) {
+				return;
+			}
+			$('.loader-overlay').show();
+			let uri = "{{ route('users.investments.requestRedemption') }}";
+			let method = 'POST';
+			let formdata = new FormData($(this)[0]);
+			$.ajax({
+                url: uri,
+                type: 'POST',
+                dataType: 'JSON',
+                data: formdata,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                contentType: false,
+                processData: false
+            }).done(function(data){
+				$('.loader-overlay').hide();
+				if (!data.status) {
+					alert(data.message);
+					return;
+				}
+				alert('Redemption Request successfully submitted for ' + data.data.shares + ' shares.');
+				location.reload();
+			});
+		})
 	});
 </script>
 @stop

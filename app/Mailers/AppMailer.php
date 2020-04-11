@@ -526,6 +526,95 @@ class AppMailer
         }
     }
 
+    public function sendRedemptionRequestEmailToAdmin($user, $project, $shares)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $recipients;
+        $this->view = 'emails.redemptionRequestNotifyAdmin';
+        $this->subject = 'Redemption request received';
+        $this->data = compact('user', 'project', 'shares');
+        $this->deliver();
+    }
+
+    public function sendRedemptionRequestEmailToUser($user, $project, $shares)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.redemptionRequestNotifyUser';
+        $this->subject = 'Redemption request received';
+        $this->data = compact('user', 'project', 'shares');
+        $this->deliverWithBcc();
+    }
+
+    public function sendRedemptionRequestAcceptedToUser($redemption)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $redemption->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.redemptionRequestAcceptedNotifyUser';
+        $this->subject = 'Redemption request Accepted';
+        $this->data = compact('redemption');
+        $this->deliverWithBcc();
+    }
+
+    public function sendRedemptionRequestRejectedToUser($redemption)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $redemption->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.redemptionRequestRejectedNotifyUser';
+        $this->subject = 'Redemption request Rejected';
+        $this->data = compact('redemption');
+        $this->deliverWithBcc();
+    }
+
+    public function sendRedemptionMoneySentToUser($redemption)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $redemption->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.redemptionMoneySentNotifyUser';
+        $this->subject = 'Redemption request Money Sent';
+        $this->data = compact('redemption');
+        $this->deliverWithBcc();
+    }
+
     public function overrideMailerConfig()
     {
         $siteconfig = SiteConfigurationHelper::getConfigurationAttr();

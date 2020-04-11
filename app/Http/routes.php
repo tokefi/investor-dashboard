@@ -265,6 +265,8 @@ Route::post('/dashboard/mail/broadcast', ['as'=>'dashboard.mail.broadcast', 'use
 Route::get('/dashboard/import/contacts', ['as'=>'dashboard.import.contacts', 'uses'=>'DashboardController@showImportContacts']);
 Route::post('/dashboard/import/contacts', ['as'=>'dashboard.import.contacts.csv', 'uses'=>'DashboardController@saveContactsFromCSV']);
 Route::get('/users/{user_id}/investments', ['as'=>'users.investments', 'uses'=>'UsersController@usersInvestments']);
+Route::get('/users/{user_id}/redemptions', ['as'=>'users.redemptions', 'uses'=>'UsersController@redemptions']);
+Route::post('/users/investments/request-redemption', ['as'=>'users.investments.requestRedemption', 'uses'=>'UsersController@requestRedemption']);
 Route::get('/users/{user_id}/notification', ['as'=>'users.notifications', 'uses'=>'UsersController@usersNotifications']);
 Route::get('/users/{user_id}/referral',['as'=>'users.referral','uses'=>'UsersController@referralUser']);
 Route::get('/pages/redirectNotification', ['as'=>'pages.redirectNotifications', 'uses'=>'PagesController@redirectUsersNotifications']);
@@ -304,6 +306,10 @@ Route::get('/project/{request_id}/interest/cancel', ['as'=>'project.interest.can
 Route::get('/dashboard/investment/requests', ['as'=>'dashboard.investmentRequests', 'uses'=>'DashboardController@investmentRequests']);
 Route::get('/project/{request_id}/interest/cancel', ['as'=>'project.interest.cancel', 'uses'=>'OfferController@cancelRequestForm']);
 Route::get('/dashboard/investment/requests', ['as'=>'dashboard.investmentRequests', 'uses'=>'DashboardController@investmentRequests']);
+Route::get('/dashboard/redemption/requests', ['as'=>'dashboard.redemption.requests', 'uses'=>'DashboardController@getAllRedemptionRequests']);
+Route::post('/dashboard/redemption/{redemption_id}/accept', ['as'=>'dashboard.redemption.accept', 'uses'=>'DashboardController@acceptRedemptionRequest']);
+Route::post('/dashboard/redemption/{redemption_id}/reject', ['as'=>'dashboard.redemption.reject', 'uses'=>'DashboardController@rejectRedemptionRequest']);
+Route::post('/dashboard/redemption/{redemption_id}/money-sent', ['as'=>'dashboard.redemption.moneysent', 'uses'=>'DashboardController@moneySentForRedemptionRequest']);
 Route::post('/dashboard/projects/hideApplicationFillupRequest', ['as'=>'dashboard.investment.hideApplicationFillupRequest', 'uses'=>'DashboardController@hideApplicationFillupRequest']);
 Route::post('/configuration/uploadprojectProgressCircleImages', ['as'=>'configuration.uploadprojectProgressCircleImages', 'uses'=>'SiteConfigurationsController@uploadprojectProgressCircleImages']);
 Route::post('/configuration/uploadprospectus',['as'=>'configuration.uploadProspectus','uses'=>'SiteConfigurationsController@uploadProspectus']);
@@ -313,4 +319,3 @@ Route::post('/dashboard/project/interest/link', ['as'=>'dashboard.project.intere
 Route::post('/dashboard/project/upload/offerdoc', ['as' => 'dashboard.upload.offerDoc', 'uses' => 'DashboardController@uploadOfferDoc']);
 Route::post('/configuration/project/editSharePerUnitPriceValue', ['as'=>'configuration.project.editSharePerUnitPriceValue', 'uses'=>'ProjectsController@editSharePerUnitPriceValue']);
 Route::post('/configuration/project/editProjectShareUnitLabelText', ['as'=>'configuration.project.editProjectShareUnitLabelText', 'uses'=>'SiteConfigurationsController@editProjectShareUnitLabelText']);
-
