@@ -129,7 +129,7 @@
 														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
-															<a href="#edit" class="edit">{{ round($investment->amount, 2) }}</a>
+															<a href="#edit" class="edit">{{ round($investment->amount, 4) }}</a>
 
 															<input type="text" class="edit-input form-control" name="amount" id="amount" value="{{$investment->amount}}" style="width: 100px;">
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
@@ -404,7 +404,7 @@
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->postal_code}}@else{{$shareInvestment->user->postal_code}}@endif
 
 										</td>
-										<td>{{round($shareInvestment->amount, 2)}}</td>
+										<td>{{round($shareInvestment->amount, 4)}}</td>
 										<td>{{ $shareInvestment->buy_rate }}</td>
 										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate, 2)) }}</td>
 										{{-- <td>
