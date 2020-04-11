@@ -142,7 +142,7 @@ class OfferController extends Controller
           'client_last_name'=> $request->last_name,
           'client_email' => $request->email,
           'phone_number' => $request->phone,
-          'investment_amount' => $request->apply_for,
+          'investment_amount' => $request->amount_to_invest,
           'country'=>$request->country,
           'line_1'=>$request->line_1,
           'line_2'=>$request->line_2,
