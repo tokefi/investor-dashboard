@@ -41,8 +41,13 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use SendGrid\Mail\Mail as SendgridMail;
 use Illuminate\Database\Eloquent\SoftDeletes;
+<<<<<<< Updated upstream
 use App\RedemptionRequest;
 use App\RedemptionStatus;
+=======
+use View;
+
+>>>>>>> Stashed changes
 
 
 class DashboardController extends Controller
@@ -61,8 +66,11 @@ class DashboardController extends Controller
         }else{
             $this->middleware('admin'); 
         }
-
+        
         $this->siteConfiguration = SiteConfiguration::where('project_site', url())->first();
+
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
 
     /**
@@ -216,6 +224,7 @@ class DashboardController extends Controller
     public function projectInvestors($project_id)
     {
         $color = Color::where('project_site',url())->first();
+        $projects = Project::all();
         $project = Project::findOrFail($project_id);
         if(SiteConfigurationHelper::isSiteAgent()){
             $investments = InvestmentInvestor::where('project_id', $project_id)->where('agent_id',\Illuminate\Support\Facades\Auth::User()->id)->get();
@@ -232,12 +241,13 @@ class DashboardController extends Controller
         $newRegistries = ModelHelper::getTotalInvestmentByProject($project_id);
         // dd($positions);
         // dd($shareInvestments->last()->investingJoint);
-        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries'));
+        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries', 'projects'));
     }
 
     public function editProject($project_id)
     {
         $color = Color::where('project_site',url())->first();
+        $projects = Project::all();
         $project = Project::findOrFail($project_id);
         $masterChild = Project::where('master_child',0)->where('id','!=',$project->id)->where('project_site',url())->get();
         if($project->project_site != url()){
@@ -253,7 +263,7 @@ class DashboardController extends Controller
             $project->save();
         }
 
-        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild'));
+        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild', 'projects'));
     }
 
     public function activateUser($user_id)

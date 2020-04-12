@@ -30,15 +30,19 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Testimonial;
 use App\Helpers\SiteConfigurationHelper;
 use App\ProjectInterest;
+use Illuminate\Support\Facades\View;
 
 
 class PagesController extends Controller
 {
+    // public $allprojects;
 
     public function __construct()
     {
         $this->middleware('auth', ['only' => ['editTeam','updateTeam','updateTeam','createTeamMember','changeColorFooter','cropUploadedImage']]);
         $this->middleware('admin', ['only' => ['editTeam','updateTeam','updateTeam','createTeamMember','changeColorFooter','cropUploadedImage']]);
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
     /**
     * returns home page
@@ -127,6 +131,7 @@ class PagesController extends Controller
         $aboutus = $aboutus->where('project_site',url())->first();
         $color = Color::where('project_site',url())->first();
         $adminedit = 0;
+        // dd($projects);
         if(Auth::user()){
             $user = Auth::user();
             $role = Role::findOrFail(3);

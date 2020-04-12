@@ -33,12 +33,12 @@
 			</ul>
 			<h3 class="text-center">My Investments</h3>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
-				<li style="width: 50%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
+				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
+				<li style="width: 50%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
 			</ul>
 
 			<div class="tab-content">
-				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
+				<div id="transactions_tab" class="tab-pane fade in active" style="overflow: auto;">
 					<br><br>
 					<div class="table-responsive text-center">
 						<table class="table table-bordered table-striped text-center" id="transactionTable">
@@ -69,10 +69,36 @@
 								@endforeach
 							</tbody>
 						</table>
+								<table class="table table-bordered table-striped text-center" id="transactionsTable">
+								<thead>
+									<tr>
+										<th>Investor Name</th>
+										<th>Project Name</th>
+										<th>Transaction type</th>
+										<th>Date</th>
+										<th>Amount</th>
+										<th>Rate</th>
+										<th>Number of shares</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($transactions as $transaction)
+									<tr>
+										<td>{{$transaction->user->first_name}} {{$transaction->user->last_name}}</td>
+										<td>@if($transaction->project->projectspvdetail){{$transaction->project->title}}@endif</td>
+										<td class="text-center">@if($transaction->transaction_type == "DIVIDEND") {{"ANNUALIZED DIVIDEND"}} @else {{$transaction->transaction_type}} @endif</td>
+										<td data-sort='YYYYMMDD'>{{date('Y-m-d', strtotime($transaction->transaction_date))}}</td>
+										<td>${{$transaction->amount}}</td>
+										<td>{{$transaction->rate}}</td>
+										<td>{{$transaction->number_of_shares}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
 					</div>
 				</div>
 
-				<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+				<div id="positions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 					<div>
 						<div class="table-responsive text-center">
 							<table class="table table-bordered table-striped" id="positionsTable">

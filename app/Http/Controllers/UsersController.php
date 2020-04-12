@@ -31,6 +31,7 @@ use App\Transaction;
 use App\Helpers\ModelHelper;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
+use Illuminate\Support\Facades\View;
 
 class UsersController extends Controller
 {
@@ -41,6 +42,8 @@ class UsersController extends Controller
     {
         $this->middleware('auth', ['except' => ['create', 'login', 'store', 'authenticate']]);
         $this->middleware('guest', ['only' => ['create', 'login']]);
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
     /**
      * Display a listing of the resource.

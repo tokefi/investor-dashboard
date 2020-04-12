@@ -86,7 +86,7 @@
 								<th>Price ($)</th>
 								<th>Amount</th>
 								<th>Is Money Received</th>
-								<th>@if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
+								<th>Issue @if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
 								<th>Investor Document</th>
 								<th>Joint Investor</th>
 								<th>Company or Trust</th>
@@ -143,20 +143,32 @@
 													${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
 												</td>
 												<td>
-													<div class="">
+													<div class="text-center">
 														<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
 															@if($investment->money_received || $investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
 															@else
-															<input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+															{{-- <input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received"> --}}
+															<div class="pretty p-svg">
+																<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+																<div class="state p-success">
+																	<!-- svg path --> 
+																	<svg class="svg svg-icon" viewBox="0 0 20 20">
+																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+																			
+																		</path>
+																	</svg>
+																 <label></label>
+																</div>
+															</div>
 															@endif
 														</form>
 													</div>
 												</td>
 												<td>
-													<div class="">
+													<div class="text-center">
 														<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -165,7 +177,19 @@
 															@if($investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">@if($project->share_vs_unit) Share @else Unit @endif certificate issued</small></i>
 															@else
-															<input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+															{{-- <input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate"> --}}
+															<div class="pretty p-svg">
+																<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif" class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
+																<div class="state p-success">
+																	<!-- svg path --> 
+																	<svg class="svg svg-icon" viewBox="0 0 20 20">
+																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+																			
+																		</path>
+																	</svg>
+																 <label></label>
+																</div>
+															</div>
 															@endif
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
@@ -826,6 +850,21 @@
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/fnAddDataAndDisplay.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("[data-toggle=tooltip").tooltip();
+		// Javascript to enable link to tab
+		var hash = document.location.hash;
+		var prefix = "tab_";
+		if (hash) {
+		    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+		    window.scrollTo(0, 0);
+		} 
+
+		// Change hash for page-reload
+		$('.nav-tabs a').on('shown', function (e) {
+		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
+		    window.scrollTo(0, 0);
+		});
+
 		$('a.edit').click(function () {
 			var dad = $(this).parent();
 			$(this).hide();
@@ -840,6 +879,7 @@
 		$('.issue-share-certi-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');
+				$(this).closest("form").submit();
 				$('.loader-overlay').show();
 			} else {
 				e.preventDefault();
@@ -849,6 +889,8 @@
 		$('.money-received-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');
+				$(this).closest("form").submit();
+				$('.loader-overlay').show();
 			} else {
 				e.preventDefault();
 			}
