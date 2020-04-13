@@ -456,8 +456,8 @@
 					<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
 						<div>
 							<div class="share-registry-actions">
-								{{--<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>--}}
-								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Dividend</button>
+								<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>
+								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Dividends cents per share</button>
 								{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
 							</div>
 							<div class="clear-both">
