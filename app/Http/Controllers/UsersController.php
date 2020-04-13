@@ -478,10 +478,22 @@ class UsersController extends Controller
         if($user->id != $user_id){
             return redirect()->route('users.investments', $user)->withMessage('<p class="alert text-center alert-warning">You can not access that profile.</p>');
         }
-        $transactions = Transaction::where('user_id', $user_id)->get();
         $investments = ModelHelper::getTotalInvestmentByUser($user_id);
 
-        return view('users.investments', compact('user','color', 'investments', 'transactions'));
+
+        //Merge user investments and dividends
+        $transactions = Transaction::where('user_id', $user_id)->where('transaction_type', 'DIVIDEND')->get();
+        $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->get();
+ 
+        $allTransactions = collect();
+        foreach ($usersInvestments as $usersInvestment){
+            $allTransactions->push($usersInvestment);
+        }
+        foreach ($transactions as $transaction){
+            $allTransactions->push($transaction);
+        }
+
+        return view('users.investments', compact('user','color', 'investments', 'transactions', 'allTransactions'));
     }
 
     /**

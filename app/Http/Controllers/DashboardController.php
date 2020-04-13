@@ -41,13 +41,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use SendGrid\Mail\Mail as SendgridMail;
 use Illuminate\Database\Eloquent\SoftDeletes;
-<<<<<<< Updated upstream
 use App\RedemptionRequest;
 use App\RedemptionStatus;
-=======
 use View;
-
->>>>>>> Stashed changes
 
 
 class DashboardController extends Controller
@@ -863,7 +859,7 @@ class DashboardController extends Controller
             $subject = 'Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round($investment->shares * (float)$dividendPercent);
+                $dividendAmount = round(($investment->shares * (float)$dividendPercent)/100);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
                 Transaction::create([
@@ -1799,10 +1795,10 @@ class DashboardController extends Controller
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id')
             ->get();
-            $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
+            $shareType = ($project->share_vs_unit) ? 'No. of shares' : 'No. of units';
 
             $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
-            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Investor Dividend amount</td></tr></thead>';
+            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Market Value</td><td>Investor Dividend amount</td></tr></thead>';
             $tableContent .= '<tbody>';
 
             foreach ($investments as $key => $investment) {
@@ -1810,8 +1806,10 @@ class DashboardController extends Controller
                 $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+                $dividendAmount = ((round($investment->shares * (float)$dividendPercent))/100);
+                $marketValue = (round($investment->shares)*($project->share_per_unit_price));
 
-                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>' . round($investment->shares * (float)$dividendPercent) . '<br></td></tr>';
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';
             }
 
             $tableContent .= '</tbody></table>';

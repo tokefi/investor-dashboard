@@ -60,13 +60,13 @@
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
-				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
+				<li class="active" style="width: 19%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
+				<li style="width: 26%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
+				<li style="width: 19%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
-				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 18%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 18%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
@@ -121,7 +121,7 @@
 														<br>{{$investment->user->email}}<br>{{$investment->user->phone_number}}
 													</div>
 												</td>
-												<td>
+												<td data-sort="{{$investment->created_at->toFormattedDateString()}}">
 													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
 												<td class="text-center">
@@ -623,28 +623,7 @@
 							</table>
 						</div>
 					</div> --}}
-					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
-						<div>
-							<table class="table table-bordered table-striped" id="eoiTable">
-								<thead>
-									<tr>
-										<th>User Email</th>
-										<th>User Phone Number</th>
-										<th>EOI Timestamp</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($projectsInterests as $projectsInterest)
-									<tr>
-										<td>{{$projectsInterest->email}}</td>
-										<td>{{$projectsInterest->phone_number}}</td>
-										<td>{{date('Y-m-d h:m:s', strtotime($projectsInterest->created_at))}}</td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
+					
 					<div id="expression_of_interest_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped" id="expression_of_interest_table">
@@ -699,16 +678,38 @@
 										<td>{{$projectsEoi->phone_number}}</td>
 										<td>${{number_format($projectsEoi->investment_amount)}}</td>
 										<td>{{$projectsEoi->invesment_period}}</td>
-										<td>{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
+										<td data-sort="{{date($projectsEoi->created_at)}}">{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
 										{{-- <td>
 											@if($projectsEoi->interested_to_buy) Yes @else No @endif
 										</td> --}}
 									</tr>
-								@endforeach
-							</tbody>
-						</table>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
+					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+						<div>
+							<table class="table table-bordered table-striped" id="eoiTable">
+								<thead>
+									<tr>
+										<th>User Email</th>
+										<th>User Phone Number</th>
+										<th>EOI Timestamp</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($projectsInterests as $projectsInterest)
+									<tr>
+										<td>{{$projectsInterest->email}}</td>
+										<td>{{$projectsInterest->phone_number}}</td>
+										<td>{{date('Y-m-d h:m:s', strtotime($projectsInterest->created_at))}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
 				
 			</div>
 		</div>
