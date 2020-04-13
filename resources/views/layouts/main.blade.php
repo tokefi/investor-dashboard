@@ -69,6 +69,7 @@ $_SESSION['code'] = md5(microtime(true));
 
     <!-- JCrop -->
     {!! Html::style('/assets/plugins/JCrop/css/jquery.Jcrop.css') !!}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
     {{-- {!! Html::script('/js/jquery-1.11.3.min.js') !!} --}}
     @yield('css-section')
 
@@ -154,6 +155,9 @@ $_SESSION['code'] = md5(microtime(true));
         .dashboard-submenu li a {
             padding-top: 7px;
             padding-bottom: 7px;
+        }
+        .submenu-item {
+            font-size: 0.9em;
         }
 
         @media (min-width: 768px) {
@@ -251,7 +255,33 @@ $_SESSION['code'] = md5(microtime(true));
                                     <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
                                     @if(!Auth::user()->roles->contains('role', 'agent'))
                                     <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li>
+                                    {{-- <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li> --}}
+                                    <li class="dropdown-submenu">
+                                        <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects')}}" >Projects <span class="caret"></span> <i class="fa fa-paperclip pull-right"></i></a>
+                                        <ul class="dropdown-menu dashboard-submenu">
+                                            @if(!Auth::user()->roles->contains('role', 'agent'))
+                                            @foreach($allProjects as $allProject)
+                                                <li class="dropdown-submenu">
+                                                    <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu dashboard-submenu">
+                                                        {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors </a></li> --}}
+                                                        <li class="dropdown-submenu">
+                                                            <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}" >Investors <span class="caret"></span></a>
+                                                            <ul class="dropdown-menu dashboard-submenu">
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications </a></li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications </a></li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry </a></li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming </a></li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI </a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details </a></li>
+                                                    </ul>
+                                                </li>
+                                            @endforeach
+                                            @endif
+                                        </ul>
+                                    </li>
                                     <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
@@ -369,10 +399,10 @@ $_SESSION['code'] = md5(microtime(true));
             </div>
         </div>
         <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
-          <img style="width: 50px;" src="{{asset('assets/images/estatebaronLogo_white.png')}}">
-          <p>
-            <span style="color: #fff;">Powered by </span><a href="https://estatebaron.com/whitelabel-property-crowdfunding" target="_blank" style="cursor: pointer; color: #fff" class="a-link">Estate Baron</a>
-          </p>
+          <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_dark.png')}}"></a>
+            <p>
+                <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
+            </p>
         </div>
         <br>
         <p class="investment-title1-description-section text-justify" style="font-size:16px;">
@@ -389,10 +419,11 @@ $_SESSION['code'] = md5(microtime(true));
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
-{!! Html::script('/js/bootstrap.min.js') !!}
-{!! Html::script('/js/circle-progress.js')!!}
-{!! Html::script('/js/clipboard.min.js') !!}
-{!! Html::script('/js/clipboard-action.js') !!}
+<script type ="text/javascript" src ="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+{!! Html::script('js/bootstrap.min.js') !!}
+{!! Html::script('js/circle-progress.js')!!}
+{!! Html::script('js/clipboard.min.js') !!}
+{!! Html::script('js/clipboard-action.js') !!}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- JCrop -->
@@ -430,7 +461,7 @@ $_SESSION['code'] = md5(microtime(true));
         @endif
 
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+        // $('[data-toggle="tooltip"]').tooltip();
         $('[data-toggle="popover"]').popover();
         $('a[data-disabled]').click(function (e) {
             e.preventDefault();

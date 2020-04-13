@@ -24,6 +24,7 @@ use App\Jobs\SendInvestorNotificationEmail;
 use App\Jobs\SendDeveloperNotificationEmail;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\AgentInvestmentApplication;
+use View;
 
 
 class OfferController extends Controller
@@ -37,6 +38,8 @@ class OfferController extends Controller
     {
       $this->middleware('auth');
       $this->middleware('admin', ['only' => ['requestForm', 'cancelRequestForm']]);
+      $this->allProjects = Project::where('project_site', url())->get();
+      View::share('allProjects', $this->allProjects);
     }
 
     /**

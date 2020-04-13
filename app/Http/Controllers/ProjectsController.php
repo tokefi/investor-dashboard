@@ -38,6 +38,8 @@ use App\ProjectEOI;
 use App\ProspectusDownload;
 use App\Helpers\SiteConfigurationHelper;
 use App\AgentInvestmentApplication;
+use View;
+
 
 class ProjectsController extends Controller
 {
@@ -47,6 +49,8 @@ class ProjectsController extends Controller
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['index', 'show','redirectingfromproject', 'gform', 'gformRedirects','showEoiInterest','showInterest']]);
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
 
     /**
@@ -533,6 +537,7 @@ class ProjectsController extends Controller
             }
             else{
                 $user = Auth::user();
+                $agent_type = 0;
             }
             // $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>'0']);
             // // $mailer->sendInterestNotificationInvestor($user, $project);
@@ -554,7 +559,7 @@ class ProjectsController extends Controller
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment'));
             }
             if(!$project->eoi_button){
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','$agent_type'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type'));
             } else{
                 return response()->view('errors.404', [], 404);
             }

@@ -43,6 +43,7 @@ use SendGrid\Mail\Mail as SendgridMail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
+use View;
 
 
 class DashboardController extends Controller
@@ -61,8 +62,11 @@ class DashboardController extends Controller
         }else{
             $this->middleware('admin'); 
         }
-
+        
         $this->siteConfiguration = SiteConfiguration::where('project_site', url())->first();
+
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
 
     /**
@@ -216,6 +220,7 @@ class DashboardController extends Controller
     public function projectInvestors($project_id)
     {
         $color = Color::where('project_site',url())->first();
+        $projects = Project::all();
         $project = Project::findOrFail($project_id);
         if(SiteConfigurationHelper::isSiteAgent()){
             $investments = InvestmentInvestor::where('project_id', $project_id)->where('agent_id',\Illuminate\Support\Facades\Auth::User()->id)->get();
@@ -232,12 +237,13 @@ class DashboardController extends Controller
         $newRegistries = ModelHelper::getTotalInvestmentByProject($project_id);
         // dd($positions);
         // dd($shareInvestments->last()->investingJoint);
-        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries'));
+        return view('dashboard.projects.investors', compact('project', 'investments','color', 'shareInvestments', 'transactions', 'positions', 'projectsInterests', 'projectsEois', 'newRegistries', 'projects'));
     }
 
     public function editProject($project_id)
     {
         $color = Color::where('project_site',url())->first();
+        $projects = Project::all();
         $project = Project::findOrFail($project_id);
         $masterChild = Project::where('master_child',0)->where('id','!=',$project->id)->where('project_site',url())->get();
         if($project->project_site != url()){
@@ -253,7 +259,7 @@ class DashboardController extends Controller
             $project->save();
         }
 
-        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild'));
+        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild', 'projects'));
     }
 
     public function activateUser($user_id)
@@ -853,7 +859,7 @@ class DashboardController extends Controller
             $subject = 'Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round($investment->shares * (float)$dividendPercent);
+                $dividendAmount = round(($investment->shares * (float)$dividendPercent)/100);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
                 Transaction::create([
@@ -1796,10 +1802,10 @@ class DashboardController extends Controller
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id')
             ->get();
-            $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
+            $shareType = ($project->share_vs_unit) ? 'No. of shares' : 'No. of units';
 
             $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
-            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Investor Dividend amount</td></tr></thead>';
+            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Market Value</td><td>Investor Dividend amount</td></tr></thead>';
             $tableContent .= '<tbody>';
 
             foreach ($investments as $key => $investment) {
@@ -1807,8 +1813,10 @@ class DashboardController extends Controller
                 $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+                $dividendAmount = ((round($investment->shares * (float)$dividendPercent))/100);
+                $marketValue = (round($investment->shares)*($project->share_per_unit_price));
 
-                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>' . round($investment->shares * (float)$dividendPercent) . '<br></td></tr>';
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';
             }
 
             $tableContent .= '</tbody></table>';

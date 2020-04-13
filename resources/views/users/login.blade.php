@@ -50,8 +50,8 @@ Login | @parent
 							</div>
 							<input type="hidden" value="" id="next" name="next">
 							<div class="form-group" style="width:75%;">
-								{!! Form::submit('Login with Estate Baron account', array('class'=>'btn btn-block second_color_btn hide', 'tabindex'=>'4', 'style'=>'border-radius:50px; background-color:#fed405;font-size:1.125em;color:#fff;')) !!}
-								<button type="submit" class='btn btn-lg btn-danger font-semibold text-right second_color_btn' id="submitform" href='#' style="width:300px; background-color: #fed405; font-size:1em; color:#fff;border-radius:50px; border: 0px;" data-toggle="tooltip" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) title="If you are an existing EstateBaron.com user you can use the same username and password here without having to sign up again" @endif><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/estatebaronLogo.png')}}" style="width: 20px;"> Login @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) with Estate Baron account @endif</button>
+								{!! Form::submit('Login with Konkrete account', array('class'=>'btn btn-block second_color_btn hide', 'tabindex'=>'4', 'style'=>'border-radius:50px; background-color:#fed405;font-size:1.125em;color:#fff;')) !!}
+								<button type="submit" class='btn btn-lg btn-danger font-semibold text-right second_color_btn' id="submitform" href='#' style="width:300px; background-color: #fed405; font-size:1em; color:#fff;border-radius:50px; border: 0px;" data-toggle="tooltip" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) title="If you are an existing Konkrete user you can use the same username and password here without having to sign up again" @endif><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/konkrete_favicon.png')}}" style="width: 20px;"> Login @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) with Konkrete account @endif</button>
 							</div>
 							<p class="text-left" style="margin-left: -25px"> <a class="btn btn-link" href="{{ url('/password/email') }}"> Forgot Your Password?</a></p>
 						</fieldset>
@@ -70,7 +70,7 @@ Login | @parent
 					<br><br>
 					<br>
 				</div>
-				<div class="col-md-3">
+				{{-- <div class="col-md-3">
 					<div class="row" style="text-align:center;">
 						<div class="btn-group" style="box-shadow:3px 3px 3px #888888;">
 							<!-- <a class='btn btn-lg btn-danger'><i class="fa fa-google-plus" style="width:16px;"></i></a> -->
@@ -86,7 +86,7 @@ Login | @parent
 							<a class='btn btn-lg btn-primary font-semibold facebook-btn' href='/auth/facebook' style="width:243px; background-color: #375599; border-color: #375599; font-size:1em; color:#fff; border-radius:0;"><img class="pull-left" src="{{asset('assets/images/fb_login.png')}}" style=" margin:-10px -12px; background-color: #fff; width:45px;"> Sign in with Facebook</a>
 						</div>	
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</div>
 	</div>

@@ -33,46 +33,61 @@
 			</ul>
 			<h3 class="text-center">My Investments</h3>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
-				<li style="width: 50%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
+				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
+				<li style="width: 50%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
 			</ul>
 
 			<div class="tab-content">
-				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
+				<div id="transactions_tab" class="tab-pane fade in active" style="overflow: auto;">
 					<br><br>
 					<div class="table-responsive text-center">
-						<table class="table table-bordered table-striped text-center" id="transactionTable">
+						<table class="table table-bordered table-striped text-center" id="transactionsTable">
 							<thead>
 								<tr>
-									<th>Investor Name</th>
+									{{-- <th>Investor Name</th> --}}
 									<th>Project Name</th>
-									<th>Transaction type</th>
-									<th>Date</th>
-									<th>Amount</th>
-									<th>Rate</th>
+									<th>Investment Status</th>
 									<th>Number of shares</th>
+									<th>Rate</th>
+									<th>Amount</th>
 									<th>Agent Name</th>
+									<th>Investment Date</th>
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($transactions as $transaction)
-								<tr>
-									<td>{{$transaction->user->first_name}} {{$transaction->user->last_name}}</td>
-									<td>@if($transaction->project->projectspvdetail){{$transaction->project->title}}@endif</td>
-									<td class="text-center">@if($transaction->transaction_type == "DIVIDEND") {{"ANNUALIZED DIVIDEND"}} @else {{$transaction->transaction_type}} @endif</td>
-									<td>{{date('m-d-Y', strtotime($transaction->transaction_date))}}</td>
-									<td>${{$transaction->amount}}</td>
-									<td>{{$transaction->rate}}</td>
-									<td>{{$transaction->number_of_shares}}</td>
-									<td>@if($transaction->user->agent_id) <?php $agent= App\User::find($transaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $transaction->user->agent_id }} @else NA @endif </td>
-								</tr>
-								@endforeach
+								@if($allTransactions->count())
+									@foreach($allTransactions as $allTransaction)
+										@if($allTransaction->transaction_type)
+											@if($allTransaction->transaction_type == 'DIVIDEND')
+											<tr>
+												<td>@if($allTransaction->project->projectspvdetail){{$allTransaction->project->title}}@endif</td>
+												<td class="text-center">DIVIDEND</td>
+												<td class="text-center">{{$allTransaction->number_of_shares}}</td>
+												<td>${{$allTransaction->rate}}</td>
+												<td>${{$allTransaction->amount}}</td>
+												<td>@if($allTransaction->user->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
+												<td data-sort="{{date($allTransaction->transaction_date)}}">{{date('d/m/Y', strtotime($allTransaction->transaction_date))}}</td>
+											</tr>
+											@endif
+										@else
+										<tr>
+											<td>@if($allTransaction->project->projectspvdetail){{$allTransaction->project->title}}@endif</td>
+											<td class="text-center">@if($allTransaction->accepted && $allTransaction->money_received) Share Certificate Issued @elseif($allTransaction->money_received) Money Received @else Applied @endif</td>
+											<td class="text-center">{{$allTransaction->amount}}</td>
+											<td>${{$allTransaction->buy_rate}}</td>
+											<td>${{($allTransaction->amount)*($allTransaction->project->share_per_unit_price)}}</td>
+											<td>@if($allTransaction->user->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
+											<td data-sort="{{date($allTransaction->created_at)}}">{{date('d/m/Y', strtotime($allTransaction->created_at))}}</td>
+										</tr>
+										@endif
+									@endforeach
+								@endif
 							</tbody>
 						</table>
 					</div>
 				</div>
 
-				<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+				<div id="positions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 					<div>
 						<div class="table-responsive text-center">
 							<table class="table table-bordered table-striped" id="positionsTable">

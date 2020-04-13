@@ -60,13 +60,13 @@
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
-				<li class="active" style="width: 20%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
-				<li style="width: 30%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
+				<li class="active" style="width: 19%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
+				<li style="width: 26%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
+				<li style="width: 19%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
-				<li style="width: 30%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
-				<li style="width: 20%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 18%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
+				<li style="width: 18%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
 			</ul>
 			<div class="tab-content">
 				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
@@ -86,7 +86,7 @@
 								<th>Price ($)</th>
 								<th>Amount</th>
 								<th>Is Money Received</th>
-								<th>@if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
+								<th>Issue @if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
 								<th>Investor Document</th>
 								<th>Joint Investor</th>
 								<th>Company or Trust</th>
@@ -121,7 +121,7 @@
 														<br>{{$investment->user->email}}<br>{{$investment->user->phone_number}}
 													</div>
 												</td>
-												<td>
+												<td data-sort="{{$investment->created_at->toFormattedDateString()}}">
 													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
 												<td class="text-center">
@@ -143,20 +143,32 @@
 													${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
 												</td>
 												<td>
-													<div class="">
+													<div class="text-center">
 														<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
 															@if($investment->money_received || $investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
 															@else
-															<input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+															{{-- <input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received"> --}}
+															<div class="pretty p-svg">
+																<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+																<div class="state p-success">
+																	<!-- svg path --> 
+																	<svg class="svg svg-icon" viewBox="0 0 20 20">
+																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+																			
+																		</path>
+																	</svg>
+																 <label></label>
+																</div>
+															</div>
 															@endif
 														</form>
 													</div>
 												</td>
 												<td>
-													<div class="">
+													<div class="text-center">
 														<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
@@ -165,7 +177,19 @@
 															@if($investment->accepted)
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">@if($project->share_vs_unit) Share @else Unit @endif certificate issued</small></i>
 															@else
-															<input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+															{{-- <input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate"> --}}
+															<div class="pretty p-svg">
+																<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif" class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
+																<div class="state p-success">
+																	<!-- svg path --> 
+																	<svg class="svg svg-icon" viewBox="0 0 20 20">
+																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+																			
+																		</path>
+																	</svg>
+																 <label></label>
+																</div>
+															</div>
 															@endif
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
 														</form>
@@ -599,28 +623,7 @@
 							</table>
 						</div>
 					</div> --}}
-					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
-						<div>
-							<table class="table table-bordered table-striped" id="eoiTable">
-								<thead>
-									<tr>
-										<th>User Email</th>
-										<th>User Phone Number</th>
-										<th>EOI Timestamp</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($projectsInterests as $projectsInterest)
-									<tr>
-										<td>{{$projectsInterest->email}}</td>
-										<td>{{$projectsInterest->phone_number}}</td>
-										<td>{{date('Y-m-d h:m:s', strtotime($projectsInterest->created_at))}}</td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
+					
 					<div id="expression_of_interest_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped" id="expression_of_interest_table">
@@ -675,16 +678,38 @@
 										<td>{{$projectsEoi->phone_number}}</td>
 										<td>${{number_format($projectsEoi->investment_amount)}}</td>
 										<td>{{$projectsEoi->invesment_period}}</td>
-										<td>{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
+										<td data-sort="{{date($projectsEoi->created_at)}}">{{date('Y-m-d h:m:s', strtotime($projectsEoi->created_at))}}</td>
 										{{-- <td>
 											@if($projectsEoi->interested_to_buy) Yes @else No @endif
 										</td> --}}
 									</tr>
-								@endforeach
-							</tbody>
-						</table>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
 					</div>
-				</div>
+					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+						<div>
+							<table class="table table-bordered table-striped" id="eoiTable">
+								<thead>
+									<tr>
+										<th>User Email</th>
+										<th>User Phone Number</th>
+										<th>EOI Timestamp</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($projectsInterests as $projectsInterest)
+									<tr>
+										<td>{{$projectsInterest->email}}</td>
+										<td>{{$projectsInterest->phone_number}}</td>
+										<td>{{date('Y-m-d h:m:s', strtotime($projectsInterest->created_at))}}</td>
+									</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
 				
 			</div>
 		</div>
@@ -826,6 +851,21 @@
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/fnAddDataAndDisplay.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		$("[data-toggle=tooltip").tooltip();
+		// Javascript to enable link to tab
+		var hash = document.location.hash;
+		var prefix = "tab_";
+		if (hash) {
+		    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+		    window.scrollTo(0, 0);
+		} 
+
+		// Change hash for page-reload
+		$('.nav-tabs a').on('shown', function (e) {
+		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
+		    window.scrollTo(0, 0);
+		});
+
 		$('a.edit').click(function () {
 			var dad = $(this).parent();
 			$(this).hide();
@@ -840,6 +880,7 @@
 		$('.issue-share-certi-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');
+				$(this).closest("form").submit();
 				$('.loader-overlay').show();
 			} else {
 				e.preventDefault();
@@ -849,6 +890,8 @@
 		$('.money-received-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');
+				$(this).closest("form").submit();
+				$('.loader-overlay').show();
 			} else {
 				e.preventDefault();
 			}
