@@ -14,7 +14,7 @@ class ModelHelper
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
+            ->groupBy('user_id', 'project_id')
             ->get();
         
         return $investment->map(function ($item, $key) {
@@ -34,7 +34,7 @@ class ModelHelper
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
+            ->groupBy('user_id', 'project_id')
             ->get();
         
         return $investment->map(function ($item, $key) {
@@ -54,7 +54,7 @@ class ModelHelper
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
+            ->groupBy('user_id', 'project_id')
             ->get();
 
         return $investment->map(function ($item, $key) {
@@ -75,7 +75,7 @@ class ModelHelper
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
+            ->groupBy('user_id', 'project_id')
             ->first();
 
         $redemption = RedemptionRequest::select([\DB::raw("SUM(accepted_amount) as redemptions")])
