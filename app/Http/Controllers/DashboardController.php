@@ -748,8 +748,8 @@ class DashboardController extends Controller
         if($investorList != ''){
             if($dateDiff >=0){
                 $investors = explode(',', $investorList);
-                $investments = InvestmentInvestor::findMany($investors);
-
+                // $investments = InvestmentInvestor::findMany($investors);
+                $investments = ModelHelper::getTotalInvestmentByUsersAndProject($investors, $projectId);
                 // Add the records to project progress table
                 // ProjectProg::create([
                 //     'project_id' => $projectId,
@@ -1750,7 +1750,14 @@ class DashboardController extends Controller
         if($investorList != '') {
             if($dateDiff >=0) {
                 $investors = explode(',', $investorList);
-                $investments = InvestmentInvestor::findMany($investors);
+                // $investments = InvestmentInvestor::findMany($investors);
+                $investments = InvestmentInvestor::whereIn('user_id', $investors)
+            ->where('project_id', $projectId)
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id')
+            ->get();
                 $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
 
                 $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
