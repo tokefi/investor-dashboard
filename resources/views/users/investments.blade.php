@@ -48,7 +48,7 @@
 									<th>Project Name</th>
 									<th>Investment Status</th>
 									<th>Number of shares</th>
-									<th>Rate</th>
+									<th>Price</th>
 									<th>Amount</th>
 									<th>Agent Name</th>
 									<th>Investment Date</th>
@@ -58,13 +58,13 @@
 								@if($allTransactions->count())
 									@foreach($allTransactions as $allTransaction)
 										@if($allTransaction->transaction_type)
-											@if($allTransaction->transaction_type == 'DIVIDEND')
+											@if(($allTransaction->transaction_type == 'DIVIDEND') || ($allTransaction->transaction_type == 'ANNUALIZED DIVIDEND'))
 											<tr>
 												<td>@if($allTransaction->project->projectspvdetail){{$allTransaction->project->title}}@endif</td>
-												<td class="text-center">DIVIDEND</td>
+												<td class="text-center">@if($allTransaction->transaction_type == 'DIVIDEND') DIVIDEND % FIXED @else DIVIDEND % ANNUALIZED @endif</td>
 												<td class="text-center">{{$allTransaction->number_of_shares}}</td>
-												<td>${{$allTransaction->rate}}</td>
-												<td>${{$allTransaction->amount}}</td>
+												<td>@if($allTransaction->transaction_type == 'DIVIDEND') ${{number_format(($allTransaction->rate/100), 4)}} @else ${{number_format($allTransaction->rate, 4)}} @endif</td>
+												<td>${{number_format($allTransaction->amount, 2)}}</td>
 												<td>@if($allTransaction->user->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
 												<td data-sort="{{date($allTransaction->transaction_date)}}">{{date('d/m/Y', strtotime($allTransaction->transaction_date))}}</td>
 											</tr>
@@ -73,9 +73,9 @@
 										<tr>
 											<td>@if($allTransaction->project->projectspvdetail){{$allTransaction->project->title}}@endif</td>
 											<td class="text-center">@if($allTransaction->accepted && $allTransaction->money_received) Share Certificate Issued @elseif($allTransaction->money_received) Money Received @else Applied @endif</td>
-											<td class="text-center">{{$allTransaction->amount}}</td>
-											<td>${{$allTransaction->buy_rate}}</td>
-											<td>${{($allTransaction->amount)*($allTransaction->project->share_per_unit_price)}}</td>
+											<td class="text-center">{{round($allTransaction->amount)}}</td>
+											<td>${{number_format($allTransaction->buy_rate, 4)}}</td>
+											<td>${{number_format(round(($allTransaction->amount)*($allTransaction->project->share_per_unit_price)), 2)}}</td>
 											<td>@if($allTransaction->user->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
 											<td data-sort="{{date($allTransaction->created_at)}}">{{date('d/m/Y', strtotime($allTransaction->created_at))}}</td>
 										</tr>

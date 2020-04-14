@@ -100,7 +100,7 @@
 							@foreach($investments as $investment)
 							@if(!$investment->hide_investment)
 							<tr id="application{{$investment->id}}">
-								<td>INV{{$investment->id}}
+								<td data-sort="{{$investment->id}}">INV{{$investment->id}}
 									<a href="{{route('dashboard.application.view', [$investment->id])}}" class="edit-application" style="margin-top: 1.2em;"><br>
 										<i class="fa fa-edit" aria-hidden="true"></i>
 									</a>
@@ -129,7 +129,7 @@
 														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
 															{{method_field('PATCH')}}
 															{{csrf_field()}}
-															<a href="#edit" class="edit">{{ round($investment->amount, 4) }}</a>
+															<a href="#edit" class="edit">{{ round($investment->amount) }}</a>
 
 															<input type="text" class="edit-input form-control" name="amount" id="amount" value="{{$investment->amount}}" style="width: 100px;">
 															<input type="hidden" name="investor" value="{{$investment->user->id}}">
@@ -137,7 +137,7 @@
 													</div>
 												</td>
 												<td class="text-center">
-													{{ $investment->buy_rate }}
+													{{ number_format($investment->buy_rate, 4) }}
 												</td>
 												<td class="text-center">
 													${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
@@ -410,7 +410,7 @@
 								<tbody>
 									@foreach($shareInvestments as $shareInvestment)
 									<tr @if($shareInvestment->is_cancelled) style="color: #CCC;" @endif>
-										<td>INV{{$shareInvestment->id}}</td>
+										<td data-sort="{{$shareInvestment->id}}">INV{{$shareInvestment->id}}</td>
 										{{-- <td>@if($shareInvestment->share_number){{$shareInvestment->share_number}}@else{{'NA'}}@endif</td> --}}
 										<td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td>
 										<td>{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</td>
@@ -428,9 +428,9 @@
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->postal_code}}@else{{$shareInvestment->user->postal_code}}@endif
 
 										</td>
-										<td>{{round($shareInvestment->amount, 4)}}</td>
-										<td>{{ $shareInvestment->buy_rate }}</td>
-										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate, 2)) }}</td>
+										<td>{{round($shareInvestment->amount)}}</td>
+										<td>{{ number_format($shareInvestment->buy_rate, 4) }}</td>
+										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate), 2) }}</td>
 										{{-- <td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Investment is repurchased</strong>
@@ -541,9 +541,9 @@
 												{{$registry->user->country}},
 												{{$registry->user->postal_code}}
 											</td>
-											<td>{{ $registry->shares }}</td>
-											<td>{{ $project->share_per_unit_price }}</td>
-											<td>{{ $registry->shares * $project->share_per_unit_price }}</td>
+											<td>{{ round($registry->shares) }}</td>
+											<td>{{ number_format($project->share_per_unit_price, 4) }}</td>
+											<td>{{ number_format(($registry->shares * $project->share_per_unit_price), 2) }}</td>
 											<td>
 												@if($project->share_vs_unit)
 												<a href="{{route('user.view.share', [base64_encode($registry->id)])}}" target="_blank">

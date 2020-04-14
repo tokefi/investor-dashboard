@@ -773,7 +773,7 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $investment->user_id,
                         'project_id' => $investment->project_id,
-                        'transaction_type' => 'DIVIDEND',
+                        'transaction_type' => 'ANNUALIZED DIVIDEND',
                         'transaction_date' => Carbon::now(),
                         'amount' => $dividendAmount,
                         'rate' => $dividendPercent,
@@ -861,7 +861,7 @@ class DashboardController extends Controller
                 // Save details to transaction table
                 $dividendAmount = round(($investment->shares * (float)$dividendPercent)/100);
                 $shareNumber = explode('-', $investment->share_number);
-                $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
+                $noOfShares = $investment->shares;
                 Transaction::create([
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
@@ -1806,10 +1806,10 @@ class DashboardController extends Controller
                 $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
-                $dividendAmount = ((round($investment->shares * (float)$dividendPercent))/100);
-                $marketValue = (round($investment->shares)*($project->share_per_unit_price));
+                $dividendAmount = round((($investment->shares * (float)$dividendPercent)/100), 2);
+                $marketValue = round(($investment->shares)*($project->share_per_unit_price), 2);
 
-                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . $investment->shares . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . round($investment->shares) . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';
             }
 
             $tableContent .= '</tbody></table>';
