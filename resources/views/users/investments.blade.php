@@ -121,7 +121,7 @@
 											<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
 										</td>
 										<td>
-											<form action="#" id="redemption_request_form">
+											<form action="#" id="redemption_request_form" class="redemption-request-form">
 												<div class="input-group">
 													<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 100px;">
 													<div class="input-group-btn">
@@ -158,7 +158,7 @@
 			"iDisplayLength": 50
 		});
 
-		$('#redemption_request_form').on('submit', function (e) {
+		$('.redemption-request-form').on('submit', function (e) {
 			e.preventDefault();
 			if (!confirm('Are you sure you want to submit redemption request?')) {
 				return;
