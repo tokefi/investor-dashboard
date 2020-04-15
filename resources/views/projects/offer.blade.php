@@ -522,9 +522,9 @@ Offer Doc
 																	{!! $errors->first('postal_code', '<small class="text-danger">:message</small>') !!}
 																</div>
 																<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
-																	<select name="country" class="form-control">
+																	<select name="country" class="form-control" @if(!Auth::guest() && isset($user->country)) disabled @elseif(isset($clientApplication)) disabled @endif>
 																		@foreach(\App\Http\Utilities\Country::all() as $country => $code)
-																		<option @if(!Auth::guest() && isset($user->country) != null) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
+																		<option >@if(!Auth::guest() && isset($user->country)) {{$user->country}} @elseif(isset($clientApplication)) {{$clientApplication->country}} @else {{ $country }} @endif</option>
 																		@endforeach
 																	</select>
 																	{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
