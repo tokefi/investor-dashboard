@@ -583,7 +583,7 @@
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->bsb}} @else {{$investment->user->bsb}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->account_number}} @else {{$investment->user->account_number}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$investment->shares}}</span><br></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{round($investment->shares * ((int)$dividendPercent/100))}}</span><br></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{round($investment->shares * $project->share_per_unit_price * ((int)$dividendPercent/100), 2)}}</span><br></td>
                                       </tr>
                                       @endforeach
                                     </tbody>
