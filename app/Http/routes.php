@@ -289,9 +289,11 @@ Route::get('/projects/showedit/{project_id}', ['as'=>'projects.showedit', 'uses'
 Route::get('/dashboard/projects/{investment_id}/investments/cancel', ['as'=>'dashboard.investment.cancel', 'uses'=>'DashboardController@investmentCancel']);
 Route::post('/dashboard/projects/{project_id}/investment/previewDividend', ['as'=>'dashboard.investment.previewDividend', 'uses'=>'DashboardController@getDividendPreviewData']);
 Route::post('/dashboard/projects/{project_id}/investment/previewFixedDividend', ['as'=>'dashboard.investment.previewFixedDividend', 'uses'=>'DashboardController@getFixedDividendPreviewData']);
+Route::post('/dashboard/projects/{project_id}/investment/previewCentsPerShareDividend', ['as'=>'dashboard.investment.previewCentsPerShareDividend', 'uses'=>'DashboardController@getCentsPerSharePreviewData']);
 Route::post('/dashboard/projects/{project_id}/investment/previewrepurchase', ['as'=>'dashboard.investment.previewRepurchase', 'uses'=>'DashboardController@getRepurchasePreviewData']);
 Route::post('/dashboard/projects/{project_id}/investment/declareDividend', ['as'=>'dashboard.investment.declareDividend', 'uses'=>'DashboardController@declareDividend']);
 Route::post('/dashboard/projects/{project_id}/investment/declareFixedDividend', ['as'=>'dashboard.investment.declareFixedDividend', 'uses'=>'DashboardController@declareFixedDividend']);
+Route::post('/dashboard/projects/{project_id}/investment/declareCentsPerShareDividend', ['as'=>'dashboard.investment.declareCentsPerShareDividend', 'uses'=>'DashboardController@declareCentsPerShareDividend']);
 Route::post('/dashboard/projects/{project_id}/investment/declareRepurchase', ['as'=>'dashboard.investment.declareRepurchase', 'uses'=>'DashboardController@declareRepurchase']);
 Route::post('/dashboard/projects/{project_id}/investment/statement', ['as'=>'dashboard.investment.statement', 'uses'=>'DashboardController@investmentStatement']);
 Route::get('/dashboard/projects/{project_id}/investment/statement/send', ['as'=>'dashboard.investment.statement.send', 'uses'=>'DashboardController@sendInvestmentStatement']);
