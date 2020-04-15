@@ -136,6 +136,10 @@ $_SESSION['code'] = md5(microtime(true));
             text-decoration: underline !important;
         }
 
+        .dropdown-menu>li>a {
+            padding: 12px 20px;
+        }
+
         /** dropdown sub-menu */
         .dropdown-submenu:hover>.dropdown-menu {
             display: block;
@@ -150,11 +154,11 @@ $_SESSION['code'] = md5(microtime(true));
             font-size: 16px;
         }
         .dashboard-submenu li a {
-            padding-top: 5px;
-            padding-bottom: 5px;
+            padding-top: 12px;
+            padding-bottom: 12px;
         }
         .submenu-item {
-            font-size: 0.9em;
+            font-size: 1em;
         }
 
         @media (min-width: 768px) {

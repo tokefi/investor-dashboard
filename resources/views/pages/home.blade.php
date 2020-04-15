@@ -126,8 +126,8 @@
             font-size: 16px;
         }
         .dashboard-submenu li a {
-            padding-top: 7px;
-            padding-bottom: 7px;
+            padding-top: 12px;
+            padding-bottom: 12px;
         }
         /*.submenu-item {
             font-size: 0.9em;
@@ -196,7 +196,7 @@
 				<a id="brand" class="navbar-brand big-logo" href="{{route('home')}}"><img class="img-responsive brand-big-image" src="{{$mainLogo->path}}" alt="Logo" width="80%" class="main-logo" data-wow-duration="1.5s" data-wow-delay="0.2s" style="margin-left:50px; margin-top:-30px;"></a>
 				@else
 				<a id="brand" class="navbar-brand hide small-logo" href="{{route('home')}}"><img src="{{asset('assets/images/main_logo.png')}}" width="130" alt="Brand logo" id="logo" style="margin-top:-5px;"></a>
-				<a id="brand" class="navbar-brand big-logo" href="{{route('home')}}"><img class="img-responsive brand-big-image" src="/assets/images/main_logo.png" alt="Logo" width="80%" class="main-logo" data-wow-duration="1.5s" data-wow-delay="0.2s" style="margin-left:50px; margin-top:-30px;"></a>
+				<a id="brand" class="navbar-brand big-logo" href="{{route('home')}}"><img class="img-responsive brand-big-image" src="/assets/images/main_logo.png" alt="Logo" width="70%" class="main-logo" data-wow-duration="1.5s" data-wow-delay="0.2s" style="margin-left:50px; margin-top:-30px;"></a>
 				@endif
 				@else
 				<a id="brand" class="navbar-brand hide small-logo" href="{{route('home')}}"><img src="{{asset('assets/images/main_logo.png')}}" width="130" alt="Brand logo" id="logo" style="margin-top:-5px;"></a>
@@ -234,7 +234,7 @@
 								<ul class="dropdown-menu" role="menu">
 									@if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || Auth::user()->roles->contains('role', 'agent'))
 									<li class="dropdown-submenu">
-										<a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:9px 17px;">Dashboard <span class="caret"></span></a>
+										<a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:12px 17px;">Dashboard <span class="caret"></span></a>
 										<ul class="dropdown-menu dashboard-submenu">
 											<li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
 											<li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
@@ -278,10 +278,10 @@
 									</li>--}}
 									@endif
 									<li>
-										{!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:9px 17px;']) !!}
+										{!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
 									</li>
 									<li>
-										{!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:9px 17px;']) !!}
+										{!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
 									</li>
 								</ul>
 							</li>

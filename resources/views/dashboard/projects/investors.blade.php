@@ -35,6 +35,10 @@
 			word-wrap: break-word;
 		}
 	}
+
+	td {
+		text-align: center;
+	}
 </style>
 @stop
 
@@ -51,15 +55,15 @@
 					@if (Session::has('message'))
 					{!! Session::get('message') !!}
 					@endif
-					<h3 class="text-center"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
-						<address class="text-center">
+					<h2 class="text-center"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
+						{{-- <address class="text-center">
 							<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}
 							</small>
-						</address>
-					</h3>
+						</address> --}}
+					</h2>
 				</div>
 			</div>
-			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
+			<ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
 				<li class="active" style="width: 19%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
 				<li style="width: 26%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
 				<li style="width: 19%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
@@ -76,7 +80,7 @@
 						}
 					</style>
 					<br><br>
-					<table class="table table-bordered table-striped investors-table" id="investorsTable" style="margin-top: 2em;">
+					<table class="table table-bordered table-striped investors-table" id="investorsTable" style="margin-top: 1em;">
 						<thead>
 							<tr>
 								<th>Unique ID</th>
@@ -89,7 +93,7 @@
 								<th>Issue @if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
 								<th>Investor Document</th>
 								<th>Joint Investor</th>
-								<th>Company or Trust</th>
+								<th>Entity Details</th>
 								@if(!$project->retail_vs_wholesale)<th>Wholesale Investment</th>@endif
 								<th>Application Form</th>
 								<th>Interested to Buy</th>
@@ -122,7 +126,7 @@
 													</div>
 												</td>
 												<td data-sort="{{$investment->created_at->toFormattedDateString()}}">
-													<div class="text-right">{{$investment->created_at->toFormattedDateString()}}</div>
+													<div class="text-center">{{$investment->created_at->toFormattedDateString()}}</div>
 												</td>
 												<td class="text-center">
 													<div class="">
@@ -199,7 +203,7 @@
 													@if($investment->userInvestmentDoc->where('type','normal_name')->last())
 													<a href="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" target="_blank">{{$investment->user->first_name}} {{$investment->user->last_name}} Doc</a>
 													<a href="#" class="pop">
-														<img src="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" style="width: 300px;" class="img-responsive">
+														<img src="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" style="width: 120px; margin: auto !important;;" class="img-responsive">
 													</a>
 													<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 														<div class="modal-dialog">
@@ -348,7 +352,7 @@
 						</table>
 					</div>
 
-					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 1em;overflow: auto;">
 						<!-- <ul class="list-group">Hello</ul> -->
 						{{-- <div>
 							<div class="share-registry-actions">
@@ -372,7 +376,7 @@
 									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
 									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 								</form>
-								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
+								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-center">
 									{{csrf_field()}}
 									<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
 								</form>
@@ -386,23 +390,21 @@
 									<tr>
 										<th>Unique ID</th>
 										{{-- <th>@if($project->share_vs_unit) Share @else Unit @endif numbers</th> --}}
-										<th>Project SPV Name</th>
-										<th>Investor Name</th>
+										{{-- <th>Project SPV Name</th> --}}
+										<th>Investor Details</th>
 										<th>Investment type</th>
-										<th>Joint Investor Name</th>
+										<th>Joint Investor <br> Name</th>
 										<th>Entity details</th>
-										<th>Phone</th>
-										<th>Email</th>
-										<th>Address</th>
 										<th>@if($project->share_vs_unit) Share @else Unit @endif face value</th>
 										<th>Price ($)</th>
 										<th>Amount</th>
 										{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
-										<th>TFN</th>
+										{{-- <th>TFN</th> --}}
 										<th>Investment Documents</th>
-										<th>Account Name</th>
+										<th>Application Form</th>
+										{{-- <th>Account Name</th>
 										<th>BSB</th>
-										<th>Account Number</th>
+										<th>Account Number</th> --}}
 										<th>Action</th>
 										<th>Agent name</th>
 									</tr>
@@ -412,14 +414,14 @@
 									<tr @if($shareInvestment->is_cancelled) style="color: #CCC;" @endif>
 										<td data-sort="{{$shareInvestment->id}}">INV{{$shareInvestment->id}}</td>
 										{{-- <td>@if($shareInvestment->share_number){{$shareInvestment->share_number}}@else{{'NA'}}@endif</td> --}}
-										<td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td>
-										<td>{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</td>
+										{{-- <td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td> --}}
+										<td><a href="{{route('dashboard.users.show', [$investment->user->id])}}" >{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</a> <br> {{$shareInvestment->user->email}} <br> {{$shareInvestment->user->phone_number}}</td>
 										<td>{{$shareInvestment->investing_as}}</td>
-										<td>@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}}@else{{'NA'}}@endif</td>
-										<td>@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->investing_company}}@else{{'NA'}}@endif</td>
-										<td>{{$shareInvestment->user->phone_number}}</td>
-										<td>{{$shareInvestment->user->email}}</td>
-										<td>
+										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
+										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->investing_company) {{$shareInvestment->investingJoint->investing_company}}@endif @else{{'NA'}} @endif</td>
+										{{-- <td>{{$shareInvestment->user->phone_number}}</td> --}}
+										{{-- <td>{{$shareInvestment->user->email}}</td> --}}
+										{{-- <td>
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->line_1}},@else{{$shareInvestment->user->line_1}},@endif
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->line_2}},@else{{$shareInvestment->user->line_2}},@endif
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->city}},@else{{$shareInvestment->user->city}},@endif
@@ -427,7 +429,7 @@
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->country}},@else{{$shareInvestment->user->country}},@endif
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->postal_code}}@else{{$shareInvestment->user->postal_code}}@endif
 
-										</td>
+										</td> --}}
 										<td>{{round($shareInvestment->amount)}}</td>
 										<td>{{ number_format($shareInvestment->buy_rate, 4) }}</td>
 										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate), 2) }}</td>
@@ -450,13 +452,45 @@
 											@endif
 											@endif
 										</td> --}}
-										<td>
+										{{-- <td>
 											@if($shareInvestment->investingJoint){{$shareInvestment->investingJoint->tfn}} @else{{$shareInvestment->user->tfn}} @endif
+										</td> --}}
+										<td>
+											@if($investment->userInvestmentDoc->where('type','normal_name')->last())
+											<a href="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" target="_blank">{{$investment->user->first_name}} {{$investment->user->last_name}} Doc</a>
+											<a href="#" class="pop">
+												<img src="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" style="width: 120px; margin: auto !important;" class="img-responsive">
+											</a>
+											<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-body">
+															<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+															<img src="" class="imagepreview" style="width: 100%;" >
+														</div>
+													</div>
+												</div>
+											</div>
+											<script>
+												$(function() {
+													$('.pop').on('click', function() {
+														$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+														$('#imagemodal').modal('show');
+													});
+												});
+											</script>
+											@else
+											NA
+											@endif</a>
 										</td>
-										<td>{{-- @if($shareInvestment->userInvestmentDoc) <a href="{{$shareInvestment->userInvestmentDoc->path}}"> {{$shareInvestment->userInvestmentDoc->type}} @else NA @endif</a> --}}</td>
-										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_name}} @else {{$shareInvestment->user->account_name}} @endif</td>
+										<td>
+											<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
+												Application form
+											</a>
+										</td>
+										{{-- <td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_name}} @else {{$shareInvestment->user->account_name}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->bsb}} @else {{$shareInvestment->user->bsb}} @endif</td>
-										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_number}} @else {{$shareInvestment->user->account_number}} @endif</td>
+										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_number}} @else {{$shareInvestment->user->account_number}} @endif</td> --}}
 										<td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Repurchased</strong>
@@ -500,7 +534,7 @@
 									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
 									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 								</form>
-								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="text-right">
+								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="pull-right">
 									{{csrf_field()}}
 									<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
 								</form>
@@ -513,13 +547,13 @@
 								<thead>
 									<tr>
 										<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
-										<th>Project SPV Name</th>
+										{{-- <th>Project SPV Name</th> --}}
 										<th>Investor Name</th>
 										<th>Phone</th>
 										<th>Email</th>
 										<th>Address</th>
 										<th>@if($project->share_vs_unit) Shares @else Units @endif</th>
-										<th>Price ($)</th>
+										{{-- <th>Price ($)</th> --}}
 										<th>Market value ($)</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
 										<th>Agent name</th>
@@ -529,7 +563,7 @@
 									@foreach ($newRegistries as $registry)
 										<tr>
 											<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
-											<td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td>
+											{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
 											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
 											<td>{{$registry->user->phone_number}}</td>
 											<td>{{$registry->user->email}}</td>
@@ -542,7 +576,7 @@
 												{{$registry->user->postal_code}}
 											</td>
 											<td>{{ round($registry->shares) }}</td>
-											<td>{{ number_format($project->share_per_unit_price, 4) }}</td>
+											{{-- <td>{{ number_format($project->share_per_unit_price, 4) }}</td> --}}
 											<td>{{ number_format(($registry->shares * $project->share_per_unit_price), 2) }}</td>
 											<td>
 												@if($project->share_vs_unit)
@@ -624,7 +658,7 @@
 						</div>
 					</div> --}}
 					
-					<div id="expression_of_interest_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+					<div id="expression_of_interest_tab" class="tab-pane fade" style="margin-top: 1em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped" id="expression_of_interest_table">
 								<thead>
@@ -688,7 +722,7 @@
 							</table>
 						</div>
 					</div>
-					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+					<div id="eoi_tab" class="tab-pane fade" style="margin-top: 1em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped" id="eoiTable">
 								<thead>
