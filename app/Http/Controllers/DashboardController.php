@@ -961,7 +961,7 @@ class DashboardController extends Controller
             $subject = 'Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round((($investment->shares * $project->share_per_unit_price * (int)$dividendPercent/100), 2);
+                $dividendAmount = round(($investment->shares * $project->share_per_unit_price * (int)$dividendPercent/100), 2);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $investment->shares;
                 Transaction::create([
