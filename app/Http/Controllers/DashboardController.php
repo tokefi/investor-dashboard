@@ -895,8 +895,7 @@ class DashboardController extends Controller
                             '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
-                            '%project_prospectus_text%' => $prospectusText,
-                            '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit'
+                            '%project_prospectus_text%' => $prospectusText
                         ]
                     ]
                 );
@@ -955,14 +954,14 @@ class DashboardController extends Controller
 
             // send dividend email to admins
             $csvPath = $this->exportFixedDividendCSV($investments, $dividendPercent, $project);
-            // $mailer->sendFixedDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project);
+            $mailer->sendCentsPerShareDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project);
 
             // send dividend emails to investors
             $sendgridPersonalization = [];
             $subject = 'Dividend declared for '.$project->title;
             foreach ($investments as $investment) {
                 // Save details to transaction table
-                $dividendAmount = round((($investment->shares * $project->share_per_unit_price * (float)$dividendPercent)/100), 2);
+                $dividendAmount = round((($investment->shares * $project->share_per_unit_price * (int)$dividendPercent/100), 2);
                 $shareNumber = explode('-', $investment->share_number);
                 $noOfShares = $investment->shares;
                 Transaction::create([
@@ -1009,7 +1008,7 @@ class DashboardController extends Controller
             $resultBulkEmail = BulkEmailHelper::sendBulkEmail(
                 $subject,
                 $sendgridPersonalization,
-                view('emails.sendgrid-api-specific.userFixedDividendDistributioNotify')->render()
+                view('emails.sendgrid-api-specific.userCentsPerShareDividendDistributioNotify')->render()
             );
 
             if(!$resultBulkEmail['status']) {
@@ -1173,7 +1172,7 @@ class DashboardController extends Controller
                 $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
                 $investment->shares,
                 $dividendPercent,
-                round($investment->shares * (float)$dividendPercent)
+                round($investment->shares * (int)$dividendPercent/100)
             ));
         }
 
@@ -1960,7 +1959,7 @@ class DashboardController extends Controller
                 $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
                 $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
                 $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
-                $dividendAmount = round(((($investment->shares) *($project->share_per_unit_price) * (float)$dividendPercent)/100), 2);
+                $dividendAmount = round(((($investment->shares) *($project->share_per_unit_price) * (int)$dividendPercent)/100), 2);
                 $marketValue = round(($investment->shares)*($project->share_per_unit_price), 2);
 
                 $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . round($investment->shares) . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';

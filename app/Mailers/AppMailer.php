@@ -446,6 +446,7 @@ class AppMailer
         $this->deliverWithFile();
     }
 
+
     public function sendFixedDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project)
     {
         $role = Role::findOrFail(1);
@@ -457,6 +458,24 @@ class AppMailer
         }
         $this->to = $recipients;
         $this->view = 'emails.adminFixedDividendDistributioNotify';
+        $this->subject = 'Distribute dividend amount to investors';
+        $this->data = compact('investments', 'dividendPercent', 'project');
+        $this->pathToFile = $csvPath;
+
+        $this->deliverWithFile();
+    }
+
+     public function sendCentsPerShareDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project)
+    {
+        $role = Role::findOrFail(1);
+        $recipients = ['info@konkrete.io'];
+        foreach ($role->users as $user) {
+            if($user->registration_site == url()){
+                array_push($recipients, $user->email);
+            }
+        }
+        $this->to = $recipients;
+        $this->view = 'emails.adminCentsPerShareDividendDistributioNotify';
         $this->subject = 'Distribute dividend amount to investors';
         $this->data = compact('investments', 'dividendPercent', 'project');
         $this->pathToFile = $csvPath;
