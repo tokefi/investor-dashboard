@@ -4,6 +4,15 @@
 {{$user->first_name}} | @parent
 @stop
 
+@section('css-section')
+<style type="text/css">
+#userProfileDetails input {
+	pointer-events: none;
+	background-color: white;
+}
+</style>
+@stop
+
 {{-- @section('content-section')
 <div class="container">
 	<br><br>
@@ -143,26 +152,185 @@
 			<ul class="list-group">
 				<li class="list-group-item">
 					<dl class="dl-horizontal">
-						<dt></dt>
-						<div class="col-md-offset-2 col-xs-offset-3 col-sm-offset-1">
-							<dd{{--  style="margin-left: 230px !important;" --}}><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
-							<dt></dt>
-							<dd{{--  style="margin-left: 230px !important;" --}}>
+						<section id="userProfileDetails">
 							<div class="row">
+								<div class="col-md-10 col-md-offset-1 form-horizontal">
+									<fieldset style="padding: 2rem;">
+										{{-- <h2 class="text-center">{{$user->first_name}} {{$user->last_name}}</h2> --}}
+										{{-- <hr> --}}
+										<h3 class="text-center" style="font-size: 1.6em; word-spacing: 3px;">YOUR PROFILE DETAILS</h3>
+										<div class="row text-right">
+											<div class="form-group">
+												<div class="col-sm-offset-2 col-sm-9">
+													<a href="{{route('users.edit', $user)}}" class="btn btn-warning" data-toggle="tooltip" title="Edit profile and bank account details">Edit Details</a>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('first_name', 'Name', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													<div class="row">
+														<div class="col-sm-6">
+															{!! Form::text('first_name', $user->first_name, array('placeholder'=>'First Name', 'class'=>'form-control ', 'tabindex'=>'1')) !!}
+														</div>
+														<div class="col-sm-6">
+															{!! Form::text('last_name', $user->last_name, array('placeholder'=>'Last Name', 'class'=>'form-control', 'tabindex'=>'2')) !!}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('email', 'Email', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::email('email', $user->email, array('placeholder'=>'you@somewhere.com', 'class'=>'form-control', 'tabindex'=>'4', 'disabled'=>'disabled')) !!}
+												</div>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('gender', 'Gender', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::select('gender', ['male'=>'Male','female'=>'Female'], $user->gender, array('class'=>'form-control', 'tabindex'=>'7', 'disabled'=>'disabled','style'=>'background-color:white;')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('date_of_birth', 'Your Birth Date', array('class'=>'col-sm-2 control-label'))!!}
+												@if($user->date_of_birth)
+												<?php $dob_string = $user->date_of_birth->toDateString(); ?>
+												@else
+												<?php $dob_string = Null; ?>
+												@endif
+												<div class="col-sm-9">
+													{!! Form::input('date', 'date_of_birth', $dob_string , array('class'=>'form-control', 'tabindex'=>'8', 'max'=>'2099-01-01')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('phone_number', 'Mobile', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::input('tel', 'phone_number', $user->phone_number, array('placeholder'=>'7276160000', 'class'=>'form-control', 'tabindex'=>'9')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('line_1', 'Address:', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													<div class="row">
+														<div class="col-sm-6">
+															{!! Form::text('line_1', $user->line_1, array('placeholder'=>'line 1', 'class'=>'form-control', 'tabindex'=>'3')) !!}
+														</div>
+														<div class="col-sm-6">
+															{!! Form::text('line_2', $user->line_2, array('placeholder'=>'line 2', 'class'=>'form-control', 'tabindex'=>'4')) !!}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-sm-offset-2 col-sm-9">
+													<div class="row">
+														<div class="col-sm-6">
+															{!! Form::text('city', $user->city, array('placeholder'=>'City', 'class'=>'form-control', 'tabindex'=>'5')) !!}
+														</div>
+														<div class="col-sm-6">
+															{!! Form::text('state', $user->state, array('placeholder'=>'state', 'class'=>'form-control', 'tabindex'=>'6')) !!}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-sm-offset-2 col-sm-9">
+													<div class="row">
+														<div class="col-sm-6">
+															{!! Form::text('postal_code', $user->postal_code, array('placeholder'=>'postal code', 'class'=>'form-control', 'tabindex'=>'7')) !!}
+														</div>
+														<div class="col-sm-6">
+															<select name="country" class="form-control country-dropdown" >
+																@foreach(\App\Http\Utilities\Country::all() as $country => $code)
+																<option data-country-code="{{$code}}" @if($user->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
+																@endforeach
+															</select>
+															<input type="hidden" name="country_code" class="country-code" value="{{ array_search($user->country, array_flip(\App\Http\Utilities\Country::all())) }}">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<br>
+										<hr>
+										<br>
+										<h3 class="text-center" style="font-size: 1.6em; word-spacing: 3px;">NOMINATED BANK ACCOUNT DETAILS</h3>
+										<br>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('account_name', 'Account Name', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::text('account_name', $user->account_name, array('placeholder'=>'Account name', 'class'=>'form-control', 'tabindex'=>'10')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group <?php if($errors->first('account_name')){echo 'has-error';}?>">
+												{!!Form::label('bsb', 'BSB', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::text('bsb', $user->bsb, array('placeholder'=>'BSB', 'class'=>'form-control', 'tabindex'=>'11')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('account_number', 'Account Number', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::text('account_number', $user->account_number, array('placeholder'=>'Account number', 'class'=>'form-control', 'tabindex'=>'12')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												{!!Form::label('tfn', 'TFN', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-9">
+													{!! Form::text('tfn', $user->tfn, array('placeholder'=>'tfn', 'class'=>'form-control', 'tabindex'=>'12')) !!}
+												</div>
+											</div>
+										</div>
+										<br><br>
+									</fieldset>
+								</div>
+							</div>
+						</section>
+						{{-- <dt></dt>
+						<div class="col-md-offset-2 col-xs-offset-3 col-sm-offset-1">
+							<dd><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
+							<dt></dt>
+							<dd> --}}
+
+							{{-- <div class="row">
 								<div class="col-md-5">
 									{{$user->email}}
 								</div>
 								<div class="col-md-7">
 									<a href="{{route('users.edit', $user)}}">edit</a>
 								</div>
-							</div>
-						</dd>
-						<dt></dt>
-						<dd{{--  style="margin-left: 230px !important;" --}}>{{$user->phone_number}}</dd>
-					</div>
+							</div> --}}
+						{{-- </dd>
+						<dt></dt> --}}
+						{{-- <dd>{{$user->phone_number}}</dd> --}}
+					{{-- </div>
 					<hr>
-					<dt></dt>
-					<dd style="margin-left: 0px;">
+					<dt></dt> --}}
+					{{-- <dd style="margin-left: 0px;">
 						<div class="col-md-10 col-md-offset-1 wow fadeIn text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" data-wow-duration="1.5s" data-wow-delay="0.2s">
 							<h2 class="text-center wow fadeIn" data-wow-duration="1.5s" data-wow-delay="0.3s" style="font-size:3em;"> Earn KONKRETE tokens
 							</h2>
@@ -187,12 +355,13 @@
 								</small>
 							</center>
 						</div>
-					</dd>
+					</dd> --}}
 				</dl>
-			</li>
-		</ul>
+
+				</li>
+			</ul>
+		</div>
 	</div>
-</div>
 </div>
 @endsection
 @section('js-section')

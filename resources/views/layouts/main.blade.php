@@ -136,7 +136,7 @@ $_SESSION['code'] = md5(microtime(true));
         }
 
         .dropdown-menu>li>a {
-            padding: 9px 20px;
+            padding: 12px 20px;
         }
 
         /** dropdown sub-menu */
@@ -153,8 +153,8 @@ $_SESSION['code'] = md5(microtime(true));
             font-size: 16px;
         }
         .dashboard-submenu li a {
-            padding-top: 7px;
-            padding-bottom: 7px;
+            padding-top: 12px;
+            padding-bottom: 12px;
         }
         .submenu-item {
             font-size: 0.9em;

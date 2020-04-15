@@ -43,7 +43,7 @@ Edit {!! $user->first_name !!} | @parent
 								<div class="form-group <?php if($errors->first('email')){echo 'has-error';}?>">
 									{!!Form::label('email', 'Email', array('class'=>'col-sm-2 control-label'))!!}
 									<div class="col-sm-9">
-										{!! Form::email('email', null, array('placeholder'=>'you@somwehere.com', 'class'=>'form-control', 'tabindex'=>'4','readonly'=>'readonly')) !!}
+										{!! Form::email('email', null, array('placeholder'=>'you@somewhere.com', 'class'=>'form-control', 'tabindex'=>'4','readonly'=>'readonly')) !!}
 										{!! $errors->first('email', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
