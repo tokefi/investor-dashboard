@@ -769,7 +769,7 @@ class DashboardController extends Controller
                     // Save details to transaction table
                     $dividendAmount = round($investment->amount * ((int)$dividendPercent/(365*100)) * $dateDiff, 2);
                     $shareNumber = explode('-', $investment->share_number);
-                    $noOfShares = $shareNumber[1]-$shareNumber[0]+1;
+                    $noOfShares = $investment->shares;
                     Transaction::create([
                         'user_id' => $investment->user_id,
                         'project_id' => $investment->project_id,
@@ -895,6 +895,108 @@ class DashboardController extends Controller
                             '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
+                            '%project_prospectus_text%' => $prospectusText
+                        ]
+                    ]
+                );
+            }
+
+            // Send bulk emails through sendgrid API
+            $resultBulkEmail = BulkEmailHelper::sendBulkEmail(
+                $subject,
+                $sendgridPersonalization,
+                view('emails.sendgrid-api-specific.userFixedDividendDistributioNotify')->render()
+            );
+
+            if(!$resultBulkEmail['status']) {
+                return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $resultBulkEmail['message'] . '</p>');
+            }
+
+            return redirect()->back()->withMessage('<p class="alert alert-success text-center">Fixed Dividend distribution have been mailed to Investors and admins</p>');
+
+            //     $content = \View::make('emails.userFixedDividendDistributioNotify', array('investment' => $investment, 'dividendPercent' => $dividendPercent, 'project' => $project));
+            //     $result = $this->queueEmailsUsingMailgun($investment->user->email, $subject, $content->render());
+            //     if($result->http_response_code != 200){
+            //         array_push($failedEmails, $investment->user->email);
+            //     }
+            // }
+            // if(empty($failedEmails)){
+            //     return redirect()->back()->withMessage('<p class="alert alert-success text-center">Fixed Dividend distribution have been mailed to Investors and admins</p>');
+            // }
+            // else{
+            //     $emails = '';
+            //     foreach ($failedEmails as $email) {
+            //         $emails = $emails.", $email";
+            //     }
+            //     return redirect()->back()->withMessage('<p class="alert alert-danger text-center">Fixed Dividend distribution email sending failed for investors - '.$emails.'.</p>');
+            // }
+        }
+    }
+
+    public function declareCentsPerShareDividend(Request $request, AppMailer $mailer, $projectId)
+    {
+        $investorList = $request->investors_list;
+        $dividendPercent = $request->cents_per_share_dividend;
+        $project = Project::findOrFail($projectId);
+
+        if($investorList != ''){
+            $investors = explode(',', $investorList);
+            
+            $investments = ModelHelper::getTotalInvestmentByUsersAndProject($investors, $projectId);
+
+            // Add the records to project progress table
+            // ProjectProg::create([
+            //     'project_id' => $projectId,
+            //     'updated_date' => Carbon::now(),
+            //     'progress_description' => 'Fixed Dividend Declaration',
+            //     'progress_details' => 'A Fixed Dividend of '.$dividendPercent.'% has been declared.'
+            // ]);
+
+            // send dividend email to admins
+            $csvPath = $this->exportFixedDividendCSV($investments, $dividendPercent, $project);
+            $mailer->sendCentsPerShareDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project);
+
+            // send dividend emails to investors
+            $sendgridPersonalization = [];
+            $subject = 'Dividend declared for '.$project->title;
+            foreach ($investments as $investment) {
+                // Save details to transaction table
+                $dividendAmount = round((($investment->shares * $project->share_per_unit_price * (int)$dividendPercent/100), 2);
+                $shareNumber = explode('-', $investment->share_number);
+                $noOfShares = $investment->shares;
+                Transaction::create([
+                    'user_id' => $investment->user_id,
+                    'project_id' => $investment->project_id,
+                    'transaction_type' => 'FIXED DIVIDEND',
+                    'transaction_date' => Carbon::now(),
+                    'amount' => $dividendAmount,
+                    'rate' => $dividendPercent,
+                    'number_of_shares' => $noOfShares,
+                ]);
+
+                $prospectusText = 'Prospectus';
+                if($project->project_prospectus_text != '') {
+                    $prospectusText = $project->project_prospectus_text;
+                } else if (SiteConfigurationHelper::getConfigurationAttr()->prospectus_text) {
+                    $prospectusText = SiteConfigurationHelper::getConfigurationAttr()->prospectus_text;
+                } else {}
+
+                array_push(
+                    $sendgridPersonalization,
+                    [
+                        'to' => [[ 'email' => $investment->user->email ]],
+                        'substitutions' => [
+                            '%first_name%' => $investment->user->first_name,
+                            '%dividend_percent%' =>$dividendPercent,
+                            '%project_title%' => $project->title,
+                            '%share_type%' => $project->share_vs_unit ? 'shareholder' : 'unitholder',
+                            '%account_name%' => $investment->investingJoint ? $investment->investingJoint->account_name : $investment->user->account_name,
+                            '%bank_name%' => $investment->investingJoint ? $investment->investingJoint->bank_name : $investment->user->bank_name,
+                            '%user_bsb%' => $investment->investingJoint ? $investment->investingJoint->bsb : $investment->user->bsb,
+                            '%account_number%' => $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
+                            '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
+                            '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
+                            '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
                             '%project_prospectus_text%' => $prospectusText,
                             '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit'
                         ]
@@ -906,7 +1008,7 @@ class DashboardController extends Controller
             $resultBulkEmail = BulkEmailHelper::sendBulkEmail(
                 $subject,
                 $sendgridPersonalization,
-                view('emails.sendgrid-api-specific.userFixedDividendDistributioNotify')->render()
+                view('emails.sendgrid-api-specific.userCentsPerShareDividendDistributioNotify')->render()
             );
 
             if(!$resultBulkEmail['status']) {
@@ -1070,7 +1172,7 @@ class DashboardController extends Controller
                 $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
                 $investment->shares,
                 $dividendPercent,
-                round($investment->shares * (float)$dividendPercent)
+                round($investment->shares * (int)$dividendPercent/100)
             ));
         }
 
@@ -1225,8 +1327,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-               return new TransportManager($app);
-           });
+             return new TransportManager($app);
+         });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
@@ -1752,12 +1854,12 @@ class DashboardController extends Controller
                 $investors = explode(',', $investorList);
                 // $investments = InvestmentInvestor::findMany($investors);
                 $investments = InvestmentInvestor::whereIn('user_id', $investors)
-            ->where('project_id', $projectId)
-            ->where('accepted', 1)
-            ->where('is_cancelled', false)
-            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
-            ->groupBy('user_id')
-            ->get();
+                ->where('project_id', $projectId)
+                ->where('accepted', 1)
+                ->where('is_cancelled', false)
+                ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+                ->groupBy('user_id')
+                ->get();
                 $shareType = ($project->share_vs_unit) ? 'Share amount' : 'Unit amount';
 
                 $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
@@ -1829,6 +1931,49 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getCentsPerSharePreviewData(Request $request, $projectId)
+    {
+        $investorList = $request->investors_list;
+        $dividendPercent = $request->dividend_percent;
+        $project = Project::findOrFail($projectId);
+
+        $tableContent = '';
+
+        if($investorList != '') {
+            $investors = explode(',', $investorList);
+            $investments = InvestmentInvestor::whereIn('user_id', $investors)
+            ->where('project_id', $projectId)
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id')
+            ->get();
+            $shareType = ($project->share_vs_unit) ? 'No. of shares' : 'No. of units';
+
+            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
+            $tableContent .= '<thead><tr style="background: #dcdcdc;"><td>Investor Name</td><td>Investor Bank account name</td><td>Investor bank</td><td>Investor BSB</td><td>Investor Account</td><td>' . $shareType . '</td><td>Market Value</td><td>Investor Dividend amount</td></tr></thead>';
+            $tableContent .= '<tbody>';
+
+            foreach ($investments as $key => $investment) {
+                $investorAc = ($investment->investingJoint) ? $investment->investingJoint->account_name : $investment->user->account_name;
+                $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
+                $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
+                $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+                $dividendAmount = round(((($investment->shares) *($project->share_per_unit_price) * (int)$dividendPercent)/100), 2);
+                $marketValue = round(($investment->shares)*($project->share_per_unit_price), 2);
+
+                $tableContent .= '<tr><td>' . $investment->user->first_name . ' ' . $investment->user->last_name . '</td><td>' . $investorAc . '</td><td>' . $bank . '</td><td>' . $bsb . '</td><td>' . $acNum . '</td><td>' . round($investment->shares) . '<br></td><td>$' . $marketValue . '</td><td>' . '$' . $dividendAmount . '<br></td></tr>';
+            }
+
+            $tableContent .= '</tbody></table>';
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Successful.',
+            'data' => $tableContent
+        ]);
+    }
     public function getRepurchasePreviewData(Request $request, $projectId) {
         $investorList = $request->investors_list;
         $repurchaseRate = $request->repurchase_rate;
@@ -1868,9 +2013,9 @@ class DashboardController extends Controller
     {
         $color = Color::where('project_site',url())->first();
         $redemptionRequests = RedemptionRequest::whereHas('project', function ($q) {
-                $q->where('project_site', url());
-            })->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
-            ->get();
+            $q->where('project_site', url());
+        })->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+        ->get();
 
         return view('dashboard.redemptions.requests', compact('redemptionRequests', 'color'));
     }
@@ -1914,7 +2059,7 @@ class DashboardController extends Controller
                 'request_amount' => ($redemption->request_amount - $request->num_shares),
                 'status_id' => RedemptionStatus::STATUS_PENDING
             ]);
-        
+
         } else {
             // Whole amount redumption
             $redemption->accepted_amount = $request->num_shares;

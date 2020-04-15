@@ -515,6 +515,7 @@
 						<div>
 							<div class="share-registry-actions">
 								<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>
+								<button class="btn btn-primary issue-dividend-cents-per-share-btn" action="cents-per-share-dividend" style="margin: 0 1rem;">Issue Dividends</button>
 								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Dividends cents per share</button>
 								{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
 							</div>
@@ -529,6 +530,12 @@
 									<span class="declare-fixed-statement hide"><small>Issue Dividend at <input type="number" name="fixed_dividend_percent" id="fixed_dividend_percent" step="0.01"> cents per @if($project->share_vs_unit) share @else unit @endif  <input type="submit" class="btn btn-primary declare-fixed-dividend-btn" value="Declare"></small></span>
 									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 								</form>
+								<form id="declare_cents_per_share_dividend_form" action="{{route('dashboard.investment.declareCentsPerShareDividend', [$project->id])}}" method="POST">
+									{{csrf_field()}}
+									<span class="declare-cents-per-share-statement hide"><small>Issue Fixed Dividend at <input type="number" name="cents_per_share_dividend" id="cents_per_share_dividend" step="0.01"> % <input type="submit" class="btn btn-primary declare-cents-per-share-dividend-btn" value="Declare"></small></span>
+									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
+								</form>
+
 								<form id="declare_repurchase_form" action="{{route('dashboard.investment.declareRepurchase', [$project->id])}}" method="POST">
 									{{csrf_field()}}
 									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
@@ -838,6 +845,47 @@
 	</div>
 </div>
 
+<!--Cents Per Share Dividend confirm Modal -->
+<div id="cents_per_share_dividend_confirm_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog" style="width:90%;">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">CONFIRM DIVIDEND</h4>
+			</div>
+			<div class="modal-body" style="padding: 15px 30px;">
+				<p class="text-center">
+					<i><small>** Please check and confirm the below dividend details.</small></i>
+				</p><br>
+				<div class="text-center">
+					<h2>{{$project->title}}</h2>
+					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+				</div><br>
+				<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
+					<tbody>
+						<tr>
+							<td><b>Dividend Rate: </b></td>
+							<td><small><span id="modal_cents_per_share_dividend_rate"></span> % fixed</small></td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+				<h2 class="text-center">Dividend calculation preview</h2><br>
+				<div id="cents_per_share_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+					<!-- Render through JS -->
+				</div>
+				<br>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="submit_cents_per_share_dividend_confirmation">Confirm</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <!--Rupurchase confirm Modal -->
 <div id="repurchase_confirm_modal" class="modal fade" role="dialog">
 	<div class="modal-dialog" style="width:90%;">
@@ -1083,14 +1131,16 @@
 		});
 
 		// show select checkbox for share registry
-		$('.issue-dividend-btn, .repurchase-shares-btn, .issue-fixed-dividend-btn').click(function(e){
+		$('.issue-dividend-btn, .repurchase-shares-btn, .issue-fixed-dividend-btn, .issue-dividend-cents-per-share-btn').click(function(e){
 			$('.select-check').removeClass('hide');
 			$('.share-registry-actions').addClass('hide');
 			if($(this).attr('action') == "dividend"){
 				$('.declare-statement').removeClass('hide');
 			}else if($(this).attr('action') == "fixed-dividend"){
 				$('.declare-fixed-statement').removeClass('hide');
-			} else {
+			}else if($(this).attr('action') == "cents-per-share-dividend"){
+				$('.declare-cents-per-share-statement').removeClass('hide');
+			}else {
 				$('.repurchase-statement').removeClass('hide');
 			}
 
@@ -1137,6 +1187,8 @@
 			declareDividend();
 			// Declare fixed dividend
 			declareFixedDividend();
+			// Declare fixed dividend
+			declareCentsPerShareDividend();
 			// repurchase shares
 			repurchaseShares();
 			//Upload offer document for eoi
@@ -1152,6 +1204,12 @@
 		// Submit Fixed dividend form
 		$('#submit_fixed_dividend_confirmation').on('click', function(e) {
 			$('#declare_fixed_dividend_form').submit();
+			$('.loader-overlay').show();
+		});
+
+		// Submit Cents per share dividend form
+		$('#submit_cents_per_share_dividend_confirmation').on('click', function(e) {
+			$('#declare_cents_per_share_dividend_form').submit();
 			$('.loader-overlay').show();
 		});
 
@@ -1265,6 +1323,58 @@
 					$('#modal_fixed_dividend_rate').html(dividendPercent);
 
 					$('#fixed_dividend_confirm_modal').modal({
+						keyboard: false,
+						backdrop: 'static'
+					});
+
+				} else {
+					alert(data.message);
+				}
+			});
+		});
+	}
+
+	// Declare cents per share dividend
+	function declareCentsPerShareDividend(){
+		$('.declare-cents-per-share-dividend-btn').click(function(e){
+			e.preventDefault();
+			var dividendPercent = $('#cents_per_share_dividend').val();
+			dividendPercent = dividendPercent.toString();
+			var investorsList = $('.investors-list').val();
+			var project_id = {{$project->id}};
+
+			if(dividendPercent == ''){
+				alert('Before declaration please enter dividend.');
+				return;
+			}
+			else {
+				if(investorsList == ''){
+					alert('Please select atleast one @if($project->share_vs_unit) share @else unit @endif registry record.');
+					return;
+				}
+			}
+
+			// Show confirm box
+			$('.loader-overlay').show();
+			$.ajax({
+				url: '/dashboard/projects/'+project_id+'/investment/previewCentsPerShareDividend',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {
+					investors_list: investorsList,
+					dividend_percent: dividendPercent
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+			}).done(function(data){
+				$('.loader-overlay').hide();
+				if(data.status) {
+					$('#cents_per_share_dividend_calculation_preview_table').html(data.data);
+
+					$('#modal_cents_per_share_dividend_rate').html(dividendPercent);
+
+					$('#cents_per_share_dividend_confirm_modal').modal({
 						keyboard: false,
 						backdrop: 'static'
 					});
