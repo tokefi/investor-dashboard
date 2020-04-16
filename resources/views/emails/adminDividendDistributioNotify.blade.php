@@ -573,6 +573,7 @@
                                       <th>Investor BSB</th>
                                       <th>Investor Account</th>
                                       <th>@if($project->share_vs_unit) Share @else Unit @endif amount</th>
+                                      <th>The Market Value</th>
                                       <th>Investor Dividend amount</th>
                                     </tr></thead>
                                     <tbody>
@@ -583,8 +584,9 @@
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->bank_name}} @else {{$investment->user->bank_name}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->bsb}} @else {{$investment->user->bsb}} @endif</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">@if($investment->investingJoint) {{$investment->investingJoint->account_number}} @else {{$investment->user->account_number}} @endif</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$investment->amount}}</span><br></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{round($investment->amount * ((int)$dividendPercent/(365*100)) * $dateDiff, 2)}}</span><br></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">${{$investment->amount}}</span><br></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">${{$investment->shares * $project->share_per_unit_price }}</span><br></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">${{round($investment->amount * ((int)$dividendPercent/(365*100)) * $dateDiff, 2)}}</span><br></td>
                                       </tr>
                                       @endforeach
                                     </tbody>

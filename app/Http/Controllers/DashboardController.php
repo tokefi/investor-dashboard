@@ -823,7 +823,7 @@ class DashboardController extends Controller
                     return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $resultBulkEmail['message'] . '</p>');
                 }
 
-                return redirect()->back()->withMessage('<p class="alert alert-success text-center">Dividend distribution have been mailed to Investors and admins</p>');
+                return redirect('/dashboard/projects/'.$project->id.'/investors#new_registry')->withMessage('<p class="alert alert-success text-center">Dividend distribution have been mailed to Investors and admins</p>');
             }
             else {
                 return redirect()->back()->withMessage('<p class="alert alert-danger text-center">End date must be greater than start date.</p>');
@@ -895,7 +895,8 @@ class DashboardController extends Controller
                             '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
-                            '%project_prospectus_text%' => $prospectusText
+                            '%project_prospectus_text%' => $prospectusText,
+                            '%project_share_or_unit%' => $project->share_vs_unit ? 'share' : 'unit'
                         ]
                     ]
                 );
@@ -912,7 +913,7 @@ class DashboardController extends Controller
                 return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $resultBulkEmail['message'] . '</p>');
             }
 
-            return redirect()->back()->withMessage('<p class="alert alert-success text-center">Fixed Dividend distribution have been mailed to Investors and admins</p>');
+            return redirect('/dashboard/projects/'.$project->id.'/investors#new_registry')->withMessage('<p class="alert alert-success text-center">Cents Per Share Dividend distribution have been mailed to Investors and admins</p>');
 
             //     $content = \View::make('emails.userFixedDividendDistributioNotify', array('investment' => $investment, 'dividendPercent' => $dividendPercent, 'project' => $project));
             //     $result = $this->queueEmailsUsingMailgun($investment->user->email, $subject, $content->render());
@@ -1015,7 +1016,7 @@ class DashboardController extends Controller
                 return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $resultBulkEmail['message'] . '</p>');
             }
 
-            return redirect()->back()->withMessage('<p class="alert alert-success text-center">Fixed Dividend distribution have been mailed to Investors and admins</p>');
+            return redirect('/dashboard/projects/'.$project->id.'/investors#new_registry')->withMessage('<p class="alert alert-success text-center">Fixed Dividend distribution have been mailed to Investors and admins</p>');
 
             //     $content = \View::make('emails.userFixedDividendDistributioNotify', array('investment' => $investment, 'dividendPercent' => $dividendPercent, 'project' => $project));
             //     $result = $this->queueEmailsUsingMailgun($investment->user->email, $subject, $content->render());
