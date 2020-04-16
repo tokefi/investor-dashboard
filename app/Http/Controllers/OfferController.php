@@ -186,6 +186,7 @@ class OfferController extends Controller
             $clientApplication->unlisted_investment_experience_text = $request->unlisted_investment_experience_txt;
             $clientApplication->understand_risk_text = $request->understand_risk_txt;
           }
+          $clientApplication->interested_to_buy = $request->interested_to_buy;
           $clientApplication->save();
         }
         // dd($clientApplication,$request->all());
