@@ -75,7 +75,7 @@
 											<td class="text-center">@if($allTransaction->accepted && $allTransaction->money_received) Share Certificate Issued @elseif($allTransaction->money_received) Money Received @else Applied @endif</td>
 											<td class="text-center">{{round($allTransaction->amount)}}</td>
 											<td>${{number_format($allTransaction->buy_rate, 4)}}</td>
-											<td>${{number_format(round(($allTransaction->amount)*($allTransaction->project->share_per_unit_price)), 2)}}</td>
+											<td>${{number_format(round(($allTransaction->amount)*($allTransaction->buy_rate)), 2)}}</td>
 											<td>@if($allTransaction->user->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
 											<td data-sort="{{date($allTransaction->created_at)}}">{{date('d/m/Y', strtotime($allTransaction->created_at))}}</td>
 										</tr>
