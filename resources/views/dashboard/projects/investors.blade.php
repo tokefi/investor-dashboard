@@ -85,7 +85,7 @@
 					<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [$project->id])}}" method="POST" class="pull-right">
 						{{csrf_field()}}
 						<label for="#update_share_price">Share Price:   $</label>
-						<input type="number" name="update_share_price" id="update_share_price" step="0.01" value="{{ $project->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning declare-dividend-btn" value="UPDATE">
+						<input type="number" name="update_share_price" id="update_share_price" step="0.01" value="{{ $project->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE">
 					</form>
 				</div>
 			</div>
