@@ -130,7 +130,7 @@ h1>small>small,h2>small>small,h3>small>small,h4>small>small{
 	height: 100vh;
 	background:  url('/assets/images/header_color.png')center no-repeat;
 	background-size: cover;
-	opacity: 1.0;
+	opacity: 0.9;
 }
 
 /*.project-thn:hover*/ .thn-outer {

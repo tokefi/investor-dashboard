@@ -33,7 +33,7 @@ use Illuminate\Database\Migrations\Migration;
 use App\Helpers\SiteConfigurationHelper;
 use App\Helpers\BulkEmailHelper;
 use SendGrid\Mail\Mail as SendgridMail;
-
+use App\Price;
 
 
 class SiteConfigurationsController extends Controller
@@ -812,6 +812,18 @@ class SiteConfigurationsController extends Controller
             }elseif($project->eoi_button == '0' && (int)$request->project_min_investment_txt % 100 != 0)
             {
                 return redirect()->back()->withInput()->withMessage('<p class="alert alert-danger text-center" style="color="white;">Please enter amount in increments of $100 only</p>');
+            }
+            $sharePrice = Price::where('project_id', $projectId)->whereDate('created_at', '=', Carbon::today()->format('Y-m-d'))->first();
+            if(!$sharePrice)
+            {
+                $sharePrice = new Price;
+                $sharePrice->project_id = $projectId;
+                $sharePrice->price = $request->project_share_per_unit_price;
+                $sharePrice->save();
+            }
+            else 
+            {
+                $sharePrice->update(['price'=>$request->project_share_per_unit_price]);
             }
             Project::where('id', $projectId)->update([
                 'title' => $request->project_title_txt,

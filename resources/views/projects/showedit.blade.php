@@ -106,7 +106,7 @@
 	@endif
 	@endif
 	<input type="hidden" name="current_project_id" id="current_project_id" value="{{$project->id}}">
-	<section style="background: @if($project->media->where('type', 'projectpg_back_img')->last()) url({{asset($project->media->where('type', 'projectpg_back_img')->last()->path)}}) @else url({{asset('assets/images/bgimage_sample.png')}}) @endif;background-repeat: no-repeat; background-size:100% 100%;" class="project-back img-responsive" id="project-title-section">
+	<section{{--  style="background: @if($project->media->where('type', 'projectpg_back_img')->last()) url({{asset($project->media->where('type', 'projectpg_back_img')->last()->path)}}) @else url({{asset('assets/images/bgimage_sample.png')}}) @endif;background-repeat: no-repeat; background-size:100% 100%;" --}} style="background:  url(http://localhost:8000/assets/images/default_background_project.jpg) ;background-repeat: no-repeat; background-size:100% 100%;" class="project-back img-responsive" id="project-title-section">
 		<div class="color-overlay main-fold-overlay-color">
 			<div class="container">
 				<div class="row">
@@ -125,7 +125,7 @@
 						<br>
 					</div>
 					<div class="col-md-4 col-md-offset-4 col-sm-6 text-center project-close-date-field">
-						<p style="color: white !important;">Close Date</p><input name="fund_raising_close_date" type="date" style="color: #000;" value="{{$project->investment->fund_raising_close_date->toDateString()}}" placeholder="DD/MM/YYYY">
+						<span style="color: #ffffff !important;">Close Date</span><br><input name="fund_raising_close_date" type="date" style="color: #000;" value="{{$project->investment->fund_raising_close_date->toDateString()}}" placeholder="DD/MM/YYYY">
 					</div>
 					<div class="col-md-5 col-md-offset-3 col-sm-6">
 						@if($project->projectconfiguration->show_project_progress_image)
@@ -314,7 +314,7 @@
 				</div>
 			</section>
 			<br><br>
-			<div class="row" style="margin-left: 5em;">
+			<div class="" style="margin-left: 5em;">
 				<div class="form-group @if($errors->first('investments_structure_video_url')){{'has-error'}} @endif">
 					{!!Form::label('investments_structure_video_url', 'Investment Structure Video URL', array('class'=>'col-sm-2 control-label'))!!}
 					<div class="col-sm-9">

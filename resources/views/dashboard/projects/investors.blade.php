@@ -25,6 +25,27 @@
 		word-wrap: break-word !important;
 		white-space: pre-wrap !important;
 	}
+	table {
+		font-size: 14px;
+		word-break: break-word !important;
+	}
+
+	h3 {
+		font-size: 23px;
+	}
+
+	table th, table td {
+		word-break: break-word;
+		text-align: center;
+	}
+
+	table.dataTable thead th, table.dataTable thead td {
+		padding: 10px 12px;
+	}
+
+	table.dataTable tbody th, table.dataTable tbody td {
+		padding: 8px 9px;
+	}
 
 	@media (min-width: 768px) {
 		.share-registry-table {
@@ -55,12 +76,17 @@
 					@if (Session::has('message'))
 					{!! Session::get('message') !!}
 					@endif
-					<h2 class="text-center"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
+					<h2 class="text-center" style="margin-top: 0.9rem;"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
 						{{-- <address class="text-center">
 							<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}
 							</small>
 						</address> --}}
 					</h2>
+					<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [$project->id])}}" method="POST" class="pull-right">
+						{{csrf_field()}}
+						<label for="#update_share_price">Share Price:   $</label>
+						<input type="number" name="update_share_price" id="update_share_price" step="0.01" value="{{ $project->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning declare-dividend-btn" value="UPDATE">
+					</form>
 				</div>
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
@@ -79,7 +105,7 @@
 							display: none;
 						}
 					</style>
-					<br><br>
+					<br>
 					<table class="table table-bordered table-striped investors-table" id="investorsTable" style="margin-top: 1em;">
 						<thead>
 							<tr>
@@ -383,7 +409,6 @@
 							</div>
 						</div>
 						<br> --}}
-						<br>
 						<div class="">
 							<table class="table table-bordered table-striped share-registry-table" id="shareRegistryTable">
 								<thead>
@@ -432,7 +457,7 @@
 										</td> --}}
 										<td>{{round($shareInvestment->amount)}}</td>
 										<td>{{ number_format($shareInvestment->buy_rate, 4) }}</td>
-										<td>${{ number_format(round($shareInvestment->amount * $shareInvestment->buy_rate), 2) }}</td>
+										<td>${{ $shareInvestment->amount * $shareInvestment->buy_rate }}</td>
 										{{-- <td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Investment is repurchased</strong>
@@ -511,7 +536,7 @@
 
 					</div>
 
-					<div id="new_registry" class="tab-pane fade" style="margin-top: 2em; overflow: auto;">
+					<div id="new_registry" class="tab-pane fade" style="margin-top: 1em; overflow: auto;">
 						<div>
 							<div class="share-registry-actions">
 								<button class="btn btn-primary issue-dividend-btn" action="dividend">Issue Dividend Annualized</button>

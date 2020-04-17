@@ -198,4 +198,8 @@ class Project extends Model
     {
         return $this->hasOne('App\MasterChild','child');
     }
+    public function price()
+    {
+        return $this->hasMany('App\Price');
+    }
 }

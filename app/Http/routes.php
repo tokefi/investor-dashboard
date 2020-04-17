@@ -70,6 +70,7 @@ Route::get('/dashboard/projects/{project_id}/deactivate', ['as'=>'dashboard.proj
 Route::patch('/dashboard/projects/{project_id}/toggleStatus', ['as'=>'dashboard.projects.toggleStatus', 'uses'=>'DashboardController@toggleStatus']);
 Route::patch('/dashboard/projects/{investment_id}/investments', ['as'=>'dashboard.investment.update', 'uses'=>'DashboardController@updateInvestment']);
 Route::patch('/dashboard/projects/{investment_id}/investments/accept', ['as'=>'dashboard.investment.accept', 'uses'=>'DashboardController@acceptInvestment']);
+Route::post('/dashboard/projects/{project_id}/updateSharePrice', ['as'=>'dashboard.projects.updateSharePrice', 'uses'=>'DashboardController@updateSharePrice']);
 Route::get('/dashboard/users/{id}/documents',['as'=>'dashboard.users.document','uses'=>'DashboardController@documents']);
 Route::post('/dashboard/users/{id}/documents',['as'=>'dashboard.users.document.upload','uses'=>'DashboardController@uploadDocuments']);
 Route::get('/dashboard/application/{id}',['as'=>'dashboard.application.view','uses'=>'DashboardController@viewApplication']);

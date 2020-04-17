@@ -1497,7 +1497,7 @@
 			@endif
 			@endif
 			<div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
-				<a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_dark.png')}}"></a>
+				<a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
 				<p>
 					<span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
 				</p>

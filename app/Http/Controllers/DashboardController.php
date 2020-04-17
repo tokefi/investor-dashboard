@@ -43,6 +43,7 @@ use SendGrid\Mail\Mail as SendgridMail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
+use App\Price;
 use View;
 
 
@@ -357,6 +358,31 @@ class DashboardController extends Controller
         $project = Project::findOrFail($project_id);
         $status = $project->update(['active'=> $request->active, 'activated_on'=>Carbon::now()]);
         return redirect()->back();
+    }
+
+    public function updateSharePrice(Request $request, $project_id)
+    {
+        $validator = $this->validate($request, array(
+                'update_share_price' => 'required',
+            ));
+        Project::where('id', $project_id)->update([
+            'share_per_unit_price'=>$request->update_share_price,
+        ]);
+
+       $sharePrice = Price::where('project_id', $project_id)->whereDate('created_at', '=', Carbon::today()->format('Y-m-d'))->first();
+        if(!$sharePrice)
+        {
+            $sharePrice = new Price;
+            $sharePrice->project_id = $project_id;
+            $sharePrice->price = $request->update_share_price;
+            $sharePrice->save();
+        }
+        else 
+        {
+            $sharePrice->update(['price'=>$request->update_share_price]);
+        }
+
+        return redirect()->back()->withMessage('<p class="alert alert-success text-center">Share price updated successfully.</p>');;
     }
 
     public function updateInvestment(Request $request, $investment_id)
@@ -802,7 +828,7 @@ class DashboardController extends Controller
                                 '%bank_name%' => $investment->investingJoint ? $investment->investingJoint->bank_name : $investment->user->bank_name,
                                 '%user_bsb%' => $investment->investingJoint ? $investment->investingJoint->bsb : $investment->user->bsb,
                                 '%account_number%' => $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
-                                '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
+                                '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@konkrete.iotatebaron.com',
                                 '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                                 '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
                                 '%project_prospectus_text%' => $prospectusText
@@ -892,7 +918,7 @@ class DashboardController extends Controller
                             '%bank_name%' => $investment->investingJoint ? $investment->investingJoint->bank_name : $investment->user->bank_name,
                             '%user_bsb%' => $investment->investingJoint ? $investment->investingJoint->bsb : $investment->user->bsb,
                             '%account_number%' => $investment->investingJoint ? $investment->investingJoint->account_number : $investment->user->account_number,
-                            '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@estatebaron.com',
+                            '%spv_email%' => $project->projectspvdetail ? $project->projectspvdetail->spv_email : 'info@konkrete.iotatebaron.com',
                             '%spv_md_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_md_name : '',
                             '%spv_name%' => $project->projectspvdetail ? $project->projectspvdetail->spv_name : 'Estate Baron Team',
                             '%project_prospectus_text%' => $prospectusText,
@@ -1240,7 +1266,7 @@ class DashboardController extends Controller
             array(
                 'from'    => $fromMail,
                 'to'      => $emailStr,
-                // 'bcc'     => 'info@estatebaron.com',
+                // 'bcc'     => 'info@konkrete.iotatebaron.com',
                 'subject' => $subject,
                 'html'    => $content
             ),
