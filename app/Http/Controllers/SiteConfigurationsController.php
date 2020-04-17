@@ -795,7 +795,6 @@ class SiteConfigurationsController extends Controller
         if (SiteConfigurationHelper::isSiteAdmin()){
             $validator = $this->validate($request, array(
                 'project_title_txt' => 'required',
-                'project_description_txt' => 'required',
                 'project_goal_amount'=>'required|integer|min:1',
                 'project_min_investment_txt'=>'required|integer|min:5',
                 'prospectusDocument' => 'mimes:pdf',

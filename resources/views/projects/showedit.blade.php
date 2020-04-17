@@ -120,7 +120,7 @@
 							<input type="text" name="project_title_txt" class="form-control" value="{{$project->title}}" style="font-size: 25px;">
 						</h2>
 						<span class="text-left project-description-field" style="color:#fff; font-size:0.875em;">
-							<textarea type="text" name="project_description_txt" id="project_description_txt" class="form-control" required="required">{{$project->description}}</textarea>
+							<textarea type="text" name="project_description_txt" id="project_description_txt" class="form-control" >{{$project->description}}</textarea>
 						</span>
 						<br>
 					</div>

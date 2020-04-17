@@ -572,7 +572,7 @@
                                       <th>Investor BSB</th>
                                       <th>Investor Account</th>
                                       <th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
-                                      <th>The Market Value</th>
+                                      <th>Market Value</th>
                                       <th>Investor Dividend Amount</th>
                                     </tr></thead>
                                     <tbody>
