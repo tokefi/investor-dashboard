@@ -818,6 +818,7 @@ class SiteConfigurationsController extends Controller
                 $sharePrice = new Price;
                 $sharePrice->project_id = $projectId;
                 $sharePrice->price = $request->project_share_per_unit_price;
+                $sharePrice->effective_date = Carbon::now()->toDateTimeString();
                 $sharePrice->save();
             }
             else 

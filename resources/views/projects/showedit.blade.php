@@ -165,7 +165,7 @@
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-2" style="border-right: thin solid #ffffff;">
 									<h4 class="font-bold project-share-per-unit-price-field" style="font-size:1.375em;color:#fff;display: -webkit-box;">
-										$<input type="number" name="project_share_per_unit_price" class="form-control" value="{{$project->share_per_unit_price}}" style="padding-left: 2px; padding-right: 2px;" step="any">
+										$<input type="number" name="project_share_per_unit_price" class="form-control" value="{{ number_format($project->share_per_unit_price, 4) }}" style="padding-left: 2px; padding-right: 2px;" step="0.0001">
 									</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
 								</div>

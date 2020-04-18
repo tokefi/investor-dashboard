@@ -13,7 +13,7 @@ class Price extends Model
      *
      * @var array
      */
-    protected $fillable = ['project_id', 'price'];
+    protected $fillable = ['project_id', 'price', 'effective_date'];
 
     public function project()
     {

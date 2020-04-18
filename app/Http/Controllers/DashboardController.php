@@ -375,6 +375,7 @@ class DashboardController extends Controller
             $sharePrice = new Price;
             $sharePrice->project_id = $project_id;
             $sharePrice->price = $request->update_share_price;
+            $sharePrice->effective_date = Carbon::now()->toDateTimeString();
             $sharePrice->save();
         }
         else 
