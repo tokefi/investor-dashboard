@@ -515,10 +515,10 @@ class UsersController extends Controller
         // $shareStart =  explode('-',$shareStart);
         // $shareEnd = $shareStart[1];
         // $shareStart = $shareStart[0];
-        // $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
+        $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.invoiceHtml',compact('investment','color','user','project'));
+        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing'));
         // $pdf->setPaper('a4', 'landscape');
         // $pdf->setOptions(['Content-Type' => 'application/pdf','images' => true]);
         // return $pdf->stream('invoice.pdf',200,['Content-Type' => 'application/pdf','Content-Disposition' => 'inline']);
