@@ -215,9 +215,9 @@ class OfferController extends Controller
         $investor = InvestmentInvestor::get()->last();
         if($project->master_child){
           foreach($project->children as $child){
-            $percAmount = $amount* ($child->allocation)/100;
+            $percAmount = round($amount* ($child->allocation)/100 * $project->share_per_unit_price);
             $childProject = Project::find($child->child);
-            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>$percAmount, 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
+            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$investingAs, 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'admin_investment'=>$admin_investment, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
           }
         }
         if($user->idDoc != NULL && $user->idDoc->investing_as != 'Individual Investor'){

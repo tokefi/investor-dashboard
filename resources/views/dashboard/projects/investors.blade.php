@@ -112,8 +112,8 @@
 								<th>Unique ID</th>
 								<th>Investors Details</th>
 								<th>Investment Date</th>
-								<th>Shares</th>
-								<th>Price ($)</th>
+								<th>Number of Shares</th>
+								<th>Share Price ($)</th>
 								<th>Amount</th>
 								<th>Is Money Received</th>
 								<th>Issue @if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
@@ -181,8 +181,8 @@
 															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
 															@else
 															{{-- <input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received"> --}}
-															<div class="pretty p-svg">
-																<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif>
+															<div class="pretty p-svg ">
+																<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif>
 																<div class="state p-success">
 																	<!-- svg path --> 
 																	<svg class="svg svg-icon" viewBox="0 0 20 20">
@@ -209,7 +209,7 @@
 															@else
 															{{-- <input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate"> --}}
 															<div class="pretty p-svg">
-																<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif" class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
+																<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
 																<div class="state p-success">
 																	<!-- svg path --> 
 																	<svg class="svg svg-icon" viewBox="0 0 20 20">
@@ -420,9 +420,9 @@
 										<th>Investment type</th>
 										<th>Joint Investor <br> Name</th>
 										<th>Entity details</th>
-										<th>@if($project->share_vs_unit) Share @else Unit @endif face value</th>
-										<th>Price ($)</th>
-										<th>Amount</th>
+										<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
+										<th>Share Price ($)</th>
+										<th>Market Value</th>
 										{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
 										{{-- <th>TFN</th> --}}
 										<th>Investment Documents</th>
@@ -457,7 +457,7 @@
 										</td> --}}
 										<td>{{round($shareInvestment->amount)}}</td>
 										<td>{{ number_format($shareInvestment->buy_rate, 4) }}</td>
-										<td>${{ $shareInvestment->amount * $shareInvestment->buy_rate }}</td>
+										<td>${{ number_format($shareInvestment->amount * $shareInvestment->buy_rate,2) }}</td>
 										{{-- <td>
 											@if($shareInvestment->is_repurchased)
 											<strong>Investment is repurchased</strong>
@@ -584,7 +584,7 @@
 										<th>Phone</th>
 										<th>Email</th>
 										<th>Address</th>
-										<th>@if($project->share_vs_unit) Shares @else Units @endif</th>
+										<th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
 										{{-- <th>Price ($)</th> --}}
 										<th>Market value ($)</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
