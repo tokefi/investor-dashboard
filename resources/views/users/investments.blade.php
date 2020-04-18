@@ -99,6 +99,7 @@
 										<th>Price ($)</th>
 										<th>Market Value</th>
 										<th>Link to share certificate</th>
+										<th>Encash/Rollover</th>
 										<th>Redemptions</th>
 									</tr>
 								</thead>
@@ -121,11 +122,23 @@
 											<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
 										</td>
 										<td>
-											<form action="#" id="redemption_request_form" class="redemption-request-form">
+											<div class="btn-group project-progress-3way-switch" data-toggle="buttons" style="width:110px">
+												<label class="btn btn-sm btn-default active" style="padding:5px;">
+													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="encash" data-project-id="{{$investment->project_id}}"> Encash
+												</label>
+												<label class="btn btn-sm btn-default" style="padding:5px;">
+													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="rollover" data-project-id="{{$investment->project_id}}"> Rollover
+												</label>
+											</div>
+										</td>
+										<td>
+											<form action="#" id="redemption_request_form_{{$investment->project_id}}" class="redemption-request-form">
 												<div class="input-group">
-													<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 100px;">
+													<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 100px;" required>
 													<div class="input-group-btn">
-														<input hidden name="project_id" value="{{$investment->project->id}}" />
+														<input hidden name="project_id" value="{{$investment->project_id}}" />
+														<input hidden name="rollover_action" value="encash" />
+														<input hidden name="rollover_project_id" value="" />
 														<button class="btn btn-primary form-control" type="submit">Request</button>
 													</div>
 												</div>
@@ -140,6 +153,39 @@
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Redemption reject Modal -->
+<div id="rollover_project_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Select rollover project</h4>
+			</div>
+			<form action="#" id="rollover_project_form" name="rollover_project_form" data-project-id="">
+				<div class="modal-body" style="padding: 30px;">
+					<small class="muted">** Select the project for which you want to rollover the shares. Once you confirm, submit the redemption request and you will be redirected to sign the application form of rollover project.</small><br><br>
+					<div class="form-group">
+						<label for="rollover_project">Reason to Reject: </label>
+						<select name="rollover_project" id="rollover_project" class="form-control">
+							@foreach ($projects as $project)
+								<option value="{{ $project->id }}">
+									<strong>{{ $project->title }} - </strong>
+									<small class="text-grey">( {{$project->location->line_1}}, @if($project->location->line_2){{$project->location->line_2}},@endif {{$project->location->city}}, {{$project->location->postal_code}}, {{$project->location->country}} )</small>
+								</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-danger" >Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
@@ -158,15 +204,42 @@
 			"iDisplayLength": 50
 		});
 
+		$('.rollover-switch').on('change', function (e) {
+			let action = $(this).val();
+			let projectId = $(this).attr('data-project-id');
+			if (action == 'rollover') {
+				// show modal for rollover project selection
+				$('#rollover_project_modal #rollover_project_form').attr('data-project-id', projectId);
+				$('#rollover_project_modal').modal({
+                    keyboard: false,
+                    backdrop: 'static'
+				});	
+			} else {
+				$('#redemption_request_form_' + projectId + ' input[name=rollover_project_id]').val('');
+			}
+			$('#redemption_request_form_' + projectId + ' input[name=rollover_action]').val(action);
+		});
+
+		$('#rollover_project_modal #rollover_project_form').on('submit', function (e) {
+			e.preventDefault();
+			let rolloverProjectId = $(this).find('#rollover_project').val();
+			let projectId = $(this).attr('data-project-id');
+			$('#redemption_request_form_' + projectId + ' input[name=rollover_project_id]').val(rolloverProjectId);
+			$('#rollover_project_modal').modal('toggle');
+		});
+
 		$('.redemption-request-form').on('submit', function (e) {
 			e.preventDefault();
 			if (!confirm('Are you sure you want to submit redemption request?')) {
 				return;
 			}
 			$('.loader-overlay').show();
+			let form = $(this);
+			let projectId = form.find('input[name=project_id]').val();
+			let rolloverAction = form.find('input[name=rollover_action]').val();
 			let uri = "{{ route('users.investments.requestRedemption') }}";
 			let method = 'POST';
-			let formdata = new FormData($(this)[0]);
+			let formdata = new FormData(form[0]);
 			$.ajax({
                 url: uri,
                 type: 'POST',
@@ -183,6 +256,14 @@
 					alert(data.message);
 					return;
 				}
+
+				if (rolloverAction == 'rollover') {
+					let rolloverProjectId = form.find('input[name=rollover_project_id]').val();
+					alert('Redemption Request successfully submitted for ' + data.data.shares + ' shares. After this you will be redirected to rollover project application, please sign and submit it to apply rollover.');
+					window.location = data.data.rollover_url;
+					return;
+				}
+
 				alert('Redemption Request successfully submitted for ' + data.data.shares + ' shares.');
 				location.reload();
 			});

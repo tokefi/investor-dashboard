@@ -546,6 +546,12 @@ class ProjectsController extends Controller
             // $this->dispatch(new SendInvestorNotificationEmail($user,$project));
             // $this->dispatch(new SendReminderEmail($user,$project));
             // $this->dispatch(new SendDeveloperNotificationEmail($user,$project));
+
+            // Set flash message for rollover action
+            if (isset($request->action) && $request->action == 'rollover') {
+                Session::flash('message', 'This is redemption rollover request for amount $' . $request->rollover_amount . '.'); 
+            }
+
             if($request->source == 'eoi'){
                 $user = User::find($request->uid);
                 $eoi = ProjectEOI::find($request->id);
