@@ -583,6 +583,11 @@ class ProjectsController extends Controller
             $user = Auth::user();
         }
         if($project->eoi_button) {
+            // Set flash message for rollover action
+            if (isset($request->action) && $request->action == 'rollover') {
+                Session::flash('message', 'This is redemption rollover request for amount $' . $request->rollover_amount . '.'); 
+            }
+            
             return view('projects.eoiForm', compact('project', 'color', 'projects_spv', 'user'));
         }else {
             return response()->view('errors.404', [], 404);
