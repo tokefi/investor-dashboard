@@ -25,7 +25,7 @@ Projects | Dashboard | @parent
                             <th>Price ($)</th>
                             <th>Amount</th>
                             <th>Requested On</th>
-                            <th>Last Updated</th>
+                            <th>Type</th>
                             <th>Status</th>
                             <th>Comments</th>
                             <th>Action</th>
@@ -61,7 +61,7 @@ Projects | Dashboard | @parent
                                     @endif
                                 </td>
                                 <td>{{ $redemption->created_at->toFormattedDateString() }}</td>
-                                <td>{{ $redemption->updated_at->diffForHumans() }}</td>
+                                <td>{{ $redemption->type }}</td>
                                 <td>
                                     {{ $redemption->status->name }}<br>
                                     @if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)

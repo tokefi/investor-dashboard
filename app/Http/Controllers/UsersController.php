@@ -493,7 +493,9 @@ class UsersController extends Controller
             $allTransactions->push($transaction);
         }
 
-        return view('users.investments', compact('user','color', 'investments', 'transactions', 'allTransactions'));
+        $projects = Project::where(['active'=>'1','project_site'=>url()])->select(['id', 'title'])->orderBy('project_rank', 'asc')->get();
+        
+        return view('users.investments', compact('user','color', 'investments', 'transactions', 'allTransactions', 'projects'));
     }
 
     /**
@@ -769,7 +771,8 @@ class UsersController extends Controller
             'user_id' => $user->id,
             'project_id' => $request->project_id,
             'request_amount' => $request->num_shares,
-            'status_id' => RedemptionStatus::STATUS_PENDING
+            'status_id' => RedemptionStatus::STATUS_PENDING,
+            'type' => strtoupper($request->rollover_action)
         ]);
         
         // Send email to admin
@@ -778,11 +781,25 @@ class UsersController extends Controller
         // Send email to user
         $mailer->sendRedemptionRequestEmailToUser($user, $project, $request->num_shares);
 
+        $data = [];
+        $data['shares'] = $request->num_shares;
+        
+        // Rollover functionality
+        if ($request->rollover_project_id) {
+            $parameters = [
+                'project_id' => $request->rollover_project_id,
+                'action' => 'rollover',
+                'rollover_amount' => $request->num_shares * $investment->project->share_per_unit_price
+            ];
+            $rolloverProject = Project::find($request->rollover_project_id);
+            $rolloverUrl = $rolloverProject->eoi_button ? route('projects.eoi', $parameters) : route('projects.interest', $parameters);
+
+            $data['rollover_url'] = $rolloverUrl;
+        }
+        
         return response()->json([
             'status' => true,
-            'data' => [
-                'shares' => $request->num_shares
-            ]
+            'data' => $data
         ]);
 
     }

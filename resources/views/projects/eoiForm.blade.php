@@ -75,7 +75,7 @@ EOI Doc
                     {!! Form::label(null, 'Amount you would be interested in investing') !!}
                     <div class="input-group">
                         <span class="input-group-addon">A$</span>
-                        {!! Form::input('number', 'investment_amount', $project->investment->minimum_accepted_amount, array('required', 'class'=>'form-control','id'=>'amountEoi' , 'step'=>'5', 'min'=>'5', 'placeholder'=>'Enter Invesment Amount (min '.$project->investment->minimum_accepted_amount.'AUD)')) !!}
+                        {!! Form::input('number', 'investment_amount', (isset(request()->action) && request()->action == 'rollover') ? round(request()->rollover_amount) : $project->investment->minimum_accepted_amount, array('required', 'class'=>'form-control','id'=>'amountEoi' , 'step'=>'5', 'min'=>'5', 'placeholder'=>'Enter Invesment Amount (min '.$project->investment->minimum_accepted_amount.'AUD)')) !!}
                     </div>
                 </div>
                 <div class="col-sm-6  <?php if($errors->first('is_accredited_investor')){echo 'has-error';}?>" data-wow-delay="0.2s">

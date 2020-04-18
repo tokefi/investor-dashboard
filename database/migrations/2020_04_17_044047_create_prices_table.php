@@ -16,7 +16,7 @@ class CreatePricesTable extends Migration
             $table->increments('id');
             $table->integer('project_id')->unsigned();
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->float('price');
+            $table->double('price', 10, 4);
             $table->timestamps();
         });
     }
