@@ -122,7 +122,7 @@
 											<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
 										</td>
 										<td>
-											<div class="btn-group project-progress-3way-switch" data-toggle="buttons" style="width:110px">
+											<div class="btn-group project-progress-3way-switch" id="rollover_toggle_{{ $investment->project_id }}" data-toggle="buttons" style="width:110px">
 												<label class="btn btn-sm btn-default active" style="padding:5px;">
 													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="encash" data-project-id="{{$investment->project_id}}"> Encash
 												</label>
@@ -163,7 +163,6 @@
 		<!-- Modal content-->
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Select rollover project</h4>
 			</div>
 			<form action="#" id="rollover_project_form" name="rollover_project_form" data-project-id="">
@@ -183,7 +182,6 @@
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-danger" >Confirm</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 				</div>
 			</form>
 		</div>

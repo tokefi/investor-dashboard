@@ -771,7 +771,8 @@ class UsersController extends Controller
             'user_id' => $user->id,
             'project_id' => $request->project_id,
             'request_amount' => $request->num_shares,
-            'status_id' => RedemptionStatus::STATUS_PENDING
+            'status_id' => RedemptionStatus::STATUS_PENDING,
+            'type' => strtoupper($request->rollover_action)
         ]);
         
         // Send email to admin
@@ -790,7 +791,8 @@ class UsersController extends Controller
                 'action' => 'rollover',
                 'rollover_amount' => $request->num_shares * $investment->project->share_per_unit_price
             ];
-            $rolloverUrl = $investment->project->eoi_button ? route('projects.eoi', $parameters) : route('projects.interest', $parameters);
+            $rolloverProject = Project::find($request->rollover_project_id);
+            $rolloverUrl = $rolloverProject->eoi_button ? route('projects.eoi', $parameters) : route('projects.interest', $parameters);
 
             $data['rollover_url'] = $rolloverUrl;
         }
