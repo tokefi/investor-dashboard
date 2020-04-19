@@ -45,7 +45,7 @@
 					@endif
 					<br><br>
 					<p>
-						This is to certify {{$investment->user->first_name}} {{$investment->user->last_name}} @if($investment->user->line_1) of {{$investment->user->line_1}}, @if($investment->user->line_2 != '') {{$investment->user->line_2}}, @endif {{$investment->user->city}}, {{$investment->user->state}}, {{$investment->user->postal_code}}@endif owns {{$investment->shares}} @if($investment->project->share_vs_unit == 1) redeemable preference shares @elseif($investment->project->share_vs_unit == 2) Preference Shares @elseif($investment->project->share_vs_unit == 3) Ordinary shares @else units @endif of @if($investment->project->projectspvdetail){{$investment->project->projectspvdetail->spv_name}}@else Estate Baron @endif at ${{  $investment->project->share_per_unit_price }} @if($investment->project->share_vs_unit) share @else unit @endif.
+						This is to certify {{$investment->user->first_name}} {{$investment->user->last_name}} @if($investment->user->line_1) of {{$investment->user->line_1}}, @if($investment->user->line_2 != '') {{$investment->user->line_2}}, @endif {{$investment->user->city}}, {{$investment->user->state}}, {{$investment->user->postal_code}}@endif owns {{$investment->shares}} @if($investment->project->share_vs_unit == 1) redeemable preference shares @elseif($investment->project->share_vs_unit == 2) Preference Shares @elseif($investment->project->share_vs_unit == 3) Ordinary shares @else units @endif of @if($investment->project->projectspvdetail){{$investment->project->projectspvdetail->spv_name}}@else Estate Baron @endif.
 					</p>
 					<br><br>
 					@if($investment->project->media->where('type', 'spv_md_sign_image')->first())
