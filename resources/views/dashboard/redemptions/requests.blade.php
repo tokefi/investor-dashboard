@@ -61,7 +61,15 @@ Projects | Dashboard | @parent
                                     @endif
                                 </td>
                                 <td>{{ $redemption->created_at->toFormattedDateString() }}</td>
-                                <td>{{ $redemption->type }}</td>
+                                <td>
+                                    {{ $redemption->type }}
+                                    @if ($redemption->type == 'ROLLOVER')
+                                        @if ($redemption->rollover_project_id)
+                                            to
+                                            <a href="{{ route('projects.show', $redemption->rollover_project_id) }}">{{ $redemption->rolloverProject->title }}</a>
+                                        @endif
+                                    @endif
+                                </td>
                                 <td>
                                     {{ $redemption->status->name }}<br>
                                     @if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)

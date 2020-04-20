@@ -171,7 +171,7 @@
 				<div class="modal-body" style="padding: 30px;">
 					<small class="muted">** Select the project for which you want to rollover the shares. Once you confirm, submit the redemption request and you will be redirected to sign the application form of rollover project.</small><br><br>
 					<div class="form-group">
-						<label for="rollover_project">Reason to Reject: </label>
+						<label for="rollover_project">Select project for rollover: </label>
 						<select name="rollover_project" id="rollover_project" class="form-control">
 							@foreach ($projects as $project)
 								<option value="{{ $project->id }}">

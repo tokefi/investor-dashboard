@@ -763,6 +763,34 @@ class UsersController extends Controller
             ]);
         }
 
+        $shares = $request->num_shares;
+        $amount = $request->num_shares * $investment->project->share_per_unit_price;
+        $data = [];
+        $data['shares'] = $shares;
+        
+        // Rollover functionality
+        if ($request->rollover_project_id) {
+            $rolloverProject = Project::find($request->rollover_project_id);
+            $rolloverMinInvestment = $rolloverProject->investment->minimum_accepted_amount * $rolloverProject->share_per_unit_price;
+
+            if ($rolloverMinInvestment > $amount) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Minimum investment amount for rollover project ' . $rolloverProject->title . ' is $' . $rolloverMinInvestment . '. Please increase number of shares to rollover to complete request.'
+                ]);
+            }
+
+            $parameters = [
+                'project_id' => $request->rollover_project_id,
+                'action' => 'rollover',
+                'rollover_amount' => $amount
+            ];
+            $rolloverProject = Project::find($request->rollover_project_id);
+            $rolloverUrl = $rolloverProject->eoi_button ? route('projects.eoi', $parameters) : route('projects.interest', $parameters);
+
+            $data['rollover_url'] = $rolloverUrl;
+        }
+
         $project = Project::findOrFail($request->project_id);
 
         // Create redemption record in DB
@@ -780,22 +808,6 @@ class UsersController extends Controller
         // Send email to user
         $mailer->sendRedemptionRequestEmailToUser($user, $project, $request->num_shares);
 
-        $data = [];
-        $data['shares'] = $request->num_shares;
-        
-        // Rollover functionality
-        if ($request->rollover_project_id) {
-            $parameters = [
-                'project_id' => $request->rollover_project_id,
-                'action' => 'rollover',
-                'rollover_amount' => $request->num_shares * $investment->project->share_per_unit_price
-            ];
-            $rolloverProject = Project::find($request->rollover_project_id);
-            $rolloverUrl = $rolloverProject->eoi_button ? route('projects.eoi', $parameters) : route('projects.interest', $parameters);
-
-            $data['rollover_url'] = $rolloverUrl;
-        }
-        
         return response()->json([
             'status' => true,
             'data' => $data
