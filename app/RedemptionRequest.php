@@ -24,4 +24,9 @@ class RedemptionRequest extends Model
     {
         return $this->belongsTo('App\RedemptionStatus');
     }
+
+    public function rolloverProject()
+    {
+        return $this->belongsTo('App\Project');
+    }
 }
