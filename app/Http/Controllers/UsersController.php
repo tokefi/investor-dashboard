@@ -799,7 +799,8 @@ class UsersController extends Controller
             'project_id' => $request->project_id,
             'request_amount' => $request->num_shares,
             'status_id' => RedemptionStatus::STATUS_PENDING,
-            'type' => strtoupper($request->rollover_action)
+            'type' => strtoupper($request->rollover_action),
+            'rollover_project_id' => strtoupper($request->rollover_action) == 'ROLLOVER' ? $request->rollover_project_id : null
         ]);
         
         // Send email to admin
