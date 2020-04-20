@@ -800,7 +800,7 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $investment->user_id,
                         'project_id' => $investment->project_id,
-                        'transaction_type' => 'ANNUALIZED DIVIDEND',
+                        'transaction_type' => $dividendPercent.'% ANNUALIZED DIVIDEND BETWEEN '.$request->start_date.' and '.$request->end_date,
                         'transaction_date' => Carbon::now(),
                         'amount' => $dividendAmount,
                         'rate' => $dividendPercent,

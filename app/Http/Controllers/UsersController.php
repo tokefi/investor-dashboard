@@ -482,9 +482,8 @@ class UsersController extends Controller
 
 
         //Merge user investments and dividends
-        $transactions = Transaction::where('user_id', $user_id)->where('transaction_type', 'DIVIDEND')->orWhere('transaction_type', 'ANNUALIZED DIVIDEND')->get();
+        $transactions = Transaction::where('user_id', $user_id)->get();
         $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->get();
- 
         $allTransactions = collect();
         foreach ($usersInvestments as $usersInvestment){
             $allTransactions->push($usersInvestment);

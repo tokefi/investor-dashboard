@@ -576,7 +576,7 @@
 
               <div style="font-size: 13px;text-align:left; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
                 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">Thank you for investing in <b>{{$investment->project->title}}.</b><br><br><br>
-                  <a href="{{$formLink}}" style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#fff;text-decoration:none;padding:15px;cursor:pointer; background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><b>View your @if($investment->project->share_vs_unit) share @else unit @endif certificate.</b></a>
+                  <a href="{{$formLink}}" style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#fff;text-decoration:none;padding:15px;cursor:pointer; background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><b>View @if($investment->project->share_vs_unit) share @else unit @endif certificate with current balance.</b></a>
                 </span></span></span>
                 &nbsp;
 
