@@ -30,6 +30,6 @@
 	<a href="{{route('users.submit', [$user])}}" class="list-group-item @if($active == 5) active @endif">Submit a Project </a>
 	@endif
 	<a href="{{route('users.investments', [$user])}}" class="list-group-item @if($active == 6) active @endif">Investments </a>
-	<a href="{{ route('users.redemptions', [$user]) }}" class="list-group-item @if($active == 12) active @endif">Redemption Requests </a>
+	{{-- <a href="{{ route('users.redemptions', [$user]) }}" class="list-group-item @if($active == 12) active @endif">Redemption Requests </a> --}}
 	<a href="{{route('users.notifications', [$user])}}" class="list-group-item @if($active == 9) active @endif">Notifications </a>
 </div>

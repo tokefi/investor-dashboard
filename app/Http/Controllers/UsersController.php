@@ -482,19 +482,25 @@ class UsersController extends Controller
 
 
         //Merge user investments and dividends
-        $transactions = Transaction::where('user_id', $user_id)->get();
-        $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->get();
-        $allTransactions = collect();
-        foreach ($usersInvestments as $usersInvestment){
-            $allTransactions->push($usersInvestment);
-        }
-        foreach ($transactions as $transaction){
-            $allTransactions->push($transaction);
-        }
+        $transactions = Transaction::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        $redemptions = RedemptionRequest::whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
+            ->where('user_id', $user->id)
+            ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+            ->get();
+        // $allTransactions = collect();
+        // foreach ($usersInvestments as $usersInvestment){
+        //     $allTransactions->push($usersInvestment);
+        // }
+        // foreach ($transactions as $transaction){
+        //     $allTransactions->push($transaction);
+        // }
 
         $projects = Project::where(['active'=>'1','project_site'=>url()])->select(['id', 'title'])->orderBy('project_rank', 'asc')->get();
         
-        return view('users.investments', compact('user','color', 'investments', 'transactions', 'allTransactions', 'projects'));
+        return view('users.investments', compact('user','color', 'investments', 'transactions', 'projects','usersInvestments','redemptions'));
     }
 
     /**

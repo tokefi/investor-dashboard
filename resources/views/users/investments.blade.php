@@ -33,21 +33,22 @@
 			</ul> --}}
 			{{-- <h3 class="text-center">My Investments</h3> --}}
 			<ul class="nav nav-tabs" style="margin-top:1em; width: 100%;">
-				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
-				<li style="width: 50%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
+				<li class="" style="width: 25%;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Application</h3></a></li>
+				<li class="active" style="width: 25%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
+				<li style="width: 25%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
+				<li class="" style="width: 25%;"><a data-toggle="tab" href="#Redemption_tab" style="padding: 0em 2em"><h3 class="text-center">Redemption</h3></a></li>
 			</ul>
 
 			<div class="tab-content">
-				<div id="transactions_tab" class="tab-pane fade in active" style="overflow: auto;">
+				<div id="application_tab" class="tab-pane fade" style="overflow: auto;">
 					<br><br>
 					<div class="table-responsive text-center">
-						<table class="table table-bordered table-striped text-center" id="transactionsTable">
+						<table class="table table-bordered table-striped text-center" id="applicationsTable">
 							<thead>
 								<tr>
 									{{-- <th>Investor Name</th> --}}
 									<th>Project Name</th>
 									<th>Investment Status</th>
-									<th>Transaction Type</th>
 									<th>Number of shares</th>
 									<th>Price</th>
 									<th>Amount</th>
@@ -56,33 +57,68 @@
 								</tr>
 							</thead>
 							<tbody>
-								@if($allTransactions->count())
-									@foreach($allTransactions as $allTransaction)
-										@if($allTransaction->transaction_type)
-											<tr>
-												<td>{{$allTransaction->project->title}}</td>
-												<td class="text-center">@if(! $allTransaction->accepted && $allTransaction->money_received) Applied @elseif($allTransaction->money_received) Money Received @else Share Certificate Issued @endif</td>
-												{{-- <td>NA</td> --}}
-												<td class="text-center">@if($allTransaction->transaction_type == 'BUY' || $allTransaction->transaction_type == 'REPURCHASE'){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == 'FIXED DIVIDEND') {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == 'DIVIDEND')  {{ round($allTransaction->rate ,2) }} % FIXED @elseif($allTransaction->transaction_type) {{ $allTransaction->transaction_type }} @endif @endif</td>
-												<td class="text-center">{{$allTransaction->number_of_shares}}</td>
-												<td>${{number_format($allTransaction->project->share_per_unit_price, 4)}}</td>
-												<td>${{number_format($allTransaction->amount, 2)}} </td>
-												<td>NA</td>
-												<td data-sort="{{date($allTransaction->transaction_date)}}">{{date('d/m/Y', strtotime($allTransaction->transaction_date))}}</td>
-											</tr>
-										@else
-										<tr>
-											<td>{{$allTransaction->project->title}}</td>
-											<td class="text-center">@if($allTransaction->accepted && $allTransaction->money_received) Share Certificate Issued @elseif($allTransaction->money_received) Money Received @else Applied @endif</td>
-											<td>NA</td>
-											<td class="text-center">{{round($allTransaction->amount)}}</td>
-											<td>${{number_format($allTransaction->buy_rate, 4)}}</td>
-											<td>${{number_format(round(($allTransaction->amount)*($allTransaction->buy_rate)), 2)}}</td>
-											<td>@if($allTransaction->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td>
-											<td data-sort="{{date($allTransaction->created_at)}}">{{date('d/m/Y', strtotime($allTransaction->created_at))}}</td>
-										</tr>
-										@endif
-									@endforeach
+								@if($usersInvestments->count())
+								@foreach($usersInvestments as $userInvestment)
+								<tr>
+									<td>{{$userInvestment->project->title}}</td>
+									<td class="text-center">@if($userInvestment->accepted && $userInvestment->money_received) Share Certificate Issued @elseif($userInvestment->money_received) Money Received @else Applied @endif</td>
+									<td class="text-center">{{round($userInvestment->amount)}}</td>
+									<td>${{number_format($userInvestment->buy_rate, 4)}}</td>
+									<td>${{number_format(round(($userInvestment->amount)*($userInvestment->buy_rate)), 2)}}</td>
+									<td>@if($userInvestment->agent_id) <?php $agent= App\User::find($userInvestment->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $userInvestment->user->agent_id }} @else NA @endif </td>
+									<td data-sort="{{date($userInvestment->created_at)}}">{{date('d/m/Y', strtotime($userInvestment->created_at))}}</td>
+								</tr>
+								@endforeach
+								@endif
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div id="transactions_tab" class="tab-pane fade in active" style="overflow: auto;">
+					<br><br>
+					<div class="table-responsive text-center">
+						<table class="table table-bordered table-striped text-center" id="transactionsTable">
+							<thead>
+								<tr>
+									{{-- <th>Investor Name</th> --}}
+									<th>Project Name</th>
+									{{-- <th>Investment Status</th> --}}
+									<th>Transaction Type</th>
+									<th>Number of shares</th>
+									<th>Price</th>
+									<th>Amount</th>
+									{{-- <th>Agent Name</th> --}}
+									<th>Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								@if($transactions->count())
+								@foreach($transactions as $allTransaction)
+								@if($allTransaction->transaction_type)
+								<tr>
+									<td>{{$allTransaction->project->title}}</td>
+									{{-- <td class="text-center">@if(! $allTransaction->accepted && $allTransaction->money_received) Applied @elseif($allTransaction->money_received) Money Received @else Share Certificate Issued @endif</td> --}}
+									<td class="text-center">@if($allTransaction->transaction_type == 'BUY' || $allTransaction->transaction_type == 'REPURCHASE'){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == 'FIXED DIVIDEND') {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == 'DIVIDEND')  {{ round($allTransaction->rate ,2) }} % FIXED @elseif($allTransaction->transaction_type) {{ $allTransaction->transaction_type }} @endif @endif</td>
+									<td class="text-center">{{$allTransaction->number_of_shares}}</td>
+									<td>${{number_format($allTransaction->project->share_per_unit_price, 4)}}</td>
+									<td>${{number_format($allTransaction->amount, 2)}} </td>
+									{{-- <td>NA</td> --}}
+									<td data-sort="{{date($allTransaction->transaction_date)}}">{{date('d/m/Y', strtotime($allTransaction->transaction_date))}}</td>
+								</tr>
+								@else
+								<tr>
+									<td>{{$allTransaction->project->title}}</td>
+									{{-- <td class="text-center">@if($allTransaction->accepted && $allTransaction->money_received) Share Certificate Issued @elseif($allTransaction->money_received) Money Received @else Applied @endif</td> --}}
+									<td>NA</td>
+									<td class="text-center">{{round($allTransaction->amount)}}</td>
+									<td>${{number_format($allTransaction->buy_rate, 4)}}</td>
+									<td>${{number_format(round(($allTransaction->amount)*($allTransaction->buy_rate)), 2)}}</td>
+									{{-- <td>@if($allTransaction->agent_id) <?php $agent= App\User::find($allTransaction->user->agent_id); ?> {{ $agent->first_name }} {{ $agent->last_name }} <br> {{ $allTransaction->user->agent_id }} @else NA @endif </td> --}}
+									<td data-sort="{{date($allTransaction->created_at)}}">{{date('d/m/Y', strtotime($allTransaction->created_at))}}</td>
+								</tr>
+								@endif
+								@endforeach
 								@endif
 							</tbody>
 						</table>
@@ -154,6 +190,66 @@
 						</div>
 					</div>
 				</div>
+
+				<div id="Redemption_tab" class="tab-pane fade" style="overflow: auto;">
+					<br><br>
+					<div class="table-responsive text-center">
+						<table class="table table-bordered table-striped" id="redemptionsTable">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Project</th>
+									<th>Requested shares</th>
+									<th>Price ($)</th>
+									<th>Amount</th>
+									<th>Requested On</th>
+									<th>Last Updated</th>
+									<th>Status</th>
+									<th>Comments</th>
+								</tr>
+							</thead>
+							<tbody class="text-left">
+								@foreach ($redemptions as $redemption)
+								<tr style="@if($redemption->status_id != \App\RedemptionStatus::STATUS_PENDING) color: #ccc;  @endif">
+									<td>{{ sprintf('%05d', $redemption->id) }}</td>
+									<td>
+										<a href="/projects/{{ $redemption->project_id }}">{{ $redemption->project->title }}</a><br>
+										<address>
+											{{$redemption->project->location->line_1}}, {{$redemption->project->location->line_2}}, {{$redemption->project->location->city}}, {{$redemption->project->location->postal_code}}, {{$redemption->project->location->country}}
+										</address>
+									</td>
+									<td class="text-center">{{ $redemption->request_amount }}</td>
+									<td class="text-center">
+										@if($redemption->status_id == \App\RedemptionStatus::STATUS_PENDING)
+										{{ $redemption->project->share_per_unit_price }}
+										@else
+										{{ $redemption->price }}
+										@endif
+									</td>
+									<td class="text-center">
+										@if($redemption->status_id != \App\RedemptionStatus::STATUS_PENDING)
+										${{ number_format(round($redemption->request_amount * $redemption->price, 2)) }}
+										@else
+										${{ number_format(round($redemption->request_amount * $redemption->project->share_per_unit_price, 2)) }}
+										@endif
+									</td>
+									<td>{{ $redemption->created_at->toFormattedDateString() }}</td>
+									<td>{{ $redemption->updated_at->diffForHumans() }}</td>
+									<td>
+										{{ $redemption->status->name }}
+										<br>
+										@if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)
+										<span class="badge"><strong>Accepted:</strong> {{ $redemption->accepted_amount }}/{{ $redemption->request_amount }}</span>
+										@endif
+									</td>
+									<td>{{ $redemption->comments }}</td>
+								</tr>    
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -174,10 +270,10 @@
 						<label for="rollover_project">Select project for rollover: </label>
 						<select name="rollover_project" id="rollover_project" class="form-control">
 							@foreach ($projects as $project)
-								<option value="{{ $project->id }}">
-									<strong>{{ $project->title }} - </strong>
-									<small class="text-grey">( {{$project->location->line_1}}, @if($project->location->line_2){{$project->location->line_2}},@endif {{$project->location->city}}, {{$project->location->postal_code}}, {{$project->location->country}} )</small>
-								</option>
+							<option value="{{ $project->id }}">
+								<strong>{{ $project->title }} - </strong>
+								<small class="text-grey">( {{$project->location->line_1}}, @if($project->location->line_2){{$project->location->line_2}},@endif {{$project->location->city}}, {{$project->location->postal_code}}, {{$project->location->country}} )</small>
+							</option>
 							@endforeach
 						</select>
 					</div>
@@ -196,11 +292,19 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		var transactionsTable = $('#transactionsTable').DataTable({
-			"order": [[5, 'desc'], [0, 'desc']],
+			"order": [],
 			"iDisplayLength": 50
 		});
 		var positionsTable = $('#positionsTable').DataTable({
-			"order": [[5, 'desc'], [0, 'desc']],
+			"order": [],
+			"iDisplayLength": 50
+		});
+		var applicationsTable = $('#applicationsTable').DataTable({
+			"order": [],
+			"iDisplayLength": 50
+		});
+		var redemptionsTable = $('#redemptionsTable').DataTable({
+			"order": [],
 			"iDisplayLength": 50
 		});
 
@@ -211,8 +315,8 @@
 				// show modal for rollover project selection
 				$('#rollover_project_modal #rollover_project_form').attr('data-project-id', projectId);
 				$('#rollover_project_modal').modal({
-                    keyboard: false,
-                    backdrop: 'static'
+					keyboard: false,
+					backdrop: 'static'
 				});	
 			} else {
 				$('#redemption_request_form_' + projectId + ' input[name=rollover_project_id]').val('');
@@ -241,16 +345,16 @@
 			let method = 'POST';
 			let formdata = new FormData(form[0]);
 			$.ajax({
-                url: uri,
-                type: 'POST',
-                dataType: 'JSON',
-                data: formdata,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                contentType: false,
-                processData: false
-            }).done(function(data){
+				url: uri,
+				type: 'POST',
+				dataType: 'JSON',
+				data: formdata,
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				contentType: false,
+				processData: false
+			}).done(function(data){
 				$('.loader-overlay').hide();
 				if (!data.status) {
 					alert(data.message);
