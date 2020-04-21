@@ -24,15 +24,15 @@
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif
-			<ul class="list-group">
+			{{-- <ul class="list-group">
 				<li class="list-group-item">
 					<div class="text-center">
 						<h3>{{$user->first_name}} {{$user->last_name}}<br><small>{{$user->email}}</small></h3>
 					</div>
 				</li>
-			</ul>
-			<h3 class="text-center">My Investments</h3>
-			<ul class="nav nav-tabs" style="margin-top: 2em; width: 100%;">
+			</ul> --}}
+			{{-- <h3 class="text-center">My Investments</h3> --}}
+			<ul class="nav nav-tabs" style="margin-top:1em; width: 100%;">
 				<li class="active" style="width: 50%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
 				<li style="width: 50%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
 			</ul>

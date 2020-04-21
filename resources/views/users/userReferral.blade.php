@@ -17,7 +17,7 @@
 			@endif
 			<ul class="list-group">
 				<li class="list-group-item">
-					<dl class="dl-horizontal">
+					{{-- <dl class="dl-horizontal">
 						<dt></dt>
 						<dd><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
 						<dt></dt>
@@ -32,7 +32,7 @@
 							</div>
 						</dd>
 						<hr>
-					</dl>
+					</dl> --}}
 					<table class="table table-striped table-responsive text-center">
 						<thead class="text-center">
 							<tr>

@@ -26,7 +26,7 @@
 						<dt></dt>
 						<dd><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
 						<dt></dt>
-						<dd>
+						{{-- <dd>
 							<div class="row">
 								<div class="col-md-7">
 									{{$user->email}}
@@ -36,7 +36,7 @@
 								</div>
 							</div>
 						</dd>
-						<hr>
+						<hr> --}}
 
 						<div class="row">
 							<div class="col-md-10 col-md-offset-1 well text-center">

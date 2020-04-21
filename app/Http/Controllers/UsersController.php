@@ -693,7 +693,7 @@ class UsersController extends Controller
         }
         $ref = ReferralLink::where('user_id',$user_id)->get()->first();
         if(!$ref){
-            return view('users.userReferral',compact('user','color','refUsers'));
+            return view('users.userReferral',compact('user','color'));
         }
         $relationRefs = ReferralRelationship::where('referral_link_id',$ref->id)->get()->all();
         foreach($relationRefs as $relationRef){

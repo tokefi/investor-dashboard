@@ -19,14 +19,14 @@
 >			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif
-			<ul class="list-group">
+			{{-- <ul class="list-group">
 				<li class="list-group-item">
 					<div class="text-center">
 						<h3>{{$user->first_name}} {{$user->last_name}}<br><small>{{$user->email}}</small></h3>
 					</div>
 				</li>
 			</ul>
-			<h3 class="text-center">Notifications</h3>
+			<h3 class="text-center">Notifications</h3> --}}
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped" id="notificationTable">
 					<thead>
