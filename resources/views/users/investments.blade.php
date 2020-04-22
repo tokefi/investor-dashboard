@@ -33,10 +33,10 @@
 			</ul> --}}
 			{{-- <h3 class="text-center">My Investments</h3> --}}
 			<ul class="nav nav-tabs" style="margin-top:1em; width: 100%;">
-				<li class="" style="width: 25%;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Application</h3></a></li>
+				<li class="" style="width: 25%;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
 				<li class="active" style="width: 25%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
 				<li style="width: 25%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
-				<li class="" style="width: 25%;"><a data-toggle="tab" href="#Redemption_tab" style="padding: 0em 2em"><h3 class="text-center">Redemption</h3></a></li>
+				<li class="" style="width: 25%;"><a data-toggle="tab" href="#Redemption_tab" style="padding: 0em 2em"><h3 class="text-center">Redemptions</h3></a></li>
 			</ul>
 
 			<div class="tab-content">

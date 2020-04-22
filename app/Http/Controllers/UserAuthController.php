@@ -253,6 +253,13 @@ class UserAuthController extends Controller
         }
         $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$request->investing_as, 'signature_data'=>$request->signature_data,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type,'interested_to_buy'=>$request->interested_to_buy,'agent_investment'=>$agent_investment, 'agent_id'=>$request->agent_id]);
         $investor = InvestmentInvestor::get()->last();
+        if($project->master_child){
+          foreach($project->children as $child){
+            $percAmount = round($amount* ($child->allocation)/100 * $project->share_per_unit_price);
+            $childProject = Project::find($child->child);
+            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(), 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
+          }
+        }
         if($request->investing_as != 'Individual Investor'){
             $investing_joint = new InvestingJoint;
             $investing_joint->project_id = $project->id;
