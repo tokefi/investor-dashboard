@@ -431,16 +431,16 @@ class UsersController extends Controller
         }
 
         if ($user->roles->contains('role', 'investor') && $user->roles->count() > 1) {
-           $role = Role::whereRole('investor')->firstOrFail();
+         $role = Role::whereRole('investor')->firstOrFail();
 
-           $user->roles()->detach($role);
+         $user->roles()->detach($role);
 
-           return back()->withMessage('<p class="alert alert-success text-center">Successfully Deleted Investor Role</p>');
-       }
+         return back()->withMessage('<p class="alert alert-success text-center">Successfully Deleted Investor Role</p>');
+     }
 
-       return back()->withMessage('<p class="alert alert-warning text-center">Unauthorized action.</p>');
+     return back()->withMessage('<p class="alert alert-warning text-center">Unauthorized action.</p>');
 
-   }
+ }
 
     /**
      * delete Developer role from user
@@ -456,16 +456,16 @@ class UsersController extends Controller
         }
 
         if ($user->roles->contains('role', 'developer') && $user->roles->count() > 1) {
-           $role = Role::whereRole('developer')->firstOrFail();
+         $role = Role::whereRole('developer')->firstOrFail();
 
-           $user->roles()->detach($role);
+         $user->roles()->detach($role);
 
-           return back()->withMessage('<p class="alert alert-success text-center">Successfully Deleted Developer Role</p>');
-       }
+         return back()->withMessage('<p class="alert alert-success text-center">Successfully Deleted Developer Role</p>');
+     }
 
-       return back()->withMessage('<p class="alert alert-warning text-center">Unauthorized action.</p>');
+     return back()->withMessage('<p class="alert alert-warning text-center">Unauthorized action.</p>');
 
-   }
+ }
 
     /**
      * get user investments
@@ -485,11 +485,11 @@ class UsersController extends Controller
         $transactions = Transaction::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         $redemptions = RedemptionRequest::whereHas('project', function ($q) {
-                $q->where('project_site', url());
-            })
-            ->where('user_id', $user->id)
-            ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
-            ->get();
+            $q->where('project_site', url());
+        })
+        ->where('user_id', $user->id)
+        ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+        ->get();
         // $allTransactions = collect();
         // foreach ($usersInvestments as $usersInvestment){
         //     $allTransactions->push($usersInvestment);
@@ -758,9 +758,9 @@ class UsersController extends Controller
         }
 
         $pendingRequest = RedemptionRequest::where('user_id', $user->id)
-            ->where('project_id', $request->project_id)
-            ->where('status_id', RedemptionStatus::STATUS_PENDING)
-            ->get();
+        ->where('project_id', $request->project_id)
+        ->where('status_id', RedemptionStatus::STATUS_PENDING)
+        ->get();
 
         if ($pendingRequest->count()) {
             return response()->json([
@@ -808,7 +808,23 @@ class UsersController extends Controller
             'type' => strtoupper($request->rollover_action),
             'rollover_project_id' => strtoupper($request->rollover_action) == 'ROLLOVER' ? $request->rollover_project_id : null
         ]);
-        
+        $redemptionRequest = RedemptionRequest::get()->last();
+        if($project->master_child){
+            foreach($project->children as $child){
+                $childProject = Project::find($child->child);
+                RedemptionRequest::create([
+            'user_id' => $user->id,
+            'project_id' => $childProject->id,
+            'request_amount' => $request->num_shares,
+            'status_id' => RedemptionStatus::STATUS_PENDING,
+            'type' => strtoupper($request->rollover_action),
+            'rollover_project_id' => strtoupper($request->rollover_action) == 'ROLLOVER' ? $request->rollover_project_id : null,
+            'master_redemption'=>$redemptionRequest->id
+        ]);
+            }
+        }
+
+
         // Send email to admin
         $mailer->sendRedemptionRequestEmailToAdmin($user, $project, $request->num_shares);
 
@@ -831,11 +847,11 @@ class UsersController extends Controller
         }
 
         $redemptions = RedemptionRequest::whereHas('project', function ($q) {
-                $q->where('project_site', url());
-            })
-            ->where('user_id', $user->id)
-            ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
-            ->get();
+            $q->where('project_site', url());
+        })
+        ->where('user_id', $user->id)
+        ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+        ->get();
 
         return view('users.redemptionRequests', compact('user','color', 'redemptions'));
     }

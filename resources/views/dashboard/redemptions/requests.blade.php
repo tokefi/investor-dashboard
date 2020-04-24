@@ -79,15 +79,15 @@ Projects | Dashboard | @parent
                                 <td>{{ $redemption->comments }}</td>
                                 <td>
                                     @if($redemption->status_id == \App\RedemptionStatus::STATUS_PENDING)
-                                         <button class="btn btn-success btn-block accept-redemption-btn" data-action="accept" data-project-id="{{ $redemption->project_id }}" data-shares="{{ $redemption->request_amount }}" data-redemption-id="{{ $redemption->id }}">Accept</button>
-                                        <button class="btn btn-danger btn-block reject-redemption-btn" data-action="reject" data-project-id="{{ $redemption->project_id }}" data-redemption-id="{{ $redemption->id }}">Reject</button>
+                                         <button class="btn btn-success btn-block accept-redemption-btn" data-action="accept" data-project-id="{{ $redemption->project_id }}" data-shares="{{ $redemption->request_amount }}" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Accept</button>
+                                        <button class="btn btn-danger btn-block reject-redemption-btn" data-action="reject" data-project-id="{{ $redemption->project_id }}" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Reject</button>
                                     @else
                                         @if (($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE) ||
                                             ($redemption->status_id == \App\RedemptionStatus::STATUS_APPROVED))
                                             @if($redemption->is_money_sent)
                                                 <strong class="text-success"><i class="fa fa-check"> Money Sent</i></strong>
                                             @else
-                                                <button class="btn btn-primary btn-block money_sent" data-redemption-id="{{ $redemption->id }}">Money Sent</button>
+                                                <button class="btn btn-primary btn-block money_sent" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Money Sent</button>
                                             @endif
                                         @endif
                                     @endif
@@ -163,8 +163,8 @@ Projects | Dashboard | @parent
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#requestsTable').DataTable({
-            "iDisplayLength": 10,
-            "order": []
+            "iDisplayLength": 25,
+            "order": [[0, 'desc']]
         });
 
         $('.accept-redemption-btn, .reject-redemption-btn').on('click', function () {

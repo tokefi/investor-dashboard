@@ -153,7 +153,7 @@
 											{{$investment->project->location->postal_code}},
 											{{$investment->project->location->country}}
 										</td>
-										<td>{{$investment->shares}}</td>
+										<td>{{round($investment->shares)}}</td>
 										<td>{{$investment->project->share_per_unit_price}}</td>
 										<td>${{number_format($investment->shares * $investment->project->share_per_unit_price)}}</td>
 										<td>
