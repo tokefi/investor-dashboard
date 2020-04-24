@@ -12,8 +12,8 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <style type="text/css">
-	.dividend-confirm-table td, .repurchase-confirm-table td{ padding: 10px 20px; }
-	.dividend-confirm-table, .repurchase-confirm-table{ margin-left:auto;margin-right:auto; }
+	.dividend-confirm-table td, .repurchase-confirm-table td, .investor-statement-confirm-table td{ padding: 10px 20px; }
+	.dividend-confirm-table, .repurchase-confirm-table, .investor-statement-confirm-table{ margin-left:auto;margin-right:auto; }
 	.success-icon {
 		border: 1px solid;
 		padding: 2px;
@@ -566,10 +566,10 @@
 									<span class="repurchase-statement hide"><small>Repurchase @if($project->share_vs_unit) shares @else units @endif at $<input type="number" name="repurchase_rate" id="repurchase_rate" value="1" step="0.01"> per @if($project->share_vs_unit) share @else unit @endif: <input type="submit" class="btn btn-primary declare-repurchase-btn" value="Declare"></small></span>
 									<input type="hidden" class="investors-list" id="investors_list" name="investors_list">
 								</form>
-								<form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="pull-right">
+								{{-- <form action="{{route('dashboard.investment.statement', [$project->id])}}" method="POST" class="pull-right">
 									{{csrf_field()}}
 									<button type="submit" class="btn btn-default" id="generate_investor_statement"><b>Generate Investor Statement</b></button>
-								</form>
+								</form> --}}
 							</div>
 						</div>
 						<br>
@@ -589,6 +589,7 @@
 										<th>Market value ($)</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
 										<th>Agent name</th>
+										<th>Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -622,7 +623,11 @@
 												@endif
 											</td>
 											<td> 
-												@if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif</td>
+												@if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif
+											</td>
+											<td>
+												<button type="button" class="btn btn-danger btn-sm preview-investor-statement-btn" data-investor-id="{{ $registry->user_id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Statement</button>
+											</td>
 										</tr>
 									@endforeach
 								</tbody>
@@ -950,6 +955,58 @@
 		</div>
 	</div>
 </div>
+
+<!--Investor Statement Modal -->
+<div id="investor_statement_modal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">CONFIRM INVESTOR STATEMENT</h4>
+			</div>
+			<div class="modal-body" style="padding: 15px 30px;">
+				<div class="">
+					<small>** Select dates to search records.</small>
+					<form name="statement_search_form" action="#">
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="statement_start_date"><small>Start date:</small></label>
+									<input type="date" class="form-control input-sm" name="statement_start_date" id="statement_start_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label for="statement_end_date"><small>End date:</small></label>
+									<input type="date" class="form-control input-sm" name="statement_end_date" id="statement_end_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
+								</div>
+							</div>
+						</div>
+						<button class="btn btn-danger search-statement-by-date-btn" type="submit">Search</button>
+					</form>
+				</div>
+				<hr>
+				<h2 class="text-center">TRANSACTIONS</h2><br>
+				<p class="text-center"><strong>OPENING BALANCE: </strong> $ <span id="statement_opening_balance"></span></p><br>
+				<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
+					<!-- Render through JS -->
+				</div>
+				<br>
+				<p class="text-center"><strong>CLOSING BALANCE: </strong> $ <span id="statement_closing_balance"></span></p><br>
+			</div>
+			<div class="modal-footer">
+				<form name="investor_statement" action="#">
+					<input hidden value="" name="start_date" required>
+					<input hidden value="" name="end_date" required>
+					<input hidden value="" name="investor_id" required>
+					<button type="submit" class="btn btn-primary" id="submit_investor_statement">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 @stop
 
 @section('js-section')
@@ -1026,6 +1083,33 @@
 			} else {
 				e.preventDefault();
 			}
+		});
+
+		$('.preview-investor-statement-btn').click(function (e) {
+			let investorId = $(this).attr('data-investor-id');
+			$('form[name=statement_search_form').attr('data-investor-id', investorId);
+			// previewInvestmentInvestorStatement(investorId);
+			$('#investor_statement_modal').modal({
+				keyboard: false,
+				backdrop: 'static'
+			});
+		});
+
+		$('form[name=statement_search_form]').on('submit', function (e) {
+			e.preventDefault();
+			let startDate = ($('#statement_start_date').val() == '') ? null : $('#statement_start_date').val();
+			let endDate = ($('#statement_end_date').val() == '') ? null : $('#statement_end_date').val();
+			let investorId = $(this).attr('data-investor-id');
+			let form = $('form[name=investor_statement]');
+			form.find('input[name=start_date]').val(startDate);
+			form.find('input[name=end_date]').val(endDate);
+			form.find('input[name=investor_id]').val(investorId);
+			previewInvestmentInvestorStatement(investorId, startDate, endDate);
+		});
+
+		$('form[name=investor_statement]').on('submit', function (e) {
+			e.preventDefault();
+			sendInvestorStatement($(this));
 		});
 
 		$('#confirm_and_send_btn').click(function(e){
@@ -1249,7 +1333,63 @@
 			'dateFormat': 'dd/mm/yy'
 		});
         // sendEOIAppFormLink();
+
     });
+
+	function sendInvestorStatement(form) {
+		$('.loader-overlay').show();
+		let investorId = form.find('input[name=investor_id]').val();
+		let projectId = {{ $project->id }};
+		let formData = new FormData(form[0]);
+		$.ajax({
+			url: '/dashboard/projects/' + projectId + '/investor/' + investorId + '/statement/send',
+			type: 'POST',
+			dataType: 'JSON',
+			data: formData,
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+			contentType: false,
+			processData: false
+		}).done(function(data){
+			if (!data.status) {
+				alert (data.message);
+				$('.loader-overlay').hide();
+				return;
+			}
+			alert('Investor statement is sent to investor!');
+			location.reload();
+		});
+	}
+
+	function previewInvestmentInvestorStatement(investor, startDate = null, endDate = null) {
+		$('.loader-overlay').show();
+		let projectId = {{ $project->id }};
+		
+		$.ajax({
+			url: '/dashboard/projects/' + projectId + '/investor/' + investor + '/statement',
+			type: 'POST',
+			dataType: 'JSON',
+			// async: false,
+			data: {
+				start_date: startDate,
+				end_date: endDate
+			},
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			},
+		}).done(function(data){
+			if (!data.status) {
+				alert (data.message);
+				$('.loader-overlay').hide();
+				return;
+			}
+			$('#statement_opening_balance').html(data.data.openingBalance);
+			$('#statement_closing_balance').html(data.data.closingBalance);
+			$('#investor_statement_preview_table').html(data.data.transactionTable);
+			$('.loader-overlay').hide();
+		});
+	}
 
 	// Declare dividend
 	function declareDividend(){

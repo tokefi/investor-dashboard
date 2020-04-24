@@ -298,6 +298,8 @@ Route::post('/dashboard/projects/{project_id}/investment/declareCentsPerShareDiv
 Route::post('/dashboard/projects/{project_id}/investment/declareRepurchase', ['as'=>'dashboard.investment.declareRepurchase', 'uses'=>'DashboardController@declareRepurchase']);
 Route::post('/dashboard/projects/{project_id}/investment/statement', ['as'=>'dashboard.investment.statement', 'uses'=>'DashboardController@investmentStatement']);
 Route::get('/dashboard/projects/{project_id}/investment/statement/send', ['as'=>'dashboard.investment.statement.send', 'uses'=>'DashboardController@sendInvestmentStatement']);
+Route::post('/dashboard/projects/{project_id}/investor/{investor_id}/statement', [ 'as' => 'dashboard.investor.statement', 'uses'=>'DashboardController@investorStatement']);
+Route::post('/dashboard/projects/{project_id}/investor/{investor_id}/statement/send', [ 'as' => 'dashboard.investor.statement.send', 'uses'=>'DashboardController@sendInvestorStatement']);
 
 // Mail
 Route::get('/dashboard/projects/{investment_id}/investors/imgdoc',['as'=>'dashboard.userdoc.upload','uses'=>'DashboardController@newUserDoc']);

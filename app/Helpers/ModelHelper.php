@@ -5,6 +5,8 @@ namespace App\Helpers;
 use App\InvestmentInvestor;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
+use App\Price;
+use Carbon\Carbon;
 
 class ModelHelper
 {
@@ -67,25 +69,42 @@ class ModelHelper
         });
     }
 
-    public static function getTotalInvestmentByUserAndProject($userId, $projectId)
+    public static function getTotalInvestmentByUserAndProject($userId, $projectId, $date = null)
     {
         $investment =  InvestmentInvestor::where('user_id', $userId)
             ->where('project_id', $projectId)
             ->where('project_site', url())
             ->where('accepted', 1)
             ->where('is_cancelled', false)
+            ->where('share_certificate_issued_at', '<=', $date ?? Carbon::now()->toDateString())
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id', 'project_id')
             ->first();
-
-        $redemption = RedemptionRequest::select([\DB::raw("SUM(accepted_amount) as redemptions")])
+        
+        if ($investment) {
+            $redemption = RedemptionRequest::select([\DB::raw("SUM(accepted_amount) as redemptions")])
             ->where('project_id', $investment->project_id)
             ->where('user_id', $investment->user_id)
+            ->whereIn('status_id', [RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE, RedemptionStatus::STATUS_APPROVED])
+            ->where('updated_at', '<=', $date ?? Carbon::now()->toDateString())
             ->first();
-        
-        $investment->shares = $investment->shares - $redemption->redemptions;
 
+            $investment->shares = $investment->shares - ($redemption->redemptions ?? 0);
+            $sharePrice = (new static)->recentSharePrice($investment->project_id, $date);
+            $investment->balance = $investment->shares * ($sharePrice ?? $investment->project->share_per_unit_price);
+        }
+        
         return $investment;
+    }
+
+    public function recentSharePrice($projectId, $date = null)
+    {
+        $price = Price::where('project_id', $projectId)
+            ->where('effective_date', '<=', $date ?? Carbon::now()->toDateString())
+            ->orderBy('effective_date', 'desc')
+            ->first();
+
+        return $price ? $price->price : null;
     }
 }
 

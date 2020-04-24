@@ -634,6 +634,24 @@ class AppMailer
         $this->deliverWithBcc();
     }
 
+    public function sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.investorStatementRecordsToUser';
+        $this->subject = 'Investor statement received for ' . $project->title;
+        $this->data = compact('project', 'user', 'startDate', 'endDate', 'openingBalance', 'closingBalance', 'transactions');
+        $this->deliverWithBcc();
+    }
+
     public function overrideMailerConfig()
     {
         $siteconfig = SiteConfigurationHelper::getConfigurationAttr();

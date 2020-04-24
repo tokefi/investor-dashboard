@@ -2166,4 +2166,106 @@ class DashboardController extends Controller
             'status' => true
         ]);
     }
+
+    public function investorStatement(Request $request, $projectId, $investorId)
+    {
+        $validator = Validator::make($request->all(), [
+            'start_date'    => 'required',
+            'end_date'      => 'required|after:start_date'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $startDate = Carbon::parse($request->start_date)->toDateString();
+        $endDate = Carbon::parse($request->end_date)->toDateString();
+
+        // Get Position records of user for project based on Dates.
+        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
+        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+
+        // Get Transaction records of user for project based on dates 
+        $transactions = Transaction::where('user_id', $investorId)
+            ->where('project_id', $projectId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+
+        $transactionTable = '<table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%">';
+        $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transation type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
+        $transactionTable .= '<tbody>';
+        
+        foreach ($transactions as $key => $transaction) {
+            $numberOfShares = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-';
+            $rate = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-';
+            
+            $transactionTable .= '<tr>
+                    <td>' . $transaction->created_at . '</td>
+                    <td class="text-left">' . $transaction->transaction_type . '</td>
+                    <td>' . $numberOfShares . '</td>
+                    <td>' . $rate . '</td>
+                    <td class="text-right">$ ' . number_format($transaction->amount, 2) . '</td>
+                </tr>';
+        }
+        $transactionTable .= '</tbody></table>';
+
+        if (!$transactions->count()) {
+            $transactionTable .= '<br><div class="alert alert-warning text-center">No records available!</div>';
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'openingBalance' => $openingBalance,
+                'closingBalance' => $closingBalance,
+                'transactionTable' => $transactionTable,
+                'transactions' => $transactions 
+            ]
+        ]);
+    }
+
+    public function sendInvestorStatement(Request $request, AppMailer $mailer, $projectId, $investorId)
+    {
+        $validator = Validator::make($request->all(), [
+            'start_date'    => 'required',
+            'end_date'      => 'required|after:start_date'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $startDate = Carbon::parse($request->start_date)->toDateString();
+        $endDate = Carbon::parse($request->end_date)->toDateString();
+        $project = Project::findOrFail($projectId);
+        $user = User::findOrFail($investorId);
+
+        // Get Position records of user for project based on Dates.
+        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
+        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+
+        // Get Transaction records of user for project based on dates 
+        $transactions = Transaction::where('user_id', $investorId)
+            ->where('project_id', $projectId)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
+
+        // Send email to investor 
+        $mailer->sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'openingBalance' => $openingBalance,
+                'closingBalance' => $closingBalance,
+                'transactions' => $transactions 
+            ]
+        ]);
+    }
 }
