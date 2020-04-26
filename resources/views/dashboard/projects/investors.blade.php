@@ -623,7 +623,8 @@
 												@endif
 											</td>
 											<td> 
-												@if($registry->user->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->user->agent_id }} @else NA @endif
+												@if($registry->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->agent_id }} @else NA @endif
+												{{-- {{ $registry }} --}}
 											</td>
 											<td>
 												<button type="button" class="btn btn-danger btn-sm preview-investor-statement-btn" data-investor-id="{{ $registry->user_id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Statement</button>
