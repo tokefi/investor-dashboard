@@ -164,10 +164,10 @@ Projects | Dashboard | @parent
 	$(document).ready(function(){
 		$('#requestsTable').DataTable({
             "iDisplayLength": 25,
-            "order": [[0, 'desc']]
+            "order": []
         });
 
-        $('.accept-redemption-btn, .reject-redemption-btn').on('click', function () {
+        $('#requestsTable').on('click', '.accept-redemption-btn, .reject-redemption-btn', function () {
             let action = $(this).attr('data-action');
             let shares = $(this).attr('data-shares');
             let redemptionId = $(this).attr('data-redemption-id');
@@ -254,7 +254,7 @@ Projects | Dashboard | @parent
 			});
         });
 
-        $('.money_sent').on('click', function (e) {
+        $('#requestsTable').on('click','.money_sent', function (e) {
             if (!confirm('Are you sure you want to confirm money sent?')) {
 				return;
             }
