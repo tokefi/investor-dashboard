@@ -62,6 +62,7 @@ $_SESSION['code'] = md5(microtime(true));
 
     @section('css-app')
     {!! Html::style('/css/app2.css') !!}
+    {!! Html::style('/css/new-ui.css') !!}
     @show
 
     @yield('css-section')

@@ -1,0 +1,118 @@
+ @font-face{
+	font-family: Roboto;
+	src: url(/fonts/Roboto/Roboto-Regular.ttf);
+}
+@font-face{
+    font-family: Roboto-Light;
+    src: url(/fonts/Roboto/Roboto-Light.ttf);
+}
+@font-face{
+    font-family: Roboto-Thin;
+    src: url(/fonts/Roboto/Roboto-Thin.ttf);
+}
+@font-face{
+    font-family: Roboto-Medium;
+    src: url(/fonts/Roboto/Roboto-Medium.ttf);
+}
+@font-face{
+	font-family: Playfair_Display;
+	src: url(/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
+}
+
+body, .dashboard-sidebar-nav {
+	background-color: #FAFAFA;
+    font-family: Roboto;
+}
+
+#looking-for-fund-section {
+    background-image: url(../../assets/images/new-ui/submit-project-bg.png);
+    background-position: 0 0px;
+    padding-bottom: 144px;
+    background-repeat: no-repeat;
+}
+
+#looking-for-fund-section h1 {
+    line-height: 4.3rem;
+    text-align: center;
+    font-family: Roboto-Light;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+}
+
+.submit-project-btn {
+    border-radius: 6px;
+    background-color: #F3776E;
+    color: #FFF;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    padding: 10px 40px;
+    font-family: Roboto-Light;
+}
+
+.dashboard-sidebar-nav div, .dashboard-sidebar-nav a  {
+ 	border: none;
+ 	background-color: #FAFAFA;
+}
+
+.dashboard-sidebar-nav img {
+	margin-right: 1.1rem;
+    margin-bottom: 0.45rem;
+    max-height: 15px;
+    width: 14px;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+  border-radius: 4px;
+  background-color: #2E48C5;
+}
+
+.dashboard-users-section {
+    height: 100vh;
+}
+
+/* DATATABLEs */
+
+table {
+	background-color: #FFFFFF;
+}
+
+table th {
+	font-weight: 400;
+}
+
+table select, table option {
+    border: none ;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+	padding: 19px;
+}
+
+
+a {
+    font-family: Roboto;
+    color: #888;
+}
+
+.table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+	border: none;
+}
+
+/* FOOTER */
+.footer-links-title {
+    color: #282828;
+    font-size: 1.25em;
+}
+
+footer a {
+    line-height: 2em;
+}
+
+.footer-social-icon img {
+    border-radius: 100px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
