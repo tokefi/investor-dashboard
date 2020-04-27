@@ -588,7 +588,7 @@
 										{{-- <th>Price ($)</th> --}}
 										<th>Market value ($)</th>
 										<th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th>
-										<th>Agent name</th>
+										{{-- <th>Agent name</th> --}}
 										<th>Actions</th>
 									</tr>
 								</thead>
@@ -622,10 +622,7 @@
 												</a>
 												@endif
 											</td>
-											<td> 
-												@if($registry->agent_id) <?php $agent= App\User::find($registry->user->agent_id ); ?>{{ $agent->first_name}} {{ $agent->last_name}} <br> {{ $registry->agent_id }} @else NA @endif
-												{{-- {{ $registry }} --}}
-											</td>
+											{{-- <td></td> --}}
 											<td>
 												<button type="button" class="btn btn-danger btn-sm preview-investor-statement-btn" data-investor-id="{{ $registry->user_id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Statement</button>
 											</td>
