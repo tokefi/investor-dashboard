@@ -647,7 +647,7 @@ class AppMailer
         $this->to = $user->email;
         $this->bcc = $recipients;
         $this->view = 'emails.investorStatementRecordsToUser';
-        $this->subject = 'Investor statement received for ' . $project->title;
+        $this->subject = 'Investor statement for ' . $project->title;
         $this->data = compact('project', 'user', 'startDate', 'endDate', 'openingBalance', 'closingBalance', 'transactions');
         $this->deliverWithBcc();
     }

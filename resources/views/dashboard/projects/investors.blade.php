@@ -984,14 +984,25 @@
 						<button class="btn btn-danger search-statement-by-date-btn" type="submit">Search</button>
 					</form>
 				</div>
-				<hr>
-				<h2 class="text-center">TRANSACTIONS</h2><br>
-				<p class="text-center"><strong>OPENING BALANCE: </strong> $ <span id="statement_opening_balance"></span></p><br>
-				<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
-					<!-- Render through JS -->
+				<div class="hide transactions-section">
+					<hr>
+					<h5 class="text-center opening-balance">
+						<span class="pull-left"><label>OPENING BALANCE: </label> $ <span id="statement_opening_balance"></span></span>
+						<span class=""><label>SHARE PRICE: </label> $ <span id="price"></span></span>
+						<span class="pull-right"><label>NUMBER OF SHARES: </label><span id="numbers"></span></span>
+					</h5>
+					<br>
+					<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
+						<!-- Render through JS -->
+					</div>
+					<br>
+					<h5 class="text-center closing-balance">
+						<span class="pull-left"><label>CLOSING BALANCE: </label> $ <span id="statement_closing_balance"></span></span>
+						<span class=""><label>SHARE PRICE: </label> $ <span id="price"></span></span>
+						<span class="pull-right"><label>NUMBER OF SHARES: </label><span id="numbers"></span></span>
+					</h5>
+					<br>
 				</div>
-				<br>
-				<p class="text-center"><strong>CLOSING BALANCE: </strong> $ <span id="statement_closing_balance"></span></p><br>
 			</div>
 			<div class="modal-footer">
 				<form name="investor_statement" action="#">
@@ -1102,6 +1113,7 @@
 			form.find('input[name=start_date]').val(startDate);
 			form.find('input[name=end_date]').val(endDate);
 			form.find('input[name=investor_id]').val(investorId);
+			$('.transactions-section').removeClass('hide');
 			previewInvestmentInvestorStatement(investorId, startDate, endDate);
 		});
 
@@ -1382,8 +1394,14 @@
 				$('.loader-overlay').hide();
 				return;
 			}
-			$('#statement_opening_balance').html(data.data.openingBalance);
-			$('#statement_closing_balance').html(data.data.closingBalance);
+			let openingInvestment = data.data.openingBalance;
+			let closingInvestment = data.data.closingBalance;
+			$('#statement_opening_balance').html(new Intl.NumberFormat('en-US').format(openingInvestment ? openingInvestment.balance : 0));
+			$('.opening-balance #price').html(openingInvestment ? openingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }});
+			$('.opening-balance #numbers').html(openingInvestment ? openingInvestment.shares : 0);
+			$('#statement_closing_balance').html(new Intl.NumberFormat('en-US').format(closingInvestment.balance));
+			$('.closing-balance #price').html(closingInvestment.balance_price);
+			$('.closing-balance #numbers').html(closingInvestment.shares);
 			$('#investor_statement_preview_table').html(data.data.transactionTable);
 			$('.loader-overlay').hide();
 		});
