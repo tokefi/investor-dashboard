@@ -2259,8 +2259,8 @@ class DashboardController extends Controller
         $endDate = Carbon::parse($request->end_date)->toDateString();
 
         // Get Position records of user for project based on Dates.
-        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
-        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+        $openingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate);
+        $closingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate);
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
@@ -2321,8 +2321,8 @@ class DashboardController extends Controller
         $user = User::findOrFail($investorId);
 
         // Get Position records of user for project based on Dates.
-        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
-        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+        $openingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate);
+        $closingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate);
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)

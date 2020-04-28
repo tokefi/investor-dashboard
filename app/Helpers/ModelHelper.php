@@ -91,7 +91,8 @@ class ModelHelper
 
             $investment->shares = $investment->shares - ($redemption->redemptions ?? 0);
             $sharePrice = (new static)->recentSharePrice($investment->project_id, $date);
-            $investment->balance = $investment->shares * ($sharePrice ?? $investment->project->share_per_unit_price);
+            $investment->balance_price = $sharePrice ?? $investment->project->share_per_unit_price;
+            $investment->balance = $investment->shares * $investment->balance_price;
         }
         
         return $investment;
