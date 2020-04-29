@@ -86,7 +86,7 @@ class ModelHelper
             })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
-            ->whereRaw('DATE(share_certificate_issued_at) <= ?', $date ?? Carbon::now()->toDateString())
+            ->whereRaw('DATE(share_certificate_issued_at) <= ?', [$date ?? Carbon::now()->toDateString()])
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id', 'project_id')
             ->first();
