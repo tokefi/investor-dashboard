@@ -99,7 +99,7 @@
 								<tr>
 									<td>{{$allTransaction->project->title}}</td>
 									{{-- <td class="text-center">@if(! $allTransaction->accepted && $allTransaction->money_received) Applied @elseif($allTransaction->money_received) Money Received @else Share Certificate Issued @endif</td> --}}
-									<td class="text-center">@if($allTransaction->transaction_type == 'BUY' || $allTransaction->transaction_type == 'REPURCHASE'){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == 'DIVIDEND') {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == 'FIXED DIVIDEND')  {{ round($allTransaction->rate ,2) }} % FIXED @elseif($allTransaction->transaction_type) {{ $allTransaction->transaction_type }} @endif @endif</td>
+									<td class="text-center">@if($allTransaction->transaction_type == APP\Transaction::BUY || $allTransaction->transaction_type == APP\Transaction::REPURCHASE || $allTransaction->transaction_type == APP\Transaction::CANCELLED){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == APP\Transaction::DIVIDEND) {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == APP\Transaction::FIXED_DIVIDEND)  {{ round($allTransaction->rate ,2) }} % FIXED DIVIDEND @elseif($allTransaction->transaction_type == APP\Transaction::ANNUALIZED_DIVIDEND) {{ $allTransaction->transaction_description }} @endif @endif</td>
 									<td class="text-center">{{$allTransaction->number_of_shares}}</td>
 									<td>${{number_format($allTransaction->project->share_per_unit_price, 4)}}</td>
 									<td>${{number_format($allTransaction->amount, 2)}} </td>

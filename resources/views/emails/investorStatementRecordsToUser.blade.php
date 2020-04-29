@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Investor Statement Email</title>
 
+  {!! Html::style('/css/bootstrap.min.css') !!}
+
   <style type="text/css">
     p{
       margin:10px 0;
@@ -564,16 +566,20 @@
                                 <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Here is your investor statement for the period of <strong>{{ \Carbon\Carbon::parse($startDate)->format('d-m-Y') }}</strong> and <strong>{{ \Carbon\Carbon::parse($endDate)->format('d-m-Y') }}</strong> for <strong>{{ $project->title }}</strong>.</span><br><br>
                                 <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Transaction details are given below -</span><br><br>
                                 <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
-                                    <strong>Opening Balance: </strong> $ {{ $openingBalance }}
+                                    <strong>Opening balance: </strong> $ {{ number_format($openingBalance->balance ?? 0, 2) }}<br>
+                                    <strong>Share price: </strong> $ {{ $openingBalance->balance_price ?? ($project->prices->first()->price ?? $project->share_per_unit_price) }}<br>
+                                    <strong>Number of shares: </strong> {{ $openingBalance->shares ?? 0 }}
                                 </span><br><br>
-                                <table align="left" border="1" cellpadding="4" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%; margin-bottom:20px;" width="100%" class="mcnTextContentContainer">
-                                    <thead style=" font-size: 13px; text-align: center;"><tr>
-                                        <th>Transaction Date</th>
-                                        <th>Transaction Type</th>
-                                        <th>Number of shares</th>
-                                        <th>Share price</th>
-                                        <th>Cash amount</th>
-                                    </tr></thead>
+                                <table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%" >
+                                    <thead style=" font-size: 13px; text-align: center;">
+                                        <tr style="background: #dcdcdc;">
+                                            <th>Transaction Date</th>
+                                            <th>Transaction Type</th>
+                                            <th>Number of shares</th>
+                                            <th>Share price</th>
+                                            <th>Cash amount</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         @foreach($transactions as $transaction)
                                         <tr>
@@ -588,7 +594,9 @@
                                 </table>
                                 <br><br>
                                 <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
-                                    <strong>Closing Balance: </strong> $ {{ $closingBalance }}<br>
+                                    <strong>Closing balance: </strong> $ {{ number_format($closingBalance->balance, 2) }}<br>
+                                    <strong>Share price: </strong> $ {{ $closingBalance->balance_price }}<br>
+                                    <strong>Number of shares: </strong> {{ $closingBalance->shares }}
                                 </span><br><br>
                                 <span style="color:#000">Regards,</span><br>
                                 <span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-size:16px"><span style="font-family:helvetica; font-weight:bold; line-height:21px">

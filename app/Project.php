@@ -198,7 +198,7 @@ class Project extends Model
     {
         return $this->hasOne('App\MasterChild','child');
     }
-    public function latestPrice()
+    public function prices()
     {
         return $this->hasMany('App\Price');
     }

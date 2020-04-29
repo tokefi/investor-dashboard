@@ -447,7 +447,7 @@ class DashboardController extends Controller
             Transaction::create([
                 'user_id' => $investment->user_id,
                 'project_id' => $investment->project_id,
-                'transaction_type' => 'BUY',
+                'transaction_type' => Transaction::BUY,
                 'transaction_date' => Carbon::now(),
                 'amount' => round($investment->amount,2),
                 'rate' => round($transactionRate,2),
@@ -486,7 +486,7 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $child->user_id,
                         'project_id' => $child->project_id,
-                        'transaction_type' => 'BUY',
+                        'transaction_type' => Transaction::BUY,
                         'transaction_date' => Carbon::now(),
                         'amount' => round($child->amount,2),
                         'rate' => round($transactionRate,2),
@@ -741,7 +741,7 @@ class DashboardController extends Controller
         Transaction::create([
             'user_id' => $investment->user_id,
             'project_id' => $investment->project_id,
-            'transaction_type' => 'CANCELLED',
+            'transaction_type' => Transaction::CANCELLED,
             'transaction_date' => Carbon::now(),
             'amount' => round($investment->amount,2),
             'rate' => round($transactionRate,2),
@@ -800,7 +800,8 @@ class DashboardController extends Controller
                     Transaction::create([
                         'user_id' => $investment->user_id,
                         'project_id' => $investment->project_id,
-                        'transaction_type' => $dividendPercent.'% ANNUALIZED DIVIDEND BETWEEN '.$request->start_date.' and '.$request->end_date,
+                        'transaction_type' => Transaction::ANNUALIZED_DIVIDEND,
+                        'transaction_description' => $dividendPercent.'% ANNUALIZED DIVIDEND BETWEEN '.$request->start_date.' and '.$request->end_date,
                         'transaction_date' => Carbon::now(),
                         'amount' => $dividendAmount,
                         'rate' => $dividendPercent,
@@ -892,7 +893,8 @@ class DashboardController extends Controller
                 Transaction::create([
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
-                    'transaction_type' => 'DIVIDEND',
+                    'transaction_type' => Transaction::DIVIDEND,
+                    'transaction_description'=> 'cents per share',
                     'transaction_date' => Carbon::now(),
                     'amount' => $dividendAmount,
                     'rate' => $dividendPercent,
@@ -995,7 +997,7 @@ class DashboardController extends Controller
                 Transaction::create([
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
-                    'transaction_type' => 'FIXED DIVIDEND',
+                    'transaction_type' => Transaction::FIXED_DIVIDEND,
                     'transaction_date' => Carbon::now(),
                     'amount' => $dividendAmount,
                     'rate' => $dividendPercent,
@@ -2100,7 +2102,7 @@ class DashboardController extends Controller
         Transaction::create([
             'user_id' => $redemption->user_id,
             'project_id' => $redemption->project_id,
-            'transaction_type' => 'REPURCHASE',
+            'transaction_type' => Transaction::REPURCHASE,
             'transaction_date' => Carbon::now(),
             'amount' => $redemption->accepted_amount * $redemption->price,
             'rate' => $redemption->price,
@@ -2150,7 +2152,7 @@ class DashboardController extends Controller
                 Transaction::create([
                     'user_id' => $redemption->user_id,
                     'project_id' => $redemption->project_id,
-                    'transaction_type' => 'REPURCHASE',
+                    'transaction_type' => Transaction::REPURCHASE,
                     'transaction_date' => Carbon::now(),
                     'amount' => $redemption->accepted_amount * $redemption->price,
                     'rate' => $redemption->price,
@@ -2259,8 +2261,8 @@ class DashboardController extends Controller
         $endDate = Carbon::parse($request->end_date)->toDateString();
 
         // Get Position records of user for project based on Dates.
-        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
-        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+        $openingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate);
+        $closingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate);
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
@@ -2321,8 +2323,8 @@ class DashboardController extends Controller
         $user = User::findOrFail($investorId);
 
         // Get Position records of user for project based on Dates.
-        $openingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate))->balance ?? 0, 2);
-        $closingBalance = number_format((ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate))->balance ?? 0, 2);
+        $openingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate);
+        $closingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate);
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
