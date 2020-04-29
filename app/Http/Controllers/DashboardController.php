@@ -2277,10 +2277,11 @@ class DashboardController extends Controller
         foreach ($transactions as $key => $transaction) {
             $numberOfShares = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-';
             $rate = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-';
+            $transactionType = $transaction->transaction_description ?? $transaction->transaction_type;
             
             $transactionTable .= '<tr>
-                    <td>' . $transaction->created_at . '</td>
-                    <td class="text-left">' . $transaction->transaction_type . '</td>
+                    <td>' . Carbon::parse($transaction->created_at)->format('d-m-Y') . '</td>
+                    <td class="text-left">' . $transactionType . '</td>
                     <td>' . $numberOfShares . '</td>
                     <td>' . $rate . '</td>
                     <td class="text-right">$ ' . number_format($transaction->amount, 2) . '</td>

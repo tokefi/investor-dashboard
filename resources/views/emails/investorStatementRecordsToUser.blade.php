@@ -583,8 +583,8 @@
                                     <tbody>
                                         @foreach($transactions as $transaction)
                                         <tr>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$transaction->created_at}}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$transaction->transaction_type}}</span></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{\Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y')}}</span></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$transaction->transaction_description ?? $transaction->type}}</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{(strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-'}}</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{ (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-' }}</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">$ {{ number_format($transaction->amount, 2) }}</span></td>
