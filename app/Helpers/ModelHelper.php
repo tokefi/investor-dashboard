@@ -86,7 +86,7 @@ class ModelHelper
             })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
-            ->where('share_certificate_issued_at', '<=', $date ?? Carbon::now()->toDateString())
+            ->whereRaw('DATE(share_certificate_issued_at) <= ?', $date ?? Carbon::now()->toDateString())
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id', 'project_id')
             ->first();
@@ -111,7 +111,7 @@ class ModelHelper
     public function recentSharePrice($projectId, $date = null)
     {
         $price = Price::where('project_id', $projectId)
-            ->where('effective_date', '<=', $date ?? Carbon::now()->toDateString())
+            ->whereRaw('DATE(effective_date) <= ?', [$date ?? Carbon::now()->toDateString()])
             ->orderBy('effective_date', 'desc')
             ->first();
 

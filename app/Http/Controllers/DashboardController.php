@@ -2267,11 +2267,11 @@ class DashboardController extends Controller
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
             ->where('project_id', $projectId)
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
             ->get();
 
         $transactionTable = '<table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%">';
-        $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transation type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
+        $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transaction type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
         $transactionTable .= '<tbody>';
         
         foreach ($transactions as $key => $transaction) {
@@ -2330,7 +2330,7 @@ class DashboardController extends Controller
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
             ->where('project_id', $projectId)
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
             ->get();
 
         // Send email to investor 
