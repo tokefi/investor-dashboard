@@ -13,6 +13,9 @@ class ModelHelper
     public static function getTotalInvestmentByProject($projectId)
     {
         $investment = InvestmentInvestor::where('project_id', $projectId)
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
@@ -33,6 +36,9 @@ class ModelHelper
     {
         $investment = InvestmentInvestor::whereIn('user_id', $users)
             ->where('project_id', $projectId)
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
@@ -52,7 +58,9 @@ class ModelHelper
     public static function getTotalInvestmentByUser($userId)
     {
         $investment =  InvestmentInvestor::where('user_id', $userId)
-            ->where('project_site', url())
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
@@ -73,7 +81,9 @@ class ModelHelper
     {
         $investment =  InvestmentInvestor::where('user_id', $userId)
             ->where('project_id', $projectId)
-            ->where('project_site', url())
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
             ->where('accepted', 1)
             ->where('is_cancelled', false)
             ->where('share_certificate_issued_at', '<=', $date ?? Carbon::now()->toDateString())

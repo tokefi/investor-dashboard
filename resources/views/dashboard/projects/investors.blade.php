@@ -1397,11 +1397,11 @@
 			let openingInvestment = data.data.openingBalance;
 			let closingInvestment = data.data.closingBalance;
 			$('#statement_opening_balance').html(new Intl.NumberFormat('en-US').format(openingInvestment ? openingInvestment.balance : 0));
-			$('.opening-balance #price').html(openingInvestment ? openingInvestment.balance_price.toFixed(4) : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}.toFixed(4));
+			$('.opening-balance #price').html(parseFloat(openingInvestment ? openingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}).toFixed(4));
 			$('.opening-balance #numbers').html(openingInvestment ? openingInvestment.shares : 0);
-			$('#statement_closing_balance').html(new Intl.NumberFormat('en-US').format(closingInvestment.balance));
-			$('.closing-balance #price').html(closingInvestment.balance_price);
-			$('.closing-balance #numbers').html(closingInvestment.shares);
+			$('#statement_closing_balance').html(new Intl.NumberFormat('en-US').format(closingInvestment ? closingInvestment.balance : 0));
+			$('.closing-balance #price').html(parseFloat(closingInvestment ? closingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}).toFixed(4));
+			$('.closing-balance #numbers').html(closingInvestment ? closingInvestment.shares : 0);
 			$('#investor_statement_preview_table').html(data.data.transactionTable);
 			$('.loader-overlay').hide();
 		});
