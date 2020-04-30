@@ -444,7 +444,7 @@ class DashboardController extends Controller
              // Save details to transaction table
             $noOfShares = $shareEnd-$shareInit;
             $transactionRate = $investment->amount/$noOfShares;
-            Transaction::create([
+            $masterTransaction = Transaction::create([
                 'user_id' => $investment->user_id,
                 'project_id' => $investment->project_id,
                 'transaction_type' => Transaction::BUY,
@@ -483,7 +483,7 @@ class DashboardController extends Controller
                     $child->save();
                     $noOfShares = $shareEnd-$shareInit;
                     $transactionRate = $child->amount/$noOfShares;
-                    Transaction::create([
+                    $childTransaction = Transaction::create([
                         'user_id' => $child->user_id,
                         'project_id' => $child->project_id,
                         'transaction_type' => Transaction::BUY,
@@ -492,7 +492,11 @@ class DashboardController extends Controller
                         'rate' => round($transactionRate,2),
                         'number_of_shares' => $noOfShares,
                     ]);
+                    $childTransaction->transaction_description = 'Child Application';
+                    $childTransaction->save();
                 }
+                $masterTransaction->transaction_description = 'Master Application';
+                $masterTransaction->save();
             }
             // dd($investment);
 
