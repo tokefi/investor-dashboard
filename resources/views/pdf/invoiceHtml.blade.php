@@ -10,6 +10,59 @@
 	{!! Html::style('/css/bootstrap.min.css') !!}
 </head>
 <body>
+	@if($investment->project->master_child )
+	<div class="container">
+		@if( isset($source))
+		<h3 class="text-center">Transaction Table</h3>
+		<div class="">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center">Projects</th>
+						<th class="text-center">Transaction Type</th>
+						<th class="text-center">Number of Shares</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="text-center">{{App\InvestmentInvestor::find($investment_id)->project->title}}</td>
+						<td class="text-center">BUY</td>
+						<td class="text-center"> {{ App\InvestmentInvestor::find($investment_id)->amount }}
+						</td>
+					</tr>
+					@foreach(App\InvestmentInvestor::where('master_investment',$investment_id)->get() as $child)
+					<tr>
+						<td class="text-center">{{ $child->project->title }}</td>
+						<td class="text-center">BUY</td>
+						<td class="text-center">{{ $child->amount }}</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		@endif
+		<h3 class="text-center">Allocation Table</h3>
+		<div class="">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th class="text-center">Projects</th>
+						<th class="text-center">Allocation</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($investment->project->children as $child)
+					<tr>
+						<td class="text-center">{{App\Project::find($child->child)->title}}</td>
+						<td class="text-center">{{$child->allocation}} %
+						</td>
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+	@endif
 	@if($investment->project->projectspvdetail)
 	@if($investment->project->projectspvdetail->certificate_frame)
 	<div style="background:url('/assets/images/certificate_frames/{{$investment->project->projectspvdetail->certificate_frame}}');background-position: top center;background-repeat: no-repeat;background-size: 85% 90%;width:100%;height:100%;padding-bottom: 7%;">
@@ -111,7 +164,7 @@
 							Date: {{ $cInvestment->share_certificate_issued_at->toFormattedDateString()}}
 							<br><br>
 							<p>
-								This is to certify @if($cInvestment->investing_as=='Individual Investor'){{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}}@elseif($cInvestment->investing_as == 'Joint Investor'){{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}} and {{$investing->joint_investor_first_name}} {{$investing->joint_investor_last_name}}@elseif($cInvestment->investing_as=='Trust or Company'){{$investing->investing_company}}@else{{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}}@endif @if($cInvestment->user->line_1) of {{$cInvestment->user->line_1}}, @if($cInvestment->user->line_2 != '') {{$cInvestment->user->line_2}}, @endif {{$cInvestment->user->city}}, {{$cInvestment->user->state}}, {{$cInvestment->user->postal_code}}@endif owns {{ round($cInvestment->amount)}} @if($cInvestment->project->share_vs_unit == 1) redeemable preference shares @elseif($cInvestment->project->share_vs_unit == 2) Preference Shares @elseif($cInvestment->project->share_vs_unit == 3) Ordinary shares @else units @endif of @if($cInvestment->project->projectspvdetail){{$cInvestment->project->projectspvdetail->spv_name}}@else Estate Baron @endif at ${{  $cInvestment->project->share_per_unit_price }} @if($investment->project->share_vs_unit) per share. @else per unit. @endif
+								This is to certify @if($cInvestment->investing_as=='Individual Investor'){{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}}@elseif($cInvestment->investing_as == 'Joint Investor'){{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}} and {{$investing->joint_investor_first_name}} {{$investing->joint_investor_last_name}}@elseif($cInvestment->investing_as=='Trust or Company'){{$investing->investing_company}}@else{{$cInvestment->user->first_name}} {{$cInvestment->user->last_name}}@endif @if($cInvestment->user->line_1) of {{$cInvestment->user->line_1}}, @if($cInvestment->user->line_2 != '') {{$cInvestment->user->line_2}}, @endif {{$cInvestment->user->city}}, {{$cInvestment->user->state}}, {{$cInvestment->user->postal_code}}@endif owns {{ app\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($cInvestment->user->id, $cInvestment->project->id)->shares}} @if($cInvestment->project->share_vs_unit == 1) redeemable preference shares @elseif($cInvestment->project->share_vs_unit == 2) Preference Shares @elseif($cInvestment->project->share_vs_unit == 3) Ordinary shares @else units @endif of @if($cInvestment->project->projectspvdetail){{$cInvestment->project->projectspvdetail->spv_name}}@else Estate Baron @endif at ${{  $cInvestment->project->share_per_unit_price }} @if($investment->project->share_vs_unit) per share. @else per unit. @endif
 							</p>
 							<br><br>
 							@if($cInvestment->project->media->where('type', 'spv_md_sign_image')->first())
@@ -138,28 +191,7 @@
 						</div>
 					</div>
 					@endforeach
-					<div class="container">
-						<h3 class="text-center">Allocation Table</h3>
-						<div class="">
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th class="text-center">Projects</th>
-										<th class="text-center">Allocation</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach($investment->project->children as $child)
-									<tr>
-										<td class="text-center">{{App\Project::find($child->child)->title}}</td>
-										<td class="text-center">{{$child->allocation}} %
-										</td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
+					
 					<br><br><br>
 					@endif
 				</body>

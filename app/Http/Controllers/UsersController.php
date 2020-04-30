@@ -507,7 +507,7 @@ class UsersController extends Controller
      * render share certificateof the user
      * @param  InvestmentInvestor $investment_id
      */
-    public function viewShareCertificate($investment_id)
+    public function viewShareCertificate(Request $request,$investment_id)
     {
         $investment_id = base64_decode($investment_id);
         $color = Color::where('project_site',url())->first();
@@ -525,6 +525,11 @@ class UsersController extends Controller
         $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
+        // dd($request->source);
+        if($request->source == 'mail'){
+            $source = $request->source;
+            return view('pdf.invoiceHtml',compact('investment','color','user','project','investing','source','investment_id'));  
+        }
         return view('pdf.invoiceHtml',compact('investment','color','user','project','investing'));
         // $pdf->setPaper('a4', 'landscape');
         // $pdf->setOptions(['Content-Type' => 'application/pdf','images' => true]);
