@@ -2267,20 +2267,21 @@ class DashboardController extends Controller
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
             ->where('project_id', $projectId)
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
             ->get();
 
         $transactionTable = '<table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%">';
-        $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transation type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
+        $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transaction type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
         $transactionTable .= '<tbody>';
         
         foreach ($transactions as $key => $transaction) {
             $numberOfShares = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-';
             $rate = (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-';
+            $transactionType = $transaction->transaction_description ?? $transaction->transaction_type;
             
             $transactionTable .= '<tr>
-                    <td>' . $transaction->created_at . '</td>
-                    <td class="text-left">' . $transaction->transaction_type . '</td>
+                    <td>' . Carbon::parse($transaction->created_at)->format('d-m-Y') . '</td>
+                    <td class="text-left">' . $transactionType . '</td>
                     <td>' . $numberOfShares . '</td>
                     <td>' . $rate . '</td>
                     <td class="text-right">$ ' . number_format($transaction->amount, 2) . '</td>
@@ -2329,7 +2330,7 @@ class DashboardController extends Controller
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
             ->where('project_id', $projectId)
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
             ->get();
 
         // Send email to investor 

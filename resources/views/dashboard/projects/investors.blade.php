@@ -987,9 +987,9 @@
 				<div class="hide transactions-section">
 					<hr>
 					<h5 class="text-center opening-balance">
-						<span class="pull-left"><label>OPENING BALANCE: </label> $ <span id="statement_opening_balance"></span></span>
-						<span class=""><label>SHARE PRICE: </label> $ <span id="price"></span></span>
-						<span class="pull-right"><label>NUMBER OF SHARES: </label><span id="numbers"></span></span>
+						<span class="pull-left"><label>OPENING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_opening_balance"></span></span>
+						<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
+						<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
 					</h5>
 					<br>
 					<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
@@ -997,9 +997,9 @@
 					</div>
 					<br>
 					<h5 class="text-center closing-balance">
-						<span class="pull-left"><label>CLOSING BALANCE: </label> $ <span id="statement_closing_balance"></span></span>
-						<span class=""><label>SHARE PRICE: </label> $ <span id="price"></span></span>
-						<span class="pull-right"><label>NUMBER OF SHARES: </label><span id="numbers"></span></span>
+						<span class="pull-left"><label>CLOSING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_closing_balance"></span></span>
+						<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
+						<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
 					</h5>
 					<br>
 				</div>
@@ -1397,11 +1397,11 @@
 			let openingInvestment = data.data.openingBalance;
 			let closingInvestment = data.data.closingBalance;
 			$('#statement_opening_balance').html(new Intl.NumberFormat('en-US').format(openingInvestment ? openingInvestment.balance : 0));
-			$('.opening-balance #price').html(openingInvestment ? openingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }});
+			$('.opening-balance #price').html(parseFloat(openingInvestment ? openingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}).toFixed(4));
 			$('.opening-balance #numbers').html(openingInvestment ? openingInvestment.shares : 0);
-			$('#statement_closing_balance').html(new Intl.NumberFormat('en-US').format(closingInvestment.balance));
-			$('.closing-balance #price').html(closingInvestment.balance_price);
-			$('.closing-balance #numbers').html(closingInvestment.shares);
+			$('#statement_closing_balance').html(new Intl.NumberFormat('en-US').format(closingInvestment ? closingInvestment.balance : 0));
+			$('.closing-balance #price').html(parseFloat(closingInvestment ? closingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}).toFixed(4));
+			$('.closing-balance #numbers').html(closingInvestment ? closingInvestment.shares : 0);
 			$('#investor_statement_preview_table').html(data.data.transactionTable);
 			$('.loader-overlay').hide();
 		});
