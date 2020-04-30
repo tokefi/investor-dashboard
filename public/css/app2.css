@@ -15,9 +15,33 @@
 	font-family: SourceSansPro-Regular;
 	src: url(/SourceSansPro-Regular.ttf);
 }
+ @font-face{
+	font-family: Roboto;
+	src: url(/fonts/Roboto/Roboto-Regular.ttf);
+}
+@font-face{
+    font-family: Roboto-Light;
+    src: url(/fonts/Roboto/Roboto-Light.ttf);
+}
+@font-face{
+    font-family: Roboto-Thin;
+    src: url(/fonts/Roboto/Roboto-Thin.ttf);
+}
+@font-face{
+    font-family: Roboto-Medium;
+    src: url(/fonts/Roboto/Roboto-Medium.ttf);
+}
+@font-face{
+    font-family: Roboto-Bold;
+    src: url(/fonts/Roboto/Roboto-Bold.ttf);
+}
+@font-face{
+	font-family: Playfair_Display;
+	src: url(/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
+}
 body {
 	color: #282a73;
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto, SourceSansPro-Regular;
 	font-size: 16px;
 	/*font-weight:100;*/
 	/*letter-spacing: 0.1px;*/
@@ -27,33 +51,33 @@ body {
 	-webkit-appearance: none;
 }
 .font-bold{
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold, SourceSansPro-Bold;
 }
 .font-semibold{
-	font-family: SourceSansPro-Semibold;
+	font-family: Roboto, SourceSansPro-Semibold;
 }
 .h1-faq{
-	font-family: SourceSansPro-Light;
+	font-family: Roboto-Light;
 }
 .font-regular{
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto, SourceSansPro-Regular;
 }
 a{
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold, SourceSansPro-Bold;
 }
 p{
 	/*color: #2d2a6e;*/
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto, SourceSansPro-Regular;
 }
 h1, h2, h3, h4 {
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold, SourceSansPro-Bold;
 	-webkit-font-smoothing: antialiased;
 	color: #282a73;
 	/*letter-spacing: 1px;*/
 	/*line-height: 1.2;*/
 }
 h1>small, h2>small, h3>small, h4>small {
-	font-family: SourceSansPro-Light;
+	font-family: Roboto-Light;
 	-webkit-font-smoothing: antialiased;
 	/*font-weight:100 !important;*/
 	color: #282a73;
@@ -111,14 +135,14 @@ dd, dt {
 }
 /*.btn-primary.active, .btn-primary:active, .open > .dropdown-toggle.btn-primary*/
 .btn-n2:active,.btn-n2.active{
-	background-color: #2c254a
+	background-color: #282a73
 }
 .navbar-default {
 	background-color: #fff;
-	/*border-color: #2c254a;*/
+	/*border-color: #282a73;*/
 }
 .navbar{
-	background-color: #2c254a;
+	background-color: #282a73;
 }
 .navbar-default .navbar-nav>li>a{
 	color: #ffffff;
@@ -146,7 +170,7 @@ dd, dt {
 }
 .fa-stack:hover  .fa.fa-circle { color: #efe92f; }
 #footer {
-	background-color:#2d2d4b;
+	background-color:#182A5F;
 	color:#fff;
 }
 
@@ -402,7 +426,7 @@ a:hover {
 }
 .list-group-item {
 	font-size: 16;
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto, SourceSansPro-Regular;
 }
 
 .pallet-row-left .color-pallet-left:last-child {
@@ -481,7 +505,7 @@ input[type="radio"] {
 	.navbar {
 		font-size: 13px;
 		position: static;
-		background-color: #2c254a;
+		background-color: #282a73;
 		margin-bottom: 0px;
 	}
 	.header .main-nav .nav .nav-item a{
@@ -501,7 +525,7 @@ input[type="radio"] {
 	}
 	.navbar{
 		position: static;
-		background-color: #2c254a;
+		background-color: #282a73;
 		margin-bottom: 0px;
 	}
 	.header .main-nav .nav .nav-item a{

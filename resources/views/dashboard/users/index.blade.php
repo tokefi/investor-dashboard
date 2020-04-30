@@ -12,10 +12,10 @@ Users | Dashboard | @parent
 <div class="container dashboard-users-section">
 	<br>
 	<div class="row">
-		<div class="col-md-2">
+		{{-- <div class="col-md-2">
 			@include('dashboard.includes.sidebar', ['active'=>2])
-		</div>
-		<div class="col-md-10">
+		</div> --}}
+		<div class="col-md-12">
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif
@@ -28,13 +28,13 @@ Users | Dashboard | @parent
 						</div>
 						<div class="col-sm-4 col-sm-offset-2">
 							<div class="input-group">
-								<input type="text" placeholder="Search by name, email address, or phone number" name="search" id="search"
+								<input type="text" placeholder="Search by name, email, or phone number" name="search" id="search"
 									   class="form-control"
 									   value="{{ request('search') }}"
-									   title="Search on name, email and phone number.">
+									   title="Search by name, email and phone number.">
 								<div class="input-group-btn">
 									<button class="btn btn-primary form-control" type="submit">
-										<i class="glyphicon glyphicon-search"></i>
+										<i class="fa fa-search"></i>
 									</button>
 								</div>
 							</div>
@@ -43,7 +43,7 @@ Users | Dashboard | @parent
 					<div>{!! $users->total() !!} users</div>
 				</form>
 				<br>
-				<table class="table table-bordered" id="usersTable">
+				<table class="table table-bordered table-padding table-striped" id="usersTable">
 					<thead>
 					<tr>
 						<th>
@@ -98,7 +98,7 @@ Users | Dashboard | @parent
 								<div id="btn_{{$user->id}}"></div>
 								{{-- <a class="btn btn-primary" style="width: 10em;" href="{{route('projects.interest', [1])}}?user_id={{$user->id}}">Next >></a> --}}
 							</td>
-							<td> <div> + Add Notes </div>
+							<td>
 								<?php
 								$note=$user->notes->last();
 								$note_content = null;
@@ -107,7 +107,7 @@ Users | Dashboard | @parent
 								}
 								?>
 								{!! Form::open(array('route'=>'notes.store', 'class'=>'form-horizontal', 'role'=>'form')) !!}
-								{!! Form::textarea('content', $note_content, array('placeholder'=>'note', 'class'=>'form-control note-content hide', 'rows'=>'3')) !!}
+								{!! Form::textarea('content', $note_content, array('placeholder'=>'note', 'class'=>'form-control note-content', 'rows'=>'3')) !!}
 								{!! Form::hidden('user_id', $user->id) !!}
 								{!! Form::close() !!}
 							</td>
@@ -128,14 +128,14 @@ Users | Dashboard | @parent
 		</div>
 	</div>
 </div>
-<div class="container-fluid" id="looking-for-fund-section">
+{{-- <div class="container-fluid" id="looking-for-fund-section">
 	<div class="row text-center" style="margin-top: 7em;">
 		<div class="col-md-12">
 			<h1>Are you a property developer <br> looking for funding?</h1><br>
 		</div>
 		<a href="#" class="btn submit-project-btn">Submit Project</a>
 	</div>
-</div>
+</div> --}}
 @stop
 
 @section('js-section')

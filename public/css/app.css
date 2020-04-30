@@ -17,10 +17,35 @@
 	font-family: SourceSansPro-Regular;
 	src: url(/SourceSansPro-Regular.ttf);
 }
+ @font-face{
+	font-family: Roboto;
+	src: url(/fonts/Roboto/Roboto-Regular.ttf);
+}
+@font-face{
+    font-family: Roboto-Light;
+    src: url(/fonts/Roboto/Roboto-Light.ttf);
+}
+@font-face{
+    font-family: Roboto-Thin;
+    src: url(/fonts/Roboto/Roboto-Thin.ttf);
+}
+@font-face{
+    font-family: Roboto-Medium;
+    src: url(/fonts/Roboto/Roboto-Medium.ttf);
+}
+@font-face{
+    font-family: Roboto-Bold;
+    src: url(/fonts/Roboto/Roboto-Bold.ttf);
+}
+@font-face{
+	font-family: Playfair_Display;
+	src: url(/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
+}
 body {
 	color: #282a73;
-	font-family: SourceSansPro-Regular;
-	font-size: 16px;
+	/*font-family: SourceSansPro-Regular;*/
+	font-family: Roboto;
+	font-size: 15px;
 	/*font-weight:100;*/
 	/*letter-spacing: 0.1px;*/
 }
@@ -28,36 +53,36 @@ body {
 	border-radius: 0px;
 }
 .heading-font-light{
-	font-family: SourceSansPro-Light;
+	font-family: Roboto-Light;
 }
 .font-semibold{
-	font-family: SourceSansPro-Semibold;
+	font-family: Roboto;
 }
 .h1-faq{
-	font-family: SourceSansPro-Light;
+	font-family: Roboto-Light;
 }
 .font-regular{
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto;
 }
 .font-bold{
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold;
 }
 a{
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold;
 }
 p{
 	/*color: #2d2a6e;*/
-	font-family: SourceSansPro-Regular;
+	font-family: Roboto, SourceSansPro-Regular;
 }
 h1, h2, h3, h4 {
-	font-family: SourceSansPro-Bold;
+	font-family: Roboto-Bold, SourceSansPro-Bold;
 	-webkit-font-smoothing: antialiased;
 	color: #282a73;
 	/*letter-spacing: 1px;*/
 	/*line-height: 1.2;*/
 }
 h1>small, h2>small, h3>small, h4>small {
-	font-family: SourceSansPro-Light;
+	font-family: Roboto-Light, SourceSansPro-Light;
 	-webkit-font-smoothing: antialiased;
 	/*font-weight:100 !important;*/
 	color: #282a73;
@@ -219,7 +244,7 @@ h1>small>small,h2>small>small,h3>small>small,h4>small>small{
 }
 
 #footer {
-	background-color:#2d2d4b;
+	background-color:#182A5F;
 }
 a{
 	color:#fff;
@@ -601,7 +626,7 @@ a:hover {
 	.navbar {
 		font-size: 16px;
 		position: fixed;
-		background-color: #2c254a;
+		background-color: #282a73;
 		margin-bottom: 0px;
 	}
 	.nav>li>a{
@@ -642,7 +667,7 @@ a:hover {
 	.navbar {
 		font-size: 13px;
 		position: static;
-		background-color: #2c254a;
+		background-color: #282a73;
 		margin-bottom: 0px;
 	}
 	.header .main-nav .nav .nav-item a{
@@ -674,7 +699,7 @@ a:hover {
 	}
 	.navbar{
 		position: fixed;
-		background-color: #2c254a;
+		background-color: #282a73;
 		margin-bottom: 0px;
 	}
 	.header .main-nav .nav .nav-item a{
@@ -821,7 +846,7 @@ a:hover {
 		}
 
 		.navbar.navbar-fixed-top.fixed-theme {
-			background-color: #2c254a;
+			background-color: #282a73;
 			/*border-color: #080808;*/
 			box-shadow: 0 0 5px rgba(0,0,0,.8);
 		}

@@ -77,7 +77,12 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
-		var usersTable = $('#notificationTable').DataTable();
+		var usersTable = $('#notificationTable').DataTable({
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
+		});
 	});
 </script>
 @stop

@@ -20,10 +20,10 @@ Projects | Dashboard | @parent
 			{!! Session::get('message') !!}
 			@endif
 			<div class="table-responsive">
-				<table class="table table-bordered table-striped" id="projectsTable">
+				<table class="table table-bordered table-striped table-padding" id="projectsTable">
 					<thead>
 						<tr>
-							<th></th>
+							<th>#</th>
 							<th>Title</th>
 							<th>Description</th>
 							<th>Active</th>
@@ -34,7 +34,7 @@ Projects | Dashboard | @parent
 					<tbody>
 						@foreach($projects as $project)
 						<tr class="@if(!$project->active) inactive @endif">
-							<td>{{$project->id}}</td>
+							<td class="dt-first-column">{{$project->id}}</td>
 							<td>
 								<a href="{{route('dashboard.projects.edit', [$project])}}">{{$project->title}}</a><br><br>
 								<a href="{{route('dashboard.projects.investors', [$project])}}">Investors <i class="fa fa-angle-double-right"></i></a>
@@ -47,7 +47,7 @@ Projects | Dashboard | @parent
 								<time datetime="{{$project->activated_on}}">
 									{{$project->activated_on->diffForHumans()}}
 								</time>
-								<br><a href="{{route('dashboard.projects.deactivate', [$project])}}">Deactivate</a>
+								<br><br><a href="{{route('dashboard.projects.deactivate', [$project])}}" class="deactivate-link">Deactivate</a>
 								@elseif($project->activated_on && $project->active == '2') Private
 								@elseif($project->activated_on && $project->active == '0') Deactivate <br> <a href="{{route('dashboard.projects.activate', [$project])}}"> Activate </a>
 								@else($project->active == '0') Submitted <br> <a href="{{route('dashboard.projects.activate', [$project])}}">Activate</a>
@@ -76,7 +76,11 @@ Projects | Dashboard | @parent
 			$(this).text($(this).text().substring(0,50));
 		});
 		var projectsTable = $('#projectsTable').DataTable({
-			"iDisplayLength": 10
+			"iDisplayLength": 10,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			  }
 		});
 		// $('.description').text(desc.substring(0,50));
 	});

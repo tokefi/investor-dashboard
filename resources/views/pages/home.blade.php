@@ -123,7 +123,7 @@
 		}
 		.dashboard-submenu {
             width: 240px;
-            font-size: 16px;
+            font-size: 15px;
         }
         .dashboard-submenu li a {
             padding-top: 12px;

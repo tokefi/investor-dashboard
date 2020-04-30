@@ -32,7 +32,7 @@
 				</li>
 			</ul> --}}
 			{{-- <h3 class="text-center">My Investments</h3> --}}
-			<ul class="nav nav-tabs" style="margin-top:1em; width: 100%;">
+			<ul class="nav nav-tabs" style="width: 100%;">
 				<li class="" style="width: 25%;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
 				<li class="active" style="width: 25%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
 				<li style="width: 25%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
@@ -41,7 +41,7 @@
 
 			<div class="tab-content">
 				<div id="application_tab" class="tab-pane fade" style="overflow: auto;">
-					<br><br>
+					<br>
 					<div class="table-responsive text-center">
 						<table class="table table-bordered table-striped text-center" id="applicationsTable">
 							<thead>
@@ -76,7 +76,7 @@
 				</div>
 
 				<div id="transactions_tab" class="tab-pane fade in active" style="overflow: auto;">
-					<br><br>
+					<br>
 					<div class="table-responsive text-center">
 						<table class="table table-bordered table-striped text-center" id="transactionsTable">
 							<thead>
@@ -125,7 +125,8 @@
 					</div>
 				</div>
 
-				<div id="positions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
+				<div id="positions_tab" class="tab-pane fade" style="overflow: auto;">
+					<br>
 					<div>
 						<div class="table-responsive text-center">
 							<table class="table table-bordered table-striped" id="positionsTable">
@@ -192,7 +193,7 @@
 				</div>
 
 				<div id="Redemption_tab" class="tab-pane fade" style="overflow: auto;">
-					<br><br>
+					<br>
 					<div class="table-responsive text-center">
 						<table class="table table-bordered table-striped" id="redemptionsTable">
 							<thead>
@@ -293,19 +294,35 @@
 	$(document).ready(function(){
 		var transactionsTable = $('#transactionsTable').DataTable({
 			"order": [],
-			"iDisplayLength": 50
+			"iDisplayLength": 50,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 		var positionsTable = $('#positionsTable').DataTable({
 			"order": [],
-			"iDisplayLength": 50
+			"iDisplayLength": 50,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 		var applicationsTable = $('#applicationsTable').DataTable({
 			"order": [],
-			"iDisplayLength": 50
+			"iDisplayLength": 50,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 		var redemptionsTable = $('#redemptionsTable').DataTable({
 			"order": [],
-			"iDisplayLength": 50
+			"iDisplayLength": 50,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 
 		$('.rollover-switch').on('change', function (e) {

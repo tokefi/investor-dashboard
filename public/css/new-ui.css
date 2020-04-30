@@ -15,16 +15,24 @@
     src: url(/fonts/Roboto/Roboto-Medium.ttf);
 }
 @font-face{
+    font-family: Roboto-Bold;
+    src: url(/fonts/Roboto/Roboto-Bold.ttf);
+}
+@font-face{
 	font-family: Playfair_Display;
 	src: url(/fonts/Playfair_Display/PlayfairDisplay-Regular.ttf);
 }
 
-body, .dashboard-sidebar-nav {
+body, .sidebar-nav {
 	background-color: #FAFAFA;
     font-family: Roboto;
 }
 
-#looking-for-fund-section {
+h3 {
+    font-family: Roboto-Medium;
+}
+
+/*#looking-for-fund-section {
     background-image: url(../../assets/images/new-ui/submit-project-bg.png);
     background-position: 0 0px;
     padding-bottom: 144px;
@@ -37,7 +45,7 @@ body, .dashboard-sidebar-nav {
     font-family: Roboto-Light;
     color: #FFFFFF;
     letter-spacing: 1px;
-}
+}*/
 
 .submit-project-btn {
     border-radius: 6px;
@@ -50,16 +58,16 @@ body, .dashboard-sidebar-nav {
     font-family: Roboto-Light;
 }
 
-.dashboard-sidebar-nav div, .dashboard-sidebar-nav a  {
+.sidebar-nav div, .sidebar-nav a  {
  	border: none;
  	background-color: #FAFAFA;
 }
 
-.dashboard-sidebar-nav img {
-	margin-right: 1.1rem;
+.sidebar-nav i {
+	margin-right: 1.15rem;
     margin-bottom: 0.45rem;
-    max-height: 15px;
-    width: 14px;
+    max-height: 16px;
+    width: 15px;
 }
 
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
@@ -87,32 +95,66 @@ table select, table option {
     box-shadow: none;
 }
 
-.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+table tr, table th {
+    border-bottom: 1px solid #ddd !important;
+    border-collapse: collapse !important;
+}
+
+.table-padding>tbody>tr>td, .table-padding>tbody>tr>th, .table-padding>tfoot>tr>td, .table-padding>tfoot>tr>th, .table-padding>thead>tr>td, .table-padding>thead>tr>th {
 	padding: 19px;
 }
 
-
-a {
-    font-family: Roboto;
+table th {
     color: #888;
+    font-weight: 400 !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #ddd !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #efefef;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    width: 240px;
+    font-weight: 400;
+    margin-bottom: 15px;
+    margin-left: 0px !important;
+    display: block;
+    width: 100%;
+    height: 38px;
+    padding: 6px 12px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.dataTables_length label {
+    font-weight: 400 !important;
+}
+
+.dt-first-column {
+    text-align: center;
+}
+
+.deactivate-link {
+    color: #F36767 !important;
 }
 
 .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
 	border: none;
 }
 
-/* FOOTER */
-.footer-links-title {
-    color: #282828;
-    font-size: 1.25em;
-}
 
-footer a {
-    line-height: 2em;
-}
-
-.footer-social-icon img {
-    border-radius: 100px;
-    margin-top: 10px;
-    margin-right: 10px;
+a {
+    font-family: Roboto;
+    color: #888;
 }

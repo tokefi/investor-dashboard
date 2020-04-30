@@ -136,9 +136,9 @@ $_SESSION['code'] = md5(microtime(true));
             text-decoration: underline !important;
         }
 
-        .dropdown-menu>li>a {
+        /*.dropdown-menu>li>a {
             padding: 12px 20px;
-        }
+        }*/
 
         /** dropdown sub-menu */
         .dropdown-submenu:hover>.dropdown-menu {
@@ -150,20 +150,19 @@ $_SESSION['code'] = md5(microtime(true));
         }
         .dashboard-submenu {
             width: 240px;
-            margin-top: 0;
-            font-size: 16px;
+            font-size: 15px;
         }
         .dashboard-submenu li a {
             padding-top: 12px;
             padding-bottom: 12px;
         }
-        .submenu-item {
-            font-size: 1em;
-        }
+        /*.submenu-item {
+            font-size: 0.9em;
+        }*/
 
         @media (min-width: 768px) {
 			.dashboard-submenu {
-				margin-top: -36px;
+				margin-top: -44px;
     			left: -237px !important;
 			}
 		}
@@ -246,58 +245,64 @@ $_SESSION['code'] = md5(microtime(true));
                     <li class="nav-item"><a href="{{route('users.create')}}">Register</a></li>
                     <li class="nav-item"><a href="{{route('users.login')}}">Sign in</a></li>
                     @else
-                    <li class="dropdown nav-item last">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            My Account <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || Auth::user()->roles->contains('role', 'agent'))
-                            <li class="dropdown-submenu">
-                                <a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:5px 17px;">Dashboard <span class="caret"></span></a>
-                                <ul class="dropdown-menu dashboard-submenu">
-                                    <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
-                                    @if(!Auth::user()->roles->contains('role', 'agent'))
-                                    <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
-                                    {{-- <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li> --}}
+                    <li class="nav-item last dropdown" role="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    My Account <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || Auth::user()->roles->contains('role', 'agent'))
                                     <li class="dropdown-submenu">
-                                        <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects')}}">Projects <span class="caret"></span><i class="fa fa-paperclip pull-right"></i></a>
+                                        <a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:12px 17px;">Dashboard <span class="caret"></span></a>
                                         <ul class="dropdown-menu dashboard-submenu">
-                                            @foreach($allProjects as $allProject)
-                                                <li class="dropdown-submenu">
-                                                    <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
-                                                    <ul class="dropdown-menu dashboard-submenu">
-                                                        {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors </a></li> --}}
+                                            <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
+                                            <li class="dropdown-submenu">
+                                                <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects')}}">Projects <span class="caret"></span><i class="fa fa-paperclip pull-right"></i></a>
+                                                <ul class="dropdown-menu dashboard-submenu">
+                                                    @if(!Auth::user()->roles->contains('role', 'agent'))
+                                                    @foreach($allProjects as $allProject)
                                                         <li class="dropdown-submenu">
-                                                            <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
+                                                            <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
                                                             <ul class="dropdown-menu dashboard-submenu">
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI </a></li>
+                                                                {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
+                                                                <li class="dropdown-submenu">
+                                                                    <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
+                                                                    <ul class="dropdown-menu dashboard-submenu">
+                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
+                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
+                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
+                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming</a></li>
+                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
                                                             </ul>
                                                         </li>
-                                                        <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details </a></li>
-                                                    </ul>
-                                                </li>
-                                            @endforeach
+                                                    @endforeach
+                                                    @endif
+                                                </ul>
+                                            </li>
+                                            <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
+                                            <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
                                         </ul>
                                     </li>
-                                    <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
+                                    {{--<li>
+                                        {!! Html::linkRoute('dashboard.index', 'Dashboard', null, ['class'=>'anchor-color', 'style'=>'padding:5px 17px;']) !!}
+                                    </li>--}}
                                     @endif
+                                    <li>
+                                        {!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
+                                    </li>
+                                    <li>
+                                        {!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
+                                    </li>
                                 </ul>
                             </li>
-                            @endif
-                            <li class="nav-item"><a href="{{route('users.show',[Auth::user()])}}">Profile</a></li>
-                            <li class="nav-item"><a href="{{route('users.logout')}}">Logout</a></li>
-                        </ul>
-                    </li>
                     <li class="hide"><a href="#"><i class="fa fa-bell"></i></a></li>
                     @endif
                 </ul>
@@ -405,7 +410,7 @@ $_SESSION['code'] = md5(microtime(true));
             </p>
         </div>
         <br>
-        <p class="investment-title1-description-section text-justify" style="font-size:16px;">
+        <p class="investment-title1-description-section text-center" style="font-size:16px;">
         <small><small>@if($siteConfiguration->compliance_description != '')
         {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
         The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages.<span class="hide"> {{$siteConfiguration->licensee_name}} {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.</span>

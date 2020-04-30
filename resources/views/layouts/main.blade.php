@@ -318,7 +318,7 @@ $_SESSION['code'] = md5(microtime(true));
 
     <!-- footer content here -->
     @section('footer-section')
-    <footer id="footer" class="chunk-box" style="background-color: #ffffff;">
+    {{-- <footer id="footer" class="chunk-box" style="background-color: #ffffff;">
         <div class="container" style="margin-top: 1.8em;">
             <div class="row text-center">
                 <div class="col-md-4">
@@ -354,7 +354,92 @@ $_SESSION['code'] = md5(microtime(true));
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> --}}
+    <footer id="footer" class="chunk-box" @if($color)style='background-color: #{{$color->nav_footer_color}}' @endif>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.2s">
+                    <center>
+                        @if($siteConfigMedia=$siteConfiguration->siteconfigmedia)
+                        @if($mainLogo = $siteConfigMedia->where('type', 'brand_logo')->first())
+                        <img class="img-responsive" src="{{asset($mainLogo->path)}}" alt="Logo" width="200">
+                        @else
+                        <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
+                        @endif
+                        @else
+                        <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
+                        @endif
+                    </center>
+                </div>
+            </div>
+            <br>
+            <div class="row @if(!$siteConfiguration->show_social_icons) hide @endif">
+                <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.3s">
+                    <a href="{{ $siteConfiguration->facebook_link }}" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                            <i class="fa fa-facebook fa-stack-1x fa-inverse" style="color:#21203a;"></i>
+                        </span>
+                    </a>
+                    <a href="{{ $siteConfiguration->twitter_link }}" class="footer-social-icon" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-twitter fa-stack-2x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="{{ $siteConfiguration->youtube_link }}" class="footer-social-icon" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                            <i class="fa fa-youtube fa-stack-1x fa-inverse" style="color:#21203a;"></i>
+                        </span>
+                    </a>
+                    <a href="{{ $siteConfiguration->linkedin_link }}" class="footer-social-icon" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-linkedin-square fa-stack-2x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="{{ $siteConfiguration->google_link }}" class="footer-social-icon" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-google-plus fa-stack-2x fa-inverse" style="padding:4px; margin-left:-3px; font-size:24px !important;"></i>
+                        </span>
+                    </a>
+                    <a href="{{ $siteConfiguration->instagram_link }}" class="footer-social-icon" target="_blank">
+                        <span class="fa-stack fa">
+                            <i class="fa fa-instagram fa-stack-2x fa-inverse"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4 text-center">
+                    <ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
+                        <li class="footer-list-item"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->blog_link_new) hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link"><span class="font-semibold"  style="color:#fff; font-size: 16px;">Terms & conditions</span></a></li>
+                        <span style="color:#fff;"> </span>
+                        <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
+                        <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
+                        <li class="footer-list-item"><a href="/pages/faq" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
+                    </ul>
+                <br>
+            </div>
+        </div>
+        <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
+          <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
+            <p>
+                <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
+            </p>
+        </div>
+        <br>
+        <p class="investment-title1-description-section text-center" style="font-size:16px;">
+        <small><small>@if($siteConfiguration->compliance_description != '')
+        {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
+        The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages. <span class="hide"> {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.
+        </span>@endif</small></small>
+        </p>
+        <p class="csef-text text-justify hide"><small><small>In particular note that this website does not rely on the Crowd Sourced Equity Funding (CSEF) regulation (RG261) and does not have an ASIC authorization to act as a Crowdfunding intermediary platform. Any use of the term crowdfunding anywhere on this site should not be be construed to mean that such an authorization exists. Investment offers listed here typically rely on RG228 to provide effective disclosure to Retail investors using a Prospectus. We believe the CSEF regulation is unsuited for Property development investment opportunities and have hence relied on providing a full prospectus to provide clear concise and effective disclosure.</small></small></p>
+    </div>
+</footer>
 @show
 
 

@@ -85,7 +85,7 @@
 					<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [$project->id])}}" method="POST" class="pull-right">
 						{{csrf_field()}}
 						<label for="#update_share_price">Share Price:   $</label>
-						<input type="number" name="update_share_price" id="update_share_price" step="0.0001" value="{{ $project->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE">
+						<input type="number" class="form-control" style="width: auto; display: inline-block; max-height: 34px;" name="update_share_price" id="update_share_price" step="0.0001" value="{{ $project->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE">
 					</form>
 				</div>
 			</div>
@@ -99,14 +99,13 @@
 				<li style="width: 18%;"><a data-toggle="tab" href="#eoi_tab" style="padding: 0em 2em"><h3 class="text-center">Upcoming</h3></a></li>
 			</ul>
 			<div class="tab-content">
-				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto;">
+				<div id="investors_tab" class="tab-pane fade in active" style="overflow: auto; margin-top: 1em;">
 					<style type="text/css">
 						.edit-input{
 							display: none;
 						}
 					</style>
-					<br>
-					<table class="table table-bordered table-striped investors-table" id="investorsTable" style="margin-top: 1em;">
+					<table class="table table-bordered table-striped investors-table" id="investorsTable">
 						<thead>
 							<tr>
 								<th>Unique ID</th>
@@ -572,7 +571,6 @@
 								</form> --}}
 							</div>
 						</div>
-						<br>
 						<br>
 						<div>
 							<table class="table table-bordered table-striped new-registry-table" id="new_registry_table">
@@ -1206,7 +1204,7 @@
 				}).done(function(data){
 					if(data){
 						$('.loader-overlay').hide();
-						$("#investorsTable").DataTable().row( $('#application' + investment_id) ).remove().draw( false );
+						$("#investorsTable").DataTable({ "language": { "search": "", "searchPlaceholder": "Search" }}).row( $('#application' + investment_id) ).remove().draw( false );
 					}
 				});
 			}
@@ -1220,8 +1218,12 @@
 			{
 				"bSortable": false,
 				'aTargets': ['nosort']
-			}
+			},
 			],
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 			"fnDrawCallback": function( oSettings ) {
 				if($('.share-registry-actions').hasClass('hide')){
 					$('.select-check').removeClass('hide');
@@ -1230,23 +1232,47 @@
 		});
 		var investorsTable = $('#investorsTable').DataTable({
 			"order": [2, 'desc'],
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 		});
 		var transactionTable = $('#transactionTable').DataTable({
 			"order": [[3, 'desc']],
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 		});
 		var positionTable = $('#positionTable').DataTable({
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 		var eoiTable = $('#eoiTable').DataTable({
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 		});
 		var expression_of_interest_table = $('#expression_of_interest_table').DataTable({
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 		});
 		let newRegistryTable = $('#new_registry_table').DataTable({
-			"iDisplayLength": 25
+			"iDisplayLength": 25,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			},
 		});
 
 		// show select checkbox for share registry

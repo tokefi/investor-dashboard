@@ -13,7 +13,7 @@
 	<a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank" class="list-group-item @if($active == 8) active @endif">FAQ Help<i class="fa fa-info-circle pull-right"></i></a>
 </div> --}}
 
-<div class="list-group dashboard-sidebar-nav">
+<div class="list-group sidebar-nav">
 	<div class="list-group-item"><img src="{{asset('assets/images/default-male.png')}}" width="40" class="img-circle"><div>{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}<br>Admin</div></div>
 	<a href="{{route('dashboard.index')}}" class="list-group-item @if($active == 1) active @endif"><img src="{{asset('assets/images/new-ui/dashboard/sidebar/dashboard.png')}}" alt=""> Dashboard</a>
 	<a href="{{route('dashboard.users')}}" class="list-group-item @if($active == 2) active @endif"><img src="{{asset('assets/images/new-ui/dashboard/sidebar/users.png')}}" alt=""> Users</i></a>
