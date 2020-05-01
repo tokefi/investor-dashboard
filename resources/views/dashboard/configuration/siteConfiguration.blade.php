@@ -247,7 +247,7 @@ Configuration | Dashboard | @parent
                                 @endif
                                 <div class="caption">
                                     <h3><b>Legal Details</b></h3>
-                                    <p><small>Edit Operator name, AFSL and CAR number.</small></p>
+                                    <p><small>Edit Operator name, AFSL <br> and CAR number.</small></p>
                                     <hr>
                                     <p>
                                         <label class="input-group-btn">
