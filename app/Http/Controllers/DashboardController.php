@@ -413,7 +413,7 @@ class DashboardController extends Controller
         $this->validate($request, [
             'investor' => 'required',
         ]);
-
+        $investments = collect();
         $investment = InvestmentInvestor::findOrFail($investment_id);
         if($investment){
             $investmentShares = InvestmentInvestor::where('project_id', $investment->project_id)
@@ -444,7 +444,7 @@ class DashboardController extends Controller
              // Save details to transaction table
             $noOfShares = $shareEnd-$shareInit;
             $transactionRate = $investment->amount/$noOfShares;
-            Transaction::create([
+            $masterTransaction = Transaction::create([
                 'user_id' => $investment->user_id,
                 'project_id' => $investment->project_id,
                 'transaction_type' => Transaction::BUY,
@@ -453,7 +453,11 @@ class DashboardController extends Controller
                 'rate' => round($transactionRate,2),
                 'number_of_shares' => $noOfShares,
             ]);
+
             if($investment->project->master_child){
+                $masterTransaction->transaction_description = 'Master Application';
+                $masterTransaction->save();
+                $investments->push($masterTransaction);
                 $childInvestments = InvestmentInvestor::where('master_investment',$investment->id)->get();
                 foreach($childInvestments as $child){
                     $investmentShares = InvestmentInvestor::where('project_id', $child->project_id)
@@ -483,7 +487,7 @@ class DashboardController extends Controller
                     $child->save();
                     $noOfShares = $shareEnd-$shareInit;
                     $transactionRate = $child->amount/$noOfShares;
-                    Transaction::create([
+                    $childTransaction = Transaction::create([
                         'user_id' => $child->user_id,
                         'project_id' => $child->project_id,
                         'transaction_type' => Transaction::BUY,
@@ -492,6 +496,9 @@ class DashboardController extends Controller
                         'rate' => round($transactionRate,2),
                         'number_of_shares' => $noOfShares,
                     ]);
+                    $childTransaction->transaction_description = 'Child Application';
+                    $childTransaction->save();
+                    $investments->push($childTransaction);
                 }
             }
             // dd($investment);
@@ -508,8 +515,8 @@ class DashboardController extends Controller
                     $formLink = url().'/user/view/'.base64_encode($investment->id).'/unit';
                 }
 
-                $mailer->sendInvoiceToUser($investment,$formLink);
-                $mailer->sendInvoiceToAdmin($investment,$formLink);
+                $mailer->sendInvoiceToUser($investment,$formLink,$investments);
+                $mailer->sendInvoiceToAdmin($investment,$formLink,$investments);
             }
             return redirect()->back()->withMessage('<p class="alert alert-success text-center">Successfully updated.</p>');
         }
@@ -1357,8 +1364,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-               return new TransportManager($app);
-           });
+             return new TransportManager($app);
+         });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
@@ -2266,9 +2273,9 @@ class DashboardController extends Controller
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
-            ->where('project_id', $projectId)
-            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
-            ->get();
+        ->where('project_id', $projectId)
+        ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
+        ->get();
 
         $transactionTable = '<table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%">';
         $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transaction type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
@@ -2280,12 +2287,12 @@ class DashboardController extends Controller
             $transactionType = $transaction->transaction_description ?? $transaction->transaction_type;
             
             $transactionTable .= '<tr>
-                    <td>' . Carbon::parse($transaction->created_at)->format('d-m-Y') . '</td>
-                    <td class="text-left">' . $transactionType . '</td>
-                    <td>' . $numberOfShares . '</td>
-                    <td>' . $rate . '</td>
-                    <td class="text-right">$ ' . number_format($transaction->amount, 2) . '</td>
-                </tr>';
+            <td>' . Carbon::parse($transaction->created_at)->format('d-m-Y') . '</td>
+            <td class="text-left">' . $transactionType . '</td>
+            <td>' . $numberOfShares . '</td>
+            <td>' . $rate . '</td>
+            <td class="text-right">$ ' . number_format($transaction->amount, 2) . '</td>
+            </tr>';
         }
         $transactionTable .= '</tbody></table>';
 
@@ -2329,9 +2336,9 @@ class DashboardController extends Controller
 
         // Get Transaction records of user for project based on dates 
         $transactions = Transaction::where('user_id', $investorId)
-            ->where('project_id', $projectId)
-            ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
-            ->get();
+        ->where('project_id', $projectId)
+        ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
+        ->get();
 
         // Send email to investor 
         $mailer->sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions);
