@@ -1,712 +1,876 @@
-<?php
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confirmation Email</title>
 
-namespace App\Mailers;
-
-use Mail;
-use App\Role;
-use App\User;
-use App\Project;
-use App\IdImage;
-use App\IdDocument;
-use App\MailSetting;
-use App\UserRegistration;
-
-use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Mail\TransportManager;
-use App\Helpers\SiteConfigurationHelper;
-use Swift_MailTransport as MailTransport;
-
-class AppMailer
-{
-    public function __construct(Mailer $mailer) {
-        $this->mailer = $mailer;
+  <style type="text/css">
+    p{
+      margin:10px 0;
+      padding:0;
+    }
+    table{
+      border-collapse:collapse;
+    }
+    h1,h2,h3,h4,h5,h6{
+      display:block;
+      margin:0;
+      padding:0;
+    }
+    img,a img{
+      border:0;
+      height:auto;
+      outline:none;
+      text-decoration:none;
+    }
+    body,#bodyTable,#bodyCell{
+      height:100%;
+      margin:0;
+      padding:0;
+      width:100%;
+    }
+    #outlook a{
+      padding:0;
+    }
+    img{
+      -ms-interpolation-mode:bicubic;
+    }
+    table{
+      mso-table-lspace:0pt;
+      mso-table-rspace:0pt;
+    }
+    .ReadMsgBody{
+      width:100%;
+    }
+    .ExternalClass{
+      width:100%;
+    }
+    p,a,li,td,blockquote{
+      mso-line-height-rule:exactly;
+    }
+    a[href^=tel],a[href^=sms]{
+      color:inherit;
+      cursor:default;
+      text-decoration:none;
+    }
+    p,a,li,td,body,table,blockquote{
+      -ms-text-size-adjust:100%;
+      -webkit-text-size-adjust:100%;
+    }
+    .ExternalClass,.ExternalClass p,.ExternalClass td,.ExternalClass div,.ExternalClass span,.ExternalClass font{
+      line-height:100%;
+    }
+    a[x-apple-data-detectors]{
+      color:inherit !important;
+      text-decoration:none !important;
+      font-size:inherit !important;
+      font-family:inherit !important;
+      font-weight:inherit !important;
+      line-height:inherit !important;
+    }
+    #bodyCell{
+      padding:10px;
+    }
+    .templateContainer{
+      max-width:600px !important;
+    }
+    a.mcnButton{
+      display:block;
+    }
+    .mcnImage{
+      vertical-align:bottom;
+    }
+    .mcnTextContent{
+      word-break:break-word;
+    }
+    .mcnTextContent img{
+      height:auto !important;
+    }
+    .mcnDividerBlock{
+      table-layout:fixed !important;
+    }
+  /*
+   Page
+   Background Style
+   Set the background color and top border for your email. You may want to choose colors that match your company's branding.
+   */
+   body,#bodyTable{
+    background-color:#FAFAFA;
+  }
+  /*
+   Page
+   Background Style
+   Set the background color and top border for your email. You may want to choose colors that match your company's branding.
+   */
+   #bodyCell{
+    border-top:0;
+  }
+  /*
+   Page
+   Email Border
+   Set the border for your email.
+   */
+   .templateContainer{
+    border:0;
+  }
+  /*
+   Page
+   Heading 1
+   Set the styling for all first-level headings in your emails. These should be the largest of your headings.
+   heading 1
+   */
+   h1{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:26px;
+    font-style:normal;
+    font-weight:bold;
+    line-height:125%;
+    letter-spacing:normal;
+    text-align:left;
+  }
+  /*
+   Page
+   Heading 2
+   Set the styling for all second-level headings in your emails.
+   heading 2
+   */
+   h2{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:22px;
+    font-style:normal;
+    font-weight:bold;
+    line-height:125%;
+    letter-spacing:normal;
+    text-align:left;
+  }
+  /*
+   Page
+   Heading 3
+   Set the styling for all third-level headings in your emails.
+   heading 3
+   */
+   h3{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:20px;
+    font-style:normal;
+    font-weight:bold;
+    line-height:125%;
+    letter-spacing:normal;
+    text-align:left;
+  }
+  /*
+   Page
+   Heading 4
+   Set the styling for all fourth-level headings in your emails. These should be the smallest of your headings.
+   heading 4
+   */
+   h4{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:18px;
+    font-style:normal;
+    font-weight:bold;
+    line-height:125%;
+    letter-spacing:normal;
+    text-align:left;
+  }
+  /*
+   Preheader
+   Preheader Style
+   Set the background color and borders for your email's preheader area.
+   */
+   #templatePreheader{
+    background-color:#FAFAFA;
+    border-top:0;
+    border-bottom:0;
+    padding-top:9px;
+    padding-bottom:9px;
+  }
+  /*
+   Preheader
+   Preheader Text
+   Set the styling for your email's preheader text. Choose a size and color that is easy to read.
+   */
+   #templatePreheader .mcnTextContent,#templatePreheader .mcnTextContent p{
+    color:#656565;
+    font-family:Helvetica;
+    font-size:12px;
+    line-height:150%;
+    text-align:left;
+  }
+  /*
+   Preheader
+   Preheader Link
+   Set the styling for your email's preheader links. Choose a color that helps them stand out from your text.
+   */
+   #templatePreheader .mcnTextContent a,#templatePreheader .mcnTextContent p a{
+    color:#656565;
+    font-weight:normal;
+    text-decoration:underline;
+  }
+  /*
+   Header
+   Header Style
+   Set the background color and borders for your email's header area.
+   */
+   #templateHeader{
+    background-color:#FFFFFF;
+    border-top:0;
+    border-bottom:0;
+    padding-top:9px;
+    padding-bottom:0;
+  }
+  /*
+   Header
+   Header Text
+   Set the styling for your email's header text. Choose a size and color that is easy to read.
+   */
+   #templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:16px;
+    line-height:150%;
+    text-align:left;
+  }
+  /*
+   Header
+   Header Link
+   Set the styling for your email's header links. Choose a color that helps them stand out from your text.
+   */
+   #templateHeader .mcnTextContent a,#templateHeader .mcnTextContent p a{
+    color:#2BAADF;
+    font-weight:normal;
+    text-decoration:underline;
+  }
+  /*
+   Body
+   Body Style
+   Set the background color and borders for your email's body area.
+   */
+   #templateBody{
+    background-color:#FFFFFF;
+    border-top:0;
+    border-bottom:2px solid #EAEAEA;
+    padding-top:0;
+    padding-bottom:9px;
+  }
+  /*
+   Body
+   Body Text
+   Set the styling for your email's body text. Choose a size and color that is easy to read.
+   */
+   #templateBody .mcnTextContent,#templateBody .mcnTextContent p{
+    color:#202020;
+    font-family:Helvetica;
+    font-size:16px;
+    line-height:150%;
+    text-align:left;
+  }
+  /*
+   Body
+   Body Link
+   Set the styling for your email's body links. Choose a color that helps them stand out from your text.
+   */
+   #templateBody .mcnTextContent a,#templateBody .mcnTextContent p a{
+    color:#2BAADF;
+    font-weight:normal;
+    text-decoration:underline;
+  }
+  /*
+   Footer
+   Footer Style
+   Set the background color and borders for your email's footer area.
+   */
+   #templateFooter{
+    background-color:#FAFAFA;
+    border-top:0;
+    border-bottom:0;
+    padding-top:9px;
+    padding-bottom:9px;
+  }
+  /*
+   Footer
+   Footer Text
+   Set the styling for your email's footer text. Choose a size and color that is easy to read.
+   */
+   #templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
+    color:#656565;
+    font-family:Helvetica;
+    font-size:12px;
+    line-height:150%;
+    text-align:center;
+  }
+  /*
+   Footer
+   Footer Link
+   Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
+   */
+   #templateFooter .mcnTextContent a,#templateFooter .mcnTextContent p a{
+    color:#656565;
+    font-weight:normal;
+    text-decoration:underline;
+  }
+  @media only screen and (min-width:768px){
+    .templateContainer{
+      width:600px !important;
     }
 
-    protected $mailer;
-    protected $from = 'info@konkrete.io';
-    protected $to;
-    protected $bcc;
-    protected $view;
-    protected $subject;
-    protected $pathToFile;
-    protected $data = [];
+    } @media only screen and (max-width: 480px){
+      body,table,td,p,a,li,blockquote{
+        -webkit-text-size-adjust:none !important;
+      }
 
-    public function recommendTo($email, Article $article)
-    {
-        Mail::queue('emails.article', ['article' => $article], function ($message) use ($email) {
-            $message->to($email)->subject('Recommendation');
-        });
-    }
+      } @media only screen and (max-width: 480px){
+        body{
+          width:100% !important;
+          min-width:100% !important;
+        }
 
-    public function sendEmailConfirmationTo(User $user)
-    {
-        $this->to = $user->email;
-        $this->view = 'emails.confirm';
-        $siteTitle = ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron';
-        $this->subject = 'Please complete your registration on '.$siteTitle;
-        $this->data = compact('user');
+        } @media only screen and (max-width: 480px){
+          #bodyCell{
+            padding-top:10px !important;
+          }
 
-        $this->deliver();
-    }
-
-    public function sendRegistrationConfirmationTo(UserRegistration $user,$ref)
-    {
-        $this->to = $user->email;
-        $this->view = 'emails.registrationConfirm';
-        $siteTitle = ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron';
-        $this->subject = 'Please complete your registration on '.$siteTitle;
-        $this->data = compact('user','ref');
-
-        $this->deliver();
-    }
-
-    // public function sendApplicationRegistrationFailTo(Request $request,UserRegistration $user)
-    // {
-    //     # code...
-    // }
-
-    public function sendInterestNotificationInvestor(User $user, Project $project)
-    {
-        $this->to = $user->email;
-        $this->view = 'emails.interest';
-        $this->subject = 'Application Received for '.$project->title;
-        $this->data = compact('user', 'project');
-
-        $this->deliver();
-    }
-
-    public function sendApplicationRequestNotificationToClient(User $agent, Project $project, $clientApplication)
-    {
-        $this->to = $clientApplication->client_email;
-        $this->view = 'emails.requestToInvestorFromAgent';
-        $this->subject = $agent->first_name.' '.$agent->last_name.' is requesting investment application sign off';
-        $this->data = compact('agent','project','clientApplication');
-
-        $this->deliver();
-    }
-
-
-    public function sendInterestNotificationDeveloper(Project $project, User $investor)
-    {
-        $this->to = $project->user->email;
-        $this->view = 'emails.developer';
-        $this->subject = 'Application Received for '.$project->title;
-        $this->data = compact('project', 'investor');
-
-        $this->deliver();
-    }
-
-    public function sendRegistrationNotificationAdmin(User $investor,$referrer)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
+          } @media only screen and (max-width: 480px){
+            .mcnImage{
+              width:100% !important;
             }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.regNotification';
-        $this->subject = 'New User Sign Up '.$investor->first_name.' '.$investor->last_name.' '.$investor->phone_number;
-        $this->data = compact('investor','referrer');
 
-        $this->deliver();
-    }
+            } @media only screen and (max-width: 480px){
+              .mcnCartContainer,.mcnCaptionTopContent,.mcnRecContentContainer,.mcnCaptionBottomContent,.mcnTextContentContainer,.mcnBoxedTextContentContainer,.mcnImageGroupContentContainer,.mcnCaptionLeftTextContentContainer,.mcnCaptionRightTextContentContainer,.mcnCaptionLeftImageContentContainer,.mcnCaptionRightImageContentContainer,.mcnImageCardLeftTextContentContainer,.mcnImageCardRightTextContentContainer{
+                max-width:100% !important;
+                width:100% !important;
+              }
 
-    public function sendRegistrationNotificationAdminOther(User $investor,$referrer)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.regNotificationOther';
-        $this->subject = 'New User Sign Up '.$investor->first_name.' '.$investor->last_name.' '.$investor->phone_number;
-        $this->data = compact('investor','referrer');
+              } @media only screen and (max-width: 480px){
+                .mcnBoxedTextContentContainer{
+                  min-width:100% !important;
+                }
 
-        $this->deliver();
-    }
+                } @media only screen and (max-width: 480px){
+                  .mcnImageGroupContent{
+                    padding:9px !important;
+                  }
 
-    public function sendInterestNotificationAdmin(Project $project, User $investor)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.admin';
-        $this->subject = 'Application Received for '.$project->title;
-        $this->data = compact('project', 'investor');
+                  } @media only screen and (max-width: 480px){
+                    .mcnCaptionLeftContentOuter .mcnTextContent,.mcnCaptionRightContentOuter .mcnTextContent{
+                      padding-top:9px !important;
+                    }
 
-        $this->deliver();
-    }
+                    } @media only screen and (max-width: 480px){
+                      .mcnImageCardTopImageContent,.mcnCaptionBlockInner .mcnCaptionTopContent:last-child .mcnTextContent{
+                        padding-top:18px !important;
+                      }
 
-    public function sendSubdivideEmailToAdmin($details)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.subdivide';
-        $this->subject = 'Received a subdivide request';
-        $this->data = compact('details');
+                      } @media only screen and (max-width: 480px){
+                        .mcnImageCardBottomImageContent{
+                          padding-bottom:9px !important;
+                        }
 
-        $this->deliver();
-    }
-    public function sendProjectSubmit(User $investor, Project $project)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.projectSubmit';
-        $this->subject = 'New Project Submitted';
-        $this->data = compact('investor', 'project');
+                        } @media only screen and (max-width: 480px){
+                          .mcnImageGroupBlockInner{
+                            padding-top:0 !important;
+                            padding-bottom:0 !important;
+                          }
 
-        $this->deliver();
-    }
+                          } @media only screen and (max-width: 480px){
+                            .mcnImageGroupBlockOuter{
+                              padding-top:9px !important;
+                              padding-bottom:9px !important;
+                            }
 
-    public function sendIdVerificationEmailToAdmin($details)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.idVerification';
-        $this->subject = 'Received an verification request';
-        $this->data = compact('details');
+                            } @media only screen and (max-width: 480px){
+                              .mcnTextContent,.mcnBoxedTextContentColumn{
+                                padding-right:18px !important;
+                                padding-left:18px !important;
+                              }
 
-        $this->deliver();
-    }
+                              } @media only screen and (max-width: 480px){
+                                .mcnImageCardLeftImageContent,.mcnImageCardRightImageContent{
+                                  padding-right:18px !important;
+                                  padding-bottom:0 !important;
+                                  padding-left:18px !important;
+                                }
 
-    public function sendVerificationNotificationToUser(User $user, $status, IdDocument $idimages)
-    {
-        $this->to = $user->email;
-        $this->view = 'emails.verifyNotification';
-        if($status == '0')
-        {
-            $this->subject = 'Verification Status';
-        }
-        elseif ($status == '-1') {
-            $this->subject = 'Verification Unsuccessful';
-        }
-        else{
-            $this->subject = 'Verification Successful';
-        }
-        $this->data = compact('user', 'status', 'idimages');
+                                } @media only screen and (max-width: 480px){
+                                  .mcpreview-image-uploader{
+                                    display:none !important;
+                                    width:100% !important;
+                                  }
 
-        $this->deliver();
-    }
+                                  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Heading 1
+   Make the first-level headings larger in size for better readability on small screens.
+   */
+   h1{
+    font-size:22px !important;
+    line-height:125% !important;
+  }
 
-    public function sendIdVerificationNotificationToUser(User $user, $status)
-    {
-        $this->to = $user->email;
-        $this->view = 'emails.verifyNotification';
-        $idimages = $user->idDoc;
-        if($status == '0')
-        {
-            $this->subject = 'Verification Status';
-        }
-        elseif ($status == '-1') {
-            $this->subject = 'Verification Unsuccessful';
-        }
-        else{
-            $this->subject = 'Verification Successful';
-        }
-        $this->data = compact('user', 'status', 'idimages');
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Heading 2
+   Make the second-level headings larger in size for better readability on small screens.
+   */
+   h2{
+    font-size:20px !important;
+    line-height:125% !important;
+  }
 
-        $this->deliver();
-    }
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Heading 3
+   Make the third-level headings larger in size for better readability on small screens.
+   */
+   h3{
+    font-size:18px !important;
+    line-height:125% !important;
+  }
 
-    public function sendInviteToUser($email, User $user, $token)
-    {
-        $this->to = $email;
-        $this->view = 'emails.invitation';
-        $siteTitle = ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron';
-        $this->subject = 'You have been invited to '.$siteTitle.' by '.$user->first_name;
-        $this->data = compact('user', 'token');
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Heading 4
+   Make the fourth-level headings larger in size for better readability on small screens.
+   */
+   h4{
+    font-size:16px !important;
+    line-height:150% !important;
+  }
 
-        $this->deliver();
-    }
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Boxed Text
+   Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+   */
+   .mcnBoxedTextContentContainer .mcnTextContent,.mcnBoxedTextContentContainer .mcnTextContent p{
+    font-size:14px !important;
+    line-height:150% !important;
+  }
 
-    public function sendInvoiceToUser($investment,$formLink,$investments)
-    {
-        $this->to = $investment->user->email;
-        $this->view = 'emails.invoice';
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Preheader Visibility
+   Set the visibility of the email's preheader on small screens. You can hide it to save space.
+   */
+   #templatePreheader{
+    display:block !important;
+  }
 
-        if($investment->project->share_vs_unit) {
-            $this->subject = 'Share certificate for '.$investment->project->title;
-        }else {
-            $this->subject = 'Unit certificate for '.$investment->project->title;
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Preheader Text
+   Make the preheader text larger in size for better readability on small screens.
+   */
+   #templatePreheader .mcnTextContent,#templatePreheader .mcnTextContent p{
+    font-size:14px !important;
+    line-height:150% !important;
+  }
 
-        }
-        $this->data = compact('investment','formLink','investments');
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Header Text
+   Make the header text larger in size for better readability on small screens.
+   */
+   #templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
+    font-size:16px !important;
+    line-height:150% !important;
+  }
 
-        if($investment->project->share_vs_unit) {
-            $this->pathToFile = storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf';
-        }else {
-            $this->pathToFile = storage_path().'/app/invoices/Unit-Certificate-'.$investment->id.'.pdf';
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Body Text
+   Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
+   */
+   #templateBody .mcnTextContent,#templateBody .mcnTextContent p{
+    font-size:16px !important;
+    line-height:150% !important;
+  }
 
-        }
+  } @media only screen and (max-width: 480px){
+  /*
+   Mobile Styles
+   Footer Text
+   Make the footer content text larger in size for better readability on small screens.
+   */
+   #templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
+    font-size:9px !important;
+    line-height:125% !important;
+  }
 
-        $this->deliver();
-    }
-
-    public function sendInvoiceToAdmin($investment,$formLink,$investments)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminInvoice';
-        if($investment->project->share_vs_unit) {
-            $this->subject = 'Share certificate for '.$investment->project->title.' for '.$investment->user->first_name.' '.$investment->user->last_name;
-        }else {
-            $this->subject = 'Unit certificate for '.$investment->project->title.' for '.$investment->user->first_name.' '.$investment->user->last_name;
-        }
-        $this->data = compact('investment','formLink');
-        if($investment->project->share_vs_unit) {
-            $this->pathToFile = storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf';
-        }else {
-            $this->pathToFile = storage_path().'/app/invoices/Unit-Certificate-'.$investment->id.'.pdf';
-
-        }
-        $this->deliver();
-    }
-
-    public function sendMoneyReceivedConfirmationToUser($investment)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $investment->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.moneyReceivedConfirm';
-        $this->subject = 'Funds received for '.$investment->project->title;
-        $this->data = compact('investment');
-
-        $this->deliverWithBcc();
-    }
-
-    public function sendInvestmentReminderToUser($investment)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $investment->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.investmentReminder';
-        $this->subject = 'Investment Reminder for '.$investment->project->title;
-        $this->data = compact('investment');
-
-        $this->deliverWithBcc();
-    }
-    public function sendInvestmentConfirmationToUser($investment)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $investment->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.investmentConfirmation';
-        $this->subject = 'Investment Confirmed for '.$investment->project->title;
-        $this->data = compact('investment');
-
-        $this->deliverWithBcc();
-    }
-
-    public function sendUpcomingProjectInterestMailToAdmins($project, $email, $phone)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.upcomingProjectInterestNotification';
-        $this->subject = 'User Expressed Interest in '.$project->title;
-        $this->data = compact('project', 'email', 'phone');
-
-        $this->deliver();
-    }
-
-    public function sendProjectEoiEmailToAdmins($project, $eoi_data)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.projectEoiAdminNotification';
-        $this->subject = 'User Expressed Interest in '.$project->title;
-        $this->data = compact('project', 'eoi_data');
-
-        $this->deliver();
-    }
-
-    public function sendProjectEoiEmailToUser($project, $user_info)
-    {
-        $recipients = ['info@konkrete.io'];
-        $this->to = $user_info->email;
-        $this->view = 'emails.projectEoiUserNotification';
-        $this->subject = 'Thank you for expressing Interest in '.$project->title;
-        $this->data = compact('project', 'user_info');
-
-        $this->deliver();
-    }
-
-    public function sendUserFeedbackEmailToAdmins($project, $user_info, $comment)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.userFeedbackAdminEmail';
-        $this->subject = 'User gave feedback on '.$project->title;
-        $this->data = compact('project', 'user_info', 'comment');
-
-        $this->deliver();
-    }
-
-    public function sendInvestmentCancellationConfirmationToUser($investment, $shareInit, $investing, $shareStart, $shareEnd)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $investment->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.investmentCancelNotification';
-        $this->subject = 'Your investment in '.$investment->project->title.' has been cancelled';
-        $this->data = compact('investment', 'shareInit', 'investing','shareStart', 'shareEnd');
-        $this->deliverWithBcc();
-    }
-
-    public function sendDividendDistributionNotificationToAdmin($investments, $dividendPercent, $dateDiff, $csvPath, $project)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminDividendDistributioNotify';
-        $this->subject = 'Distribute dividend amount to investors';
-        $this->data = compact('investments', 'dividendPercent', 'dateDiff', 'project');
-        $this->pathToFile = $csvPath;
-
-        $this->deliverWithFile();
-    }
+}</style></head>
+<body style="height: 100%;margin: 0;padding: 0;width: 100%;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;">
+  <center>
+    <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #FAFAFA;">
+      <tr>
+        <td align="center" valign="top" id="bodyCell" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
+          <!-- BEGIN TEMPLATE // -->
+            <!--[if gte mso 9]>
+            <table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
+            <tr>
+            <td align="center" valign="top" width="600" style="width:600px;">
+            <![endif]-->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;border: 0;max-width: 600px !important;">
+              <tr>
+                <td valign="top" id="templatePreheader" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;border-top: 0;border-bottom: 0;padding-top: 9px;padding-bottom: 9px;"></td>
+              </tr>
+              <tr>
+                <td valign="top" id="templateHeader" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 0;padding-top: 0px;padding-bottom: 0;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                  <tbody class="mcnImageBlockOuter">
+                    <tr>
+                      <td valign="top" style="padding: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnImageBlockInner">
+                        <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                          <tbody><tr>
+                            <td class="mcnImageContent" valign="top" style="padding-right: 0px;padding-left: 0px;padding-top: 0;padding-bottom: 0;text-align: center;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;text-align:right;background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->nav_footer_color}}@else #2D2D4B @endif;">
 
 
-    public function sendFixedDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminFixedDividendDistributioNotify';
-        $this->subject = 'Distribute dividend amount to investors';
-        $this->data = compact('investments', 'dividendPercent', 'project');
-        $this->pathToFile = $csvPath;
+                              <!-- <img align="center" alt="" src="http://www.vestabyte.com/assets/images/email/vb.png" width="600" style="max-width: 650px;padding-bottom: 0;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"> -->
 
-        $this->deliverWithFile();
-    }
+                              {{-- <p style="font-family:helvetica; font-weight:bolder; text-align: left; padding-left: 18px; color: #fff; font-size: 25px;">@if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif</p> --}}
+                              <table  border="0" cellpadding="18" cellspacing="0" align="left"> 
+                                <td style="font-family:helvetica; font-weight:bolder; text-align: left; color: #fff; font-size: 25px;" cell-padding="18">@if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif</td>
+                              </table>
 
-     public function sendCentsPerShareDividendDistributionNotificationToAdmin($investments, $dividendPercent, $csvPath, $project)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminCentsPerShareDividendDistributioNotify';
-        $this->subject = 'Distribute dividend amount to investors';
-        $this->data = compact('investments', 'dividendPercent', 'project');
-        $this->pathToFile = $csvPath;
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table></td>
+              </tr>
+              <tr>
+                <td valign="top" id="templateBody" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FFFFFF;border-top: 0;border-bottom: 2px solid #EAEAEA;padding-top: 0;padding-bottom: 9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                  <tbody class="mcnTextBlockOuter">
+                    <tr>
+                      <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <!--[if mso]>
+        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+        <tr>
+        <![endif]-->
 
-        $this->deliverWithFile();
-    }
+        <!--[if mso]>
+        <td valign="top" width="600" style="width:600px;">
+        <![endif]-->
+        <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+          <tbody><tr>
 
-    public function sendRepurchaseNotificationToAdmin($investments, $repurchaseRate, $csvPath, $project)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $user) {
-            if($user->registration_site == url()){
-                array_push($recipients, $user->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminRepurchaseNotify';
-        if($project->share_vs_unit) {
-            $this->subject = 'Shares Repurchase';
-        } else {
-            $this->subject = 'Units Repurchase';
-        }
-        $this->data = compact('investments', 'repurchaseRate', 'project');
-        $this->pathToFile = $csvPath;
+            <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 14px;font-style: normal;font-weight: normal;line-height: 100%;text-align: left;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #202020;">
 
-        $this->deliverWithFile();
-    }
+              <br> <br>
+              <strong><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-family:helvetica; font-weight:bolder; line-height:21px"><span style="font-size:20px">Hi Admin(s),</span></span></span></strong>
 
-    public function sendInvestmentRequestToAdmin($user, $project, $formLink)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.adminInvestmentRequestNotify';
-        $this->subject = 'User Requested Form Fill up';
-        $this->data = compact('user', 'project', 'formLink');
-        $this->deliver();
-    }
+              <div style="font-size: 13px;text-align:left; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
+                <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">The following @if($investment->project->share_vs_unit) share @else unit @endif certificate has now been sent.<br>
+                  <br>
+                  Name:  <b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
+                  <br><br>
+                  Project: <b>{{$investment->project->title}}</b>
+                </span></span></span><br><br>
+                <table class="table-striped " border="1" cellpadding="10" width="100%" >
+                  <thead style=" font-size: 13px; text-align: center;">
+                    <tr style="">
+                      <th>Project Name</th>
+                      <th>Transaction Type</th>
+                      <th>Number of shares</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    @foreach($investments as $investment)
+                    <tr>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$investment->project->title }}</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">BUY</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$investment->amount}}</span></td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+                <br><br>
+                <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">
+                  <a href="{{$formLink}}" style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#fff;text-decoration:none;padding:15px;cursor:pointer; background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><b>View @if($investment->project->share_vs_unit) share @else unit @endif certificate.</b></a><br>
+                </span></span></span>
+                &nbsp;
 
-    public function sendEoiApplicationLinkToUser($project, $eoi)
-    {
-        $role = Role::findOrFail(1);
-        $recipients = ['info@konkrete.io'];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $eoi->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.eoiFormLink';
-        $this->subject = 'Your expression of interest in '.$project->title.' has been accepted';
-        $this->data = compact('project', 'eoi');
+              </div>
 
-        if($eoi->offer_doc_path){
-            $this->pathToFile = public_path().$eoi->offer_doc_path;
-            $this->deliverWithFile();
-        }
-        else{
-           $this->deliver();
-        }
-    }
+            </td>
+          </tr>
+        </tbody></table>
+        <!--[if mso]>
+        </td>
+      <![endif]-->
 
-    public function sendRedemptionRequestEmailToAdmin($user, $project, $shares)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $recipients;
-        $this->view = 'emails.redemptionRequestNotifyAdmin';
-        $this->subject = 'Redemption request received';
-        $this->data = compact('user', 'project', 'shares');
-        $this->deliver();
-    }
+        <!--[if mso]>
+        </tr>
+        </table>
+      <![endif]-->
+    </td>
+  </tr>
+</tbody>
+</table><!-- <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnButtonBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnButtonBlockOuter">
+        <tr>
+            <td style="padding-top: 0;padding-right: 18px;padding-bottom: 18px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" valign="top" align="left" class="mcnButtonBlockInner">
+                <table border="0" cellpadding="0" cellspacing="0" class="mcnButtonContentContainer" style="border-collapse: separate !important;border-radius: 0px;background-color: #2d2d4b;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                    <tbody>
+                        <tr>
+                            <td align="center" valign="middle" class="mcnButtonContent" style="font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 16px;padding: 10px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                <a class="mcnButton " title="Activate Account" href="" target="_blank" style="font-weight: normal;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;">Activate Account</a>
+                                 </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+  </table> -->
+<!-- <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+        <tr>
+          <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"> -->
+                <!--[if mso]>
+        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+        <tr>
+        <![endif]-->
 
-    public function sendRedemptionRequestEmailToUser($user, $project, $shares)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.redemptionRequestNotifyUser';
-        $this->subject = 'Redemption request received';
-        $this->data = compact('user', 'project', 'shares');
-        $this->deliverWithBcc();
-    }
+        <!--[if mso]>
+        <td valign="top" width="600" style="width:600px;">
+        <![endif]-->
+<!--                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+                    <tbody><tr>
 
-    public function sendRedemptionRequestAcceptedToUser($redemption)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $redemption->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.redemptionRequestAcceptedNotifyUser';
-        $this->subject = 'Redemption request Accepted';
-        $this->data = compact('redemption');
-        $this->deliverWithBcc();
-    }
+                        <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 14px;font-style: normal;font-weight: normal;line-height: 100%;text-align: left;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #202020;">
 
-    public function sendRedemptionRequestRejectedToUser($redemption)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $redemption->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.redemptionRequestRejectedNotifyUser';
-        $this->subject = 'Redemption request Rejected';
-        $this->data = compact('redemption');
-        $this->deliverWithBcc();
-    }
+<span style="color:#282a73><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">For any queries contact us via;<br /><br />Email:&nbsp;&nbsp;<a style="mso-line-height-rule: exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #282a73; font-weight: normal; text-decoration: underline;" href="mailto:info@estatebaron.com" target="_blank">info@estatebaron.com</a> --><!-- <br />Phone: &nbsp;<a style="mso-line-height-rule: exactly; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #282a73; font-weight: normal; text-decoration: underline;" href="callto:+61398117015" target="_blank">+61 3 98117015</a><br /> --><!-- </span></span></span></div><br>
 
-    public function sendRedemptionMoneySentToUser($redemption)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $redemption->user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.redemptionMoneySentNotifyUser';
-        $this->subject = 'Redemption request Money Sent';
-        $this->data = compact('redemption');
-        $this->deliverWithBcc();
-    }
+                        </td>
+                    </tr>
+                  </tbody></table> -->
+        <!--[if mso]>
+        </td>
+      <![endif]-->
 
-    public function sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions)
-    {
-        $role = Role::findOrFail(1);
-        // $recipients = ['info@konkrete.io'];
-        $recipients = [];
-        foreach ($role->users as $adminUser) {
-            if($adminUser->registration_site == url()){
-                array_push($recipients, $adminUser->email);
-            }
-        }
-        $this->to = $user->email;
-        $this->bcc = $recipients;
-        $this->view = 'emails.investorStatementRecordsToUser';
-        $this->subject = 'Investor statement for ' . $project->title;
-        $this->data = compact('project', 'user', 'startDate', 'endDate', 'openingBalance', 'closingBalance', 'transactions');
-        $this->deliverWithBcc();
-    }
+        <!--[if mso]>
+        </tr>
+        </table>
+      <![endif]-->
+            <!-- </td>
+        </tr>
+    </tbody>
+  </table> --><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnTextBlockOuter">
+      <tr>
+        <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <!--[if mso]>
+        <table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
+        <tr>
+        <![endif]-->
 
-    public function overrideMailerConfig()
-    {
-        $siteconfig = SiteConfigurationHelper::getConfigurationAttr();
-        $config = $siteconfig->mailSetting()->first();
-        if($config) {
-            // Config::set('mail.driver',$configs['driver']);
-            \Config::set('mail.host',$config->host);
-            \Config::set('mail.port',$config->port);
-            \Config::set('mail.username',$config->username);
-            \Config::set('mail.password',$config->password);
-            \Config::set('mail.sendmail',$config->from);
-            $this->from = $config->from;
-            $app = \App::getInstance();
-            $app['swift.transport'] = $app->share(function ($app) {
-               return new TransportManager($app);
-           });
+        <!--[if mso]>
+        <td valign="top" width="600" style="width:600px;">
+        <![endif]-->
+        <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+          <tbody><tr>
 
-            $mailer = new \Swift_Mailer($app['swift.transport']->driver());
-            Mail::setSwiftMailer($mailer);           
-        }
-    }
+            <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 14px;font-style: normal;font-weight: normal;line-height: 100%;text-align: left;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #202020;">
+              <div style="font-size: 13px;text-align:left; font-family:'Helvetica';font-weight:lighter;line-height:21px;"
+              <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">Regards,<br>
+                <br><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-size:16px"><span style="font-family:helvetica; font-weight:bold; line-height:21px">
+                  @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name != '')
+                  {!! App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name !!}
+                  @else
+                  Estate Baron
+                  @endif Team<br><br>
+                </td>
+              </tr>
+            </tbody></table>
+        <!--[if mso]>
+        </td>
+      <![endif]-->
 
-    public function deliver()
-    {
-        $siteconfig = SiteConfigurationHelper::getConfigurationAttr();
-        $config = $siteconfig->mailSetting()->first();
-        if($config){
-            $this->overrideMailerConfig();
-        }
-        $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->subject($this->subject);
-        });
-    }
+        <!--[if mso]>
+        </tr>
+        </table>
+      <![endif]-->
+    </td>
+  </tr>
+</tbody>
+</table></td>
+</tr>
+<tr>
+  <td valign="top" id="templateFooter" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;border-top: 0;border-bottom: 0;padding-top: 9px;padding-bottom: 9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody class="mcnFollowBlockOuter">
+      <tr>
+        <td align="center" valign="top" style="padding: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowBlockInner">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+            <tbody><tr>
+              <td align="center" style="padding-left: 9px;padding-right: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContent">
+                  <tbody><tr>
+                    <td align="center" valign="top" style="padding-top: 9px;padding-right: 9px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                      <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <tbody><tr>
+                          <td align="center" valign="top" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                    <!--[if mso]>
+                                    <table align="center" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                    <![endif]-->
 
-    public function deliverWithFile()
-    {
-        $siteconfig = SiteConfigurationHelper::getConfigurationAttr();
-        $config = $siteconfig->mailSetting()->first();
-        if($config){
-            $this->overrideMailerConfig();
-        }
-        $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->subject($this->subject)->attach($this->pathToFile);
-        });
-    }
+                                        <!--[if mso]>
+                                        <td align="center" valign="top">
+                                        <![endif]-->
+<!-- <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: inline;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign="top" style="padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContentItemContainer">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align="left" valign="middle" style="padding-top: 5px;padding-right: 10px;padding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tbody><tr>
 
-    public function deliverWithBcc()
-    {
-        $siteconfig = SiteConfigurationHelper::getConfigurationAttr();
-        $config = $siteconfig->mailSetting()->first();
-        if($config){
-            $this->overrideMailerConfig();
-        }
-        $this->mailer->send($this->view, $this->data, function ($message) {
-            $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Konkrete')->to($this->to)->bcc($this->bcc)->subject($this->subject);
-        });
-    }
-}
+                                                                                <td align="center" valign="middle" width="24" class="mcnFollowIconContent" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                                    <a href="https://www.facebook.com/Vestabyte" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><img src="http://www.vestabyte.com/assets/images/email/facebook.png" style="display: block;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" height="24" width="24" class=""></a>
+                                                                                </td>
+
+
+                                                                        </tr>
+                                                                    </tbody></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                              </tbody></table> -->
+
+                                        <!--[if mso]>
+                                        </td>
+                                      <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align="center" valign="top">
+                                        <![endif]-->
+
+
+
+                      <!-- <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: inline;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign="top" style="padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContentItemContainer">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align="left" valign="middle" style="padding-top: 5px;padding-right: 10px;padding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tbody><tr>
+
+                                                                                <td align="center" valign="middle" width="24" class="mcnFollowIconContent" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                                    <a href="https://twitter.com/Vestabyte" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><img src="http://www.vestabyte.com/assets/images/email/twitter.png" style="display: block;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" height="24" width="24" class=""></a>
+                                                                                </td>
+
+
+                                                                        </tr>
+                                                                    </tbody></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                              </tbody></table> -->
+
+                                        <!--[if mso]>
+                                        </td>
+                                      <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align="center" valign="top">
+                                        <![endif]-->
+
+
+                                            <!-- <table align="left" border="0" cellpadding="0" cellspacing="0" style="display: inline;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign="top" style="padding-right: 0;padding-bottom: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContentItemContainer">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentItem" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align="left" valign="middle" style="padding-top: 5px;padding-right: 10px;padding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tbody><tr>
+
+                                                                                <td align="center" valign="middle" width="24" class="mcnFollowIconContent" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                                    <a href="https://www.linkedin.com/company/Vestabyte" target="_blank" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;"><img src="http://www.vestabyte.com/assets/images/email/linkedin.png" style="display: block;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" height="24" width="24" class=""></a>
+                                                                                </td>
+
+
+                                                                        </tr>
+                                                                    </tbody></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                              </tbody></table> -->
+
+                                        <!--[if mso]>
+                                        </td>
+                                      <![endif]-->
+
+                                    <!--[if mso]>
+                                    </tr>
+                                    </table>
+                                  <![endif]-->
+
+
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr>
+                </tbody></table>
+
+
+
+
+              </td>
+            </tr>
+          </tbody>
+        </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;table-layout: fixed !important;">
+          <tbody class="mcnDividerBlockOuter">
+            <tr>
+              <td class="mcnDividerBlockInner" style="min-width: 100%;padding: 10px 18px 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-top-width: 2px;border-top-style: solid;border-top-color: #EEEEEE;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                  <tbody><tr>
+                    <td style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                      <span></span>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </td>
+            </tr>
+          </tbody>
+        </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+          <tbody class="mcnTextBlockOuter">
+            <tr>
+              <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+                  <tbody><tr>
+
+                    <td valign="top" class="mcnTextContent" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #1e4762;font-family: Helvetica;font-size: 9px;line-height: 150%;text-align: justify;">
+
+                      The advice provided in relation to the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform, including on the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform website, is general advice only and has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif or any products offered by @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif platform you should read the @if((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Offer documents @endif and consider whether they are right for you. This email and any attachment is confidential and may be protected by copyright. If you have received it by mistake, please notify us, delete it and do not use, copy or disclose it. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif accepts no liability for the content of this email, or the consequences of any actions taken on the basis of any information provided. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif does not guarantee that this email and any attachment is secure, free of viruses or error-free.<br>
+                      &nbsp;
+                      </html>
+

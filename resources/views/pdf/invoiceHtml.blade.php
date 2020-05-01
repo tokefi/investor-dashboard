@@ -36,7 +36,7 @@
 	@endif
 	@if($investment->project->projectspvdetail)
 	@if($investment->project->projectspvdetail->certificate_frame)
-	<div style="background:url('/assets/images/certificate_frames/{{$investment->project->projectspvdetail->certificate_frame}}');background-position: top center;background-repeat: no-repeat;background-size: 85% 90%;width:0%;height:100%;padding-bottom: 7%;">
+	<div style="background:url('/assets/images/certificate_frames/{{$investment->project->projectspvdetail->certificate_frame}}');background-position: top center;background-repeat: no-repeat;background-size: 85% 90%;width:100%;height:100%;padding-bottom: 7%; position: relative;">
 		@else
 		<div style="padding-top:100px;padding-left:0px;padding-right:0px;margin-top:-50px; position: relative;">
 			@endif
@@ -44,7 +44,7 @@
 			<div style="padding-top:100px;padding-left:0px;padding-right:0px;margin-top:-50px; position: relative;">
 				@endif
 				@if($investment->project->media->where('type', 'spv_logo_image')->first())
-				<div class="text-center" style="top: 15%;width:100%;position:absolute;z-index:-1;opacity:0.05;"><img src="/{{$investment->project->media->where('type', 'spv_logo_image')->first()->path}}" width="700"></div>
+				<div class="text-center" style="@if($investment->project->master_child) top: 95 @else top: 15% @endif ;width:100%;position:absolute;z-index:-1;opacity:0.05;"><img src="/{{$investment->project->media->where('type', 'spv_logo_image')->first()->path}}" width="700"></div>
 				@endif
 				<div class="text-center" style="padding: 10% 20%;">
 					<h1>@if($investment->project->share_vs_unit == 1) Redeemable Preference Share @elseif($investment->project->share_vs_unit == 2) Preference Shares @elseif($investment->project->share_vs_unit == 3) Ordinary Shares @else Unit @endif Certificate</h1>
@@ -100,7 +100,7 @@
 			@foreach($investment->childInvestment as $cInvestment)
 			@if($cInvestment->project->projectspvdetail)
 			@if($cInvestment->project->projectspvdetail->certificate_frame)
-			<div style="background:url('/assets/images/certificate_frames/{{$cInvestment->project->projectspvdetail->certificate_frame}}');background-position: top center;background-repeat: no-repeat;background-size: 85% 90%;width:100%;height:100%;padding-bottom: 7%;">
+			<div style="background:url('/assets/images/certificate_frames/{{$cInvestment->project->projectspvdetail->certificate_frame}}');background-position: top center;background-repeat: no-repeat;background-size: 85% 90%;width:100%;height:100%;padding-bottom: 7%; position: relative;">
 				@else
 				<div style="padding-top:100px;padding-left:0px;padding-right:0px;margin-top:-50px;  position:relative;">
 					@endif
