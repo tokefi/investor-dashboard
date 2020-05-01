@@ -482,8 +482,9 @@ class UsersController extends Controller
 
 
         //Merge user investments and dividends
-        $transactions = Transaction::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
-        $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        $transactions = Transaction::where('user_id', $user_id)->whereHas('project', function ($q) {
+            $q->where('project_site', url());})->orderBy('created_at', 'desc')->get();
+        $usersInvestments = InvestmentInvestor::where('user_id', $user_id)->where('project_site',url())->orderBy('created_at', 'desc')->get();
         $redemptions = RedemptionRequest::whereHas('project', function ($q) {
             $q->where('project_site', url());
         })
