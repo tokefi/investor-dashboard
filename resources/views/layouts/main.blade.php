@@ -249,12 +249,12 @@ $_SESSION['code'] = md5(microtime(true));
                             My Account <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || Auth::user()->roles->contains('role', 'agent'))
+                            @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') ||  App\Helpers\SiteConfigurationHelper::isSiteAgent())
                             <li class="dropdown-submenu">
                                 <a class="submenu-item" tabindex="-1" href="javascript:void()">Dashboard <span class="caret"></span></a>
                                 <ul class="dropdown-menu dashboard-submenu">
                                     <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
-                                    @if(!Auth::user()->roles->contains('role', 'agent'))
+                                    @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') )
                                     <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
                                     {{-- <li class="nav-item"><a href="{{route('dashboard.projects')}}">Projects <i class="fa fa-paperclip pull-right"></i></a></li> --}}
                                     <li class="dropdown-submenu">
