@@ -295,8 +295,12 @@ $_SESSION['code'] = md5(microtime(true));
                                         {!! Html::linkRoute('dashboard.index', 'Dashboard', null, ['class'=>'anchor-color', 'style'=>'padding:5px 17px;']) !!}
                                     </li>--}}
                                     @endif
+                                    {{-- <li class="nav-item"><a href="{{route('users.investments',[Auth::user()])}}">Investments</a></li>
                                     <li>
                                         {!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
+                                    </li> --}}
+                                    <li>
+                                        {!! Html::linkRoute('users.investments', 'Investments', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
                                     </li>
                                     <li>
                                         {!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}

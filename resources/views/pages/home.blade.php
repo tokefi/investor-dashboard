@@ -277,9 +277,12 @@
 										{!! Html::linkRoute('dashboard.index', 'Dashboard', null, ['class'=>'anchor-color', 'style'=>'padding:5px 17px;']) !!}
 									</li>--}}
 									@endif
-									<li>
+									{{-- <li>
 										{!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
-									</li>
+									</li> --}}
+									 <li>
+                                        {!! Html::linkRoute('users.investments', 'Investments', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
+                                    </li>
 									<li>
 										{!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
 									</li>

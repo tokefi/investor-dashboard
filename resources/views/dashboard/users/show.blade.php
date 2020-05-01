@@ -1,5 +1,4 @@
 @extends('layouts.main')
-@include('dashboard.includes.sidebar')
 
 @section('title-section')
 {{$user->first_name}} | Dashboard | @parent

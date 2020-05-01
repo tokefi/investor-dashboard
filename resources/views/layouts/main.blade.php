@@ -295,7 +295,8 @@ $_SESSION['code'] = md5(microtime(true));
                             </li>
                             {{--<li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard</a></li>--}}
                             @endif
-                            <li class="nav-item"><a href="{{route('users.show',[Auth::user()])}}">Profile</a></li>
+                            {{-- <li class="nav-item"><a href="{{route('users.show',[Auth::user()])}}">Profile</a></li> --}}
+                            <li class="nav-item"><a href="{{route('users.investments',[Auth::user()])}}">Investments</a></li>
                             <li class="nav-item"><a href="{{route('users.logout')}}">Logout</a></li>
                         </ul>
                     </li>
