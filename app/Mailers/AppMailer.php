@@ -286,7 +286,7 @@ class AppMailer
         }else {
             $this->subject = 'Unit certificate for '.$investment->project->title.' for '.$investment->user->first_name.' '.$investment->user->last_name;
         }
-        $this->data = compact('investment','formLink');
+        $this->data = compact('investment','formLink','investments');
         if($investment->project->share_vs_unit) {
             $this->pathToFile = storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf';
         }else {
