@@ -589,7 +589,7 @@
                                         <tr>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->project->title }}</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">BUY</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->amount}}</span></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->number_of_shares}}</span></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
