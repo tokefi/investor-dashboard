@@ -413,28 +413,13 @@ class DashboardController extends Controller
         $this->validate($request, [
             'investor' => 'required',
         ]);
-        $investments = collect();
+        $transactions = collect();
         $investment = InvestmentInvestor::findOrFail($investment_id);
         if($investment){
-            $investmentShares = InvestmentInvestor::where('project_id', $investment->project_id)
-            ->where('accepted', 1)
-            ->orderBy('share_certificate_issued_at','DESC')->get()
-            ->first();
-            $shareInit = 0;
-            if($investmentShares){
-                if($investmentShares->share_number){
-                    $shareNumber = explode('-', $investmentShares->share_number);
-                    $shareInit = $shareNumber[1];
-                }
-            }
-            $shareStart = $shareInit+1;
-            $shareEnd = $shareInit+$investment->amount;
-            $shareCount = (string)($shareStart)."-".(string)($shareEnd);
             //Update current investment and with the share certificate details
             $investment->accepted = 1;
             $investment->money_received = 1;
             $investment->share_certificate_issued_at = Carbon::now();
-            $investment->share_number = $shareCount;
             if($investment->project->share_vs_unit){
                 $investment->share_certificate_path = "/app/invoices/Share-Certificate-".$investment->id.".pdf";
             }else{
@@ -442,63 +427,44 @@ class DashboardController extends Controller
             }
             $investment->save();
              // Save details to transaction table
-            $noOfShares = $shareEnd-$shareInit;
-            $transactionRate = $investment->amount/$noOfShares;
             $masterTransaction = Transaction::create([
                 'user_id' => $investment->user_id,
                 'project_id' => $investment->project_id,
                 'transaction_type' => Transaction::BUY,
                 'transaction_date' => Carbon::now(),
-                'amount' => round($investment->amount,2),
-                'rate' => round($transactionRate,2),
-                'number_of_shares' => $noOfShares,
+                'amount' => round($investment->amount * $investment->buy_rate,2),
+                'rate' => round($investment->buy_rate,4),
+                'number_of_shares' => $investment->amount,
             ]);
 
             if($investment->project->master_child){
                 $masterTransaction->transaction_description = 'Master Application';
                 $masterTransaction->save();
-                $investments->push($masterTransaction);
+                $transactions->push($masterTransaction);
                 $childInvestments = InvestmentInvestor::where('master_investment',$investment->id)->get();
                 foreach($childInvestments as $child){
-                    $investmentShares = InvestmentInvestor::where('project_id', $child->project_id)
-                    ->where('accepted', 1)
-                    ->orderBy('share_certificate_issued_at','DESC')->get()
-                    ->first();
-                    $shareInit = 0;
-                    if($investmentShares){
-                        if($investmentShares->share_number){
-                            $shareNumber = explode('-', $investmentShares->share_number);
-                            $shareInit = $shareNumber[1];
-                        }
-                    }
-                    $shareStart = $shareInit+1;
-                    $shareEnd = $shareInit+$child->amount;
-                    $shareCount = (string)($shareStart)."-".(string)($shareEnd);
                     //Update current Investment and with the share certificate details
                     $child->accepted = 1;
                     $child->money_received = 1;
                     $child->share_certificate_issued_at = Carbon::now();
-                    $child->share_number = $shareCount;
                     if($child->project->share_vs_unit){
                         $child->share_certificate_path = "/app/invoices/Share-Certificate-".$child->id.".pdf";
                     }else{
                         $child->share_certificate_path = "/app/invoices/Share-Certificate-".$child->id.".pdf";
                     }
                     $child->save();
-                    $noOfShares = $shareEnd-$shareInit;
-                    $transactionRate = $child->amount/$noOfShares;
                     $childTransaction = Transaction::create([
                         'user_id' => $child->user_id,
                         'project_id' => $child->project_id,
                         'transaction_type' => Transaction::BUY,
                         'transaction_date' => Carbon::now(),
-                        'amount' => round($child->amount,2),
-                        'rate' => round($transactionRate,2),
-                        'number_of_shares' => $noOfShares,
+                        'amount' => round($child->amount * $child->buy_rate,2),
+                        'rate' => round($child->buy_rate,4),
+                        'number_of_shares' => $child->amount,
                     ]);
                     $childTransaction->transaction_description = 'Child Application';
                     $childTransaction->save();
-                    $investments->push($childTransaction);
+                    $transactions->push($childTransaction);
                 }
             }
             // dd($investment);
@@ -515,8 +481,8 @@ class DashboardController extends Controller
                     $formLink = url().'/user/view/'.base64_encode($investment->id).'/unit';
                 }
 
-                $mailer->sendInvoiceToUser($investment,$formLink,$investments);
-                $mailer->sendInvoiceToAdmin($investment,$formLink,$investments);
+                $mailer->sendInvoiceToUser($investment,$formLink,$transactions);
+                $mailer->sendInvoiceToAdmin($investment,$formLink,$transactions);
             }
             return redirect()->back()->withMessage('<p class="alert alert-success text-center">Successfully updated.</p>');
         }
@@ -1364,8 +1330,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-             return new TransportManager($app);
-         });
+               return new TransportManager($app);
+           });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);

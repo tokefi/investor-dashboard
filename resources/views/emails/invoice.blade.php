@@ -585,11 +585,11 @@
                                         </tr>
                                     </thead>
                                     <tbody style="text-align: center;">
-                                        @foreach($investments as $investment)
+                                        @foreach($transactions as $transaction)
                                         <tr>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$investment->project->title }}</span></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->project->title }}</span></td>
                                         <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">BUY</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$investment->amount}}</span></td>
+                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->amount}}</span></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

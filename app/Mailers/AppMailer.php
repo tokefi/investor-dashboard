@@ -247,7 +247,7 @@ class AppMailer
         $this->deliver();
     }
 
-    public function sendInvoiceToUser($investment,$formLink,$investments)
+    public function sendInvoiceToUser($investment,$formLink,$transactions)
     {
         $this->to = $investment->user->email;
         $this->view = 'emails.invoice';
@@ -258,7 +258,7 @@ class AppMailer
             $this->subject = 'Unit certificate for '.$investment->project->title;
 
         }
-        $this->data = compact('investment','formLink','investments');
+        $this->data = compact('investment','formLink','transactions');
 
         if($investment->project->share_vs_unit) {
             $this->pathToFile = storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf';
@@ -270,7 +270,7 @@ class AppMailer
         $this->deliver();
     }
 
-    public function sendInvoiceToAdmin($investment,$formLink,$investments)
+    public function sendInvoiceToAdmin($investment,$formLink,$transactions)
     {
         $role = Role::findOrFail(1);
         $recipients = ['info@konkrete.io'];
@@ -286,7 +286,7 @@ class AppMailer
         }else {
             $this->subject = 'Unit certificate for '.$investment->project->title.' for '.$investment->user->first_name.' '.$investment->user->last_name;
         }
-        $this->data = compact('investment','formLink','investments');
+        $this->data = compact('investment','formLink','transactions');
         if($investment->project->share_vs_unit) {
             $this->pathToFile = storage_path().'/app/invoices/Share-Certificate-'.$investment->id.'.pdf';
         }else {
