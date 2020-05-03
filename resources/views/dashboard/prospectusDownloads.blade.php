@@ -46,7 +46,11 @@ Projects | Dashboard | @parent
 <script type="text/javascript">
 	$(document).ready(function(){
 		var projectsTable = $('#prospectusDownloadsTable').DataTable({
-			"iDisplayLength": 10
+			"iDisplayLength": 10,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 	});
 </script>

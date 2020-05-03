@@ -24,6 +24,21 @@
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif
+			@if($investments->count())
+			<div class="chart">
+				<canvas id="myChart"></canvas>
+			</div>
+			{{-- <div class="topleft">
+		        <div class="chart">
+		            <div class="pie">
+		                <canvas id="myChart" class="pie"></canvas>
+		            </div>
+		            <div class="legend" id="top10Legend">
+		            </div>
+		        </div>
+		    </div> --}}
+			<br>
+			@endif
 			{{-- <ul class="list-group">
 				<li class="list-group-item">
 					<div class="text-center">
@@ -282,6 +297,12 @@
 
 @section('js-section')
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> --}}
+<script src="https://www.chartjs.org/dist/master/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/google-palette/1.1.0/palette.min.js"></script>
+{{-- <script src="https://unpkg.com/chartjs-plugin-colorschemes"></script> --}}
+
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		var transactionsTable = $('#transactionsTable').DataTable({
@@ -381,6 +402,98 @@
 				location.reload();
 			});
 		})
+
+		@if($investments->count())
+	  	var marketValue = [];
+	  	var projectName = [];
+	    @foreach($investments as $investment )
+	        marketValue.push(Math.round({{$investment->shares * $investment->project->share_per_unit_price}}));
+	        projectName.push('{{$investment->project->title}}');
+	    @endforeach
+
+	    var sumOfMarketValues = marketValue.reduce(function(a, b){
+	        return a + b;
+	    }, 0);
+
+	    // Create our number formatter.
+		var formatter = new Intl.NumberFormat('en-US', {
+		  style: 'currency',
+		  currency: 'USD',
+		});
+	    var pieChartTitle = 'Total Market Value - ' + formatter.format(sumOfMarketValues);
+
+  		var ctx = document.getElementById('myChart').getContext('2d');
+  // 		Chart.Legend.prototype.afterFit = function() {
+		//     this.height = this.height + 20;
+		// };
+
+		var pieColors = [
+			'#08519c',
+            '#2171b5',
+            '#4292c6',
+            '#6baed6',
+            '#9ecae1',
+            '#a6cee6',
+            '#c6dbef',
+            '#c4dfef',
+            '#f7fbff',
+            '#e1eff7'
+		];
+
+		var chart = new Chart(ctx, {
+			type: 'pie',
+			data: {
+				labels: projectName,
+		    	datasets: [{
+			  		backgroundColor: pieColors,
+		  		  	hoverBorderWidth: 8,
+			      	backgroundColor: pieColors,
+			     	hoverBackgroundColor: pieColors,
+			      	hoverBorderColor: pieColors,
+					borderColor: '#eee',
+					data: marketValue,
+				}]
+			},
+			options: {
+				animation: false,
+				responsive: true,
+			    layout: {
+			      padding: {
+			      	left: 0,
+		            right: 0,
+		            top: 10,
+		            bottom: 0
+					}			    
+			  	},
+			    legend: {
+			      display: true,
+			      position: 'right',
+			      align: 'middle'
+			    },	    
+				title: {
+					display: true,
+					text: pieChartTitle,
+					fontSize: 14,
+					padding: {
+						bottom: 30,
+					}
+				},
+				tooltips: {
+                    callbacks: {
+                        title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+                        label: function (tooltipItem, data) {
+                            var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+                            // return '$' + amount + ' / ' + '$' + total + ' ( ' + parseFloat(amount * 100 / total).toFixed(2) + '% )';
+                            return '$' + amount + ' ( ' + parseFloat(amount * 100 / total).toFixed(2) + '% )';
+                        },
+                    }
+                },
+        	}
+		});
+
+		@endif
+
 	});
 </script>
 @stop

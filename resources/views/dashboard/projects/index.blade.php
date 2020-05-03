@@ -80,7 +80,7 @@ Projects | Dashboard | @parent
 			"language": {
 			    "search": "",
 			    "searchPlaceholder": "Search",
-			  }
+			}
 		});
 		// $('.description').text(desc.substring(0,50));
 	});

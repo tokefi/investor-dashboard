@@ -164,7 +164,11 @@ Projects | Dashboard | @parent
 	$(document).ready(function(){
 		$('#requestsTable').DataTable({
             "iDisplayLength": 25,
-            "order": []
+            "order": [],
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search",
+            }
         });
 
         $('#requestsTable').on('click', '.accept-redemption-btn, .reject-redemption-btn', function () {

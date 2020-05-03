@@ -62,7 +62,11 @@ Projects | Dashboard | @parent
 <script type="text/javascript">
 	$(document).ready(function(){
 		var projectsTable = $('#requestsTable').DataTable({
-			"iDisplayLength": 10
+			"iDisplayLength": 10,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 
 		//Hide application form fillup request from requests page in admin dashboard
@@ -83,7 +87,7 @@ Projects | Dashboard | @parent
 		        }).done(function(data){
 		        	if(data){
 		        		$('.loader-overlay').hide();
-	 						$("#requestsTable").DataTable().row( $('#application_request_' + application_request_id) ).remove().draw( false );
+	 						$("#requestsTable").DataTable({ "language": { "search": "", "searchPlaceholder": "Search" } }).row( $('#application_request_' + application_request_id) ).remove().draw( false );
 		        	}
 		        });
 		    }

@@ -9,7 +9,7 @@ Users | Dashboard | @parent
 @stop
 
 @section('content-section')
-<div class="container dashboard-users-section">
+<div class="container">
 	<br>
 	<div class="row">
 		{{-- <div class="col-md-2">

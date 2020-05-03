@@ -168,7 +168,11 @@
 	$(document).ready(function(){
 		var usersTable = $('#investmentsTable').DataTable({
 			"order": [[5, 'desc'], [0, 'desc']],
-			"iDisplayLength": 50
+			"iDisplayLength": 50,
+			"language": {
+			    "search": "",
+			    "searchPlaceholder": "Search",
+			}
 		});
 
 		default_project_value = $('#project_to_invest').val();
