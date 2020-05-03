@@ -99,7 +99,7 @@
 								<tr>
 									<td>{{$allTransaction->project->title}}</td>
 									{{-- <td class="text-center">@if(! $allTransaction->accepted && $allTransaction->money_received) Applied @elseif($allTransaction->money_received) Money Received @else Share Certificate Issued @endif</td> --}}
-									<td class="text-center">@if($allTransaction->transaction_type == APP\Transaction::BUY || $allTransaction->transaction_type == APP\Transaction::REPURCHASE || $allTransaction->transaction_type == APP\Transaction::CANCELLED){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == APP\Transaction::DIVIDEND) {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == APP\Transaction::FIXED_DIVIDEND)  {{ round($allTransaction->rate ,2) }} % FIXED DIVIDEND @elseif($allTransaction->transaction_type == APP\Transaction::ANNUALIZED_DIVIDEND) {{ $allTransaction->transaction_description }} @endif @endif</td>
+									<td class="text-center">@if($allTransaction->transaction_type == APP\Transaction::BUY || $allTransaction->transaction_type == APP\Transaction::REPURCHASE || $allTransaction->transaction_type == APP\Transaction::CANCELLED){{ $allTransaction->transaction_type }} @else @if($allTransaction->transaction_type == APP\Transaction::DIVIDEND) Dividend {{ round($allTransaction->rate ,2) }} CENTS PER SHARE @elseif($allTransaction->transaction_type == APP\Transaction::FIXED_DIVIDEND)  {{ round($allTransaction->rate ,2) }} % FIXED DIVIDEND @elseif($allTransaction->transaction_type == APP\Transaction::ANNUALIZED_DIVIDEND) {{ $allTransaction->transaction_description }} @endif @endif</td>
 									<td class="text-center">{{$allTransaction->number_of_shares}}</td>
 									<td>${{number_format($allTransaction->project->share_per_unit_price, 4)}}</td>
 									<td>${{number_format($allTransaction->amount, 2)}} </td>
@@ -133,7 +133,6 @@
 								<thead>
 									<tr>
 										<th>Project Name</th>
-										<th>Project Address</th>
 										<th>Shares/units</th>
 										<th>Price ($)</th>
 										<th>Market Value</th>
@@ -147,13 +146,6 @@
 									@foreach($investments as $investment)
 									<tr>
 										<td>{{$investment->project->title}}</td>
-										<td>
-											{{$investment->project->location->line_1}}, 
-											{{$investment->project->location->line_2}}, 
-											{{$investment->project->location->city}}, 
-											{{$investment->project->location->postal_code}},
-											{{$investment->project->location->country}}
-										</td>
 										<td>{{round($investment->shares)}}</td>
 										<td>{{$investment->project->share_per_unit_price}}</td>
 										<td>${{number_format($investment->shares * $investment->project->share_per_unit_price)}}</td>
