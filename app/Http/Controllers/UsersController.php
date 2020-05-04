@@ -480,6 +480,16 @@ class UsersController extends Controller
         }
         $investments = ModelHelper::getTotalInvestmentByUser($user_id);
 
+        $investmentsWithoutMasterFund =  InvestmentInvestor::where('user_id', $user_id)
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url())->where('master_child', 0);
+            })
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id', 'project_id')
+            ->get();
+
 
         //Merge user investments and dividends
         $transactions = Transaction::where('user_id', $user_id)->whereHas('project', function ($q) {
@@ -501,7 +511,7 @@ class UsersController extends Controller
 
         $projects = Project::where(['active'=>'1','project_site'=>url()])->select(['id', 'title'])->orderBy('project_rank', 'asc')->get();
         
-        return view('users.investments', compact('user','color', 'investments', 'transactions', 'projects','usersInvestments','redemptions'));
+        return view('users.investments', compact('user','color', 'investments', 'transactions', 'projects','usersInvestments','redemptions', 'investmentsWithoutMasterFund'));
     }
 
     /**

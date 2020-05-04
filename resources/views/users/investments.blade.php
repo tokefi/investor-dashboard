@@ -24,20 +24,47 @@
 			@if (Session::has('message'))
 			{!! Session::get('message') !!}
 			@endif
-			@if($investments->count())
-			<div class="chart">
-				<canvas id="myChart"></canvas>
+			@if($investmentsWithoutMasterFund->count())
+			<div class="row">
+				<div class="col-md-12">
+					<div class="chart">
+						<canvas id="myChart"></canvas>
+					</div>
+				</div>
+				{{-- <div class="col-md-6">
+					<div class="chart">
+						<select id="input">
+						  <option value="VTI">Vanguard Total Stock Market ETF</option>
+						  <option value="AAPL">Apple</option>
+						  <option value="GOOG">Google</option>
+						  <option value="MSFT">Microsoft</option>
+						  <option value="BRK.A">Berkshire Hathaway</option>
+						  <option value="FB">Facebook</option>
+						  <option value="JPM">JPMorgan</option>
+						</select>
+						<!-- <input id="input" placeholder="Enter a stock"></input> -->
+						<button type="button" onclick="displayPrices()">Get Prices</button><br><br>
+
+						<label for="spacing">Duration:</label>
+						<div class="slider">
+						<datalist id="steplist">
+						    <option label="3" value="3">
+						    <option label="6" value="6">
+						    <option label="9" value="9">
+						    <option label="12" value="12">
+						    <option label="15" value="15">  
+						    <option label="18" value="18">
+						    <option label="21" value="21">
+						    <option label="24" value="24">
+						</datalist>
+						<input onchange="displayPrices()" list="steplist" 
+						           id="duration" type="range" min="3" max="24" step="3" value="12">  
+						</div>
+						<canvas id="sharePriceChart"></canvas>
+					</div>
+				</div>	 --}}			
 			</div>
-			{{-- <div class="topleft">
-		        <div class="chart">
-		            <div class="pie">
-		                <canvas id="myChart" class="pie"></canvas>
-		            </div>
-		            <div class="legend" id="top10Legend">
-		            </div>
-		        </div>
-		    </div> --}}
-			<br>
+			<br><br>
 			@endif
 			{{-- <ul class="list-group">
 				<li class="list-group-item">
@@ -300,9 +327,69 @@
 {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> --}}
 <script src="https://www.chartjs.org/dist/master/Chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/google-palette/1.1.0/palette.min.js"></script>
-{{-- <script src="https://unpkg.com/chartjs-plugin-colorschemes"></script> --}}
+<script src="https://d3js.org/d3.v5.min.js"></script>
 
+{{-- <script type="text/javascript">
+	displayPrices();
+function displayPrices(){
+  
+let duration = document.getElementById("duration").value;
+let name = document.getElementById("input").value;
+var xmlhttp = new XMLHttpRequest(),
+    url = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + name + '&apikey=PVY8MCGPGIBP69X4';
 
+xmlhttp.open('GET', url, true);
+xmlhttp.onload = function() {
+  // const dates = lastWeek();
+  if (this.readyState == 4 && this.status == 200) {
+    json=JSON.parse(this.responseText);
+    // document.getElementById('stock').innerHTML =
+    //   json['Meta Data']['2. Symbol'];
+    // get an array of object keys
+    let keys = Object.keys(json['Monthly Time Series']);
+    var dates = [];
+    var pricesClose = [];
+    const months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+    // get prices for last no. of months
+    for (let i=0; i<duration; i++) {
+      let key = keys[i];
+      // console.log('key', key);
+      pricesClose.push(json['Monthly Time Series'][key]['4. close']);
+      dates.push(months[Number(key.slice(5, 7) - 1)] + key.slice(2, 4));
+    }
+    // console.log(dates);
+    // console.log(pricesClose);
+    displayChart(name, dates, pricesClose)
+  }
+};
+xmlhttp.send();
+}
+
+function displayChart(name, dates, pricesClose) {
+  let labels = dates.reverse();
+  let data = pricesClose.reverse();
+  let ctx = document.getElementById('sharePriceChart').getContext('2d');
+  let chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+
+      // The data for our dataset
+      data: {
+          labels: labels,
+          datasets: [{
+              label: name,
+              borderColor: 'rgb(255, 99, 132)',
+              data: data,
+            lineTension: 0,
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+}
+</script> --}}
 <script type="text/javascript">
 	$(document).ready(function(){
 		var transactionsTable = $('#transactionsTable').DataTable({
@@ -403,10 +490,10 @@
 			});
 		})
 
-		@if($investments->count())
+		@if($investmentsWithoutMasterFund->count())
 	  	var marketValue = [];
 	  	var projectName = [];
-	    @foreach($investments as $investment )
+	    @foreach($investmentsWithoutMasterFund as $investment )
 	        marketValue.push(Math.round({{$investment->shares * $investment->project->share_per_unit_price}}));
 	        projectName.push('{{$investment->project->title}}');
 	    @endforeach
@@ -423,10 +510,6 @@
 	    var pieChartTitle = 'Total Market Value - ' + formatter.format(sumOfMarketValues);
 
   		var ctx = document.getElementById('myChart').getContext('2d');
-  // 		Chart.Legend.prototype.afterFit = function() {
-		//     this.height = this.height + 20;
-		// };
-
 		var pieColors = [
 			'#08519c',
             '#2171b5',
@@ -491,6 +574,9 @@
                 },
         	}
 		});
+
+
+		
 
 		@endif
 
