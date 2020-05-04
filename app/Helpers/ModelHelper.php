@@ -77,6 +77,28 @@ class ModelHelper
         });
     }
 
+    public static function getTotalInvestmentByUserWithoutMasterFunds($userId)
+    {
+        $investment =  InvestmentInvestor::where('user_id', $userId)
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url())->where('master_child', 0);
+            })
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id', 'project_id')
+            ->get();
+
+        return $investment->map(function ($item, $key) {
+            $redemption = RedemptionRequest::select([\DB::raw("SUM(accepted_amount) as redemptions")])
+                ->where('project_id', $item->project_id)
+                ->where('user_id', $item->user_id)
+                ->first();
+            $item->shares = $item->shares - $redemption->redemptions;
+            return $item;
+        });
+    }
+
     public static function getTotalInvestmentByUserAndProject($userId, $projectId, $date = null)
     {
         $investment =  InvestmentInvestor::where('user_id', $userId)
