@@ -577,23 +577,25 @@
               <div style="font-size: 13px;text-align:left; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
                 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">Thank you for investing in <b>{{$investment->project->title}}.</b></span></span></span><br><br>
                 <table class="table-striped " border="1" cellpadding="10" width="100%" >
-                                    <thead style=" font-size: 13px; text-align: center;">
-                                        <tr style="">
-                                            <th>Project Name</th>
-                                            <th>Transaction Type</th>
-                                            <th>Number of shares</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="text-align: center;">
-                                        @foreach($transactions as $transaction)
-                                        <tr>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->project->title }}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">BUY</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->number_of_shares}}</span></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                  <thead style=" font-size: 13px; text-align: center;">
+                    <tr style="">
+                      <th>Project Name</th>
+                      <th>Transaction Type</th>
+                      <th>Number of shares</th>
+                    </tr>
+                  </thead>
+                  <tbody style="text-align: center;">
+                    @foreach($transactions as $transaction)
+                    <tr>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->project->title }}</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">BUY</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">${{$transaction->rate}}</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">{{$transaction->number_of_shares}}</span></td>
+                      <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px; text-align: center;">${{$transaction->amount}}</span></td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
                 <br><br>
                 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">
                   <a href="{{$formLink}}" style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#fff;text-decoration:none;padding:15px;cursor:pointer; background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><b>View @if($investment->project->share_vs_unit) share @else unit @endif certificate with current balance.</b></a>

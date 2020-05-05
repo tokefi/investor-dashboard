@@ -2036,69 +2036,69 @@ class DashboardController extends Controller
             ]);
         }
 
-        $redemption = RedemptionRequest::findOrFail($redemptionId);
+        $masterRedemption = RedemptionRequest::findOrFail($redemptionId);
 
-        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($redemption->user_id, $redemption->project_id);
+        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($masterRedemption->user_id, $masterRedemption->project_id);
 
-        if ($request->num_shares < 1 || $request->num_shares > $redemption->request_amount || $request->num_shares > $investment->shares) {
+        if ($request->num_shares < 1 || $request->num_shares > $masterRedemption->request_amount || $request->num_shares > $investment->shares) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid redemption amount.'
             ]);
         }
 
-        if ($request->num_shares != $redemption->request_amount) {
+        if ($request->num_shares != $masterRedemption->request_amount) {
             // Partial redemption
-            $redemption->accepted_amount = $request->num_shares;
-            $redemption->price = $redemption->project->share_per_unit_price;
-            $redemption->status_id = RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE;
-            $redemption->comments = $request->comments;
-            $redemption->save();
+            $masterRedemption->accepted_amount = $request->num_shares;
+            $masterRedemption->price = $masterRedemption->project->share_per_unit_price;
+            $masterRedemption->status_id = RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE;
+            $masterRedemption->comments = $request->comments;
+            $masterRedemption->save();
 
             // Create new redemption request with remaining amount
             RedemptionRequest::create([
-                'user_id' => $redemption->user_id,
-                'project_id' => $redemption->project_id,
-                'request_amount' => ($redemption->request_amount - $request->num_shares),
+                'user_id' => $masterRedemption->user_id,
+                'project_id' => $masterRedemption->project_id,
+                'request_amount' => ($masterRedemption->request_amount - $request->num_shares),
                 'status_id' => RedemptionStatus::STATUS_PENDING
             ]);
 
         } else {
             // Whole amount redumption
-            $redemption->accepted_amount = $request->num_shares;
-            $redemption->price = $redemption->project->share_per_unit_price;
-            $redemption->status_id = RedemptionStatus::STATUS_APPROVED;
-            $redemption->comments = $request->comments;
-            $redemption->save();
+            $masterRedemption->accepted_amount = $masterRedemption->request_amount;
+            $masterRedemption->price = $masterRedemption->project->share_per_unit_price;
+            $masterRedemption->status_id = RedemptionStatus::STATUS_APPROVED;
+            $masterRedemption->comments = $request->comments;
+            $masterRedemption->save();
         }
 
         Transaction::create([
-            'user_id' => $redemption->user_id,
-            'project_id' => $redemption->project_id,
+            'user_id' => $masterRedemption->user_id,
+            'project_id' => $masterRedemption->project_id,
             'transaction_type' => Transaction::REPURCHASE,
             'transaction_date' => Carbon::now(),
-            'amount' => $redemption->accepted_amount * $redemption->price,
-            'rate' => $redemption->price,
-            'number_of_shares' => $redemption->accepted_amount,
+            'amount' => $masterRedemption->accepted_amount * $masterRedemption->price,
+            'rate' => $masterRedemption->price,
+            'number_of_shares' => $masterRedemption->request_amount,
         ]);
         //master child redemption accept
-        if($redemption->project->master_child){
+        if($masterRedemption->project->master_child){
             $master = RedemptionRequest::get()->last();
             $childRedemptions = RedemptionRequest::where('master_redemption',$redemptionId)->get();
-
             foreach($childRedemptions as $redemption){
+                $shareRedemptionNumber = $request->num_shares*$redemption->project->isChild->allocation/100;
                 $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($redemption->user_id, $redemption->project_id);
 
-                if ($request->num_shares < 1 || $request->num_shares > $redemption->request_amount || $request->num_shares > $investment->shares) {
+                if ($shareRedemptionNumber < 1 || $shareRedemptionNumber > $redemption->request_amount || $shareRedemptionNumber > $investment->shares) {
                     return response()->json([
                         'status' => false,
                         'message' => 'Invalid redemption amount.'
                     ]);
                 }
-
-                if ($request->num_shares != $redemption->request_amount) {
+                
+                if ($shareRedemptionNumber != $redemption->request_amount) {
             // Partial redemption
-                    $redemption->accepted_amount = $request->num_shares;
+                    $redemption->accepted_amount = $shareRedemptionNumber;
                     $redemption->price = $redemption->project->share_per_unit_price;
                     $redemption->status_id = RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE;
                     $redemption->comments = $request->comments;
@@ -2108,14 +2108,14 @@ class DashboardController extends Controller
                     RedemptionRequest::create([
                         'user_id' => $redemption->user_id,
                         'project_id' => $redemption->project_id,
-                        'request_amount' => ($redemption->request_amount - $request->num_shares),
+                        'request_amount' => ($redemption->request_amount - $shareRedemptionNumber),
                         'status_id' => RedemptionStatus::STATUS_PENDING,
-                        'master_redemption' => $master->id
+                        'master_redemption' => $master->id,
                     ]);
 
                 } else {
             // Whole amount redumption
-                    $redemption->accepted_amount = $request->num_shares;
+                    $redemption->accepted_amount = $redemption->request_amount;
                     $redemption->price = $redemption->project->share_per_unit_price;
                     $redemption->status_id = RedemptionStatus::STATUS_APPROVED;
                     $redemption->comments = $request->comments;
@@ -2136,7 +2136,7 @@ class DashboardController extends Controller
             }
         }
         
-        $mailer->sendRedemptionRequestAcceptedToUser($redemption);
+        $mailer->sendRedemptionRequestAcceptedToUser($masterRedemption);
         
         return response()->json([
             'status' => true,

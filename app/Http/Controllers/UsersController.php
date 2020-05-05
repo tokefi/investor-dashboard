@@ -32,6 +32,7 @@ use App\Helpers\ModelHelper;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
 use Illuminate\Support\Facades\View;
+use App\MasterChild;
 
 class UsersController extends Controller
 {
@@ -750,8 +751,7 @@ class UsersController extends Controller
         }
 
         $user = Auth::user();
-        $investment = ModelHelper::getTotalInvestmentByUserAndProject($user->id, $request->project_id);
-        
+        $investment = ModelHelper::getTotalInvestmentByUsersAndProject(array($user->id), $request->project_id)->first();
         if ($request->num_shares < 1 || $request->num_shares > $investment->shares) {
             return response()->json([
                 'status' => false,
@@ -762,6 +762,7 @@ class UsersController extends Controller
         $pendingRequest = RedemptionRequest::where('user_id', $user->id)
         ->where('project_id', $request->project_id)
         ->where('status_id', RedemptionStatus::STATUS_PENDING)
+        ->where('master_redemption', null)
         ->get();
 
         if ($pendingRequest->count()) {
@@ -769,6 +770,19 @@ class UsersController extends Controller
                 'status' => false,
                 'message' => 'You already have a request in pending status!'
             ]);
+        }
+        $project = Project::findOrFail($request->project_id);
+
+        if($project->isChild){
+            $masterInvestment = ModelHelper::getTotalInvestmentByUsersAndProject(array($user->id), $project->isChild->master)->first();
+            $childShareAvailableForDirectRedemption = $investment->shares-(($masterInvestment->shares * ($project->isChild->allocation/100))/$project->share_per_unit_price);
+
+            if(($childShareAvailableForDirectRedemption - $request->num_shares) < 0){
+                return response()->json([ 
+                'status' => false,
+                'message' => 'This redemption cannot be allowed as '.$project->title.' is a '.$project->isChild->allocation.' % constituent of '.$masterInvestment->project->title.', Please reduce the amount'
+            ]);
+            }
         }
 
         $shares = $request->num_shares;
@@ -799,7 +813,7 @@ class UsersController extends Controller
             $data['rollover_url'] = $rolloverUrl;
         }
 
-        $project = Project::findOrFail($request->project_id);
+        
 
         // Create redemption record in DB
         RedemptionRequest::create([
@@ -817,7 +831,7 @@ class UsersController extends Controller
                 RedemptionRequest::create([
             'user_id' => $user->id,
             'project_id' => $childProject->id,
-            'request_amount' => $request->num_shares,
+            'request_amount' => round(($amount*$child->allocation/100)/$childProject->share_per_unit_price),
             'status_id' => RedemptionStatus::STATUS_PENDING,
             'type' => strtoupper($request->rollover_action),
             'rollover_project_id' => strtoupper($request->rollover_action) == 'ROLLOVER' ? $request->rollover_project_id : null,
