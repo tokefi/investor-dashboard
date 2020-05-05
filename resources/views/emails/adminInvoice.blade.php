@@ -581,6 +581,7 @@
                   <br><br>
                   Project: <b>{{$investment->project->title}}</b>
                 </span></span></span><br><br>
+                @if($transactions->count())
                 <table class="table-striped " border="1" cellpadding="10" width="100%" >
                   <thead style=" font-size: 13px; text-align: center;">
                     <tr style="">
@@ -604,6 +605,7 @@
                   </tbody>
                 </table>
                 <br><br>
+                @endif
                 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">
                   <a href="{{$formLink}}" style="font-family:helvetica; font-weight:lighter; line-height:21px; color:#fff;text-decoration:none;padding:15px;cursor:pointer; background-color: @if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><b>View @if($investment->project->share_vs_unit) share @else unit @endif certificate.</b></a><br>
                 </span></span></span>
