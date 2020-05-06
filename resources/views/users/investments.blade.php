@@ -64,7 +64,7 @@
 					</div>
 				</div>	 --}}			
 			</div>
-			<br><br>
+			<hr>
 			@endif
 			{{-- <ul class="list-group">
 				<li class="list-group-item">
@@ -75,10 +75,10 @@
 			</ul> --}}
 			{{-- <h3 class="text-center">My Investments</h3> --}}
 			<ul class="nav nav-tabs" style="width: 100%;">
-				<li class="" style="width: 25%;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
-				<li class="active" style="width: 25%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
-				<li style="width: 25%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
-				<li class="" style="width: 25%;"><a data-toggle="tab" href="#Redemption_tab" style="padding: 0em 2em"><h3 class="text-center">Redemptions</h3></a></li>
+				<li class="col-md-3 col-xs-12" style="background: none !important;"><a data-toggle="tab" href="#application_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
+				<li class="active col-md-3 col-xs-12" style="background: none !important;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li>
+				<li class="col-md-3 col-xs-12" style="background: none !important;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a></li>
+				<li class="col-md-3 col-xs-12" style="background: none !important;"><a data-toggle="tab" href="#Redemption_tab" style="padding: 0em 2em"><h3 class="text-center">Redemptions</h3></a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -558,7 +558,7 @@ function displayChart(name, dates, pricesClose) {
 					text: pieChartTitle,
 					fontSize: 14,
 					padding: {
-						bottom: 30,
+						bottom: 20,
 					}
 				},
 				tooltips: {

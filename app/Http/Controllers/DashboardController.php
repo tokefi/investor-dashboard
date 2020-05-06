@@ -2167,11 +2167,11 @@ class DashboardController extends Controller
         if($redemption->project->master_child){
             $childRedemptions = RedemptionRequest::where('master_redemption',$redemptionId)->get();
 
-            foreach($childRedemptions as $redemption){
-                $redemption->price = $redemption->project->share_per_unit_price;
-                $redemption->status_id = RedemptionStatus::STATUS_REJECTED;
-                $redemption->comments = $request->comments;
-                $redemption->save();
+            foreach($childRedemptions as $childRedemption){
+                $childRedemption->price = $childRedemption->project->share_per_unit_price;
+                $childRedemption->status_id = RedemptionStatus::STATUS_REJECTED;
+                $childRedemption->comments = $request->comments;
+                $childRedemption->save();
             }
         }
 
@@ -2202,9 +2202,9 @@ class DashboardController extends Controller
         if($redemption->project->master_child){
             $childRedemptions = RedemptionRequest::where('master_redemption',$redemptionId)->get();
 
-            foreach($childRedemptions as $redemption){
-                $redemption->is_money_sent = 1;
-                $redemption->save();
+            foreach($childRedemptions as $childRedemption){
+                $childRedemption->is_money_sent = 1;
+                $childRedemption->save();
             }
         }
 
