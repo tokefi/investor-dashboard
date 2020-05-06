@@ -2038,7 +2038,7 @@ class DashboardController extends Controller
 
         $masterRedemption = RedemptionRequest::findOrFail($redemptionId);
 
-        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($masterRedemption->user_id, $masterRedemption->project_id);
+        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($masterRedemption->user_id), $masterRedemption->project_id)->first();
 
         if ($request->num_shares < 1 || $request->num_shares > $masterRedemption->request_amount || $request->num_shares > $investment->shares) {
             return response()->json([
@@ -2086,10 +2086,9 @@ class DashboardController extends Controller
             $master = RedemptionRequest::get()->last();
             $childRedemptions = RedemptionRequest::where('master_redemption',$redemptionId)->get();
             foreach($childRedemptions as $redemption){
-                $shareRedemptionNumber = $request->num_shares*$redemption->project->isChild->allocation/100;
-                $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUserAndProject($redemption->user_id, $redemption->project_id);
-
-                if ($shareRedemptionNumber < 1 || $shareRedemptionNumber > $redemption->request_amount || $shareRedemptionNumber > $investment->shares) {
+                $shareRedemptionNumber = ($request->num_shares*$masterRedemption->project->share_per_unit_price*$redemption->project->isChild->allocation/100)/$redemption->project->share_per_unit_price;
+                $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($redemption->user_id), $redemption->project_id)->first();
+                if ($shareRedemptionNumber < 1 || $shareRedemptionNumber > $redemption->request_amount ) {
                     return response()->json([
                         'status' => false,
                         'message' => 'Invalid redemption amount.'
