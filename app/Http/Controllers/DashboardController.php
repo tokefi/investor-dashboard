@@ -716,9 +716,9 @@ class DashboardController extends Controller
             'project_id' => $investment->project_id,
             'transaction_type' => Transaction::CANCELLED,
             'transaction_date' => Carbon::now(),
-            'amount' => round($investment->amount,2),
-            'rate' => round($transactionRate,2),
-            'number_of_shares' => $noOfShares,
+            'amount' => round($investment->amount * $investment->buy_rate, 2),
+            'rate' => round($investment->buy_rate, 4),
+            'number_of_shares' => $investment->amount,
         ]);
 
         $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
@@ -867,7 +867,7 @@ class DashboardController extends Controller
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
                     'transaction_type' => Transaction::DIVIDEND,
-                    'transaction_description'=> 'cents per share',
+                    'transaction_description'=> $dividendPercent . ' CENTS PER SHARE DIVIDEND',
                     'transaction_date' => Carbon::now(),
                     'amount' => $dividendAmount,
                     'rate' => $dividendPercent,
@@ -971,10 +971,11 @@ class DashboardController extends Controller
                     'user_id' => $investment->user_id,
                     'project_id' => $investment->project_id,
                     'transaction_type' => Transaction::FIXED_DIVIDEND,
+                    'transaction_description' => $dividendPercent . '% FIXED DIVIDEND',
                     'transaction_date' => Carbon::now(),
                     'amount' => $dividendAmount,
                     'rate' => $dividendPercent,
-                    'number_of_shares' => $noOfShares,
+                    'number_of_shares' => $noOfShares
                 ]);
 
                 $prospectusText = 'Prospectus';
