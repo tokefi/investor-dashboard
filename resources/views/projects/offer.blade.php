@@ -283,7 +283,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@if(!Auth::guest() && (!isset($user->idDoc) || (Auth::user()->roles->contains('role', 'admin')||Auth::user()->roles->contains('role', 'agent'))))
+									@if(!Auth::guest())
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
