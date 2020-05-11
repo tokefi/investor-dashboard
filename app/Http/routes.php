@@ -324,3 +324,8 @@ Route::post('/dashboard/project/interest/link', ['as'=>'dashboard.project.intere
 Route::post('/dashboard/project/upload/offerdoc', ['as' => 'dashboard.upload.offerDoc', 'uses' => 'DashboardController@uploadOfferDoc']);
 Route::post('/configuration/project/editSharePerUnitPriceValue', ['as'=>'configuration.project.editSharePerUnitPriceValue', 'uses'=>'ProjectsController@editSharePerUnitPriceValue']);
 Route::post('/configuration/project/editProjectShareUnitLabelText', ['as'=>'configuration.project.editProjectShareUnitLabelText', 'uses'=>'SiteConfigurationsController@editProjectShareUnitLabelText']);
+
+/** Admin */
+Route::group(['middleware' => ['auth', 'admin']], function () {
+	Route::get('/dashboard/reporting', ['as'=>'dashboard.reporting', 'uses'=>'Admin\ReportingController@index']);
+});
