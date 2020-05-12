@@ -37,7 +37,10 @@ class ReportingController extends Controller
     {
         $txTypes = $request->tx_type ?? [];
         $projectIds = $request->project ?? [];
-        $sumAmount = 0;
+        $buy = $repurchase = $dividend = $cancelled = [
+            'count' => 0,
+            'sum' => 0
+        ];
         
         $transactions = Transaction::whereHas('project', function ($q) {
             $q->where('project_site', url());
@@ -47,14 +50,32 @@ class ReportingController extends Controller
         ->get();
 
         foreach ($transactions as $key => $transaction) {
-            if (!in_array($transaction->transaction_type, [
-                Transaction::DIVIDEND, 
-                Transaction::FIXED_DIVIDEND, 
-                Transaction::ANNUALIZED_DIVIDEND,
-                Transaction::REPURCHASE,
-                Transaction::CANCELLED
-            ])) {
-                $sumAmount += $transaction->amount;
+            switch ($transaction->transaction_type) {
+                case Transaction::BUY:
+                    $buy['count']++;
+                    $buy['sum'] += $transaction->amount;
+                    break;
+                
+                case Transaction::REPURCHASE:
+                    $repurchase['count']++;
+                    $repurchase['sum'] += $transaction->amount;
+                    break;
+                
+                case Transaction::DIVIDEND:
+                case Transaction::ANNUALIZED_DIVIDEND:
+                case Transaction::FIXED_DIVIDEND:
+                    $dividend['count']++;
+                    $dividend['sum'] += $transaction->amount;
+                    break;
+                
+                case Transaction::CANCELLED:
+                    $cancelled['count']++;
+                    $cancelled['sum'] += $transaction->amount;
+                    break;
+
+                default:
+                    # code...
+                    break;
             }
         }
 
@@ -66,7 +87,10 @@ class ReportingController extends Controller
             'projects' => $projects,
             'txTypes' => $txTypes,
             'projectIds' => $projectIds,
-            'sumAmount' => $sumAmount
+            'buy' => $buy,
+            'repurchase' => $repurchase,
+            'dividend' => $dividend,
+            'cancelled' => $cancelled,
         ]);
     }
 

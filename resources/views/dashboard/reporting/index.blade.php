@@ -68,22 +68,39 @@ Reporting | Dashboard | @parent
             @endif
         </div>
     </div>
+    @if ($transactions->count())
     <div class="pull-right">
         <h4>Summary:</h4>
         <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>BUY</th>
+                    <th>REPURCHASE</th>
+                    <th>DIVIDEND</th>
+                    <th>CANCELLED</th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
-                    <td>Number of records: </td>
-                    <td class="text-right">{{ $transactions->count() }}</td>
+                    <td>Count: </td>
+                    <td class="text-center">{{ $buy['count'] }}</td>
+                    <td class="text-center">{{ $repurchase['count'] }}</td>
+                    <td class="text-center">{{ $dividend['count'] }}</td>
+                    <td class="text-center">{{ $cancelled['count'] }}</td>
                 </tr>
                 <tr>
-                    <td>Amount Sum: </td>
-                    <td class="text-right">$ {{ number_format($sumAmount, 2) }}</td>
+                    <td>Sum ($): </td>
+                    <td class="text-center">{{ number_format($buy['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($repurchase['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($dividend['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($cancelled['sum'], 2) }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <br>
+    @endif
     <div class="row">
         <div class="col-md-12">
             <div class="table-responsive">
@@ -127,21 +144,38 @@ Reporting | Dashboard | @parent
         </div>
     </div>
     <br>
+    @if ($transactions->count())
     <div class="pull-right">
         <h4>Summary:</h4>
         <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>BUY</th>
+                    <th>REPURCHASE</th>
+                    <th>DIVIDEND</th>
+                    <th>CANCELLED</th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
-                    <td>Number of records: </td>
-                    <td class="text-right">{{ $transactions->count() }}</td>
+                    <td>Count: </td>
+                    <td class="text-center">{{ $buy['count'] }}</td>
+                    <td class="text-center">{{ $repurchase['count'] }}</td>
+                    <td class="text-center">{{ $dividend['count'] }}</td>
+                    <td class="text-center">{{ $cancelled['count'] }}</td>
                 </tr>
                 <tr>
-                    <td>Amount Sum: </td>
-                    <td class="text-right">$ {{ number_format($sumAmount, 2) }}</td>
+                    <td>Sum ($): </td>
+                    <td class="text-center">{{ number_format($buy['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($repurchase['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($dividend['sum'], 2) }}</td>
+                    <td class="text-center">{{ number_format($cancelled['sum'], 2) }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    @endif
 </div>
 
 @endsection
