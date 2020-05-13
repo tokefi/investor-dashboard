@@ -286,6 +286,7 @@ $_SESSION['code'] = md5(microtime(true));
                                     <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.import.clients')}}">Import Application<i class="fa pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>

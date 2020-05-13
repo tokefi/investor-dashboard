@@ -2318,4 +2318,102 @@ class DashboardController extends Controller
             ]
         ]);
     }
+    public function showImportClients()
+    {
+        $color = Color::where('project_site',url())->first();
+        $siteconfiguration = SiteConfiguration::where('project_site',url())->first();
+        return view('dashboard.importClientsApplication.importClientsAppliction',compact('color','siteconfiguration'));
+    }
+    public function saveClientsApplicationFromCSV(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['clients_file' => 'required|mimes:csv,txt']);
+        if($validator->fails()) {
+            return redirect()->back()->withMessage('<p class="alert alert-danger text-center">'.$validator->errors()->first().'</p>');
+        }
+        try {
+            $csvTmpPath = $request->file('clients_file')->getRealPath();
+            $alldata = array_map('str_getcsv', file($csvTmpPath));
+            $csv_data = array_slice($alldata, 1);
+            // import client application
+            if(!empty($csv_data)) {
+                foreach ($csv_data as $key => $clientAppliation) {
+                    //Define the user existing or new
+                    if($clientAppliation[3]){
+                        $activatedUser = User::where('email', $clientAppliation[3])->first();
+                        
+                        if(!$activatedUser){
+                            $nonActivatedUser = UserRegistration::where('email', $request->email)->first();
+                            // dd($nonActivatedUser,$clientAppliation[3],$activatedUser);
+                            if($nonActivatedUser)
+                                $nonActivatedUser->delete();
+
+                            $activatedUser = User::create([
+                                'username'=>str_slug($clientAppliation[1].' '.$clientAppliation[2].' '.rand(1, 9999)),
+                                'email' => $clientAppliation[3],
+                                'first_name' => $clientAppliation[1],
+                                'last_name' => $clientAppliation[2],
+                                'phone_number' => $clientAppliation[4],
+                                'password' => bcrypt('password'),
+                                'account_name' => $clientAppliation[6],
+                                'bsb' => $clientAppliation[7],
+                                'account_number' => $clientAppliation[8],
+                                'line_1' => $clientAppliation[9],
+                                'line_2' => $clientAppliation[10],
+                                'city' => $clientAppliation[11],
+                                'state' => $clientAppliation[12],
+                                'postal_code' => $clientAppliation[13],
+                                'country' => $clientAppliation[15],
+                                'tfn' => $clientAppliation[16],
+                                'activated_on'=>  Carbon::now(),
+                                'active' => 1,
+                            ]);
+                            // dd($activatedUser);
+                        }
+
+                        //submit application and issue share certificate
+                        if($clientAppliation[0]){
+                            $project = Project::where('id',$clientAppliation[0])->where('project_site',url())->first();
+                            $activatedUser->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$clientAppliation[5], 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'accepted'=>1,]);
+                            $masterTransaction = Transaction::create([
+                                'user_id' => $activatedUser->id,
+                                'project_id' => $project->id,
+                                'transaction_type' => Transaction::BUY,
+                                'transaction_date' => Carbon::now(),
+                                'amount' => round($clientAppliation[5],2),
+                                'rate' => round($project->share_per_unit_price,4),
+                                'number_of_shares' => round($clientAppliation[5]/$project->share_per_unit_price),
+                            ]);
+                        // $investor = InvestmentInvestor::get()->last();
+                            if($project->master_child){
+                                foreach($project->children as $child){
+                                    $percAmount = round($clientAppliation[5]* ($child->allocation)/100 * $project->share_per_unit_price);
+                                    $childProject = Project::find($child->child);
+                                    $activatedUser->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'investment_confirmation'=>1,]);
+
+                                    Transaction::create([
+                                        'user_id' => $activatedUser->id,
+                                        'project_id' => $childProject->id,
+                                        'transaction_type' => Transaction::BUY,
+                                        'transaction_date' => Carbon::now(),
+                                        'amount' => round($percAmount,2),
+                                        'rate' => round($childProject->share_per_unit_price,4),
+                                        'number_of_shares' => round($percAmount/$childProject->share_per_unit_price),
+                                        'transaction_description'=>'Child Application',
+                                    ]);
+                                }
+                                $masterTransaction->transaction_description = 'Master Application';
+                                $masterTransaction->save();
+                            }
+                        }
+                    }
+                }
+            } else {
+                return redirect()->back()->withMessage('<p class="alert alert-danger text-center">CSV file is empty</p>');
+            }
+
+        } catch(\Exception $e) {
+            return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $e->getMessage() . '</p>');
+        }
+        return redirect()->back()->withMessage('<p class="alert alert-success text-center">CSV file import done successfully.</p>');
+    }
 }
