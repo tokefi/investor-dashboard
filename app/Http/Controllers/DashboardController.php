@@ -2388,7 +2388,7 @@ class DashboardController extends Controller
                                 foreach($project->children as $child){
                                     $percAmount = round($clientAppliation[5]* ($child->allocation)/100 * $project->share_per_unit_price);
                                     $childProject = Project::find($child->child);
-                                    $activatedUser->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'investment_confirmation'=>1,]);
+                                    $activatedUser->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'accepted'=>1,]);
 
                                     Transaction::create([
                                         'user_id' => $activatedUser->id,
