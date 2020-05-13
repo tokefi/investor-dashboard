@@ -324,3 +324,5 @@ Route::post('/dashboard/project/interest/link', ['as'=>'dashboard.project.intere
 Route::post('/dashboard/project/upload/offerdoc', ['as' => 'dashboard.upload.offerDoc', 'uses' => 'DashboardController@uploadOfferDoc']);
 Route::post('/configuration/project/editSharePerUnitPriceValue', ['as'=>'configuration.project.editSharePerUnitPriceValue', 'uses'=>'ProjectsController@editSharePerUnitPriceValue']);
 Route::post('/configuration/project/editProjectShareUnitLabelText', ['as'=>'configuration.project.editProjectShareUnitLabelText', 'uses'=>'SiteConfigurationsController@editProjectShareUnitLabelText']);
+Route::get('/dashboard/import/clients', ['as'=>'dashboard.import.clients', 'uses'=>'DashboardController@showImportClients']);
+Route::post('/dashboard/import/clients', ['as'=>'dashboard.import.clients.csv', 'uses'=>'DashboardController@saveClientsApplicationFromCSV']);

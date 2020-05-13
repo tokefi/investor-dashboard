@@ -82,90 +82,90 @@ $_SESSION['code'] = md5(microtime(true));
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/Html5shiv/3.7.0/Html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+<![endif]-->
 
 
+@if($siteConfiguration->font_family != '')
+<link href="https://fonts.googleapis.com/css?family={{preg_replace('/\s+/', '+', $siteConfiguration->font_family)}}" rel="stylesheet">
+@endif
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Mr+De+Haviland" />
+<style type="text/css">
     @if($siteConfiguration->font_family != '')
-    <link href="https://fonts.googleapis.com/css?family={{preg_replace('/\s+/', '+', $siteConfiguration->font_family)}}" rel="stylesheet">
-    @endif
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Mr+De+Haviland" />
-    <style type="text/css">
-        @if($siteConfiguration->font_family != '')
-        /*Override fonts*/
-        body, .font-regular, p {
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 400;
-        }
-        .heading-font-light, .h1-faq, h1>small, h2>small, h3>small, h4>small{
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 300;
-        }
-        .font-semibold{
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 600;
-        }
-        h1, h2, h3, h4, a, .font-bold {
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 700;
-        }
-        @endif
-        .investment-title1-description-section, .csef-text {
-            color: #fff !important;
-        }
+    /*Override fonts*/
+    body, .font-regular, p {
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 400;
+  }
+  .heading-font-light, .h1-faq, h1>small, h2>small, h3>small, h4>small{
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 300;
+  }
+  .font-semibold{
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 600;
+  }
+  h1, h2, h3, h4, a, .font-bold {
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 700;
+  }
+  @endif
+  .investment-title1-description-section, .csef-text {
+    color: #fff !important;
+}
 
-        /*Center align sweetalert continue to site button*/
-        .swal-footer {
-            text-align: center;
-        }
+/*Center align sweetalert continue to site button*/
+.swal-footer {
+    text-align: center;
+}
 
-        .konkrete-slide-link {
-            color: #337ab7;
-        }
+.konkrete-slide-link {
+    color: #337ab7;
+}
 
-        .konkrete-slide-link:hover {
-            color: #23527c !important;
-            text-decoration: underline !important;
-        }
+.konkrete-slide-link:hover {
+    color: #23527c !important;
+    text-decoration: underline !important;
+}
 
-        .konkrete-slide-link:visited {
-            color: #23527c !important;
-        }
+.konkrete-slide-link:visited {
+    color: #23527c !important;
+}
 
-        .konkrete-slide-link:focus {
-            color: #23527c !important;
-            text-decoration: underline !important;
-        }
+.konkrete-slide-link:focus {
+    color: #23527c !important;
+    text-decoration: underline !important;
+}
 
         /*.dropdown-menu>li>a {
             padding: 12px 20px;
-        }*/
+            }*/
 
-        /** dropdown sub-menu */
-        .dropdown-submenu:hover>.dropdown-menu {
-            display: block;
-            min-width: 200px;
-        }
-        .dropdown-submenu {
-            position: relative;
-        }
-        .dashboard-submenu {
-            width: 240px;
-            font-size: 15px;
-        }
-        .dashboard-submenu li a {
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
+            /** dropdown sub-menu */
+            .dropdown-submenu:hover>.dropdown-menu {
+                display: block;
+                min-width: 200px;
+            }
+            .dropdown-submenu {
+                position: relative;
+            }
+            .dashboard-submenu {
+                width: 240px;
+                font-size: 15px;
+            }
+            .dashboard-submenu li a {
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
         /*.submenu-item {
             font-size: 0.9em;
-        }*/
+            }*/
 
-        @media (min-width: 768px) {
-			.dashboard-submenu {
-				margin-top: -44px;
-    			left: -237px !important;
-			}
-		}
+            @media (min-width: 768px) {
+             .dashboard-submenu {
+                margin-top: -44px;
+                left: -237px !important;
+            }
+        }
 
     </style>
 
@@ -182,10 +182,10 @@ $_SESSION['code'] = md5(microtime(true));
 </head>
 <body data-spy="scroll">
     <?php
-  if(isset($_SESSION['code'])){
+    if(isset($_SESSION['code'])){
     // echo 'code:'.$_SESSION['code'];
-  }
-  ?>
+    }
+    ?>
     <!-- Google tag manager body script if set  -->
     @if($siteConfiguration->tag_manager_body)
     {!!$siteConfiguration->tag_manager_body!!}
@@ -246,53 +246,54 @@ $_SESSION['code'] = md5(microtime(true));
                     <li class="nav-item"><a href="{{route('users.login')}}">Sign in</a></li>
                     @else
                     <li class="nav-item last dropdown" role="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    My Account <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || App\Helpers\SiteConfigurationHelper::isSiteAgent())
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            My Account <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') || App\Helpers\SiteConfigurationHelper::isSiteAgent())
+                            <li class="dropdown-submenu">
+                                <a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:12px 17px;">Dashboard <span class="caret"></span></a>
+                                <ul class="dropdown-menu dashboard-submenu">
+                                    <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
+                                    @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') )
+                                    <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
                                     <li class="dropdown-submenu">
-                                        <a class="submenu-item" tabindex="-1" href="javascript:void()" style="padding:12px 17px;">Dashboard <span class="caret"></span></a>
+                                        <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects')}}">Projects <span class="caret"></span><i class="fa fa-paperclip pull-right"></i></a>
                                         <ul class="dropdown-menu dashboard-submenu">
-                                            <li class="nav-item"><a href="{{route('dashboard.index')}}">Dashboard <i class="fa fa-tachometer pull-right"></i></a></li>
-                                            @if(Auth::user()->roles->contains('role', 'admin') || Auth::user()->roles->contains('role', 'master') )
-                                            <li class="nav-item"><a href="{{route('dashboard.users')}}">Users <i class="fa fa-users pull-right"></i></a></li>
+                                            @if(!Auth::user()->roles->contains('role', 'agent'))
+                                            @foreach($allProjects as $allProject)
                                             <li class="dropdown-submenu">
-                                                <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects')}}">Projects <span class="caret"></span><i class="fa fa-paperclip pull-right"></i></a>
+                                                <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
                                                 <ul class="dropdown-menu dashboard-submenu">
-                                                    @if(!Auth::user()->roles->contains('role', 'agent'))
-                                                    @foreach($allProjects as $allProject)
-                                                        <li class="dropdown-submenu">
-                                                            <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
-                                                            <ul class="dropdown-menu dashboard-submenu">
-                                                                {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
-                                                                <li class="dropdown-submenu">
-                                                                    <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
-                                                                    <ul class="dropdown-menu dashboard-submenu">
-                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
-                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
-                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
-                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming</a></li>
-                                                                        <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
-                                                            </ul>
-                                                        </li>
-                                                    @endforeach
-                                                    @endif
+                                                    {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
+                                                    <li class="dropdown-submenu">
+                                                        <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
+                                                        <ul class="dropdown-menu dashboard-submenu">
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming</a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
-                                            <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
+                                            @endforeach
                                             @endif
                                         </ul>
                                     </li>
+                                    <li class="nav-item"><a href="{{route('dashboard.kyc')}}">KYC Requests <i class="fa fa-file pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.configurations')}}">Configurations <i class="fa fa-edit pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.import.contacts')}}">Import Users <i class="fa fa-user-plus pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.import.clients')}}">Import Application<i class="fa pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
+                                    @endif
+                                </ul>
+                            </li>
                                     {{--<li>
                                         {!! Html::linkRoute('dashboard.index', 'Dashboard', null, ['class'=>'anchor-color', 'style'=>'padding:5px 17px;']) !!}
                                     </li>--}}
@@ -309,85 +310,85 @@ $_SESSION['code'] = md5(microtime(true));
                                     </li>
                                 </ul>
                             </li>
-                    <li class="hide"><a href="#"><i class="fa fa-bell"></i></a></li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    </nav>
-    @show
-
-    <!-- header content here -->
-    @section('header-section')
-    @stop
-
-    <!-- body content here -->
-    <div class="content">
-        @yield('content-section')
-    </div>
-
-    <!-- footer content here -->
-    @section('footer-section')
-    <footer id="footer" class="chunk-box" @if($color) style='background-color: #{{$color->nav_footer_color}}' @endif>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.2s">
-                    <center>
-                        @if($siteConfigMedia=$siteConfiguration->siteconfigmedia)
-                        @if($mainLogo = $siteConfigMedia->where('type', 'brand_logo')->first())
-                        <img class="img-responsive" src="{{asset($mainLogo->path)}}" alt="Logo" width="200">
-                        @else
-                        <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
-                        @endif
-                        @else
-                        <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
-                        @endif
-                    </center>
+                            <li class="hide"><a href="#"><i class="fa fa-bell"></i></a></li>
+                            @endif
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+            @show
+
+            <!-- header content here -->
+            @section('header-section')
+            @stop
+
+            <!-- body content here -->
+            <div class="content">
+                @yield('content-section')
             </div>
-            <br>
-            <div class="row @if(!$siteConfiguration->show_social_icons) hide @endif">
-                <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.3s">
-                    <a href="{{ $siteConfiguration->facebook_link }}" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-                            <i class="fa fa-facebook fa-stack-1x fa-inverse" style="color:#21203a;"></i>
-                        </span>
-                    </a>
-                    <a href="{{ $siteConfiguration->twitter_link }}" class="footer-social-icon" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-twitter fa-stack-2x fa-inverse"></i>
-                        </span>
-                    </a>
-                    <a href="{{ $siteConfiguration->youtube_link }}" class="footer-social-icon" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-                            <i class="fa fa-youtube fa-stack-1x fa-inverse" style="color:#21203a;"></i>
-                        </span>
-                    </a>
-                    <a href="{{ $siteConfiguration->linkedin_link }}" class="footer-social-icon" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-linkedin-square fa-stack-2x fa-inverse"></i>
-                        </span>
-                    </a>
-                    <a href="{{ $siteConfiguration->google_link }}" class="footer-social-icon" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-google-plus fa-stack-2x fa-inverse" style="padding:4px; margin-left:-3px; font-size:24px !important;"></i>
-                        </span>
-                    </a>
-                    <a href="{{ $siteConfiguration->instagram_link }}" class="footer-social-icon" target="_blank">
-                        <span class="fa-stack fa">
-                            <i class="fa fa-instagram fa-stack-2x fa-inverse"></i>
-                        </span>
-                    </a>
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4 text-center">
-                    <ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
-                        <li class="footer-list-item"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
-                        <li class="footer-list-item @if(!$siteConfiguration->blog_link_new == ' NULL ') hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
+
+            <!-- footer content here -->
+            @section('footer-section')
+            <footer id="footer" class="chunk-box" @if($color) style='background-color: #{{$color->nav_footer_color}}' @endif>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.2s">
+                            <center>
+                                @if($siteConfigMedia=$siteConfiguration->siteconfigmedia)
+                                @if($mainLogo = $siteConfigMedia->where('type', 'brand_logo')->first())
+                                <img class="img-responsive" src="{{asset($mainLogo->path)}}" alt="Logo" width="200">
+                                @else
+                                <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
+                                @endif
+                                @else
+                                <img class="img-responsive" src="{{asset('assets/images/main_logo.png')}}" alt="Logo" width="200">
+                                @endif
+                            </center>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row @if(!$siteConfiguration->show_social_icons) hide @endif">
+                        <div class="col-md-12 text-center " data-wow-duration="1.5s" data-wow-delay="0.3s">
+                            <a href="{{ $siteConfiguration->facebook_link }}" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse" style="color:#21203a;"></i>
+                                </span>
+                            </a>
+                            <a href="{{ $siteConfiguration->twitter_link }}" class="footer-social-icon" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-twitter fa-stack-2x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <a href="{{ $siteConfiguration->youtube_link }}" class="footer-social-icon" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                                    <i class="fa fa-youtube fa-stack-1x fa-inverse" style="color:#21203a;"></i>
+                                </span>
+                            </a>
+                            <a href="{{ $siteConfiguration->linkedin_link }}" class="footer-social-icon" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-linkedin-square fa-stack-2x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <a href="{{ $siteConfiguration->google_link }}" class="footer-social-icon" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-google-plus fa-stack-2x fa-inverse" style="padding:4px; margin-left:-3px; font-size:24px !important;"></i>
+                                </span>
+                            </a>
+                            <a href="{{ $siteConfiguration->instagram_link }}" class="footer-social-icon" target="_blank">
+                                <span class="fa-stack fa">
+                                    <i class="fa fa-instagram fa-stack-2x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4 text-center">
+                            <ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
+                                <li class="footer-list-item"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
+                                <li class="footer-list-item @if(!$siteConfiguration->blog_link_new == ' NULL ') hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
                         <!-- @if($siteConfiguration->show_funding_options != '')
                         <li class="footer-list-item"><a href="{{$siteConfiguration->funding_link}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Funding</span></a></li><br>
                         @endif -->
@@ -411,19 +412,19 @@ $_SESSION['code'] = md5(microtime(true));
         </div>
         <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
           <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
-            <p>
-                <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
-            </p>
-        </div>
-        <br>
-        <p class="investment-title1-description-section text-center" style="font-size:16px;">
-        <small><small>@if($siteConfiguration->compliance_description != '')
-        {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
-        The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages.<span class="hide"> {{$siteConfiguration->licensee_name}} {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.</span>
-        @endif</small></small>
+          <p>
+            <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
         </p>
-        <p class="csef-text text-justify hide"><small><small>In particular note that this website does not rely on the Crowd Sourced Equity Funding (CSEF) regulation (RG261) and does not have an ASIC authorization to act as a Crowdfunding intermediary platform. Any use of the term crowdfunding anywhere on this site should not be be construed to mean that such an authorization exists. Investment offers listed here typically rely on RG228 to provide effective disclosure to Retail investors using a Prospectus. We believe the CSEF regulation is unsuited for Property development investment opportunities and have hence relied on providing a full prospectus to provide clear concise and effective disclosure.</small></small></p>
     </div>
+    <br>
+    <p class="investment-title1-description-section text-center" style="font-size:16px;">
+        <small><small>@if($siteConfiguration->compliance_description != '')
+            {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
+            The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages.<span class="hide"> {{$siteConfiguration->licensee_name}} {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.</span>
+        @endif</small></small>
+    </p>
+    <p class="csef-text text-justify hide"><small><small>In particular note that this website does not rely on the Crowd Sourced Equity Funding (CSEF) regulation (RG261) and does not have an ASIC authorization to act as a Crowdfunding intermediary platform. Any use of the term crowdfunding anywhere on this site should not be be construed to mean that such an authorization exists. Investment offers listed here typically rely on RG228 to provide effective disclosure to Retail investors using a Prospectus. We believe the CSEF regulation is unsuited for Property development investment opportunities and have hence relied on providing a full prospectus to provide clear concise and effective disclosure.</small></small></p>
+</div>
 </footer>
 @show
 
@@ -437,7 +438,7 @@ $_SESSION['code'] = md5(microtime(true));
 {!! Html::script('/assets/plugins/JCrop/js/jquery.Jcrop.js') !!}
 
 <!-- Sweetalert for daily sign in -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- Begin Inspectlet Embed Code -->
 <script type="text/javascript" id="inspectletjs">
@@ -470,39 +471,39 @@ $_SESSION['code'] = md5(microtime(true));
         @endif
         @endif
 
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('[data-toggle="popover"]').popover();
-        $('a[data-disabled]').click(function (e) {
-            e.preventDefault();
-        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+            $('a[data-disabled]').click(function (e) {
+                e.preventDefault();
+            });
 
-        function toggleChevron(e) {
-            $(e.target)
-            .prev('.panel-heading')
-            .find("i.indicator")
-            .toggleClass('glyphicon-plus glyphicon-minus');
-        }
-        $('#accordion').on('hidden.bs.collapse', toggleChevron);
-        $('#accordion').on('shown.bs.collapse', toggleChevron);
-        $("iframe[name ='google_conversion_frame']").attr('style', 'height: 0px; display: none !important;');
-        @if($color)
-        $('p').css('color', '#{{$color->nav_footer_color}}');
-        $('.avoid-p-color').css('color', '#fff')
-        $('.first_color').css('color', '#{{$color->nav_footer_color}}');
-        $('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
-        $('.second_color').css('color','#{{$color->heading_color}}');
-        $("a").mouseover(function() {
-            $(this).css('color', '#{{$color->heading_color}}');
-        }).mouseout(function() {
-            $(this).css('color', '');
-        });
-        $(".a-link").mouseover(function() {
-            $(this).css('color', '#{{$color->heading_color}}');
-        }).mouseout(function() {
-            $(this).css('color', '#fff');
-        });
-        @endif
+            function toggleChevron(e) {
+                $(e.target)
+                .prev('.panel-heading')
+                .find("i.indicator")
+                .toggleClass('glyphicon-plus glyphicon-minus');
+            }
+            $('#accordion').on('hidden.bs.collapse', toggleChevron);
+            $('#accordion').on('shown.bs.collapse', toggleChevron);
+            $("iframe[name ='google_conversion_frame']").attr('style', 'height: 0px; display: none !important;');
+            @if($color)
+            $('p').css('color', '#{{$color->nav_footer_color}}');
+            $('.avoid-p-color').css('color', '#fff')
+            $('.first_color').css('color', '#{{$color->nav_footer_color}}');
+            $('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
+            $('.second_color').css('color','#{{$color->heading_color}}');
+            $("a").mouseover(function() {
+                $(this).css('color', '#{{$color->heading_color}}');
+            }).mouseout(function() {
+                $(this).css('color', '');
+            });
+            $(".a-link").mouseover(function() {
+                $(this).css('color', '#{{$color->heading_color}}');
+            }).mouseout(function() {
+                $(this).css('color', '#fff');
+            });
+            @endif
 
         //sidebar active tab color
         @if($color)
