@@ -326,3 +326,7 @@ Route::post('/configuration/project/editSharePerUnitPriceValue', ['as'=>'configu
 Route::post('/configuration/project/editProjectShareUnitLabelText', ['as'=>'configuration.project.editProjectShareUnitLabelText', 'uses'=>'SiteConfigurationsController@editProjectShareUnitLabelText']);
 Route::get('/dashboard/import/clients', ['as'=>'dashboard.import.clients', 'uses'=>'DashboardController@showImportClients']);
 Route::post('/dashboard/import/clients', ['as'=>'dashboard.import.clients.csv', 'uses'=>'DashboardController@saveClientsApplicationFromCSV']);
+/** Admin */
+Route::group(['middleware' => ['auth', 'admin']], function () {
+	Route::get('/dashboard/reporting', ['as'=>'dashboard.reporting', 'uses'=>'Admin\ReportingController@index']);
+});
