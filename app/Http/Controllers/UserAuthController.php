@@ -30,6 +30,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use App\Credit;
 use App\Helpers\SiteConfigurationHelper;
+use Illuminate\Support\Facades\View;
 
 
 class UserAuthController extends Controller
