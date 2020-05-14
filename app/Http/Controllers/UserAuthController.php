@@ -40,6 +40,8 @@ class UserAuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest', ['only' => ['login','authenticate','authenticateCheck']]);
+        $this->allProjects = Project::where('project_site', url())->get();
+        View::share('allProjects', $this->allProjects);
     }
 
     /**
