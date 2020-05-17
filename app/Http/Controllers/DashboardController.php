@@ -365,7 +365,13 @@ class DashboardController extends Controller
         $validator = $this->validate($request, array(
             'update_share_price' => 'required',
         ));
-        Project::where('id', $project_id)->update([
+        $project = Project::find($project_id);
+        
+        if($project->master_child){
+            return redirect()->back()->withMessage('<p class="alert alert-danger text-center">Master Fund. Cannot allowed to change the share price .</p>');;
+        }
+
+        $project->update([
             'share_per_unit_price'=>$request->update_share_price,
         ]);
 
@@ -383,7 +389,34 @@ class DashboardController extends Controller
             $sharePrice->update(['price'=>$request->update_share_price]);
         }
 
-        return redirect()->back()->withMessage('<p class="alert alert-success text-center">Share price updated successfully.</p>');;
+        if($project->isChild){
+            $master = Project::find($project->isChild->master);
+            $masterSharePriceInit = 0;
+            if($master->master_child){
+                foreach($master->children as $child){
+
+                    $masterSharePriceInit = $masterSharePriceInit + Project::find($child->child)->share_per_unit_price * $child->allocation/100;
+                }
+                $master->update([
+                    'share_per_unit_price'=>$masterSharePriceInit,
+                ]);
+            }
+            $mastersharePrice = Price::where('project_id', $master->id)->whereDate('created_at', '=', Carbon::today()->format('Y-m-d'))->first();
+        if(!$mastersharePrice)
+        {
+            $mastersharePrice = new Price;
+            $mastersharePrice->project_id = $master->id;
+            $mastersharePrice->price = $master->share_per_unit_price;
+            $mastersharePrice->effective_date = Carbon::now()->toDateTimeString();
+            $mastersharePrice->save();
+        }
+        else 
+        {
+            $mastersharePrice->update(['price'=>$master->share_per_unit_price]);
+        }
+        }
+
+        return redirect()->back()->withMessage('<p class="alert alert-success text-center">Share price updated successfully.</p>');
     }
 
     public function updateInvestment(Request $request, $investment_id)
@@ -1331,8 +1364,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-               return new TransportManager($app);
-           });
+             return new TransportManager($app);
+         });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);

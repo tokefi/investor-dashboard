@@ -165,13 +165,22 @@ Edit {{$project->title}} | Dashboard | @parent
 													<tr>
 														<th class="text-center">Projects</th>
 														<th class="text-center">Allocation</th>
+														<th class="text-center ">Share Price</th>
+														<th></th>
 													</tr>
 												</thead>
 												<tbody>
 													@foreach($project->children as $child)
 													<tr>
 														<td>{{App\Project::find($child->child)->title}}</td>
-														<td class="text-center">{{$child->allocation}} %
+														<td class="text-center">{{$child->allocation}} %</td>
+														<td class="">
+															<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [App\Project::find($child->child)->id])}}" method="POST" class="">
+																{{csrf_field()}}
+																<input type="number" class="form-control" style="width: auto; display: inline-block; max-height: 34px;" name="update_share_price" id="update_share_price" step="0.0001" value="{{ App\Project::find($child->child)->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE" >
+															</form>
+														</td>
+														<td class="text-center">
 															<a class="pull-right" id="deleteChild" onclick="deleteChild({{$child->id}})">
 																<span class="glyphicon glyphicon-remove"></span>
 															</a>
@@ -183,6 +192,8 @@ Edit {{$project->title}} | Dashboard | @parent
 													<tr>
 														<th class="text-center">Total</th>
 														<th class="text-center" id="totalAllocation"> </th>
+														<th class="text-center" id="">{{ $project->share_per_unit_price }} </th>
+														<th></th>
 													</tr>
 												</tfoot>
 											</table>

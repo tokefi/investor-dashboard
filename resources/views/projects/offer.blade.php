@@ -545,7 +545,8 @@ Offer Doc
 																<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
 																	<select name="country" class="form-control" >
 																		@foreach(\App\Http\Utilities\Country::all() as $country => $code)
-																		<option @if(!Auth::guest() && $user->country == $country) value="{{$country}}" selected="selected" @elseif(isset($clientApplication) && $clientApplication->country == $country) value="{{$country}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
+																		{{ $country }}
+																		<option @if(!Auth::guest() && !isset($clientApplication) && $user->country == $country) value="{{$code}}" selected="selected" @elseif(isset($clientApplication) && $clientApplication->country == $country) value="{{$code}}" selected="selected" @else value="{{$country}}" @endif>{{$country}}</option>
 																		@endforeach
 																	</select>
 																	{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
