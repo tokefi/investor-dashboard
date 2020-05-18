@@ -170,6 +170,7 @@ Edit {{$project->title}} | Dashboard | @parent
 													</tr>
 												</thead>
 												<tbody>
+													@if($project->children) </form> @endif
 													@foreach($project->children as $child)
 													<tr>
 														<td>{{App\Project::find($child->child)->title}}</td>
