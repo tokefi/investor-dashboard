@@ -55,6 +55,21 @@ Reporting | Dashboard | @parent
                                 </div>
                             @endforeach
                         </div><br>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="start_date"><small>Start date:</small></label>
+                                    <input type="date" class="form-control input-sm" name="start_date" id="start_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="dd/mm/yyyy" value="{{ $startDate }}" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="end_date"><small>End date:</small></label>
+                                    <input type="date" class="form-control input-sm" name="end_date" id="end_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="dd/mm/yyyy" value="{{ $endDate }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="text-center">
                             <button type="submit" class="btn btn-danger">Search <i class="fa fa-search" aria-hidden="true"></i></button>
                         </div>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use View;
 use App\Color;
 use App\Project;
+use Carbon\Carbon;
 use App\Transaction;
 use App\Http\Requests;
-use View;
 use App\SiteConfiguration;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,6 +36,9 @@ class ReportingController extends Controller
      */
     public function index(Request $request)
     {
+        $startDate = Carbon::parse($request->start_date ?? '2019-12-01')->toDateString();
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->toDateString() : Carbon::now()->toDateString();
+
         $txTypes = $request->tx_type ?? [];
         $projectIds = $request->project ?? [];
         $buy = $repurchase = $dividend = $cancelled = [
@@ -47,6 +51,7 @@ class ReportingController extends Controller
         })
         ->whereIn('transaction_type', $txTypes)
         ->whereIn('project_id', $projectIds)
+        ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
         ->get();
 
         foreach ($transactions as $key => $transaction) {
@@ -91,6 +96,8 @@ class ReportingController extends Controller
             'repurchase' => $repurchase,
             'dividend' => $dividend,
             'cancelled' => $cancelled,
+            'startDate' => $request->start_date ?? null,
+            'endDate' => $request->end_date ?? null
         ]);
     }
 
