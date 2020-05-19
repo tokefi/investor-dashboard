@@ -40,7 +40,7 @@ Users | Dashboard | @parent
 							</div>
 						</div>
 					</div>
-					<div>{!! $users->total() !!} users</div>
+					<div>{!! $users->count() !!} users</div>
 				</form>
 				<br>
 				<table class="table table-bordered table-padding table-striped" id="usersTable">

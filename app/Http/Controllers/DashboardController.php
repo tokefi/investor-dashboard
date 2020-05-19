@@ -137,8 +137,7 @@ class DashboardController extends Controller
                 $query->orWhereRaw("phone_number LIKE ?", ["%" . $search . "%"]);
             });
         }
-        $users = $users->orderBy($field, $sort)
-        ->paginate(50);
+        $users = $users->orderBy($field, $sort)->get();
         $projects = Project::where('project_site', url())->where('active', true)->where('eoi_button', false)->where('is_coming_soon', false)->get();
 
         return view('dashboard.users.index', compact('users', 'color', 'projects'))->withPath('?search=' . urlencode($search) . '&field=' . $field . '&sort=' . $sort);
