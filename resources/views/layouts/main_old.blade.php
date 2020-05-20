@@ -272,7 +272,7 @@ $_SESSION['code'] = md5(microtime(true));
                                                                 <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications </a></li>
                                                                 <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications </a></li>
                                                                 <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming </a></li>
+                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_tab"}}">Upcoming </a></li>
                                                                 <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI </a></li>
                                                             </ul>
                                                         </li>
