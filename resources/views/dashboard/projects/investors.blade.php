@@ -1128,6 +1128,31 @@
 			}
 		});
 
+		//Hide application from admin dashboard
+
+		$('#investorsTable').on('click','.hide-investment', function(e){
+			e.preventDefault();
+			var investment_id = $(this).attr('data');
+			if (confirm('Are you sure you want to delete this?')) {
+				$('.loader-overlay').show();
+				$.ajax({
+					url: '/dashboard/projects/hideInvestment',
+					type: 'PATCH',
+					dataType: 'JSON',
+					data: {investment_id},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+				}).done(function(data){
+					if(data){
+						$('.loader-overlay').hide();
+						$("#investorsTable").DataTable().row( $('#application' + investment_id) ).remove().draw( false );
+						alert("Deleted successfully");
+					}
+				});
+			}
+		});
+
 		//Ajax call for sending eoi application form link to user (for both send link and resend link buttons)
 		$('#expression_of_interest_tab').on('click', '.send-app-form-link', function(e){
 			e.preventDefault();
@@ -1185,31 +1210,6 @@
 		//         	}
 		//         });
 		// });
-
-		//Hide application from admin dashboard
-
-		$('.hide-investment').on("click", function(e){
-			e.preventDefault();
-			var investment_id = $(this).attr('data');
-			if (confirm('Are you sure you want to delete this?')) {
-				$('.loader-overlay').show();
-				$.ajax({
-					url: '/dashboard/projects/hideInvestment',
-					type: 'PATCH',
-					dataType: 'JSON',
-					data: {investment_id},
-					headers: {
-						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-					},
-				}).done(function(data){
-					if(data){
-						$('.loader-overlay').hide();
-						$("#investorsTable").DataTable({ "language": { "search": "", "searchPlaceholder": "Search" }}).row( $('#application' + investment_id) ).remove().draw( false );
-					}
-				});
-			}
-		});
-
 
 		var shareRegistryTable = $('#shareRegistryTable').DataTable({
 			"order": [[0, 'desc']],
