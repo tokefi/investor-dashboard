@@ -833,6 +833,7 @@ class SiteConfigurationsController extends Controller
                 'edit_disclaimer'=>$request->add_disclaimer_txt,
                 'custom_project_page_link'=>$request->custom_project_page_link,
                 'share_per_unit_price'=>$request->project_share_per_unit_price,
+                'custodian'=>$request->project_custodian_txt,
             ]);
             Investment::where('project_id', $projectId)->first()->update([
                 'fund_raising_close_date'=>$request->fund_raising_close_date,

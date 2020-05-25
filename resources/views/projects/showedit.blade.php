@@ -153,15 +153,21 @@
 					</div>
 				</div><br>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-8">
 						<div class="" style="color:#fff;">
 							@if($project->investment)
 							<div class="row text-left">
-								<div class="col-md-3 col-sm-3 col-xs-3" style="border-right: thin solid #ffffff;">
+								<div class="col-md-2 col-sm-3 col-xs-3" style="border-right: thin solid #ffffff;">
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff; display: -webkit-box;">
 										$<input type="number" name="project_min_investment_txt" class="form-control" value="{{(int)$project->investment->minimum_accepted_amount}}" @if($project->eoi_button) step="5" @else step="100" @endif style="width: 100%; padding-left: 2px; padding-right: 2px;" @if($project->eoi_button) min="5" @else min="100" @endif>
 									</h4>
 									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
+								</div>
+								<div class="col-md-2 col-sm-3 col-xs-3" style="border-right: thin solid #ffffff;">
+									<h4 class="font-bold project-custodian-field" style="font-size:1.375em;color:#fff; display: -webkit-box;">
+										<input type="text" name="project_custodian_txt" class="form-control" value="{{$project->custodian}}" style="width: 100%; padding-left: 2px; padding-right: 2px;">
+									</h4>
+									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Custodian</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-2" style="border-right: thin solid #ffffff;">
 									<h4 class="font-bold project-share-per-unit-price-field" style="font-size:1.375em;color:#fff;display: -webkit-box;">
@@ -180,7 +186,7 @@
 									</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
 								</div>
-								<div class="col-md-3 col-sm-3 col-xs-3 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
+								<div class="col-md-2 col-sm-3 col-xs-3 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
 									<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
 										@if($project->investment) {{$number_of_investors}} @else ### @endif
 									</h4>
@@ -204,7 +210,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="col-md-4 col-md-offset-2 project-invest-button-field" style="margin-top:0%;" id="express_interest">
+					<div class="col-md-4 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<span style="color: white;">Invest Now Button Label</span>
 						<input type="text" name="project_button_invest_txt" class="form-control" value="{{$project->button_label}}" style="font-size: 25px;" placeholder="Button text">
 					</div>
