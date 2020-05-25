@@ -55,7 +55,7 @@ class UserController extends Controller
                 if ($userReg = UserRegistration::where('email', $request->email)->first()) {
                     $originSite = $userReg->registration_site;
                 }
-                $errorMessage = 'This email is already registered on '.$originSite.' which is an EstateBaron.com powered site, you can use the same login id and password on this site.';
+                $errorMessage = 'This email is already registered on '.$originSite.', you can use the same login id and password on this site.';
 
                 return response()->json([
                     'status' => false,
