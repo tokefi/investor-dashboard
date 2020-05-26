@@ -153,7 +153,7 @@
 					</div>
 				</div><br>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-6">
 						<div class="" style="color:#fff;">
 							@if($project->investment)
 							<div class="row text-left">
@@ -162,12 +162,6 @@
 										$<input type="number" name="project_min_investment_txt" class="form-control" value="{{(int)$project->investment->minimum_accepted_amount}}" @if($project->eoi_button) step="5" @else step="100" @endif style="width: 100%; padding-left: 2px; padding-right: 2px;" @if($project->eoi_button) min="5" @else min="100" @endif>
 									</h4>
 									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
-								</div>
-								<div class="col-md-2 col-sm-3 col-xs-3" style="border-right: thin solid #ffffff;">
-									<h4 class="font-bold project-custodian-field" style="font-size:1.375em;color:#fff; display: -webkit-box;">
-										<input type="text" name="project_custodian_txt" class="form-control" value="{{$project->custodian}}" style="width: 100%; padding-left: 2px; padding-right: 2px;">
-									</h4>
-									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Custodian</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-2" style="border-right: thin solid #ffffff;">
 									<h4 class="font-bold project-share-per-unit-price-field" style="font-size:1.375em;color:#fff;display: -webkit-box;">
@@ -180,13 +174,13 @@
 										<input type="text" name="project_hold_period_txt" class="form-control" value="{{$project->investment->hold_period}}" style="padding-left: 2px; padding-right: 2px;">
 									</h4><h6 class="font-regular" style="font-size: 0.875em; color: #fff;">Months</h6>
 								</div>
-								<div class="col-md-2 col-sm-2 col-xs-2" style="@if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif">
+								<div class="col-md-3 col-sm-2 col-xs-2" style="@if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif">
 									<h4 class="font-bold project-returns-field" style="width: 90%; font-size:1.375em;color:#fff; display: -webkit-box;">
 										<input type="text" name="project_returns_txt" class="form-control" value="{{$project->investment->projected_returns}}" style="padding-left: 2px; padding-right: 2px;">%
 									</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
 								</div>
-								<div class="col-md-2 col-sm-3 col-xs-3 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
+								<div class="col-md-3 col-sm-3 col-xs-3 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
 									<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
 										@if($project->investment) {{$number_of_investors}} @else ### @endif
 									</h4>
@@ -210,7 +204,7 @@
 							</span>
 						</div>
 					</div>
-					<div class="col-md-4 project-invest-button-field" style="margin-top:0%;" id="express_interest">
+					<div class="col-md-4 col-md-offset-2 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<span style="color: white;">Invest Now Button Label</span>
 						<input type="text" name="project_button_invest_txt" class="form-control" value="{{$project->button_label}}" style="font-size: 25px;" placeholder="Button text">
 					</div>
@@ -630,6 +624,15 @@
 										<img src="{{asset($project->media->where('type', 'investment_risk')->last()->path)}}" alt="investment risk" style="max-width: 100%;" id="project_media_{{$projectMediaImage->id}}">
 										@endif
 									</div>
+								</div>
+							</div>
+							<div class="row show_custodian_section" >
+								<div class="col-md-2 text-center">
+									<h4 class="second_color show-risk-input" style="margin-top:30px; color:#fed405;font-size:1.375em;"> Custodian </h4><br>
+								</div>
+								<div class="col-md-10 text-left">
+									 <p style="font-size:0.875em;" class="project-custodian-field"><input type="text" name="project_custodian_txt" class="form-control" value= "{{ $project->custodian }}" placeholder="Enter the Custodian"> @if($project->custodian){{$project->custodian}}</p> @endif
+									
 								</div>
 							</div>
 							<br><br>
