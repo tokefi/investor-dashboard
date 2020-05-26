@@ -26,7 +26,7 @@
 			@endif
 			@if($investmentsWithoutMasterFund->count())
 			<div class="row">
-				<div class="col-md-12">
+				<div class="col-md-6 col-md-offset-3">
 					<div class="chart">
 						<canvas id="myChart"></canvas>
 					</div>
@@ -325,7 +325,7 @@
 @section('js-section')
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
 {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> --}}
-<script src="https://www.chartjs.org/dist/master/Chart.min.js"></script>
+<script src="https://www.chartjs.org/dist/master/chart.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/google-palette/1.1.0/palette.min.js"></script>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 
