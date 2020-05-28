@@ -330,3 +330,4 @@ Route::post('/dashboard/import/clients', ['as'=>'dashboard.import.clients.csv', 
 Route::group(['middleware' => ['auth', 'admin']], function () {
 	Route::get('/dashboard/reporting', ['as'=>'dashboard.reporting', 'uses'=>'Admin\ReportingController@index']);
 });
+Route:get('/dashboard/project/{project_id}/registry/records/download',['as'=>'dashboard.project.registry.records.download','uses'=>'DashboardController@downloadProjectRegistryRecord']);

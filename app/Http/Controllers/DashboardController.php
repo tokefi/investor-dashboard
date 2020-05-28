@@ -401,18 +401,18 @@ class DashboardController extends Controller
                 ]);
             }
             $mastersharePrice = Price::where('project_id', $master->id)->whereDate('created_at', '=', Carbon::today()->format('Y-m-d'))->first();
-        if(!$mastersharePrice)
-        {
-            $mastersharePrice = new Price;
-            $mastersharePrice->project_id = $master->id;
-            $mastersharePrice->price = $master->share_per_unit_price;
-            $mastersharePrice->effective_date = Carbon::now()->toDateTimeString();
-            $mastersharePrice->save();
-        }
-        else 
-        {
-            $mastersharePrice->update(['price'=>$master->share_per_unit_price]);
-        }
+            if(!$mastersharePrice)
+            {
+                $mastersharePrice = new Price;
+                $mastersharePrice->project_id = $master->id;
+                $mastersharePrice->price = $master->share_per_unit_price;
+                $mastersharePrice->effective_date = Carbon::now()->toDateTimeString();
+                $mastersharePrice->save();
+            }
+            else 
+            {
+                $mastersharePrice->update(['price'=>$master->share_per_unit_price]);
+            }
         }
 
         return redirect()->back()->withMessage('<p class="alert alert-success text-center">Share price updated successfully.</p>');
@@ -1363,8 +1363,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-             return new TransportManager($app);
-         });
+               return new TransportManager($app);
+           });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
@@ -2447,5 +2447,28 @@ class DashboardController extends Controller
             return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $e->getMessage() . '</p>');
         }
         return redirect()->back()->withMessage('<p class="alert alert-success text-center">CSV file import done successfully.</p>');
+    }
+
+    public function downloadProjectRegistryRecord($project_id)
+    {
+        $project = Project::findOrFail($project_id);
+        $table = ModelHelper::getTotalInvestmentByProject($project_id);
+        
+        
+        $filename = storage_path().'/app/registry/'.$project->title."-registry-record.csv";
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, array("Investor Name", "Phone", "Email", "Address", "Number of shares", "Market Value"));
+
+        foreach($table as $row) {
+            fputcsv($handle, array($row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1.', '.$row->user->line_2.', '.$row->user->city.', '.$row->user->state.', '.$row->user->country.'-'.$row->user->postal_code,round($row->shares),number_format(($row->shares * $project->share_per_unit_price), 2)));
+        }
+
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+
+        return \Response::download($filename, $project->title.'-registry-record.csv', $headers);
     }
 }

@@ -542,6 +542,7 @@
 								<button class="btn btn-primary issue-dividend-cents-per-share-btn" action="cents-per-share-dividend" style="margin: 0 1rem;">Issue Fixed Dividend</button>
 								<button class="btn btn-primary issue-fixed-dividend-btn" action="fixed-dividend" style="margin: 0 1rem;">Issue Dividends cents per share</button>
 								{{-- <button class="btn btn-primary repurchase-shares-btn" action="repurchase">Repurchase</button> --}}
+								<a href="{{ route('dashboard.project.registry.records.download',[$project->id]) }}" target=""><button class="btn btn-primary download-registry-record-btn" action="" style="margin: 0 1rem;">Download Registry Records</button></a>
 							</div>
 							<div class="clear-both">
 								<form id="declare_dividend_form" action="{{route('dashboard.investment.declareDividend', [$project->id])}}" method="POST">
