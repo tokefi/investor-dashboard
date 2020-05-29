@@ -291,7 +291,7 @@ $_SESSION['code'] = md5(microtime(true));
                                     <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{ route('dashboard.reporting') }}">Reporting<i class="fa fa-exchange pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
+                                    <li class="nav-item"><a href="https://docs.google.com/document/d/1kNf4wC8YPs95rUy8UbmhV9RuKF3sftj7JlAmd2rT81M/edit?usp=sharing" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
                                     @endif
                                 </ul>
                             </li>
