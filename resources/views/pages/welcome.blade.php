@@ -79,7 +79,7 @@ Sign Up | @parent
 								</div>
 								{!! Form::close() !!}
 								<br>
-								<h4 class="text-left font-regular first_color" style="font-size:1.375em;color:#2d2a6e;">If you have an existing Estate Baron account. <b><!-- {!! Html::linkRoute('users.login', 'Sign In Here') !!} --><a href="/users/login" id="redirection">Sign In Here</a></b>
+								<h4 class="text-left font-regular first_color" style="font-size:1.375em;color:#2d2a6e;">If you have an existing Konkrete account. <b><!-- {!! Html::linkRoute('users.login', 'Sign In Here') !!} --><a href="/users/login" id="redirection">Sign In Here</a></b>
 								</h4>
 							</section>
 						</div>
