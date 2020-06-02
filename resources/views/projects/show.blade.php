@@ -1724,7 +1724,7 @@
 		display:inline;
 	}
 </style>
-<section id="comments-list" class="chunk-box hide" style="padding-top:0px;">
+<section id="comments-list" class="chunk-box" style="padding-top:0px;">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-1 col-md-10">
@@ -1744,15 +1744,15 @@
 									<p class="text-justify">{{$comment->text}}</p>
 								</div>
 							</div>
-							<div class="row">
+							<div class="row " >
 								<div class="col-md-offset-1 col-md-11">
-									<div style="font-size: 0.7em; color:#aeaeae">
+									<div style="font-size: 0.7em; color:#aeaeae" class="@if(Auth::guest()) hide @endif">
 										{!! Form::open(array('route'=>['projects.{projects}.comments.votes', $project->id, $comment->id], 'class'=>'form-horizontal', 'role'=>'form')) !!}
 										<input type='radio' name='value' value='1' id='upvote_radio_{{$comment->id}}' class='vote-input'>
-										<div id='upvote-count-{{$comment->id}}' class="upvote-count vote-count">@if($comment->votes->where('value', '1')->count()) {{$comment->votes->where('value', '1')->count()}} @endif </div>
+										<div id='upvote-count-{{$comment->id}}' class="upvote-count vote-count">@if($comment->votes->where('value', 1)->count()) {{$comment->votes->where('value',1)->count()}} @else 0 @endif </div>
 										<label for='upvote_radio_{{$comment->id}}' class="vote-input-label"><i class='fa fa-chevron-up'></i></label>
 										<input type='radio' name='value' value='-1' id='downvote_radio_{{$comment->id}}' class='vote-input'>
-										<div id='downvote-count-{{$comment->id}}' class="downvote-count vote-count">@if($comment->votes->where('value', '-1')->count()) {{$comment->votes->where('value', '-1')->count()}} @endif </div>
+										<div id='downvote-count-{{$comment->id}}' class="downvote-count vote-count">@if($comment->votes->where('value',-1)->count()) {{$comment->votes->where('value',-1)->count()}} @else 0 @endif </div>
 										<label for='downvote_radio_{{$comment->id}}' class="vote-input-label"><i class='fa fa-chevron-down'></i></label>
 										&nbsp; <i class="fa fa-circle" style="font-size:0.5em;"></i> &nbsp; <a href='#reply-form-{{$comment->id}}' class='reply-to-button'><b>Reply</b></a>
 										{!! Form::close() !!}
@@ -1795,7 +1795,8 @@
 					@endforeach
 					<?php
 				}
-				$comments = $project->comments->where('reply_id', '0')->reverse()->all();
+				$comments = $project->comments->where('reply_id',0)->reverse();
+				/**dd( gettype($comments));*/
 				commentsFunc($project, $comments);?>
 			</div>
 		</div>
