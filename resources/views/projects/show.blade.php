@@ -1672,7 +1672,7 @@
 				<hr style="margin-top:0px;">
 			</div>
 		</div> --}}
-		<section id="comments-form" class="chunk-box " style="padding-bottom:0px;">
+		<section id="comments-form" class="chunk-box @if(Auth::guest()) hide @endif" style="padding-bottom:0px;">
 			<div class="container">
 				<h3 class="text-center">More questions/comments/concerns? You can post them here</h3>
 				<br>
