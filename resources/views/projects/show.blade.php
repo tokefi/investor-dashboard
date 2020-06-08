@@ -180,10 +180,10 @@
 							@else
 							@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
 							<div class="text-center" style="margin-left: -42em;">
-								<input type="checkbox" class="toggle-elements" action="min_investment_field" autocomplete="off" data-label-text="Min Invest" data-size="mini" @if($project->projectconfiguration->show_min_investment_field) checked value="1" @else value="0" @endif>
+								<input type="checkbox" class="toggle-elements" action="min_investment_field" autocomplete="off" data-label-text="MinInvest" data-size="mini" @if($project->projectconfiguration->show_min_investment_field) checked value="1" @else value="0" @endif>
 							</div>
 							<div class="text-center" style="margin-left: -24em;">
-								<input type="checkbox" class="toggle-elements" action="max_investment_field" autocomplete="off" data-label-text="Max Invest" data-size="mini" @if($project->projectconfiguration->show_max_investment_field) checked value="1" @else value="0" @endif>
+								<input type="checkbox" class="toggle-elements" action="max_investment_field" autocomplete="off" data-label-text="MaxInvest" data-size="mini" @if($project->projectconfiguration->show_max_investment_field) checked value="1" @else value="0" @endif>
 							</div>
 							<div class="text-center" style="margin-left: -10em;">
 								<input type="checkbox" class="toggle-elements" action="share_per_unit_price" autocomplete="off" data-label-text="Share/Unit" data-size="mini" @if($project->projectconfiguration->show_share_per_unit_price) checked value="1" @else value="0" @endif>
@@ -194,7 +194,7 @@
 							@endif
 							@endif
 							<div class="row text-left">
-								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif">
+								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff; ">
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 max_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff;">
