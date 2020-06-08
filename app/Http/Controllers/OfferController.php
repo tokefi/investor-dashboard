@@ -88,7 +88,9 @@ class OfferController extends Controller
         'amount_to_invest'   => 'required|numeric',
         'line_1' => 'required',
         'state' => 'required',
-        'postal_code' => 'required'
+        'postal_code' => 'required',
+        'first_name' => 'alpha_num',
+        'last_name' => 'alpha_num'
       );
       $validator = Validator::make($request->all(), $validation_rules);
 

@@ -838,6 +838,7 @@ class SiteConfigurationsController extends Controller
             Investment::where('project_id', $projectId)->first()->update([
                 'fund_raising_close_date'=>$request->fund_raising_close_date,
                 'minimum_accepted_amount' => $request->project_min_investment_txt,
+                'maximum_accepted_amount' =>$request->project_max_investment_txt,
                 'hold_period' => $request->project_hold_period_txt,
                 'projected_returns' => $request->project_returns_txt,
                 'goal_amount' => $request->project_goal_amount,

@@ -145,8 +145,8 @@ class UserAuthController extends Controller
                 return redirect()->back()->withCookie(cookie('login_bonus', $loginBonus, 1))->withErrors(['The amount to invest must be at least $'.$min_amount_invest]);
             }
             $this->validate($request, [
-                'first_name' => 'required',
-                'last_name' =>'required',
+                'first_name' => 'required|alpha_num',
+                'last_name' =>'required|alpha_num',
                 'email' => 'required',
                 'phone_number' => 'required|numeric',
                 'investment_amount' => 'required|numeric',

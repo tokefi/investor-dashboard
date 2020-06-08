@@ -173,23 +173,32 @@
 					</div>
 				</div><br>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-8">
 						<div class="" style="color:#fff;">
 							@if($project->investment)
 							@if(Auth::guest())
 							@else
 							@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-							<div class="text-center" style="margin-left: -18em;">
+							<div class="text-center" style="margin-left: -42em;">
+								<input type="checkbox" class="toggle-elements" action="min_investment_field" autocomplete="off" data-label-text="Min Invest" data-size="mini" @if($project->projectconfiguration->show_min_investment_field) checked value="1" @else value="0" @endif>
+							</div>
+							<div class="text-center" style="margin-left: -24em;">
+								<input type="checkbox" class="toggle-elements" action="max_investment_field" autocomplete="off" data-label-text="Max Invest" data-size="mini" @if($project->projectconfiguration->show_max_investment_field) checked value="1" @else value="0" @endif>
+							</div>
+							<div class="text-center" style="margin-left: -10em;">
 								<input type="checkbox" class="toggle-elements" action="share_per_unit_price" autocomplete="off" data-label-text="Share/Unit" data-size="mini" @if($project->projectconfiguration->show_share_per_unit_price) checked value="1" @else value="0" @endif>
 							</div>
-							<div class="text-center" style="margin-left: -6em;">
+							<div class="text-center" style="margin-left: 6em;">
 								<input type="checkbox" class="toggle-elements" action="duration" autocomplete="off" data-label-text="Duration" data-size="mini" @if($project->projectconfiguration->show_duration) checked value="1" @else value="0" @endif>
 							</div>
 							@endif
 							@endif
 							<div class="row text-left">
-								<div class="col-md-2 col-sm-2 col-xs-4" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif">
+								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if($project->projectconfiguration->show_duration || $project->projectconfiguration->show_expected_return || $project->projectconfiguration->show_project_investor_count) border-right: thin solid #ffffff; @endif">
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
+								</div>
+								<div class="col-md-2 col-sm-2 col-xs-4 max_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff;">
+									<h4 class="font-bold project-max-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->maximum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Max Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 share_per_unit_price" style="@if(!$project->projectconfiguration->show_share_per_unit_price) display:none; @endif border-right: thin solid #ffffff; ">
 									<h4 class="font-bold project-share-per-unit-price" style="font-size:1.375em;color:#fff;">${{$project->share_per_unit_price}}</h4>
@@ -202,17 +211,17 @@
 								@if(Auth::guest())
 								@else
 								@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-								<div class="text-center" >
+								<div class="text-center" style="">
 								<input type="checkbox" class="toggle-elements" action="expected_return" autocomplete="off" data-label-text="ExpectedReturn" data-size="mini" @if($project->projectconfiguration->show_expected_return) checked value="1" @else value="0" @endif>
 							</div>
 								@endif
 								@endif
-								<div class="col-md-3 col-sm-2 col-xs-6 expected_return" style="@if(!$project->projectconfiguration->show_expected_return) display:none; @endif @if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
+								<div class="col-md-2 col-sm-2 col-xs-6 expected_return" style="@if(!$project->projectconfiguration->show_expected_return) display:none; @endif @if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
 									<h4 class="font-bold project-returns-field" style="font-size:1.375em;color:#fff;">{{$project->investment->projected_returns}}%</h4>
 									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
 								</div>
 
-								<div class="col-md-3 col-sm-2 col-xs-6 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
+								<div class="col-md-2 col-sm-2 col-xs-6 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
 									<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
 										@if($project->investment) {{$number_of_investors}} @else ### @endif
 									</h4>
@@ -250,7 +259,7 @@
 						@endif
 						@endif
 					</div>
-					<div class="col-md-4 col-md-offset-2 project-invest-button-field" style="margin-top:0%;" id="express_interest">
+					<div class="col-md-4 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<br>
 						@if($project->investment)
 						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
@@ -2925,6 +2934,7 @@ function deleteCarouselImage(){
 			$(this).val(setVal);
 			var checkValue = $(this).val();
 			var projectId = '{{$project->id}}';
+			console.log(checkValue,projectId,toggleAction);
 			$('.loader-overlay').show();
 			$.ajax({
 				url: '/configuration/project/toggleProjectElementVisibility',

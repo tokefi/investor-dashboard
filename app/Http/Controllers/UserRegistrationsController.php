@@ -193,8 +193,8 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
     $color = Color::where('project_site',url())->first();
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
-        'first_name' => 'required',
-        'last_name' => 'required',
+        'first_name' => 'required|alpha_num',
+        'last_name' => 'required|alpha_num',
         'role'=>'required'
     ]);
     $validator1 = Validator::make($request->all(), [
@@ -266,8 +266,8 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
 public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
-        'first_name' => 'required',
-        'last_name' => 'required',
+        'first_name' => 'required|alpha_num',
+        'last_name' => 'required|alpha_num',
         'role'=>'required',
         'g-recaptcha-response' => 'required',
         'password'=>'required|max:60'
@@ -908,8 +908,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         if(isset($request->reg_first_name) && isset($request->reg_last_name)) {
            $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'first_name' => 'required',
-            'last_name' => 'required'
+            'first_name' => 'required|alpha_num',
+            'last_name' => 'required|alpha_num'
         ]);
        }
        $validator1 = Validator::make($request->all(), [
