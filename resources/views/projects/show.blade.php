@@ -194,7 +194,7 @@
 							@endif
 							@endif
 							<div class="row text-left">
-								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff; ">
+								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if(!$project->projectconfiguration->show_min_investment_field) display:none; @endif border-right: thin solid #ffffff; ">
 									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 max_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff;">
