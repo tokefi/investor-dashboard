@@ -611,8 +611,8 @@ class ProjectsController extends Controller
         }
 
         $this->validate($request, [
-            'first_name' => 'required|alpha_num',
-            'last_name' =>'required|alpha_num',
+            'first_name' => 'required|regex:/^[\w]*$/',
+            'last_name' =>'required|regex:/^[\w]*$/',
             'email' => 'required',
             'phone_number' => 'required',
             'investment_amount' => 'required|numeric',

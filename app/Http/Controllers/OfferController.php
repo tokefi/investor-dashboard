@@ -89,8 +89,8 @@ class OfferController extends Controller
         'line_1' => 'required',
         'state' => 'required',
         'postal_code' => 'required',
-        'first_name' => 'alpha_num',
-        'last_name' => 'alpha_num'
+        'first_name' => 'regex:/^[\w]*$/',
+        'last_name' => 'regex:/^[\w]*$/'
       );
       $validator = Validator::make($request->all(), $validation_rules);
 

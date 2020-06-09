@@ -229,7 +229,7 @@ class UsersController extends Controller
     }
     public function fbupdate(Request $request, $id)
     {
-        $this->validate($request, ['first_name'=>'required','last_name'=>'required','phone_number'=>'required']);
+        $this->validate($request, ['first_name'=>'required|regex:/^[\w]*$/','last_name'=>'required|regex:/^[\w]*$/','phone_number'=>'required']);
         $user = Auth::user();
         $roles = $user->roles;
         $access = 0;

@@ -193,8 +193,8 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
     $color = Color::where('project_site',url())->first();
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
-        'first_name' => 'required|alpha_num',
-        'last_name' => 'required|alpha_num',
+        'first_name' => 'required|regex:/^[\w]*$/',
+        'last_name' => 'required|regex:/^[\w]*$/',
         'role'=>'required'
     ]);
     $validator1 = Validator::make($request->all(), [
@@ -266,8 +266,8 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
 public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
-        'first_name' => 'required|alpha_num',
-        'last_name' => 'required|alpha_num',
+        'first_name' => 'required|regex:/^[\w]*$/',
+        'last_name' => 'required|regex:/^[\w]*$/',
         'role'=>'required',
         'g-recaptcha-response' => 'required',
         'password'=>'required|max:60'
@@ -451,8 +451,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $cookies = \Cookie::get();
         $referrer = isset($cookies['referrer']) ? $cookies['referrer'] : "";
         $this->validate($request, [
-            'first_name' => 'required|min:1|max:50',
-            'last_name' => 'required|min:1|max:50',
+            'first_name' => 'required|min:1|max:50|regex:/^[\w]*$/',
+            'last_name' => 'required|min:1|max:50|regex:/^[\w]*$/',
             'phone_number' => 'required|numeric',
             'password' => 'required|max:60',
             'token'=>'required',
@@ -837,8 +837,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
     public function storeDetailsInvite(Request $request)
     {
         $this->validate($request, [
-            'first_name' => 'required|alpha_dash|min:1|max:50',
-            'last_name' => 'required|alpha_dash|min:1|max:50',
+            'first_name' => 'required|regex:/^[\w-]*$/|min:1|max:50',
+            'last_name' => 'required|regex:/^[\w-]*$/|min:1|max:50',
             'phone_number' => 'required',
             'password' => 'required',
             'token'=>'required',
@@ -908,8 +908,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         if(isset($request->reg_first_name) && isset($request->reg_last_name)) {
            $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'first_name' => 'required|alpha_num',
-            'last_name' => 'required|alpha_num'
+            'first_name' => 'required|regex:/^[\w]*$/',
+            'last_name' => 'required|regex:/^[\w]*$/'
         ]);
        }
        $validator1 = Validator::make($request->all(), [
