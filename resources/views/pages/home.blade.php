@@ -413,7 +413,7 @@
 								<br><br><br><br>
 								<div class="row">
 									<div class="homepg-text1 text-center form-group col-md-6 col-md-offset-3">
-										<h2 class="text-center font-regular" style="color: white; font-size:32px;">
+										<h2 class="text-center font_color" style=" font-size:32px;">
 											@if(!empty($siteConfiguration))
 											@if($siteConfiguration->homepg_text1 != '')
 											{!! nl2br(e($siteConfiguration->homepg_text1)) !!}
@@ -1352,6 +1352,7 @@
 	@if($admin_access == 1)
 	<input id="footer_color" class="jscolor {onFineChange:'update(this)'}" value="@if($color){{$color->nav_footer_color}}@endif">
 	<input id="second_color" class="jscolor {onFineChange:'update1(this)'}" value="@if($color){{$color->heading_color}}@endif">
+	<input id="font_color" class="jscolor {onFineChange:'update2(this)'}" value="@if($color){{$color->font_color}}@endif">
 	<button id="footer_color_btn">Apply Color</button>
 	<div style="float: right;">
 		<select id="font_style_select">
@@ -1873,6 +1874,7 @@
 			$('.first_color').attr('style','color: #{{$color->nav_footer_color}}');
 			$('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
 			$('.second_color').css('color','#{{$color->heading_color}}');
+			$('.font_color').css('color','#{{$color->font_color}}');
 			$("a").mouseover(function() {
 				$(this).css('color', '#{{$color->heading_color}}');
 			}).mouseout(function() {
@@ -2381,19 +2383,28 @@ function updateCoords(coords, w, h, origWidth, origHeight){
 			$('#footer, #footer_color').attr('value', jscolor);
 		}
 		function update1(jscolor) {
+			console.log('jscolor'+jscolor);
 			// 'jscolor' instance can be used as a string
 			document.getElementById('second_color_venture').style.backgroundColor = '#' + jscolor;
 			$('#second_color_venture, #second_color').attr('style', 'background-color:#'+jscolor);
 			$('#second_color_venture, #second_color').attr('value', jscolor);
 		}
+		function update2(jscolor) {
+			// 'jscolor' instance can be used as a string
+			// document.getElementById('second_color_venture').style.backgroundColor = '#' + jscolor;
+			$('#font_color').attr('style', 'background-color:#'+jscolor);
+			$('#font_color').attr('value', jscolor);
+		}
 		function changeColor(){
 			var first_color_code = $('#footer_color').attr('value');
 			var second_color_code = $('#second_color').attr('value');
+			var font_color_code = $('#font_color').attr('value');
+			console.log(first_color_code,second_color_code,font_color_code);
 			$.ajax({
 				url: '/configuration/changecolor/footer/home',
 				type: 'POST',
 				dataType: 'JSON',
-				data: {first_color_code ,second_color_code},
+				data: {first_color_code ,second_color_code,font_color_code},
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},

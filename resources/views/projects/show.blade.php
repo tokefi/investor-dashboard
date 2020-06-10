@@ -119,8 +119,8 @@
 			<div class="container">
 				<div class="row" id="main-context" style="margin-top:10px; padding-top: 2em;">
 					<div class="col-md-5 col-sm-6">
-						<h2 class="text-left project-title-name" style="font-size:2.625em; color:#fff !important;">{{$project->title}}</h2>
-						<span class="text-left project-description-field text-justify" style="color:#fff; font-size:0.875em;">{!!nl2br($project->description)!!}</span>
+						<h2 class="text-left project-title-name font_color" style="font-size:2.625em; ">{{$project->title}}</h2>
+						<span class="text-left project-description-field text-justify font_color" style="font-size:0.875em;">{!!nl2br($project->description)!!}</span>
 						<br>
 					</div>
 					{{-- <div class="col-md-4 col-md-offset-4 col-sm-6 text-center project-close-date-field"></div> --}}
@@ -619,7 +619,7 @@
 			@if(Auth::guest())
 			@else
 			@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-			<div class="text-center row">
+			<div class="text-center row second_color">
 				<small><small>@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_summary_label))}}@else Project Summary @endif</small></small><br>
 				<input type="checkbox" class="checkbox-switch" autocomplete="off" data-label-text="Show" action="show_project_summary_whole_section" @if($project->projectconfiguration->show_project_summary_whole_section) checked value="1" @else value="0" @endif>
 			</div>
@@ -627,7 +627,7 @@
 			@endif
 			<div class="row show_project_summary_whole_section" @if(!$project->projectconfiguration->show_project_summary_whole_section) style="display: none;" @endif>
 				<div class="col-md-12">
-					<h2 class="text-center first_color show-project-summary-input" style="font-size:2.625em;color:#282a73;">
+					<h2 class="text-center second_color show-project-summary-input" style="font-size:2.625em;color:#282a73;">
 						@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_summary_label))}}@else Project Summary @endif </h2>
 						<br>
 						@if(Auth::guest())
@@ -653,7 +653,7 @@
 								<h4 class="second_color show-summary-input" style="margin-top:30px; color:#fed405; font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->summary_label))}}@else Summary @endif</h4>
 							</div>
 							<div class="col-md-10 text-left">
-								@if($project->investment) <p style="font-size:0.875em;" class="project-summary-field text-justify">{!!nl2br($project->investment->summary)!!}</p> @endif
+								@if($project->investment) <p style="font-size:0.875em;" class="project-summary-field text-justify second_color">{!!nl2br($project->investment->summary)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','summary')->last())
 									@if(Auth::guest())
@@ -695,7 +695,7 @@
 								<h4 class="second_color show-security-input" style="margin-bottom:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->security_label))}}@else Security @endif</h4>
 							</div>
 							<div class="col-md-10 text-left">
-								@if($project->investment) <p style="margin-top:0px;font-size:0.875em;" class="project-security-long-field text-justify">{!!nl2br($project->investment->security_long)!!}</p> @endif
+								@if($project->investment) <p style="margin-top:0px;font-size:0.875em;" class="project-security-long-field second_color text-justify">{!!nl2br($project->investment->security_long)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','security')->last())
 									@if(Auth::guest())
@@ -734,10 +734,10 @@
 								@endif
 								@endif
 								<img src="@if($projMedia=$project->media->where('type', 'investor_distribution_image')->first()){{asset($projMedia->path)}}@else{{asset('assets/images/new_investor_distribution.png')}}@endif" alt="exit" style="width: 50px; ">
-								<h4 class="second_color show-investor-distribution-input" style="margin-top:30px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investor_distribution_label))}}@else Investor<br> Distribution @endif</h4>
+								<h4 class="second_color show-investor-distribution-input" style="margin-top:30px; font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investor_distribution_label))}}@else Investor<br> Distribution @endif</h4>
 							</div>
 							<div class="col-md-10 text-left">
-								@if($project->investment) <p style="font-size:0.875em;" class="project-investor-distribution-field text-justify">{!!nl2br($project->investment->exit_d)!!}</p> @endif
+								@if($project->investment) <p style="font-size:0.875em;" class="project-investor-distribution-field text-justify second_color">{!!nl2br($project->investment->exit_d)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','exit_image')->last())
 									@if(Auth::guest())
@@ -776,7 +776,7 @@
 				@endif
 				<div class="row show_suburb_whole_section" @if(!$project->projectconfiguration->show_suburb_whole_section) style="display: none;" @endif>
 					<div class="col-md-12">
-						<h2 class="text-center first_color show-suburb-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->suburb_profile_label))}}@else Suburb Profile @endif </h2>
+						<h2 class="text-center second_color show-suburb-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->suburb_profile_label))}}@else Suburb Profile @endif </h2>
 						<br>
 						@if(Auth::guest())
 						@else
@@ -821,7 +821,7 @@
 								<h4 class="second_color show-marketability-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->marketability_label))}}@else Marketability @endif</h4>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class="text-left project-marketability-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->marketability)!!}</p> @endif
+								@if($project->investment) <p class="text-left project-marketability-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->marketability)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','marketability')->last())
 									@if(Auth::guest())
@@ -864,7 +864,7 @@
 								<h4 class="second_color show-residents-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->residents_label))}}@else Residents @endif</h4>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class="text-left project-residents-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->residents)!!}</p> @endif
+								@if($project->investment) <p class="text-left project-residents-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->residents)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','residents')->last())
 									@if(Auth::guest())
@@ -894,15 +894,15 @@
 				@if(Auth::guest())
 				@else
 				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-				<div class="text-center row">
-					<small><small>@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_profile_label))}}@else Investment Profile @endif</small></small><br>
+				<div class="text-center row ">
+					<small><small class="second_color">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_profile_label))}}@else Investment Profile @endif</small></small><br>
 					<input type="checkbox" class="checkbox-switch" autocomplete="off" data-label-text="Show" action="show_investment_whole_section" @if($project->projectconfiguration->show_investment_whole_section) checked value="1" @else value="0" @endif>
 				</div>
 				@endif
 				@endif
 				<div class="row show_investment_whole_section" @if(!$project->projectconfiguration->show_investment_whole_section) style="display: none;" @endif>
 					<div class="col-md-12">
-						<h2 class="text-center first_color show-investment-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_profile_label))}}@else Investment Profile @endif</h2>
+						<h2 class="text-center second_color show-investment-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_profile_label))}}@else Investment Profile @endif</h2>
 						<br>
 						@if(Auth::guest())
 						@else
@@ -925,7 +925,7 @@
 								<h4 class="second_color show-investment-type-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_type_label))}}@else Type @endif</h4><br>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class="project-investment-type-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->investment_type)!!}</p>@endif
+								@if($project->investment) <p class="project-investment-type-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->investment_type)!!}</p>@endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','investment_type')->last())
 									@if(Auth::guest())
@@ -967,7 +967,7 @@
 								<h4 class="second_color show-investment-security-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_security_label))}}@else Security @endif</h4><br>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class=" project-security-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->security)!!}</p> @endif
+								@if($project->investment) <p class=" project-security-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->security)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','investment_security')->last())
 									@if(Auth::guest())
@@ -1009,7 +1009,7 @@
 								<h4 class="second_color show-expected-returns-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->expected_returns_label))}}@else Expected<br> Returns @endif</h4>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class=" project-expected-returns-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->expected_returns_long)!!}</p> @endif
+								@if($project->investment) <p class=" project-expected-returns-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->expected_returns_long)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','expected_returns')->last())
 									@if(Auth::guest())
@@ -1051,7 +1051,7 @@
 								<h4 class="second_color show-return-paid-as-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->return_paid_as_label))}}@else Returns<br> Paid As @endif</h4>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class=" project-return-paid-as-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->returns_paid_as)!!}</p> @endif
+								@if($project->investment) <p class=" project-return-paid-as-field text-justify second_color" style="font-size:0.875em;">{!!nl2br($project->investment->returns_paid_as)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','return_paid_as')->last())
 									@if(Auth::guest())
@@ -1092,7 +1092,7 @@
 								<h4 class="second_color show-taxation-input" style="margin-top:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->taxation_label))}}@else Taxation @endif</h4><br>
 							</div>
 							<div class="col-md-10">
-								@if($project->investment) <p class=" project-taxation-field text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->taxation)!!}</p> @endif
+								@if($project->investment) <p class=" project-taxation-field second_color text-justify" style="font-size:0.875em;">{!!nl2br($project->investment->taxation)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','taxation')->last())
 									@if(Auth::guest())
@@ -1122,14 +1122,14 @@
 				@else
 				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
 				<div class="text-center row">
-					<small><small>@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_profile_label))}}@else Project Profile @endif</small></small><br>
+					<small><small class="second_color">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_profile_label))}}@else Project Profile @endif</small></small><br>
 					<input type="checkbox" class="checkbox-switch" autocomplete="off" data-label-text="Show" action="show_project_profile_whole_section" @if($project->projectconfiguration->show_project_profile_whole_section) checked value="1" @else value="0" @endif>
 				</div>
 				@endif
 				@endif
 				<div class="row show_project_profile_whole_section" @if(!$project->projectconfiguration->show_project_profile_whole_section) style="display: none;" @endif>
 					<div class="col-md-12">
-						<h2 class="text-center first_color show-project-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_profile_label))}}@else Project Profile @endif </h2>
+						<h2 class="text-center second_color show-project-profile-input" style="font-size:2.625em;color:#282a73;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->project_profile_label))}}@else Project Profile @endif </h2>
 						<br>
 						@if(Auth::guest())
 						@else
@@ -1156,7 +1156,7 @@
 								@endif
 							</div>
 							<div class="col-md-10 text-left">
-								@if($project->investment) <p style="font-size:0.875em;" class="project-developer-field text-justify">{!!nl2br($project->investment->proposer)!!}</p> @endif
+								@if($project->investment) <p style="font-size:0.875em;" class="project-developer-field second_color text-justify">{!!nl2br($project->investment->proposer)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','project_developer')->last())
 									@if(Auth::guest())
@@ -1240,7 +1240,7 @@
 								<h4 class="second_color show-current-status-input" style="margin-bottom:0px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->current_status_label))}}@else Current Status @endif</h4><br>
 							</div>
 							<div class="col-md-10 text-left">
-								@if($project->investment) <p style="font-size:0.875em;" class="project-current-status-field text-justify">{!!nl2br($project->investment->current_status)!!}</p> @endif
+								@if($project->investment) <p style="font-size:0.875em;" class="project-current-status-field second_color text-justify">{!!nl2br($project->investment->current_status)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','current_status')->last())
 									@if(Auth::guest())
@@ -1330,7 +1330,7 @@
 						<h4 class="second_color show-rationale-input" style="margin-top:30px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->rationale_label))}}@else Rationale @endif</h4><br>
 					</div>
 					<div class="col-md-10 text-left">
-						@if($project->investment) <p style="font-size:0.875em;" class="project-rationale-field text-justify">{!!nl2br($project->investment->rationale)!!}</p> @endif
+						@if($project->investment) <p style="font-size:0.875em;" class="project-rationale-field second_color text-justify">{!!nl2br($project->investment->rationale)!!}</p> @endif
 						<div>
 							@if($projectMediaImage=$project->media->where('type','rationale')->last())
 							@if(Auth::guest())
@@ -1371,7 +1371,7 @@
 						<h4 class="second_color show-risk-input" style="margin-top:30px; color:#fed405;font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->investment_risk_label))}}@else Risk @endif</h4><br>
 					</div>
 					<div class="col-md-10 text-left">
-						@if($project->investment) <p style="font-size:0.875em;" class="project-risk-field text-justify">{!!nl2br($project->investment->risk)!!}</p> @endif
+						@if($project->investment) <p style="font-size:0.875em;" class="project-risk-field text-justify second_color">{!!nl2br($project->investment->risk)!!}</p> @endif
 						<div>
 							@if($projectMediaImage=$project->media->where('type','investment_risk')->last())
 							@if(Auth::guest())
@@ -1405,7 +1405,7 @@
 						<h4 class="second_color " style="margin-top:30px; color:#fed405;font-size:1.375em;">Custodian</h4><br>
 					</div>
 					<div class="col-md-10 text-left">
-						@if($project) <p style="font-size:0.875em;" class="project-risk-field text-justify">{!!nl2br($project->custodian)!!}</p> @endif
+						@if($project) <p style="font-size:0.875em;" class="project-risk-field text-justify second_color">{!!nl2br($project->custodian)!!}</p> @endif
 					</div>
 				</div>
 				<br><br>
@@ -1426,7 +1426,7 @@
 				<div class="col-md-offset-2 col-md-7">
 					<b>{{$faq->question}}</b>
 					{{$faq->id}}
-					<p class="text-justify">{{$faq->answer}}</p>
+					<p class="text-justify second_color">{{$faq->answer}}</p>
 				</div>
 				<div class="col-md-2">
 					{!! Form::open(['method' => 'DELETE', 'route' => ['projects.destroy', $faq->id, $project->id]]) !!}
@@ -1508,7 +1508,7 @@
 
 					@if($project->investment)
 					<div class="row">
-						<div class="col-md-10 col-md-offset-1 text-justify">
+						<div class="col-md-10 col-md-offset-1 text-justify second_color">
 							<h5>
 								@if($project->projectconfiguration->payment_switch)
 								<h5 class="text-center">
@@ -1586,7 +1586,7 @@
 						</div>
 						<div id="faq_{{$key}}" class="panel-collapse collapse">
 							<div class="panel-body" style="padding-left:45px;">
-								<p style="font-size:16px;color:#282a73;" class="font-regular text-justify">{!!nl2br($faq->answer)!!}</p>
+								<p style="font-size:16px;color:#282a73;" class="second_color text-justify">{!!nl2br($faq->answer)!!}</p>
 							</div>
 						</div>
 					</div>
@@ -1750,7 +1750,7 @@
 								</div>
 								<div class="col-md-11">
 									<b>{{$comment->user->first_name}} {{$comment->user->last_name}}</b> . <span style="font-size: 0.7em; padding-left:5px;">{{$comment->updated_at->diffForHumans()}}</span> @if(!Auth::guest() && App\Helpers\SiteConfigurationHelper::isSiteAdmin())<a href="{{route('projects.{projects}.comments.delete', [$project->id, $comment->id])}}"> <i class='fa fa-trash pull-right'></i> </a> @endif <br>
-									<p class="text-justify">{{$comment->text}}</p>
+									<p class="text-justify second_color">{{$comment->text}}</p>
 								</div>
 							</div>
 							<div class="row " >

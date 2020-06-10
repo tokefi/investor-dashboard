@@ -494,6 +494,7 @@ $_SESSION['code'] = md5(microtime(true));
             $('.first_color').css('color', '#{{$color->nav_footer_color}}');
             $('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
             $('.second_color').css('color','#{{$color->heading_color}}');
+            $('.font_color').css('color','#{{$color->font_color}}');
             $("a").mouseover(function() {
                 $(this).css('color', '#{{$color->heading_color}}');
             }).mouseout(function() {

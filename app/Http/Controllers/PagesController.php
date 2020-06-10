@@ -487,7 +487,8 @@ class PagesController extends Controller
         // dd($request);
         $validation_rules = array(
             'first_color_code'=>'required',
-            'second_color_code'=>'required'
+            'second_color_code'=>'required',
+            'font_color_code'=>'required',
             );
         $validator = Validator::make($request->all(), $validation_rules);
         if($validator->fails()){
@@ -502,6 +503,7 @@ class PagesController extends Controller
         $color->user_id = $user->id;
         $color->nav_footer_color = $request->first_color_code;
         $color->heading_color = $request->second_color_code;
+        $color->font_color = $request->font_color_code;
         $color->save();
         // return redirect()->back()->withMessage('Successfully Update color');
         return $resultArray = array('status' => 1, 'message' => 'Successfully Updated color');
