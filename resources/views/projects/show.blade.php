@@ -22,7 +22,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap3/bootstrap-switch.min.css">
 <!-- Summernote -->
 {!! Html::style('/assets/plugins/summernote/summernote.css') !!}
-@parent
+@parent0
 <style>
 	#map {
 		height: 350px;
@@ -48,6 +48,9 @@
 	}
 	.btn-n1 {
 		color: white;
+	}
+	.summary-text >h3{
+		color:rgb(57, 52, 65);
 	}
 	.btn-n1:hover {
 		color: black;
@@ -652,7 +655,8 @@
 								<img src="@if($projMedia=$project->media->where('type', 'summary_image')->first()){{asset($projMedia->path)}}@else{{asset('assets/images/new_summary.png')}}@endif" alt="for whom" style="width:50px;" >
 								<h4 class="second_color show-summary-input" style="margin-top:30px; color:#fed405; font-size:1.375em;">@if($project->projectconfiguration){{nl2br(e($project->projectconfiguration->summary_label))}}@else Summary @endif</h4>
 							</div>
-							<div class="col-md-10 text-left">
+							<div class="col-md-10 text-left second_color summary-text">
+								<h3 class="second_color"></h3>
 								@if($project->investment) <p style="font-size:0.875em;" class="project-summary-field text-justify second_color">{!!nl2br($project->investment->summary)!!}</p> @endif
 								<div>
 									@if($projectMediaImage=$project->media->where('type','summary')->last())
