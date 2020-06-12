@@ -385,7 +385,7 @@ $_SESSION['code'] = md5(microtime(true));
                         <span style="color:#fff;"> </span>
                         <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
                         <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
-                        <li class="footer-list-item"><a href="/pages/faq" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
+                        <li class="footer-list-item hide"><a href="/pages/faq" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
                         <!-- <li class="footer-list-item"><a href="{{$siteConfiguration->media_kit_link}}" download style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Media Kit</span></a></li> -->
                     </ul>
 <!--                     <span style="margin:0 0 1px;">

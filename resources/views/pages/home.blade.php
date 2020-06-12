@@ -1490,7 +1490,7 @@
 						<li class="footer-list-item @if($siteConfiguration->financial_service_guide_link) @else hide @endif">
 							<a href="{{$siteConfiguration->financial_service_guide_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a>
 						</li>
-						<li class="footer-list-item">
+						<li class="footer-list-item hide">
 							<a href="/pages/faq" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a>
 						</li>
 						<!-- <li class="footer-list-item">
