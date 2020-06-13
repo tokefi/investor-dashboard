@@ -1467,7 +1467,7 @@
 			<div class="row">
 				<div class="col-md-4 col-md-offset-4 text-center">
 					<ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
-						<li class="footer-list-item">
+						<li class="footer-list-item hide">
 							<a href="/#promo" data-href="/#promo" class="scrollto a-link scroll-links  "><span class="font-semibold" style="font-size: 16px;">Home</span></a>
 						</li>
 						<li class="footer-list-item @if($siteConfiguration->blog_link_new) @else hide @endif">
@@ -1490,8 +1490,8 @@
 						<li class="footer-list-item @if($siteConfiguration->financial_service_guide_link) @else hide @endif">
 							<a href="{{$siteConfiguration->financial_service_guide_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a>
 						</li>
-						<li class="footer-list-item hide">
-							<a href="/pages/faq" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a>
+						<li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif">
+							<a href="{{$siteConfiguration->faq_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a>
 						</li>
 						<!-- <li class="footer-list-item">
 							<a href="{{$siteConfiguration->media_kit_link}}" download class="a-link"><span class="font-semibold" style="font-size: 16px;">Media Kit</span></a>
@@ -1605,6 +1605,7 @@
 									<tr><td>Terms & Conditions:</td><td><input class="form-control" placeholder="http://example.com" name="terms_conditions_link" value="@if($siteConfiguration->terms_conditions_link){{$siteConfiguration->terms_conditions_link}}@endif"></td></tr>
 									<tr><td>Privacy:</td><td><input class="form-control" placeholder="http://example.com" name="privacy_link" value="@if($siteConfiguration->privacy_link){{$siteConfiguration->privacy_link}}@endif"></td></tr>
 									<tr><td>Financial Service Guide:</td><td><input class="form-control" placeholder="http://example.com" name="financial_service_guide_link" value="@if($siteConfiguration->financial_service_guide_link){{$siteConfiguration->financial_service_guide_link}}@endif"></td></tr>
+									<tr><td>FAQ:</td><td><input class="form-control" placeholder="http://example.com" name="faq_link" value="@if($siteConfiguration->faq_link){{$siteConfiguration->faq_link}}@endif"></td></tr>
 									{{-- <tr><td>Media Kit:</td><td><input class="form-control" type="text" name="media_kit_link" value="{{$siteConfiguration->media_kit_link}}"></td></tr> --}}
 								</table>
 							</div>

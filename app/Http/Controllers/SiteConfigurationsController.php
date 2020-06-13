@@ -407,6 +407,7 @@ class SiteConfigurationsController extends Controller
             'terms_conditions_link' => $request->terms_conditions_link,
             'privacy_link' => $request->privacy_link,
             'financial_service_guide_link' => $request->financial_service_guide_link,
+            'faq_link' => $request->faq_link,
             // 'media_kit_link' => $request->media_kit_link,
         ]);
         if($result){

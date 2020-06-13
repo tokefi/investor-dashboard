@@ -416,13 +416,13 @@ $_SESSION['code'] = md5(microtime(true));
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
                     <ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
-                        <li class="footer-list-item"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
+                        <li class="footer-list-item hide"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
                         <li class="footer-list-item @if(!$siteConfiguration->blog_link_new) hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
                         <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link"><span class="font-semibold"  style="color:#fff; font-size: 16px;">Terms & conditions</span></a></li>
                         <span style="color:#fff;"> </span>
                         <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
                         <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
-                        <li class="footer-list-item hide"><a href="/pages/faq" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif"><a href="{{$siteConfiguration->faq_link}}" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
                     </ul>
                 <br>
             </div>
