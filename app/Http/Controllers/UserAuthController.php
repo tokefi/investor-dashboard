@@ -105,7 +105,8 @@ class UserAuthController extends Controller
         if(Auth::check())
         {
             $color = Color::where('project_site',url())->first();
-            return view('users.successEoi',compact('color'));
+            $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
+            return view('users.successEoi',compact('color','siteConfiguration'));
         }
         return redirect()->route('users.login')->withMessage('<p class="alert alert-danger text-center">Please Login</p>');
     }
@@ -355,14 +356,15 @@ class UserAuthController extends Controller
         $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
         $this->dispatch(new SendReminderEmail($user,$project,$investor));
         $amount = $amount * $project->share_per_unit_price;
-        $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'))->render();
+        $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
+        $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration'))->render();
         return response()->json(array('success'=>true,'html'=>$viewHtml,'auth'=>$auth));
     }
     return response()->json(array('success'=>false,'auth'=>$auth));
 }
 
     /**
-     * authenticate user
+     * authenticate usersiteConfiguration
      * @param  UserAuthRequest $request
      * @return view user show page
      */

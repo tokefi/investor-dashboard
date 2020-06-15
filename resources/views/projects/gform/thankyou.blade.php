@@ -61,7 +61,8 @@
 			</section>
 			<div class="row">
 				<div class="col-md-12 text-center">
-					<a href="javascript:void(0);" onclick="top.window.location.href='@if($project->custom_project_page_link) {{$project->custom_project_page_link}} @else {{route('home')}} @endif';">BACK TO HOME</a>
+					{{-- href="javascript:void(0);" onclick="top.window.location. --}}
+					<a href='@if($siteConfiguration->project_url) {{$siteConfiguration->project_url}} @else {{route('home')}} @endif'>BACK TO HOME</a>
 				</div>
 			</div>
 		</div>

@@ -16,7 +16,7 @@ Thank You | @parent
 				<div class="col-md-12">
 					<div style="padding:10em 0;">
 						<h1 class="text-center wow fadeIn animated h1-faq">Thank you for expressing interest. We will be in touch with you shortly.<br><br><br>
-							<small>check out other <a href="/#projects">offers</a></small>
+							<small>check out other <a @if($siteConfiguration->project_url) href="{{ $siteConfiguration->project_url }}" @else href="/#projects" @endif>offers</a></small>
 						</h1>
 					</div>
 

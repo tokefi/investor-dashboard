@@ -810,8 +810,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
                     $this->dispatch(new SendReminderEmail($user,$project,$investor));
 
                     $amount = $amount * $project->share_per_unit_price;
-
-                    return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount'));
+                    $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
+                    return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration'));
                 }
 
             }
