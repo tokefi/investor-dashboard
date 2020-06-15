@@ -305,6 +305,29 @@ Configuration | Dashboard | @parent
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail text-center">
+                                @if (Session::has('message'))
+                                @if(Session::get('action') == 'change_project_url')
+                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                    <h5>{!! Session::get('message') !!}</h5>
+                                </div>
+                                @endif
+                                @endif
+                                <div class="caption">
+                                    <h3><b>Project Url</b></h3>
+                                    <p><small>Edit the project url for this site to redirect.</small></p>
+                                    <hr>
+                                    <p>
+                                        <label class="input-group-btn">
+                                            <span class="btn btn-primary btn-sm change-project-url-btn" style="cursor: pointer;">
+                                                <strong>Change Project Url</strong>
+                                            </span>
+                                        </label>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -843,6 +866,38 @@ Configuration | Dashboard | @parent
     </div>
 </div>
 
+<!-- Modal for Project Url -->
+<div class="modal fade" id="change_project_url_modal" role="dialog">
+    <div class="modal-dialog" style="margin-top: 10%;">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="modal_close_btn" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Update Project url</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row text-center" id="modal_body_container">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="alert alert-warning hide" style="margin-bottom: 0;">
+                            <small><strong>Warning!</strong> If you use free account you may face issues.</small>
+                        </div>
+                        <br>
+                        {!! Form::open(array('route'=>['configuration.updateProjectUrl'], 'method'=>'POST', 'class'=>'form-horizontal', 'role'=>'form', 'id'=>'project_url_form')) !!}
+                        <h5><i><small>Enter the project url in below text field and save to update the project url for the website.</small></i></h5>
+                        <br>
+                        <div class="row prospectus-text-error" style="text-align: -webkit-center;"></div>
+                        {!! Form::text('project_url', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->project_url, array('placeholder'=>'Enter Project Url', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'project_url')) !!}
+                        <br>
+                        {!! Form::submit('Save Project Url', array('class'=>'btn btn-primary col-md-4 col-md-offset-4', 'tabindex'=>'2', 'style'=>'margin-bottom: 20px; margin-top: 10px;')) !!}
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </div>
 </div>
 @stop
@@ -922,6 +977,14 @@ Configuration | Dashboard | @parent
             if($.trim(apiKey) == '') {
                 e.preventDefault();
                 alert('Please enter your sendgrid API key');
+            }
+        });
+
+        $('#project_url_form').on('submit', function(e) {
+            var projectUrl = $('#project_url').val();
+            if($.trim(projectUrl) == '') {
+                e.preventDefault();
+                alert('Please enter your Project Url');
             }
         });
 
@@ -1025,6 +1088,7 @@ Configuration | Dashboard | @parent
         editLegalDetails();
         changeKonkreteBonusAllocation();
         changeSendgridAPIKey();
+        changeProjectUrl();
     });
 
 function updateCoords(coords, w, h, origWidth, origHeight){
@@ -1149,6 +1213,16 @@ function updateCoords(coords, w, h, origWidth, origHeight){
                 'backdrop': false,
             });
             $('#sendgrid_api_key').select();
+        });
+    }
+
+    function changeProjectUrl(){
+        $('.change-project-url-btn').click(function(){
+            $('#change_project_url_modal').modal({
+                'show': true,
+                'backdrop': false,
+            });
+            $('#project_url').select();
         });
     }
 

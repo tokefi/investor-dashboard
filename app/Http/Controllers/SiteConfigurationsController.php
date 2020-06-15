@@ -1616,6 +1616,36 @@ class SiteConfigurationsController extends Controller
         }
     }
 
+    public function updateProjectUrl(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'project_url' => 'required'
+        ]);
+        if($validator->fails()) {
+            Session::flash('message', 'Empty Project url given');
+            Session::flash('action', 'change_project_url');
+            return redirect()->back();
+        }
+
+        $projectUrl = $request->project_url;
+        if($projectUrl != ""){
+            $siteconfiguration = SiteConfiguration::all();
+            $siteconfiguration = $siteconfiguration->where('project_site',url())->first();
+            if(!$siteconfiguration)
+            {
+                $siteconfiguration = new SiteConfiguration;
+                $siteconfiguration->project_site = url();
+                $siteconfiguration->save();
+                $siteconfiguration = SiteConfiguration::all();
+                $siteconfiguration = $siteconfiguration->where('project_site',url())->first();
+            }
+            $siteconfiguration->update(['project_url'=>$projectUrl]);
+            Session::flash('message', 'Project Url Updated Successfully');
+            Session::flash('action', 'change_project_url');
+            return redirect()->back();
+        }
+    }
+
     /**
      * \brief Sendgrid bulk API
      * \details - Common function to send bulk email to multiple users.
