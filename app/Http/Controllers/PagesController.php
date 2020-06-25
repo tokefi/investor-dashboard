@@ -624,8 +624,8 @@ class PagesController extends Controller
 
     public function fsg()
     {
-        $filename = 'fsg/Agcrowd_FSG.pdf';
-        $path = storage_path($filename);
+        $filename = 'Agcrowd_FSG.pdf';
+        $path = public_path('assets/documents/fsg/'.$filename);
         return \Response::make(file_get_contents($path), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$filename.'"'

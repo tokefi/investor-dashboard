@@ -330,6 +330,6 @@ Route::post('/dashboard/import/clients', ['as'=>'dashboard.import.clients.csv', 
 Route::group(['middleware' => ['auth', 'admin']], function () {
 	Route::get('/dashboard/reporting', ['as'=>'dashboard.reporting', 'uses'=>'Admin\ReportingController@index']);
 });
-Route:get('/dashboard/project/{project_id}/registry/records/download',['as'=>'dashboard.project.registry.records.download','uses'=>'DashboardController@downloadProjectRegistryRecord']);
+Route::get('/dashboard/project/{project_id}/registry/records/download',['as'=>'dashboard.project.registry.records.download','uses'=>'DashboardController@downloadProjectRegistryRecord']);
 Route::post('/configuration/updateProjectUrl', ['as'=> 'configuration.updateProjectUrl', 'uses'=>'SiteConfigurationsController@updateProjectUrl']);
-Route::get('/fsg', ['as'=>'fsg', 'uses'=>'PagesController@fsg']);
+Route::get('/financialserviceguide', ['as'=>'financialserviceguide', 'uses'=>'PagesController@fsg']);
