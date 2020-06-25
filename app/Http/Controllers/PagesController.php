@@ -269,7 +269,7 @@ class PagesController extends Controller
                     // 'category'=>'required',
                     'question'=>'required',
                     'answer'=>'required'
-                    ));
+                ));
                 //Save to database
                 $newFaq = new Faq;
                 // $newFaq->category = $request->category;
@@ -303,7 +303,7 @@ class PagesController extends Controller
             'main_heading'=>'required',
             'sub_heading'=>'required',
             'content'=>'required'
-            ));
+        ));
         $aboutus = new Aboutus;
         $aboutus->user_id = $user->id;
         $aboutus->project_site = url();
@@ -320,7 +320,7 @@ class PagesController extends Controller
             'main_heading'=>'required',
             'sub_heading'=>'required',
             'content'=>'required'
-            ));
+        ));
         $aboutus = Aboutus::findOrFail($id);
         $some = $aboutus->update($request->all());
         return redirect()->back()->withMessage('Successfully Updated');
@@ -334,7 +334,7 @@ class PagesController extends Controller
             'founder_content'=>'required',
             'founder_image_url'=>'required|mimes:jpeg,bmp,png,jpg,JPG',
             'founder_img_path' => 'required',
-            ));
+        ));
         $user = Auth::user();
         $aboutus = Aboutus::findOrFail($id);
         $team = new Member;
@@ -368,20 +368,20 @@ class PagesController extends Controller
         return redirect()->back()->withMessage('Deleted Successfully');
     }
     public function updateFounderLabel(Request $request){
-            if (SiteConfigurationHelper::isSiteAdmin()){
+        if (SiteConfigurationHelper::isSiteAdmin()){
             $founderLabel = $request->founder_label;
             $aboutus = Aboutus::all();
             $aboutus = $aboutus->where('project_site',url())->first();
             $aboutus->update([
                 'founder_label' => $request->founder_label,
-                ]);
+            ]);
             return redirect()->back();
         }
     }
     public function uploadMemberImgThumbnail(Request $request){
         $validation_rules = array(
             'founder_image_url'=>'required|mimes:jpeg,png,jpg,JPG'
-            );
+        );
         $validator = Validator::make($request->all(), $validation_rules);
         if($validator->fails()){
             return $resultArray = array('status' => 0, 'message' => 'The user image must be a file of type: jpeg,png,jpg,JPG');
@@ -489,7 +489,7 @@ class PagesController extends Controller
             'first_color_code'=>'required',
             'second_color_code'=>'required',
             'font_color_code'=>'required',
-            );
+        );
         $validator = Validator::make($request->all(), $validation_rules);
         if($validator->fails()){
             return $resultArray = array('status' => 0, 'message' => 'Both color fields must be specified.');
@@ -525,12 +525,12 @@ class PagesController extends Controller
             'user_name'=>'required',
             'user_summary'=>'required',
             'user_content'=>'required',
-            ));
+        ));
         if($request->user_image_url){
             $this->validate($request, array(
                 'user_image_url'=>'mimes:jpeg,bmp,png,jpg,JPG',
                 'testimonial_img_path' => 'required',
-                ));
+            ));
         }
         $testimonial = new Testimonial;
         $testimonial->user_name = $request->user_name;
@@ -546,7 +546,7 @@ class PagesController extends Controller
     {
         $this->validate($request, array(
             'testimonial_id'=>'required'
-            ));
+        ));
         $testimonial = Testimonial::find($request->testimonial_id);
         $testimonial->delete();
         return redirect()->back();
@@ -555,7 +555,7 @@ class PagesController extends Controller
     public function uploadTestimonialImgThumbnail(Request $request){
         $validation_rules = array(
             'user_image_url'=>'required|mimes:jpeg,png,jpg,JPG'
-            );
+        );
         $validator = Validator::make($request->all(), $validation_rules);
         if($validator->fails()){
             return $resultArray = array('status' => 0, 'message' => 'The user image must be a file of type: jpeg,png,jpg,JPG');
@@ -588,7 +588,7 @@ class PagesController extends Controller
         $validation_rules = array(
             'email'=>'required|email',
             'phone'=>'required|numeric'
-            );
+        );
         $validator = Validator::make($request->all(), $validation_rules);
         if ($validator->fails()){
             return $resultArray = array('status' => 0, 'message'=>$validator->messages()->first());
@@ -604,7 +604,7 @@ class PagesController extends Controller
                     'email' => $email,
                     'phone_number' => $phone,
                     'action_site' => url()
-                    ]);
+                ]);
                 $mailer->sendUpcomingProjectInterestMailToAdmins($project, $email, $phone);
                 return $resultArray = array('status' => 1);   
             }
@@ -620,5 +620,15 @@ class PagesController extends Controller
         else {
             return redirect()->route('users.login', ['redirectNotification'=>1]);
         }
+    }
+
+    public function fsg()
+    {
+        $filename = 'fsg/Agcrowd_FSG.pdf';
+        $path = storage_path($filename);
+        return \Response::make(file_get_contents($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$filename.'"'
+        ]);
     }
 }
