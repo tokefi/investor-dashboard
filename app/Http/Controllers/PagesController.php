@@ -65,13 +65,13 @@ class PagesController extends Controller
         $currentUserRole = '';
         $admin_access = 0;
         if(Auth::guest()) {
-            $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->get();
+            $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
             $currentUserRole = 'guest';
         } else {
             $user = Auth::user();
             $roles = $user->roles;
             if ($roles->contains('role', 'admin') || $roles->contains('role', 'master')) {
-                $projects = Project::whereIn('active', ['1', '2'])->where('project_site',url())->orderBy('project_rank', 'asc')->get();
+                $projects = Project::whereIn('active', ['1', '2'])->where('project_site',url())->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
                 // dd($projects);
                 if($user->registration_site == url()){
                     $admin_access = 1;
@@ -81,10 +81,10 @@ class PagesController extends Controller
                         $admin_access = 1;
                 }
             } else {
-                $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->get();
+                $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
             }
-        }        
-
+        }   
+        
         $BannerCities = ['Adelaide', 'Auckland', 'Brisbane', 'Canberra', 'Darwin', 'Hobart', 'Melbourne', 'Perth', 'Sydney'];
         $siteConfiguration = SiteConfiguration::all();
 
