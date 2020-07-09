@@ -101,8 +101,13 @@ class ProjectsController extends Controller
         } else {
             return redirect()->back()->withInput()->withMessage('<p class="alert alert-danger text-center">Enter the correct address</p>');
         }
+
+        //Check projects ranking
+        $refProject = Project::where('project_site', url())->first();
+        $isRankingEnabled = ($refProject && $refProject->project_rank == 0) ? 0 : 1;
+
         $project = Project::create($request->all());
-        $project->project_rank = 0;
+        $project->project_rank = $isRankingEnabled ? $project->id : 0;
         $project->eb_project_rank = $project->id;
         $project->save();
 

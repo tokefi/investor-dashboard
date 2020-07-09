@@ -65,14 +65,13 @@ class PagesController extends Controller
         $currentUserRole = '';
         $admin_access = 0;
         if(Auth::guest()) {
-            $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
+            $projects = Project::where(['active'=>'1','project_site'=>url()])->orderByRaw('project_rank IS NULL')->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
             $currentUserRole = 'guest';
         } else {
             $user = Auth::user();
             $roles = $user->roles;
             if ($roles->contains('role', 'admin') || $roles->contains('role', 'master')) {
-                $projects = Project::whereIn('active', ['1', '2'])->where('project_site',url())->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
-                // dd($projects);
+                $projects = Project::whereIn('active', ['1', '2'])->where('project_site',url())->orderByRaw('project_rank IS NULL')->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
                 if($user->registration_site == url()){
                     $admin_access = 1;
                 }
@@ -81,7 +80,7 @@ class PagesController extends Controller
                         $admin_access = 1;
                 }
             } else {
-                $projects = Project::where(['active'=>'1','project_site'=>url()])->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
+                $projects = Project::where(['active'=>'1','project_site'=>url()])->orderByRaw('project_rank IS NULL')->orderBy('project_rank', 'asc')->orderBy('title', 'asc')->get();
             }
         }   
         
@@ -118,7 +117,9 @@ class PagesController extends Controller
         
         $testimonials = Testimonial::where('project_site', url())->get();
         $isiosDevice = stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'iphone');
-        return view('pages.home', compact('geoIpArray', 'investments', 'investors', 'projects', 'BannerCities', 'currentUserRole', 'siteConfiguration','color', 'admin_access', 'testimonials', 'isiosDevice', 'ebConfiguration'));
+        $isRankingEnabled = ($projects->first() && $projects->first()->project_rank == 0) ? 0 : 1;
+        
+        return view('pages.home', compact('geoIpArray', 'investments', 'investors', 'projects', 'BannerCities', 'currentUserRole', 'siteConfiguration','color', 'admin_access', 'testimonials', 'isiosDevice', 'ebConfiguration', 'isRankingEnabled'));
     }
 
     /**

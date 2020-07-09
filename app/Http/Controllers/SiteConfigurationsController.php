@@ -1409,12 +1409,32 @@ class SiteConfigurationsController extends Controller
         $projectConfigurationPartial->update(['payment_switch'=>$request->checkValue]);
         return $resultArray = array('status' => 1);
     }
+
+    public function enableProjectRanking(Request $request)
+    {
+        $project = Project::where('project_site', url())->get();
+        $project->map(function ($item) {
+            $item->project_rank = $item->id;
+            $item->save();
+        });
+
+        return response()->json(['status' => true]);
+    }
+
     public function swapProjectRanking(Request $request)
     {
-        $project0 = Project::where('project_rank', (int)$request->projectRanks[0])->first();
-        $project1 = Project::where('project_rank', (int)$request->projectRanks[1])->first();
-        $project0->update(['project_rank' => (int)$request->projectRanks[1]]);
-        $project1->update(['project_rank' => (int)$request->projectRanks[0]]);
+        $projectRanks = $request->projectRanks;
+        $projectIds = $request->projectRankIds;
+
+        $project0 = Project::find((int)$projectIds[0]);
+        $project1 = Project::find((int)$projectIds[1]);
+
+        $projectRank0 = $project0->project_rank ?? $project0->id;
+        $projectRank1 = $project1->project_rank ?? $project1->id;
+        
+        $project0->update(['project_rank' => (int)$projectRank1]);
+        $project1->update(['project_rank' => (int)$projectRank0]);
+
         return $resultArray = array('status' => 1);
     }
 

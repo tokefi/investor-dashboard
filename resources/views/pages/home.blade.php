@@ -806,7 +806,7 @@
 											}
 											?>
 											<div class="col-md-4 swap-select-overlay" style="" id="circle{{$project->id}}">
-												<div class="swap-select-overlay-style" data-toggle="tooltip" title="Select project to swap" projectRank="{{$project->project_rank}}" style="display: none;"></div>
+												<div class="swap-select-overlay-style" data-toggle="tooltip" title="Select project to swap" projectRank="{{$project->project_rank}}" data-project-id="{{ $project->id }}" style="display: none;"></div>
 												@if(Auth::guest())
 												@else
 												@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
@@ -929,7 +929,7 @@
 											}
 											?>
 											<div class="col-sm-6 col-md-6 swap-select-overlay"  id="circle{{$project->id}}">
-												<div class="swap-select-overlay-style" data-toggle="tooltip" title="Select project to swap" projectRank="{{$project->project_rank}}" style="display: none;"></div>
+												<div class="swap-select-overlay-style" data-toggle="tooltip" title="Select project to swap" projectRank="{{$project->project_rank}}" data-project-id="{{ $project->id }}" style="display: none;"></div>
 												@if(Auth::guest())
 												@else
 												@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
@@ -2737,8 +2737,35 @@ function updateCoords(coords, w, h, origWidth, origHeight){
 			});
 		}
 
+		function enableProjectsRanking() {
+			$('.loader-overlay').show();
+			$.ajax({
+				url: '/configuration/home/project-ranking/enable',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+			}).done(function(data){
+				if(data.status){
+					location.reload('/#projects');
+				}
+				$('.loader-overlay').hide();
+			});
+		}
+
 		function swapProjectsRanking(){
 			$('.enable-swap-btn').click(function(){
+				// Check and enable project ranking
+				let isRankingEnabled = {{ $isRankingEnabled }};
+				if (!isRankingEnabled || isRankingEnabled == 0) {
+					if (confirm('Are you sure you want to manually set the projects listing sequence (This can\'t be undone later)? Selecting Ok will reload the page and enable swapping mechanism for you.')) {
+						enableProjectsRanking();
+					}
+					return;
+				}
+
 				$(this).attr('disabled', 'disabled');
 				$('.projects-swap-guide-msg').html('Select projects area to swap, then click on Swap icon.');
 				$(".swap-select-overlay").mouseenter(function() {
@@ -2772,9 +2799,11 @@ function updateCoords(coords, w, h, origWidth, origHeight){
 				//perform Swaping on projects
 				$('.swap-projects-btn').click(function(){
 					var projectRanks = [];
+					var projectRankIds = [];
 					$('.swap-select-overlay-style').each(function(){
 						if($(this).attr('selected')){
 							projectRanks.push($(this).attr('projectRank'));
+							projectRankIds.push($(this).attr('data-project-id'));
 						}
 					});
 					if(projectRanks.length == 2){
@@ -2783,7 +2812,10 @@ function updateCoords(coords, w, h, origWidth, origHeight){
 							url: '/configuration/home/swapProjectRanking',
 							type: 'POST',
 							dataType: 'JSON',
-							data: {projectRanks},
+							data: {
+								projectRanks,
+								projectRankIds
+							},
 							headers: {
 								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 							},
