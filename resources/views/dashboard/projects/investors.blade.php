@@ -117,8 +117,9 @@
 								<th>Is Money Received</th>
 								<th>Issue @if($project->share_vs_unit) Share @else Unit @endif Certificate</th>
 								<th>Investor Document</th>
-								<th>Joint Investor</th>
-								<th>Entity Details</th>
+								<th>Investor Type</th>
+								{{-- <th>Joint Investor</th>
+								<th>Entity Details</th> --}}
 								@if(!$project->retail_vs_wholesale)<th>Wholesale Investment</th>@endif
 								<th>Application Form</th>
 								<th>Interested to Buy</th>
@@ -261,7 +262,32 @@
 													NA
 													@endif --}}
 												</td>
-												<td>
+												<td class="text-left">
+													<span class="badge">{{ $investment->investing_as }}</span><br />
+													@if ($investment->investing_as == 'Joint Investor')
+														@if($investment->userInvestmentDoc)
+															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
+																<a href="/{{$doc->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
+																<br />
+															@else
+																NA
+															@endif
+														@endif
+													@endif
+													@if ($investment->investing_as == 'Trust or Company')
+														@if($investment->userInvestmentDoc)
+															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
+																<a href="/{{$doc->path}}" target="_blank">
+																{{$investment->investingJoint->investing_company}} Doc </a>
+															@else
+																NA
+															@endif
+														@else
+														NA
+														@endif
+													@endif
+												</td>
+												{{-- <td>
 													@if($investment->userInvestmentDoc)
 													@if($investment->userInvestmentDoc->where('type','joint_investor')->last())
 													<a href="/{{$investment->userInvestmentDoc->where('type','joint_investor')->last()->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
@@ -283,7 +309,7 @@
 													@else
 													NA
 													@endif
-												</td>
+												</td> --}}
 												@if(!$project->retail_vs_wholesale)
 												<td>@if($investment->wholesaleInvestment)<a href="#" data-toggle="modal" data-target="#trigger{{$investment->wholesaleInvestment->investment_investor_id}}">Investment Info</a> @else NA @endif</td>
 												@endif
@@ -425,9 +451,10 @@
 										{{-- <th>@if($project->share_vs_unit) Share @else Unit @endif numbers</th> --}}
 										{{-- <th>Project SPV Name</th> --}}
 										<th>Investor Details</th>
-										<th>Investment type</th>
-										<th>Joint Investor <br> Name</th>
-										<th>Entity details</th>
+										<th>Investor Document</th>
+										<th>Investor type</th>
+										{{-- <th>Joint Investor <br> Name</th>
+										<th>Entity details</th> --}}
 										<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
 										<th>Share Price ($)</th>
 										<th>Market Value</th>
@@ -449,9 +476,43 @@
 										{{-- <td>@if($shareInvestment->share_number){{$shareInvestment->share_number}}@else{{'NA'}}@endif</td> --}}
 										{{-- <td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td> --}}
 										<td><a href="{{route('dashboard.users.show', [$investment->user->id])}}" >{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</a> <br> {{$shareInvestment->user->email}} <br> {{$shareInvestment->user->phone_number}}</td>
-										<td>{{$shareInvestment->investing_as}}</td>
-										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
-										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->investing_company) {{$shareInvestment->investingJoint->investing_company}}@endif @else{{'NA'}} @endif</td>
+										<td class="text-left">
+											@if ($shareInvestment->user->idDoc)
+												<a href="{{$shareInvestment->user->idDoc['media_url']}}/{{$shareInvestment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
+											@endif
+											@if ($id2 = $shareInvestment->user->idDocs()->where('type', 'Document_2')->first())
+												<br />
+												<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+											@endif
+											<br /><br />
+										</td>
+										<td class="text-left">
+											<span class="badge">{{ $shareInvestment->investing_as }}</span><br />
+											@if ($shareInvestment->investing_as == 'Joint Investor')
+												@if($shareInvestment->userInvestmentDoc)
+													@if($doc = $shareInvestment->userInvestmentDoc->where('type','joint_investor')->last())
+														<a href="/{{$doc->path}}" target="_blank">{{$shareInvestment->investingJoint->joint_investor_first_name}} {{$shareInvestment->investingJoint->joint_investor_last_name}} Doc</a>
+														<br />
+													@else
+														NA
+													@endif
+												@endif
+											@endif
+											@if ($shareInvestment->investing_as == 'Trust or Company')
+												@if($shareInvestment->userInvestmentDoc)
+													@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
+														<a href="/{{$doc->path}}" target="_blank">
+														{{$shareInvestment->investingJoint->investing_company}} Doc </a>
+													@else
+														NA
+													@endif
+												@else
+												NA
+												@endif
+											@endif
+										</td>
+										{{-- <td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
+										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->investing_company) {{$shareInvestment->investingJoint->investing_company}}@endif @else{{'NA'}} @endif</td> --}}
 										{{-- <td>{{$shareInvestment->user->phone_number}}</td> --}}
 										{{-- <td>{{$shareInvestment->user->email}}</td> --}}
 										{{-- <td>
