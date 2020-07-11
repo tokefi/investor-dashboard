@@ -1508,7 +1508,8 @@ class DashboardController extends Controller
         $validation_rules = array(
             'joint_investor_id_doc'   => 'mimes:jpeg,jpg,png,pdf',
             'trust_or_company_docs'   => 'mimes:jpeg,jpg,png,pdf',
-            'user_id_doc'   => 'mimes:jpeg,jpg,png,pdf'
+            'user_id_doc'   => 'mimes:jpeg,jpg,png,pdf',
+            'user_id_doc_2'   => 'mimes:jpeg,jpg,png,pdf'
         );
         $validator = Validator::make($request->all(), $validation_rules);
         if ($validator->fails()) {
@@ -1555,11 +1556,27 @@ class DashboardController extends Controller
             $destinationPath = 'assets/users/kyc/'.$user->id.'/doc/';
             $filename = $request->file('user_id_doc')->getClientOriginalName();
             $fileExtension = $request->file('user_id_doc')->getClientOriginalExtension();
-            $request->file('user_id_doc')->move($destinationPath, $filename);
+            $storagePath = \Storage::disk('s3')->put($destinationPath.$filename, file_get_contents($request->file('user_id_doc')),'public');
+            // $request->file('user_id_doc')->move($destinationPath, $filename);
             if($check){
-                $user_doc = $user->idDoc()->update(['filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as,'registration_site'=>url(), 'verified'=>1]);
+                $user_doc = $user->idDoc()->update(['filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as, 'media_url'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket'), 'registration_site'=>url(), 'verified'=>1]);
             }else{
-                $user_doc = new IdDocument(['type'=>'Document', 'filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as,'registration_site'=>url(), 'verified'=>1]);
+                $user_doc = new IdDocument(['type'=>'Document', 'filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as, 'media_url'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket'), 'registration_site'=>url(), 'verified'=>1]);
+                $user->idDoc()->save($user_doc);
+            }
+        }
+
+        $check2 = IdDocument::where('user_id', $user->id)->where('type', 'Document_2')->first();
+        if($request->hasFile('user_id_doc_2'))
+        {
+            $destinationPath = 'assets/users/kyc/'.$user->id.'/doc/';
+            $filename = $request->file('user_id_doc_2')->getClientOriginalName();
+            $fileExtension = $request->file('user_id_doc_2')->getClientOriginalExtension();
+            $storagePath = \Storage::disk('s3')->put($destinationPath.$filename, file_get_contents($request->file('user_id_doc_2')),'public');
+            if($check2){
+                $user_doc = $user->idDocs()->where('type', 'Document_2')->update(['filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as, 'media_url'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket'), 'registration_site'=>url(), 'verified'=>1]);
+            }else{
+                $user_doc = new IdDocument(['type'=>'Document_2', 'filename'=>$filename, 'path'=>$destinationPath.$filename,'user_id'=>$user->id,'extension'=>$fileExtension,'investing_as'=>$request->investing_as, 'media_url'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket'), 'registration_site'=>url(), 'verified'=>1]);
                 $user->idDoc()->save($user_doc);
             }
         }

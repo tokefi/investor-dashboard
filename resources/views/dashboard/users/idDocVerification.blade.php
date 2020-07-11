@@ -18,7 +18,10 @@
 			@if($user->idDoc)
 			<div class="row">
 				<div class="col-md-6">
-					<a href="{{$user->idDoc->media_url}}/{{$user->idDoc->path}}" alt="Document" class="thumbnail" target="_blank">User Doc</a>
+					<a href="{{$user->idDoc->media_url}}/{{$user->idDoc->path}}" alt="Document" class="thumbnail" target="_blank">User Doc 1</a>
+					@if ($id2 = $user->idDocs()->where('type', 'Document_2')->first())
+					<a href="{{$id2->media_url}}/{{$id2->path}}" alt="Document 2" class="thumbnail" target="_blank">User Doc 2</a>
+					@endif
 				</div>
 				@if($user->idDoc->investing_as == 'Joint Investor')
 				<div class="col-md-6">
