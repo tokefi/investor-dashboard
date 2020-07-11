@@ -83,8 +83,8 @@ Users | Dashboard | @parent
 								<br>
 								{{$user->phone_number}}
 								<br>
-								<a href="{{route('dashboard.users.investments', [$user])}}">View Investments <i class="fa fa-angle-double-right"></i></a>
-								<a href="{{route('dashboard.users.document', [$user])}}">KYC @if($user->idDoc && $user->idDoc->verified == '1') <i class="fa fa-check-circle" aria-hidden="true"></i> @endif <i class="fa fa-angle-double-right"></i></a>
+								<a href="/dashboard/users/{{$user->id}}">View Investments <i class="fa fa-angle-double-right"></i></a>
+								<a href="/dashboard/users/{{$user->id}}#kyc_tab">KYC @if($user->idDoc && $user->idDoc->verified == '1') <i class="fa fa-check-circle" aria-hidden="true"></i> @endif <i class="fa fa-angle-double-right"></i></a>
 							</td>
 							<td>
 								<select class="form-control project_to_invest" id="project_to_invest_{{$user->id}}" data="{{$user->id}}" style="width: 10em;"> 

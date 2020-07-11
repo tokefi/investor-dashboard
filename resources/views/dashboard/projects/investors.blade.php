@@ -376,7 +376,6 @@
 							</tbody>
 						</table>
 					</div>
-
 					<div id="share_registry_tab" class="tab-pane fade" style="margin-top: 1em;overflow: auto;">
 						<!-- <ul class="list-group">Hello</ul> -->
 						{{-- <div>
@@ -532,9 +531,7 @@
 								</tbody>
 							</table>
 						</div>
-
 					</div>
-
 					<div id="new_registry" class="tab-pane fade" style="margin-top: 1em; overflow: auto;">
 						<div>
 							<div class="share-registry-actions">
@@ -631,8 +628,6 @@
 							</table>
 						</div>
 					</div>
-	
-
 					{{-- <div id="transactions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped text-center" id="transactionTable">
