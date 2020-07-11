@@ -234,7 +234,7 @@
 													<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
 													@endif
 													<br /><br />
-													<a href="{{ route('dashboard.users.document', [$investment->user->id]) }}" alt="Edit user" class="btn btn-sm btn-primary">Edit</a>
+													<a href="/dashboard/users/{{ $investment->user->id}}#kyc_tab" alt="Edit user" class="btn btn-sm btn-primary">Edit</a>
 													{{-- @if($investment->userInvestmentDoc->where('type','normal_name')->last())
 													<a href="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" target="_blank">{{$investment->user->first_name}} {{$investment->user->last_name}} Doc</a>
 													<a href="#" class="pop">

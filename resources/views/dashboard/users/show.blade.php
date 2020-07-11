@@ -5,6 +5,7 @@
 @stop
 
 @section('css-section')
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style type="text/css">
 	#userProfileDetails input {
 		pointer-events: none;
@@ -35,15 +36,15 @@
 				@endif
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
-				<li class="active" style="width: 50%;">
+				<li class="" style="width: 50%;">
 					<a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Profile</h3></a>
 				</li>
-				<li style="width: 50%;">
+				<li class="active" style="width: 50%;">
 					<a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">KYC</h3></a>
 				</li>
 			</ul>
 			<div class="tab-content">
-				<div id="profile_tab" class="tab-pane fade in active" style="overflow: auto; margin-top: 1em;">
+				<div id="profile_tab" class="tab-pane fade" style="overflow: auto; margin-top: 1em;">
 					<ul class="list-group">
 						<li class="list-group-item">
 							<dl class="dl-horizontal">
@@ -249,138 +250,140 @@
 						</li>
 					</ul>
 				</div>
-				<div id="kyc_tab" class="tab-pane fade" style="margin-top: 1em; overflow: auto;">
-					<ul class="list-group">
-						<li class="list-group-item">
-							<dl class="dl-horizontal">
-								<dt></dt>
-								<dd><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
-								<dt></dt>
-								<dd>
-									<div class="row">
-										<div class="col-md-7">
-											{{$user->email}}
+				<div id="kyc_tab" class="tab-pane fade in active" style="margin-top: 1em; overflow: auto;">
+					<div >
+						<ul class="list-group">
+							<li class="list-group-item">
+								<dl class="dl-horizontal">
+									<dt></dt>
+									<dd><h2>{{$user->first_name}} {{$user->last_name}}</h2></dd>
+									<dt></dt>
+									<dd>
+										<div class="row">
+											<div class="col-md-7">
+												{{$user->email}}
+											</div>
+											<div class="col-md-5">
+												<a href="{{route('users.edit', $user)}}">edit</a>
+											</div>
 										</div>
-										<div class="col-md-5">
-											<a href="{{route('users.edit', $user)}}">edit</a>
-										</div>
-									</div>
-								</dd>
-								<hr>
-								<dt></dt>
-								<dd><h4>Upload users id documents</h4></dd><br>
-								<dt></dt>
-								<dd>
-									@if($user->idDoc)
-									<h4>User is investing as<b style="color: blue;">{{$user->idDoc->investing_as}}</b></h4><br>
-									<a href="{{$user->idDoc->registration_site}}/{{$user->idDoc->path}}">KYC Doc</a>
-									@if($user->idDoc->investing_as == 'Joint Investor')
-									<p>Joint Investor Name:<br><b>{{$user->idDoc->joint_first_name}} {{$user->idDoc->joint_last_name}}</b></p>
-									<a href="{{$user->idDoc->registration_site}}/{{$user->idDoc->joint_id_path}}">Joint Investor Doc</a>
-									@endif
+									</dd>
 									<hr>
-									@if($user->idDoc->verified == '1')
-									Verified <i class="fa fa-check-circle" aria-hidden="true"></i>
-									@elseif($user->idDoc->verified == '-1')
-									<span style="color: red;">Verification Failed</span>
-									@else
-									Not-Verified
-									@endif
-									@endif
-									@if(!$user->idDoc || $user->idDoc->verified == '-1')
-									<form class="form-group" action="{{route('dashboard.users.document.upload',[$user->id])}}" method="POST" enctype="multipart/form-data" rel="form">
-										{{ csrf_field() }}
-										<div class="row " id="section-2">
-											<div class="col-md-12">
-												<div >
-													<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
-													<br>
-													<h4>Are you Investing as</h4>
-													<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
-													<input type="radio" name="investing_as" value="Joint Investor"> Joint Investor<br>
-													<input type="radio" name="investing_as" value="Trust or Company"> Trust or Company<br>
-													<hr>
-												</div>
-
-											</div>
-										</div>
-										<div class="row " id="section-3">
-											<div class="col-md-12">
-												<div style="display: none;" id="company_trust">
-													<label>Company or Trust Name</label>
-													<div class="row">
-														<div class="col-md-9">
-															<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled">
-														</div>
-													</div><br>
-												</div>
-												<div id="normal_name">
-													<label>Given Name(s)</label>
-													<div class="row">
-														<div class="col-md-9">
-															<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" readonly @endif>
-														</div>
-													</div><br>
-													<label>Surname</label>
-													<div class="row">
-														<div class="col-md-9">
-															<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && $user->last_name) value="{{$user->last_name}}" readonly @endif>
-														</div>
-													</div><br>
-												</div>
-												<div style="display: none;" id="joint_investor">
-													<label>Joint Investor Details</label>
-													<div class="row">
-														<div class="col-md-6">
-															<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled">
-														</div>
-														<div class="col-md-6">
-															<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled">
-														</div>
+									<dt></dt>
+									<dd><h4>Upload users id documents</h4></dd><br>
+									<dt></dt>
+									<dd>
+										@if($user->idDoc)
+										<h4>User is investing as<b style="color: blue;">{{$user->idDoc->investing_as}}</b></h4><br>
+										<a href="{{$user->idDoc->registration_site}}/{{$user->idDoc->path}}">KYC Doc</a>
+										@if($user->idDoc->investing_as == 'Joint Investor')
+										<p>Joint Investor Name:<br><b>{{$user->idDoc->joint_first_name}} {{$user->idDoc->joint_last_name}}</b></p>
+										<a href="{{$user->idDoc->registration_site}}/{{$user->idDoc->joint_id_path}}">Joint Investor Doc</a>
+										@endif
+										<hr>
+										@if($user->idDoc->verified == '1')
+										Verified <i class="fa fa-check-circle" aria-hidden="true"></i>
+										@elseif($user->idDoc->verified == '-1')
+										<span style="color: red;">Verification Failed</span>
+										@else
+										Not-Verified
+										@endif
+										@endif
+										@if(!$user->idDoc || $user->idDoc->verified == '-1')
+										<form class="form-group" action="{{route('dashboard.users.document.upload',[$user->id])}}" method="POST" enctype="multipart/form-data" rel="form">
+											{{ csrf_field() }}
+											<div class="row " id="section-2">
+												<div class="col-md-12">
+													<div >
+														<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
+														<br>
+														<h4>Are you Investing as</h4>
+														<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
+														<input type="radio" name="investing_as" value="Joint Investor"> Joint Investor<br>
+														<input type="radio" name="investing_as" value="Trust or Company"> Trust or Company<br>
+														<hr>
 													</div>
-													<br>
-													<hr>
+
 												</div>
 											</div>
-										</div>
-										<div class="row " id="section-4">
-											<div class="col-md-12">
-												<div id="trust_doc" style="display: none;">
-													<label>Trust or Company DOCS</label>
-													<input type="file" name="trust_or_company_docs" class="form-control" disabled="disabled" required><br>
-
-													<p>Please upload the first and last pages of your trust deed or Company incorporation papers</p>
-												</div>
-												<div id="normal_id_docs">
-													@if(!Auth::guest() && $user->investmentDoc->where('user_id', $user->id AND 'type','normal_name'))
-													<div class="row">
-														<div class="col-md-6">
-														</div>
+											<div class="row " id="section-3">
+												<div class="col-md-12">
+													<div style="display: none;" id="company_trust">
+														<label>Company or Trust Name</label>
+														<div class="row">
+															<div class="col-md-9">
+																<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled">
+															</div>
+														</div><br>
 													</div>
-													<br>
-													@else
-													@endif
-													<label>ID DOCS</label>
-													<input type="file" name="user_id_doc" class="form-control" required><br>
-													<p>If you have not completed your verification process. Please upload a copy of your Driver License or Passport for AML/CTF purposes</p>
-												</div>
-
-												<div id="joint_investor_docs" style="display: none;">
-													<label>Joint Investor ID DOCS</label>
-													<input type="file" name="joint_investor_id_doc" class="form-control" disabled="disabled" required><br>
-
-													<p>Please upload a copy of the joint investors Driver License or Passport for AML/CTF purposes</p>
+													<div id="normal_name">
+														<label>Given Name(s)</label>
+														<div class="row">
+															<div class="col-md-9">
+																<input type="text" name="first_name" class="form-control" placeholder="First Name" required @if(!Auth::guest() && $user->first_name) value="{{$user->first_name}}" readonly @endif>
+															</div>
+														</div><br>
+														<label>Surname</label>
+														<div class="row">
+															<div class="col-md-9">
+																<input type="text" name="last_name" class="form-control" placeholder="Last Name" required @if(!Auth::guest() && $user->last_name) value="{{$user->last_name}}" readonly @endif>
+															</div>
+														</div><br>
+													</div>
+													<div style="display: none;" id="joint_investor">
+														<label>Joint Investor Details</label>
+														<div class="row">
+															<div class="col-md-6">
+																<input type="text" name="joint_investor_first" class="form-control" placeholder="Investor First Name" required disabled="disabled">
+															</div>
+															<div class="col-md-6">
+																<input type="text" name="joint_investor_last" class="form-control" placeholder="Investor Last Name" required disabled="disabled">
+															</div>
+														</div>
+														<br>
+														<hr>
+													</div>
 												</div>
 											</div>
-										</div>
-										<br><br><br>
-										<button type="submit" class="btn btn-primary btn-lg" id="checkBtn"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;&nbsp;</strong></button><br><br>
-									</form>
-									@endif
-								</dd>
-							</dl>
-						</li>
-					</ul>
+											<div class="row " id="section-4">
+												<div class="col-md-12">
+													<div id="trust_doc" style="display: none;">
+														<label>Trust or Company DOCS</label>
+														<input type="file" name="trust_or_company_docs" class="form-control" disabled="disabled" required><br>
+
+														<p>Please upload the first and last pages of your trust deed or Company incorporation papers</p>
+													</div>
+													<div id="normal_id_docs">
+														@if(!Auth::guest() && $user->investmentDoc->where('user_id', $user->id AND 'type','normal_name'))
+														<div class="row">
+															<div class="col-md-6">
+															</div>
+														</div>
+														<br>
+														@else
+														@endif
+														<label>ID DOCS</label>
+														<input type="file" name="user_id_doc" class="form-control" required><br>
+														<p>If you have not completed your verification process. Please upload a copy of your Driver License or Passport for AML/CTF purposes</p>
+													</div>
+
+													<div id="joint_investor_docs" style="display: none;">
+														<label>Joint Investor ID DOCS</label>
+														<input type="file" name="joint_investor_id_doc" class="form-control" disabled="disabled" required><br>
+
+														<p>Please upload a copy of the joint investors Driver License or Passport for AML/CTF purposes</p>
+													</div>
+												</div>
+											</div>
+											<br><br><br>
+											<button type="submit" class="btn btn-primary btn-lg" id="checkBtn"><strong>&nbsp;&nbsp;&nbsp;&nbsp;Submit&nbsp;&nbsp;&nbsp;&nbsp;</strong></button><br><br>
+										</form>
+										@endif
+									</dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -391,6 +394,22 @@
 @section('js-section')
 <script>
 	$(document).ready( function() {
+		$("[data-toggle=tooltip").tooltip();
+		// Javascript to enable link to tab
+		var hash = document.location.hash;
+		var prefix = "tab_";
+		if (hash) {
+		    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+		    window.scrollTo(0, 0);
+		} 
+
+		// Change hash for page-reload
+		$('.nav-tabs a').on('shown', function (e) {
+		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
+		    window.scrollTo(0, 0);
+		});
+
+		
 		$("input[name='investing_as']").on('change',function() {
 			if($(this).is(':checked') && $(this).val() == 'Individual Investor')
 			{
