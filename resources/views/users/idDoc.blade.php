@@ -60,7 +60,11 @@
 								<b style="color: blue;">{{$user->idDoc->investing_as}}</b></h4><br>
 								{{-- <p>{{ Storage::disk('s3')->get($user->idDoc->path) }} test</p> --}}
 								{{-- {!!Html::image(('https://s3-ap-southeast-2.amazonaws.com/whitelabel-investors-dashboard/'.$user->idDoc->path),'logo',['width'=>60,'height'=>55])!!} --}}
-								<a href="{{$user->idDoc->media_url}}/{{$user->idDoc->path}}" target="_blank">Your Doc</a>
+								<a href="{{$user->idDoc->media_url}}/{{$user->idDoc->path}}" target="_blank">Your Doc 1</a>
+								@if ($id2 = $user->idDocs()->where('type', 'Document_2')->first())
+								<br />
+								<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+								@endif
 								@if($user->idDoc->investing_as == 'Joint Investor')
 								<p>Joint Investor Name:<br><b>{{$user->idDoc->joint_first_name}} {{$user->idDoc->joint_last_name}}</b></p>
 								<a href="{{$user->idDoc->media_url}}/{{$user->idDoc->joint_id_path}}">Joint Investor Doc</a>
@@ -147,11 +151,13 @@
 												<br>
 												@else
 												@endif
-												<label>ID DOCS</label>
+												<label>ID DOCS 1</label>
 												<input type="file" name="user_id_doc" class="form-control" required><br>
+												<label>ID DOCS 2</label>
+												<input type="file" name="user_id_doc_2" class="form-control" required><br>
 												<p>If you have not completed your verification process. Please upload a copy of your Driver License or Passport for AML/CTF purposes</p>
 											</div>
-
+											
 											<div id="joint_investor_docs" style="display: none;">
 												<label>Joint Investor ID DOCS</label>
 												<input type="file" name="joint_investor_id_doc" class="form-control" disabled="disabled" required><br>
@@ -229,6 +235,7 @@
 					$("input[name='joint_investor_last']").attr('disabled','disabled');
 					$("input[name='investing_company_name']").attr('disabled','disabled');
 					$("input[name='user_id_doc']").removeAttr('disabled');
+					$("input[name='user_id_doc_2']").removeAttr('disabled');
 					$("input[name='trust_or_company_docs']").attr('disabled','disabled');
 					$("input[name='joint_investor_id_doc']").attr('disabled','disabled');
 				}
@@ -245,6 +252,7 @@
 					$("input[name='joint_investor_id_doc']").removeAttr('disabled');
 					$("input[name='trust_or_company_docs']").attr('disabled','disabled');
 					$("input[name='user_id_doc']").removeAttr('disabled');
+					$("input[name='user_id_doc_2']").removeAttr('disabled');
 				}
 				else
 				{
@@ -259,6 +267,7 @@
 					$("input[name='joint_investor_id_doc']").attr('disabled','disabled');
 					$("input[name='trust_or_company_docs']").removeAttr('disabled');
 					$("input[name='user_id_doc']").attr('disabled','disabled');
+					$("input[name='user_id_doc_2']").attr('disabled','disabled');
 				}
 
 			});

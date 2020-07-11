@@ -224,8 +224,17 @@
 														</form>
 													</div>
 												</td>
-												<td>
-													@if($investment->userInvestmentDoc->where('type','normal_name')->last())
+												<td class="text-left">
+													@if ($investment->user->idDoc)
+													<a href="{{$investment->user->idDoc['media_url']}}/{{$investment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
+													@endif
+													@if ($id2 = $investment->user->idDocs()->where('type', 'Document_2')->first())
+													<br />
+													<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+													@endif
+													<br /><br />
+													<a href="{{ route('dashboard.users.document', [$investment->user->id]) }}" alt="Edit user" class="btn btn-sm btn-primary">Edit</a>
+													{{-- @if($investment->userInvestmentDoc->where('type','normal_name')->last())
 													<a href="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" target="_blank">{{$investment->user->first_name}} {{$investment->user->last_name}} Doc</a>
 													<a href="#" class="pop">
 														<img src="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" style="width: 120px; margin: auto !important;;" class="img-responsive">
@@ -250,7 +259,7 @@
 													</script>
 													@else
 													NA
-													@endif
+													@endif --}}
 												</td>
 												<td>
 													@if($investment->userInvestmentDoc)

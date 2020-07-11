@@ -142,6 +142,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->hasOne('App\IdDocument');
     }
+    
+    public function idDocs()
+    {
+        return $this->hasMany('App\IdDocument');
+    }
 
     public function investmentDocSingle()
     {
