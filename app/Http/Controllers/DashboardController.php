@@ -44,6 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
 use App\Price;
+use App\MasterChild;
 use View;
 
 
@@ -1363,8 +1364,8 @@ class DashboardController extends Controller
             \Config::set('mail.sendmail',$config->from);
             $app = \App::getInstance();
             $app['swift.transport'] = $app->share(function ($app) {
-               return new TransportManager($app);
-           });
+             return new TransportManager($app);
+         });
 
             $mailer = new \Swift_Mailer($app['swift.transport']->driver());
             \Mail::setSwiftMailer($mailer);
@@ -2388,6 +2389,7 @@ class DashboardController extends Controller
                                 'password' => bcrypt('password'),
                                 'account_name' => $clientAppliation[6],
                                 'bsb' => $clientAppliation[7],
+                                'registration_site' => url(),
                                 'account_number' => $clientAppliation[8],
                                 'line_1' => $clientAppliation[9],
                                 'line_2' => $clientAppliation[10],
@@ -2396,7 +2398,7 @@ class DashboardController extends Controller
                                 'postal_code' => $clientAppliation[13],
                                 'country' => $clientAppliation[15],
                                 'tfn' => $clientAppliation[16],
-                                'activated_on'=>  Carbon::now(),
+                                'activated_on'=>  Carbon::now(),// user activation date
                                 'active' => 1,
                             ]);
                             // dd($activatedUser);
@@ -2410,7 +2412,7 @@ class DashboardController extends Controller
                                 'user_id' => $activatedUser->id,
                                 'project_id' => $project->id,
                                 'transaction_type' => Transaction::BUY,
-                                'transaction_date' => Carbon::now(),
+                                'transaction_date' => $clientAppliation[32],// update transaction date
                                 'amount' => round($clientAppliation[5],2),
                                 'rate' => round($project->share_per_unit_price,4),
                                 'number_of_shares' => round($clientAppliation[5]/$project->share_per_unit_price),
@@ -2426,7 +2428,7 @@ class DashboardController extends Controller
                                         'user_id' => $activatedUser->id,
                                         'project_id' => $childProject->id,
                                         'transaction_type' => Transaction::BUY,
-                                        'transaction_date' => Carbon::now(),
+                                        'transaction_date' => $clientAppliation[32],
                                         'amount' => round($percAmount,2),
                                         'rate' => round($childProject->share_per_unit_price,4),
                                         'number_of_shares' => round($percAmount/$childProject->share_per_unit_price),
@@ -2470,5 +2472,34 @@ class DashboardController extends Controller
         );
 
         return \Response::download($filename, $project->title.'-registry-record.csv', $headers);
+    }
+
+    public function updateAllocation(Request $request)
+    {
+        // dd($request->all());
+        $master = Project::find($request->master);
+        if(array_sum( (array) $request->percAll) === 100){
+
+            for($i=0; $i<count($request->percAll); $i++){
+                $per = $request->percAll[$i];
+                $childAlloc = MasterChild::where('master',$request->master)->where('child',$request->childName[$i])->first();
+                $childAlloc->update(['allocation'=>$per]);
+            }
+            $masterSharePriceInit = 0;
+            if($master->master_child){
+                foreach($master->children as $child){
+
+                    $masterSharePriceInit = $masterSharePriceInit + Project::find($child->child)->share_per_unit_price * $child->allocation/100;
+                }
+                $master->update([
+                    'share_per_unit_price'=>$masterSharePriceInit,
+                ]);
+            }
+
+            
+            return 1;
+        }
+
+        return 1;
     }
 }

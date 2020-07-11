@@ -164,7 +164,7 @@ Edit {{$project->title}} | Dashboard | @parent
 												<thead>
 													<tr>
 														<th class="text-center">Projects</th>
-														<th class="text-center">Allocation</th>
+														<th class="text-right">Allocation</th>
 														<th class="text-center ">Share Price</th>
 														<th></th>
 													</tr>
@@ -174,462 +174,465 @@ Edit {{$project->title}} | Dashboard | @parent
 													@foreach($project->children as $child)
 													<tr>
 														<td>{{App\Project::find($child->child)->title}}</td>
-														<td class="text-center">{{$child->allocation}} %</td>
-														<td class="">
-															<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [App\Project::find($child->child)->id])}}" method="POST" class="">
-																{{csrf_field()}}
-																<input type="number" class="form-control" style="width: auto; display: inline-block; max-height: 34px;" name="update_share_price" id="update_share_price" step="0.0001" value="{{ App\Project::find($child->child)->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE" >
-															</form>
-														</td>
-														<td class="text-center">
-															<a class="pull-right" id="deleteChild" onclick="deleteChild({{$child->id}})">
-																<span class="glyphicon glyphicon-remove"></span>
-															</a>
-														</td>
-													</tr>
-													@endforeach
-												</tbody>
-												<tfoot>
-													<tr>
-														<th class="text-center">Total</th>
-														<th class="text-center" id="totalAllocation"> </th>
-														<th class="text-center" id="">{{ $project->share_per_unit_price }} </th>
-														<th></th>
-													</tr>
-												</tfoot>
-											</table>
-										</div>
-									</div>
-									@endif
-									<div id="masterChildCollapse" class="collapse">
-										<div class="jumbotron">
-											<div class="container">
-												<div class="row">
-													<div class="col-md-offset-2 col-md-4">
-														<div class="form-group">
-															<select class="form-control" id="childProjects">
-																@foreach($masterChild as $pro)
-																<option value="{{$pro->id}}">{{$pro->title}}</option>
-																@endforeach
-															</select>
-														</div>
-													</div>
-													<div class="col-md-4">
-														<div class="form-group">
-															<input type="integer" class="form-control" placeholder="Percentage Allocation" id="projectAllocationPerc">
-														</div>
-													</div>
-												</div>
-												<button class="btn btn-primary" id="addMoreChild">Add More</button>
-												<div class="row">
-													<div class="col-md-8 col-md-offset-2 selected-child-projects">
-														@foreach($project->children as $child)
-														<input type="hidden" name="child[]" value="{{$child->child}}">
-														<input type="hidden" name="percentage[]" value="{{$child->allocation}}">
+														<td class="text-right">
+															<input type="hidden" name="master" value="{{ $project->id }}">
+															<input type="hidden" name="childProject[]" value="{{ $child->child }}">
+															<input type="integer" name="childAllocation[]" value="{{$child->allocation}}" style="border-color:#fff; border:0px; text-align: right;">%</td>
+															<td class="">
+																<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [App\Project::find($child->child)->id])}}" method="POST" class="">
+																	{{csrf_field()}}
+																	<input type="number" class="form-control" style="width: auto; display: inline-block; max-height: 34px;" name="update_share_price" id="update_share_price" step="0.0001" value="{{ App\Project::find($child->child)->share_per_unit_price }}" required="required"> <input type="submit" class="btn btn-warning" value="UPDATE" >
+																</form>
+															</td>
+															<td class="text-center">
+																<a class="pull-right" id="deleteChild" onclick="deleteChild({{$child->id}})">
+																	<span class="glyphicon glyphicon-remove"></span>
+																</a>
+															</td>
+														</tr>
 														@endforeach
+													</tbody>
+													<tfoot>
+														<tr>
+															<th class="text-center">Total</th>
+															<th class="text-right" id="totalAllocation"> </th>
+															<th class="text-center" id="">{{ $project->share_per_unit_price }} </th>
+															<th></th>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
+										</div>
+										@endif
+										<div id="masterChildCollapse" class="collapse">
+											<div class="jumbotron">
+												<div class="container">
+													<div class="row">
+														<div class="col-md-offset-2 col-md-4">
+															<div class="form-group">
+																<select class="form-control" id="childProjects">
+																	@foreach($masterChild as $pro)
+																	<option value="{{$pro->id}}">{{$pro->title}}</option>
+																	@endforeach
+																</select>
+															</div>
+														</div>
+														<div class="col-md-4">
+															<div class="form-group">
+																<input type="integer" class="form-control" placeholder="Percentage Allocation" id="projectAllocationPerc">
+															</div>
+														</div>
+													</div>
+													<button class="btn btn-primary" id="addMoreChild">Add More</button>
+													<div class="row">
+														<div class="col-md-8 col-md-offset-2 selected-child-projects">
+															@foreach($project->children as $child)
+															<input type="hidden" name="child[]" value="{{$child->child}}">
+															<input type="hidden" name="percentage[]" value="{{$child->allocation}}">
+															@endforeach
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										@endif
+										<br><br>
+										<h3>Retail project vs Wholesale project</h3>
+										<div class="btn-group project-progress-3way-switch" data-toggle="buttons">
+											<label class="btn btn-default @if($project->retail_vs_wholesale == 1) active @endif">
+												<input type="radio" name="retail_vs_wholesale" value="1"> Retail
+											</label>
+											<label class="btn btn-default @if($project->retail_vs_wholesale == 0) active @endif" >
+												<input type="radio" name="retail_vs_wholesale" value="0"> Wholesale
+											</label>
+										</div>
+
+										<br><br>
+										<h3>Show interested to buy property checkbox</h3>
+										<div class="btn-group project-progress-3way-switch" data-toggle="buttons">
+											<label class="btn btn-default @if($project->show_interested_to_buy_checkbox == 1) active @endif">
+												<input type="radio" name="show_interested_to_buy_checkbox" value="1"> On
+											</label>
+											<label class="btn btn-default @if($project->show_interested_to_buy_checkbox == 0) active @endif" >
+												<input type="radio" name="show_interested_to_buy_checkbox" value="0"> Off
+											</label>
+										</div>
+
+										<br><br><br>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-sm-offset-2 col-sm-8">
+													{!! Form::submit('Update', array('class'=>'btn btn-danger btn-block', 'tabindex'=>'7')) !!}
+												</div>
+											</div>
+										</div>
+										<div class="hide" id="invite-developer">s
+											<br>
+											<br>
+											<div class="row">
+												<div class="col-md-offset-3 col-md-6">
+													<input type="text" name="developerEmail" class="form-control" placeholder="Enter Developers Email">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div style="display: none;" class="row">
+									<div class="form-group @if($errors->first('button_label')){{'has-error'}} @endif">
+										{!!Form::label('button_label', 'Button Label', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::text('button_label', null, array('placeholder'=>'Button Label to be Displayed during Investment', 'class'=>'form-control ', 'tabindex'=>'3')) !!}
+											{!! $errors->first('button_label', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+				</section>
+				<section style="display: none;">
+					<div class="row well">
+						<div class="col-md-12">
+							<fieldset>
+								<div class="row">
+									<div class="form-group @if($errors->first('line_1') && $errors->first('line_2')){{'has-error'}} @endif">
+										{!!Form::label('line_1', 'Lines', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-6 @if($errors->first('line_1')){{'has-error'}} @endif">
+													{!! Form::text('line_1', $project->location->line_1, array('placeholder'=>'line 1', 'class'=>'form-control', 'tabindex'=>'3')) !!}
+													{!! $errors->first('line_1', '<small class="text-danger">:message</small>') !!}
+												</div>
+												<div class="col-sm-6 @if($errors->first('line_2')){{'has-error'}} @endif">
+													{!! Form::text('line_2', $project->location->line_2, array('placeholder'=>'line 2', 'class'=>'form-control', 'tabindex'=>'4')) !!}
+													{!! $errors->first('line_2', '<small class="text-danger">:message</small>') !!}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group @if($errors->first('city') && $errors->first('state')){{'has-error'}} @endif">
+										{!!Form::label('city', 'City', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-6 @if($errors->first('city')){{'has-error'}} @endif">
+													{!! Form::text('city', $project->location->city, array('placeholder'=>'City', 'class'=>'form-control', 'tabindex'=>'5')) !!}
+													{!! $errors->first('city', '<small class="text-danger">:message</small>') !!}
+												</div>
+												<div class="col-sm-6 @if($errors->first('state')){{'has-error'}} @endif">
+													{!! Form::text('state', $project->location->state, array('placeholder'=>'State', 'class'=>'form-control', 'tabindex'=>'6')) !!}
+													{!! $errors->first('state', '<small class="text-danger">:message</small>') !!}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group @if($errors->first('postal_code') && $errors->first('country')){{'has-error'}} @endif">
+										{!!Form::label('postal_code', 'Postal Code', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-6 @if($errors->first('postal_code')){{'has-error'}} @endif">
+													{!! Form::text('postal_code', $project->location->postal_code, array('placeholder'=>'Postal Code', 'class'=>'form-control', 'tabindex'=>'7')) !!}
+													{!! $errors->first('postal_code', '<small class="text-danger">:message</small>') !!}
+												</div>
+												<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
+													<select name="country" class="form-control" tabindex="8">
+														@foreach(\App\Http\Utilities\Country::aus() as $country => $code)
+														<option value="{{$code}}" @if($project->location->country_code == $code) selected @endif>{{$country}}</option>
+														@endforeach
+													</select>
+													{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</section>
+				<section style="display: none;">
+					<div class="row well">
+						<div class="col-md-12">
+							<fieldset>
+								<div class="row">
+									@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/section_32.pdf')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/section_32.pdf" target="_blank">Section-32</a>
+									</div>
+									@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/section_32.doc')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/section_32.doc" target="_blank">Section-32</a>
+										<br><br>
+									</div>
+									@else
+									<div class="form-group @if($errors->first('doc1')){{'has-error'}} @endif">
+										{!!Form::label('doc1', 'Section-32', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::file('doc1', array('class'=>'form-control', 'tabindex'=>'9','placeholder'=>'Only Pdf or Doc')) !!}
+											{!! $errors->first('doc1', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+									@endif
+								</div>
+								<div class="row">
+									@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/plans_permit.pdf')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/plans_permit.pdf" target="_blank">Plans and Permit</a>
+									</div>
+									@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/plans_permit.doc')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/plans_permit.doc" target="_blank">Plans and Permit</a>
+										<br><br>
+									</div>
+									@else
+									<div class="form-group @if($errors->first('doc2')){{'has-error'}} @endif">
+										{!!Form::label('doc2', 'Plans and Permit', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::file('doc2', array('class'=>'form-control', 'tabindex'=>'10')) !!}
+											{!! $errors->first('doc2', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+									@endif
+								</div>
+								<div class="row">
+									@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/feasiblity_study.pdf')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/feasiblity_study.pdf" target="_blank">Feasibility Study</a>
+									</div>
+									@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/feasiblity_study.doc')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/feasiblity_study.doc" target="_blank">Feasibility Study</a>
+										<br><br>
+									</div>
+									@else
+									<div class="form-group @if($errors->first('doc3')){{'has-error'}} @endif">
+										{!!Form::label('doc3', 'Feasibility Study', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::file('doc3', array('class'=>'form-control', 'tabindex'=>'11')) !!}
+											{!! $errors->first('doc3', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+									@endif
+								</div>
+								<div class="row">
+									@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc1.pdf')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/optional_doc1.pdf" target="_blank">Optional Doc 1</a>
+									</div>
+									@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc1.doc')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/optional_doc1.doc" target="_blank">Optional Doc 1</a>
+										<br><br>
+									</div>
+									@else
+									<div class="form-group @if($errors->first('doc4')){{'has-error'}} @endif">
+										{!!Form::label('doc4', 'Optional Doc 1', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::file('doc4', array('class'=>'form-control', 'tabindex'=>'13')) !!}
+											{!! $errors->first('doc4', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+									@endif
+								</div>
+								<div class="row">
+									@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc2.pdf')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/optional_doc2.pdf" target="_blank">Optional Doc 2</a>
+									</div>
+									@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc2.doc')))
+									<div class="col-sm-9 col-sm-offset-2">
+										<a href="/assets/documents/projects/{{$project->id}}/optional_doc2.doc" target="_blank">Optional Doc 2</a>
+										<br><br>
+									</div>
+									@else
+									<div class="form-group @if($errors->first('doc5')){{'has-error'}} @endif">
+										{!!Form::label('doc5', 'Optional Doc 2', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											{!! Form::file('doc5', array('class'=>'form-control', 'tabindex'=>'14')) !!}
+											{!! $errors->first('doc5', '<small class="text-danger">:message</small>') !!}
+										</div>
+									</div>
+									@endif
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</section>
+				@if($project->investment)
+				<section style="display: none;">
+					<div class="row well">
+						<div class="col-md-12">
+							<fieldset>
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('goal_amount') && $errors->first('minimum_accepted_amount')){{'has-error'}} @endif">
+										{!!Form::label('goal_amount', 'Goal Amount', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('goal_amount')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('goal_amount', $project->investment?$project->investment->goal_amount:null, array('placeholder'=>'Funds Required', 'class'=>'form-control', 'tabindex'=>'3','required'=>'yes')) !!}
+														{!! $errors->first('goal_amount','<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
+												</div>
+												{!!Form::label('minimum_accepted_amount', 'Min amount', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-5 @if($errors->first('minimum_accepted_amount')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('minimum_accepted_amount', $project->investment?$project->investment->minimum_accepted_amount:null, array('placeholder'=>'Minimum Accepted', 'class'=>'form-control', 'tabindex'=>'4','required'=>'yes')) !!}
+														{!! $errors->first('minimum_accepted_amount', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-									@endif
-									<br><br>
-									<h3>Retail project vs Wholesale project</h3>
-									<div class="btn-group project-progress-3way-switch" data-toggle="buttons">
-										<label class="btn btn-default @if($project->retail_vs_wholesale == 1) active @endif">
-											<input type="radio" name="retail_vs_wholesale" value="1"> Retail
-										</label>
-										<label class="btn btn-default @if($project->retail_vs_wholesale == 0) active @endif" >
-											<input type="radio" name="retail_vs_wholesale" value="0"> Wholesale
-										</label>
-									</div>
-
-									<br><br>
-									<h3>Show interested to buy property checkbox</h3>
-									<div class="btn-group project-progress-3way-switch" data-toggle="buttons">
-										<label class="btn btn-default @if($project->show_interested_to_buy_checkbox == 1) active @endif">
-											<input type="radio" name="show_interested_to_buy_checkbox" value="1"> On
-										</label>
-										<label class="btn btn-default @if($project->show_interested_to_buy_checkbox == 0) active @endif" >
-											<input type="radio" name="show_interested_to_buy_checkbox" value="0"> Off
-										</label>
-									</div>
-
-									<br><br><br>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-sm-offset-2 col-sm-8">
-												{!! Form::submit('Update', array('class'=>'btn btn-danger btn-block', 'tabindex'=>'7')) !!}
-											</div>
-										</div>
-									</div>
-									<div class="hide" id="invite-developer">s
-										<br>
-										<br>
-										<div class="row">
-											<div class="col-md-offset-3 col-md-6">
-												<input type="text" name="developerEmail" class="form-control" placeholder="Enter Developers Email">
-											</div>
-										</div>
-									</div>
 								</div>
-							</div>
-							<div style="display: none;" class="row">
-								<div class="form-group @if($errors->first('button_label')){{'has-error'}} @endif">
-									{!!Form::label('button_label', 'Button Label', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::text('button_label', null, array('placeholder'=>'Button Label to be Displayed during Investment', 'class'=>'form-control ', 'tabindex'=>'3')) !!}
-										{!! $errors->first('button_label', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-							</div>
-						</div>
-					</fieldset>
-				</div>
-			</section>
-			<section style="display: none;">
-				<div class="row well">
-					<div class="col-md-12">
-						<fieldset>
-							<div class="row">
-								<div class="form-group @if($errors->first('line_1') && $errors->first('line_2')){{'has-error'}} @endif">
-									{!!Form::label('line_1', 'Lines', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-6 @if($errors->first('line_1')){{'has-error'}} @endif">
-												{!! Form::text('line_1', $project->location->line_1, array('placeholder'=>'line 1', 'class'=>'form-control', 'tabindex'=>'3')) !!}
-												{!! $errors->first('line_1', '<small class="text-danger">:message</small>') !!}
-											</div>
-											<div class="col-sm-6 @if($errors->first('line_2')){{'has-error'}} @endif">
-												{!! Form::text('line_2', $project->location->line_2, array('placeholder'=>'line 2', 'class'=>'form-control', 'tabindex'=>'4')) !!}
-												{!! $errors->first('line_2', '<small class="text-danger">:message</small>') !!}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="form-group @if($errors->first('city') && $errors->first('state')){{'has-error'}} @endif">
-									{!!Form::label('city', 'City', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-6 @if($errors->first('city')){{'has-error'}} @endif">
-												{!! Form::text('city', $project->location->city, array('placeholder'=>'City', 'class'=>'form-control', 'tabindex'=>'5')) !!}
-												{!! $errors->first('city', '<small class="text-danger">:message</small>') !!}
-											</div>
-											<div class="col-sm-6 @if($errors->first('state')){{'has-error'}} @endif">
-												{!! Form::text('state', $project->location->state, array('placeholder'=>'State', 'class'=>'form-control', 'tabindex'=>'6')) !!}
-												{!! $errors->first('state', '<small class="text-danger">:message</small>') !!}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="form-group @if($errors->first('postal_code') && $errors->first('country')){{'has-error'}} @endif">
-									{!!Form::label('postal_code', 'Postal Code', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-6 @if($errors->first('postal_code')){{'has-error'}} @endif">
-												{!! Form::text('postal_code', $project->location->postal_code, array('placeholder'=>'Postal Code', 'class'=>'form-control', 'tabindex'=>'7')) !!}
-												{!! $errors->first('postal_code', '<small class="text-danger">:message</small>') !!}
-											</div>
-											<div class="col-sm-6 @if($errors->first('country')){{'has-error'}} @endif">
-												<select name="country" class="form-control" tabindex="8">
-													@foreach(\App\Http\Utilities\Country::aus() as $country => $code)
-													<option value="{{$code}}" @if($project->location->country_code == $code) selected @endif>{{$country}}</option>
-													@endforeach
-												</select>
-												{!! $errors->first('country', '<small class="text-danger">:message</small>') !!}
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</fieldset>
-					</div>
-				</div>
-			</section>
-			<section style="display: none;">
-				<div class="row well">
-					<div class="col-md-12">
-						<fieldset>
-							<div class="row">
-								@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/section_32.pdf')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/section_32.pdf" target="_blank">Section-32</a>
-								</div>
-								@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/section_32.doc')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/section_32.doc" target="_blank">Section-32</a>
-									<br><br>
-								</div>
-								@else
-								<div class="form-group @if($errors->first('doc1')){{'has-error'}} @endif">
-									{!!Form::label('doc1', 'Section-32', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::file('doc1', array('class'=>'form-control', 'tabindex'=>'9','placeholder'=>'Only Pdf or Doc')) !!}
-										{!! $errors->first('doc1', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-								@endif
-							</div>
-							<div class="row">
-								@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/plans_permit.pdf')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/plans_permit.pdf" target="_blank">Plans and Permit</a>
-								</div>
-								@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/plans_permit.doc')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/plans_permit.doc" target="_blank">Plans and Permit</a>
-									<br><br>
-								</div>
-								@else
-								<div class="form-group @if($errors->first('doc2')){{'has-error'}} @endif">
-									{!!Form::label('doc2', 'Plans and Permit', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::file('doc2', array('class'=>'form-control', 'tabindex'=>'10')) !!}
-										{!! $errors->first('doc2', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-								@endif
-							</div>
-							<div class="row">
-								@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/feasiblity_study.pdf')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/feasiblity_study.pdf" target="_blank">Feasibility Study</a>
-								</div>
-								@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/feasiblity_study.doc')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/feasiblity_study.doc" target="_blank">Feasibility Study</a>
-									<br><br>
-								</div>
-								@else
-								<div class="form-group @if($errors->first('doc3')){{'has-error'}} @endif">
-									{!!Form::label('doc3', 'Feasibility Study', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::file('doc3', array('class'=>'form-control', 'tabindex'=>'11')) !!}
-										{!! $errors->first('doc3', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-								@endif
-							</div>
-							<div class="row">
-								@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc1.pdf')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/optional_doc1.pdf" target="_blank">Optional Doc 1</a>
-								</div>
-								@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc1.doc')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/optional_doc1.doc" target="_blank">Optional Doc 1</a>
-									<br><br>
-								</div>
-								@else
-								<div class="form-group @if($errors->first('doc4')){{'has-error'}} @endif">
-									{!!Form::label('doc4', 'Optional Doc 1', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::file('doc4', array('class'=>'form-control', 'tabindex'=>'13')) !!}
-										{!! $errors->first('doc4', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-								@endif
-							</div>
-							<div class="row">
-								@if(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc2.pdf')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/optional_doc2.pdf" target="_blank">Optional Doc 2</a>
-								</div>
-								@elseif(file_exists(public_path('assets/documents/projects/'.$project->id.'/optional_doc2.doc')))
-								<div class="col-sm-9 col-sm-offset-2">
-									<a href="/assets/documents/projects/{{$project->id}}/optional_doc2.doc" target="_blank">Optional Doc 2</a>
-									<br><br>
-								</div>
-								@else
-								<div class="form-group @if($errors->first('doc5')){{'has-error'}} @endif">
-									{!!Form::label('doc5', 'Optional Doc 2', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										{!! Form::file('doc5', array('class'=>'form-control', 'tabindex'=>'14')) !!}
-										{!! $errors->first('doc5', '<small class="text-danger">:message</small>') !!}
-									</div>
-								</div>
-								@endif
-							</div>
-						</fieldset>
-					</div>
-				</div>
-			</section>
-			@if($project->investment)
-			<section style="display: none;">
-				<div class="row well">
-					<div class="col-md-12">
-						<fieldset>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('goal_amount') && $errors->first('minimum_accepted_amount')){{'has-error'}} @endif">
-									{!!Form::label('goal_amount', 'Goal Amount', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('goal_amount')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('goal_amount', $project->investment?$project->investment->goal_amount:null, array('placeholder'=>'Funds Required', 'class'=>'form-control', 'tabindex'=>'3','required'=>'yes')) !!}
-													{!! $errors->first('goal_amount','<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('total_projected_costs') && $errors->first('maximum_accepted_amount')){{'has-error'}} @endif">
+										{!!Form::label('total_projected_costs', 'Total Cost', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('total_projected_costs')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('total_projected_costs', $project->investment?$project->investment->total_projected_costs:null, array('placeholder'=>'Total Cost', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
+														{!! $errors->first('total_projected_costs', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
 												</div>
-											</div>
-											{!!Form::label('minimum_accepted_amount', 'Min amount', array('class'=>'col-sm-2 control-label'))!!}
-											<div class="col-sm-5 @if($errors->first('minimum_accepted_amount')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('minimum_accepted_amount', $project->investment?$project->investment->minimum_accepted_amount:null, array('placeholder'=>'Minimum Accepted', 'class'=>'form-control', 'tabindex'=>'4','required'=>'yes')) !!}
-													{!! $errors->first('minimum_accepted_amount', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
+												{!!Form::label('maximum_accepted_amount', 'Max amount', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-5 style="display: none;" @if($errors->first('maximum_accepted_amount')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('maximum_accepted_amount', $project->investment?$project->investment->maximum_accepted_amount:null, array('placeholder'=>'Maximum Accepted', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
+														{!! $errors->first('maximum_accepted_amount', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('total_projected_costs') && $errors->first('maximum_accepted_amount')){{'has-error'}} @endif">
-									{!!Form::label('total_projected_costs', 'Total Cost', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('total_projected_costs')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('total_projected_costs', $project->investment?$project->investment->total_projected_costs:null, array('placeholder'=>'Total Cost', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
-													{!! $errors->first('total_projected_costs', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
+								<div style="display: none;" class="row">
+									<div class="form-group @if($errors->first('total_debt') && $errors->first('total_equity')){{'has-error'}} @endif">
+										{!!Form::label('total_debt', 'Total Debt', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('total_debt')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('total_debt', $project->investment?$project->investment->total_debt:null, array('placeholder'=>'Total Debt', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
+														{!! $errors->first('total_debt', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
 												</div>
-											</div>
-											{!!Form::label('maximum_accepted_amount', 'Max amount', array('class'=>'col-sm-2 control-label'))!!}
-											<div class="col-sm-5 style="display: none;" @if($errors->first('maximum_accepted_amount')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('maximum_accepted_amount', $project->investment?$project->investment->maximum_accepted_amount:null, array('placeholder'=>'Maximum Accepted', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
-													{!! $errors->first('maximum_accepted_amount', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div style="display: none;" class="row">
-								<div class="form-group @if($errors->first('total_debt') && $errors->first('total_equity')){{'has-error'}} @endif">
-									{!!Form::label('total_debt', 'Total Debt', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('total_debt')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('total_debt', $project->investment?$project->investment->total_debt:null, array('placeholder'=>'Total Debt', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
-													{!! $errors->first('total_debt', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
-												</div>
-											</div>
-											{!!Form::label('total_equity', 'Total Equity', array('class'=>'col-sm-2 control-label'))!!}
-											<div class="col-sm-5 @if($errors->first('total_equity')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('total_equity', $project->investment?$project->investment->total_equity:null, array('placeholder'=>'Total Equity', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
-													{!! $errors->first('total_equity', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
+												{!!Form::label('total_equity', 'Total Equity', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-5 @if($errors->first('total_equity')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('total_equity', $project->investment?$project->investment->total_equity:null, array('placeholder'=>'Total Equity', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
+														{!! $errors->first('total_equity', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('projected_return') && $errors->first('hold_period')){{'has-error'}} @endif">
-									{!!Form::label('projected_returns', 'Projected Return', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('projected_returns')){{'has-error'}} @endif">
-												<div class="input-group">
-													{!! Form::text('projected_returns', $project->investment?$project->investment->projected_returns:null, array('placeholder'=>'Projected Returns', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
-													{!! $errors->first('projected_returns', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">%</div>
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('projected_return') && $errors->first('hold_period')){{'has-error'}} @endif">
+										{!!Form::label('projected_returns', 'Projected Return', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('projected_returns')){{'has-error'}} @endif">
+													<div class="input-group">
+														{!! Form::text('projected_returns', $project->investment?$project->investment->projected_returns:null, array('placeholder'=>'Projected Returns', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
+														{!! $errors->first('projected_returns', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">%</div>
+													</div>
 												</div>
-											</div>
-											{!!Form::label('hold_period', 'Hold period', array('class'=>'col-sm-2 control-label'))!!}
-											<div class="col-sm-5 @if($errors->first('hold_period')){{'has-error'}} @endif">
-												<div class="input-group">
-													{!! Form::text('hold_period', $project->investment?$project->investment->hold_period:null, array('placeholder'=>'Hold Period', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
-													{!! $errors->first('hold_period', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">months</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div style="display: none;" class="row">
-								<div class="form-group @if($errors->first('developer_equity')){{'has-error'}} @endif">
-									{!!Form::label('developer_equity', 'Developer Equity', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('developer_equity')){{'has-error'}} @endif">
-												<div class="input-group">
-													<div class="input-group-addon">$</div>
-													{!! Form::text('developer_equity', $project->investment?$project->investment->developer_equity:null, array('placeholder'=>'developer equity', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
-													{!! $errors->first('developer_equity', '<small class="text-danger">:message</small>') !!}
-													<div class="input-group-addon">.00</div>
+												{!!Form::label('hold_period', 'Hold period', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-5 @if($errors->first('hold_period')){{'has-error'}} @endif">
+													<div class="input-group">
+														{!! Form::text('hold_period', $project->investment?$project->investment->hold_period:null, array('placeholder'=>'Hold Period', 'class'=>'form-control', 'tabindex'=>'6','required'=>'yes')) !!}
+														{!! $errors->first('hold_period', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">months</div>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('fund_raising_start_date')){{'has-error'}} @endif">
-									{!!Form::label('fund_raising_start_date', 'fund raising start date', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-5 @if($errors->first('fund_raising_start_date')){{'has-error'}} @endif">
-												<div class="">
-													{!! Form::input('date', 'fund_raising_start_date', $project->investment->fund_raising_start_date?$project->investment->fund_raising_start_date->toDateString():null, array('placeholder'=>'fund raising start date', 'class'=>'form-control')) !!}
-													{!! $errors->first('fund_raising_start_date', '<small class="text-danger">:message</small>') !!}
-												</div>
-											</div>
-											{!!Form::label('fund_raising_close_date', 'fund raising close date', array('class'=>'col-sm-2 control-label'))!!}
-											<div class="col-sm-5 @if($errors->first('fund_raising_close_date')){{'has-error'}} @endif">
-												<div class="">
-													{!! Form::input('date', 'fund_raising_close_date', $project->investment->fund_raising_close_date?$project->investment->fund_raising_close_date->toDateString():null, array('placeholder'=>'fund raising close date', 'class'=>'form-control')) !!}
-													{!! $errors->first('fund_raising_close_date', '<small class="text-danger">:message</small>') !!}
+								<div style="display: none;" class="row">
+									<div class="form-group @if($errors->first('developer_equity')){{'has-error'}} @endif">
+										{!!Form::label('developer_equity', 'Developer Equity', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('developer_equity')){{'has-error'}} @endif">
+													<div class="input-group">
+														<div class="input-group-addon">$</div>
+														{!! Form::text('developer_equity', $project->investment?$project->investment->developer_equity:null, array('placeholder'=>'developer equity', 'class'=>'form-control', 'tabindex'=>'5','required'=>'yes')) !!}
+														{!! $errors->first('developer_equity', '<small class="text-danger">:message</small>') !!}
+														<div class="input-group-addon">.00</div>
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('proposer')){{'has-error'}} @endif">
-									{!!Form::label('proposer', 'Developer', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-12 @if($errors->first('proposer')){{'has-error'}} @endif">
-												{!! Form::text('proposer', $project->investment?$project->investment->proposer:null, array('placeholder'=>'Developer', 'class'=>'form-control', 'tabindex'=>'5')) !!}
-												{!! $errors->first('proposer', '<small class="text-danger">:message</small>') !!}
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('fund_raising_start_date')){{'has-error'}} @endif">
+										{!!Form::label('fund_raising_start_date', 'fund raising start date', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-5 @if($errors->first('fund_raising_start_date')){{'has-error'}} @endif">
+													<div class="">
+														{!! Form::input('date', 'fund_raising_start_date', $project->investment->fund_raising_start_date?$project->investment->fund_raising_start_date->toDateString():null, array('placeholder'=>'fund raising start date', 'class'=>'form-control')) !!}
+														{!! $errors->first('fund_raising_start_date', '<small class="text-danger">:message</small>') !!}
+													</div>
+												</div>
+												{!!Form::label('fund_raising_close_date', 'fund raising close date', array('class'=>'col-sm-2 control-label'))!!}
+												<div class="col-sm-5 @if($errors->first('fund_raising_close_date')){{'has-error'}} @endif">
+													<div class="">
+														{!! Form::input('date', 'fund_raising_close_date', $project->investment->fund_raising_close_date?$project->investment->fund_raising_close_date->toDateString():null, array('placeholder'=>'fund raising close date', 'class'=>'form-control')) !!}
+														{!! $errors->first('fund_raising_close_date', '<small class="text-danger">:message</small>') !!}
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="row" style="display: none;">
-								<div class="form-group @if($errors->first('summary')){{'has-error'}} @endif">
-									{!!Form::label('summary', 'Summary', array('class'=>'col-sm-2 control-label'))!!}
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-sm-12 @if($errors->first('summary')){{'has-error'}} @endif">
-												{!! Form::textarea('summary', $project->investment?$project->investment->summary:null, array('placeholder'=>'Summary', 'class'=>'form-control', 'tabindex'=>'5', 'rows'=>'3')) !!}
-												{!! $errors->first('summary', '<small class="text-danger">:message</small>') !!}
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('proposer')){{'has-error'}} @endif">
+										{!!Form::label('proposer', 'Developer', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-12 @if($errors->first('proposer')){{'has-error'}} @endif">
+													{!! Form::text('proposer', $project->investment?$project->investment->proposer:null, array('placeholder'=>'Developer', 'class'=>'form-control', 'tabindex'=>'5')) !!}
+													{!! $errors->first('proposer', '<small class="text-danger">:message</small>') !!}
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+								<div class="row" style="display: none;">
+									<div class="form-group @if($errors->first('summary')){{'has-error'}} @endif">
+										{!!Form::label('summary', 'Summary', array('class'=>'col-sm-2 control-label'))!!}
+										<div class="col-sm-9">
+											<div class="row">
+												<div class="col-sm-12 @if($errors->first('summary')){{'has-error'}} @endif">
+													{!! Form::textarea('summary', $project->investment?$project->investment->summary:null, array('placeholder'=>'Summary', 'class'=>'form-control', 'tabindex'=>'5', 'rows'=>'3')) !!}
+													{!! $errors->first('summary', '<small class="text-danger">:message</small>') !!}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							{{--<div class="row">
 								<div class="form-group @if($errors->first('security_long')){{'has-error'}} @endif">
 									{!!Form::label('security_long', 'Security Long', array('class'=>'col-sm-2 control-label'))!!}
@@ -2149,7 +2152,38 @@ Edit {{$project->title}} | Dashboard | @parent
 			$('#masterChildCollapse').collapse('show');
 		});
 		var totalPercAllocation = $('input[name="percentage[]"]').map(function () {return parseInt($(this).val());}).get();
-		$('#totalAllocation').html(totalPercAllocation.reduce((a, b) => a + b, 0)+' % &nbsp;&nbsp;&nbsp;&nbsp;');
+		$('#totalAllocation').html('<button class="btn btn-primary" id="updateAllocation">Update Allocation</button>&nbsp;&nbsp;&nbsp;&nbsp;'+totalPercAllocation.reduce((a, b) => a + b, 0)+' % ');
+
+		$('#updateAllocation').on('click',function (f) {
+			f.preventDefault();
+			var percAll = $('input[name="childAllocation[]"]').map(function () {return parseInt($(this).val());}).get();
+			var childName = $('input[name="childProject[]"]').map(function () {return parseInt($(this).val());}).get();
+			var master = $('input[name="master"]').val();
+			if(percAll.reduce((a, b) => a + b, 0) === 100){
+					console.log('Ok');
+				}else{
+					f.preventDefault();
+					alert('Please make sure all children allocation should be total 100');
+				}
+			console.log(percAll,childName,master);
+			$('.loader-overlay').show();
+			$.ajax({
+				url: '/dashboard/projects/allocation',
+				type: 'POST',
+				dataType: 'JSON',
+				data: {percAll: percAll,childName: childName,master:master,},
+				headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+				success: function (data) {
+					console.log('hello');
+					location.reload();
+				},
+				error: function (error) {
+					console.log('You are in error');
+					location.reload();
+				}
+			});
+
+		});
 		$('#addMoreChild').on('click',function (t) {
 			t.preventDefault();
 			var proj = $('#childProjects').val();
@@ -2157,14 +2191,15 @@ Edit {{$project->title}} | Dashboard | @parent
 			var perc = $('#projectAllocationPerc').val();
 			var childs = $("input[name='child[]']")
 			.map(function(){return $(this).val();}).get();
-			console.log(perc);
+			console.log(childs);
 			if(childs.includes(proj)){
 				alert('Already added as a child, Choose another project');
 			}else{
 				var totalPerc = $('input[name="percentage[]"]').map(function () {return parseInt($(this).val());}).get();
-				console.log(100 - totalPerc.reduce((a, b) => a + b, 0));
+				console.log(totalPerc);
+				// console.log(100 - totalPerc.reduce((a, b) => a + b, 0));
 				var remain = 100 - totalPerc.reduce((a, b) => a + b, 0);
-				if(remain > 0 && parseInt(perc) <= remain){
+				if(remain >= 0 && parseInt(perc) <= remain){
 					$('.selected-child-projects').append('<div class="well well-sm"><b>Project:</b><i> '+projName+'</i> &nbsp;&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp;'+perc+'<b>% Allocation</b> </div><input type="hidden" name="child[]" value="'+proj+'"><input type="hidden" name="percentage[]" value="'+perc+'">');
 				}else{
 					alert('Now only '+remain+'% can be allocated');

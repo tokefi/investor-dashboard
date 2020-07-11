@@ -334,3 +334,4 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 Route::get('/dashboard/project/{project_id}/registry/records/download',['as'=>'dashboard.project.registry.records.download','uses'=>'DashboardController@downloadProjectRegistryRecord']);
 Route::post('/configuration/updateProjectUrl', ['as'=> 'configuration.updateProjectUrl', 'uses'=>'SiteConfigurationsController@updateProjectUrl']);
 Route::get('/financialserviceguide', ['as'=>'financialserviceguide', 'uses'=>'PagesController@fsg']);
+Route::post('/dashboard/projects/allocation',['as'=>'dashboard.projects.allocation','uses'=>'DashboardController@updateAllocation']);
