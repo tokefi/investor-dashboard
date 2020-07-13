@@ -4,8 +4,8 @@
 	@if($user->invite_only_projects->count())
 	<a href="{{route('projects.invite.only')}}" class="list-group-item @if($active == 8) active @endif"><i class="fa fa-group"></i> Invite for Projects </a>
 	@endif
-	<a href="{{route('users.document', [$user])}}" class="list-group-item @if($active == 10) active @endif"><i class="fa fa-credit-card" aria-hidden="true"></i> KYC @if(($user->idDoc && $user->idDoc->verified == '1') || ($user->digitalIdKyc)) <i class="fa fa-check-circle" aria-hidden="true"></i>
- 	@endif </a>
+	{{-- <a href="{{route('users.document', [$user])}}" class="list-group-item @if($active == 10) active @endif"><i class="fa fa-credit-card" aria-hidden="true"></i> KYC @if(($user->idDoc && $user->idDoc->verified == '1') || ($user->digitalIdKyc)) <i class="fa fa-check-circle" aria-hidden="true"></i>
+ 	@endif </a> --}}
 	<?php $roles = $user->roles; ?>
 	@if($roles->contains('role', 'developer'))
 		<a href="{{route('users.submit', [$user])}}" class="list-group-item @if($active == 5) active @endif"><i class="fa fa-cloud-upload"></i> Submit a Project </a>

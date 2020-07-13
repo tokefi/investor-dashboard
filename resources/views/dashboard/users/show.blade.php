@@ -36,15 +36,15 @@
 				@endif
 			</div>
 			<ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
-				<li class="" style="width: 50%;">
+				<li class="active" style="width: 50%;">
 					<a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Profile</h3></a>
 				</li>
-				<li class="active" style="width: 50%;">
+				<li class="" style="width: 50%;">
 					<a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">KYC</h3></a>
 				</li>
 			</ul>
 			<div class="tab-content">
-				<div id="profile_tab" class="tab-pane fade" style="overflow: auto; margin-top: 1em;">
+				<div id="profile_tab" class="tab-pane fade in active" style="overflow: auto; margin-top: 1em;">
 					<ul class="list-group">
 						<li class="list-group-item">
 							<dl class="dl-horizontal">
@@ -250,7 +250,7 @@
 						</li>
 					</ul>
 				</div>
-				<div id="kyc_tab" class="tab-pane fade in active" style="margin-top: 1em; overflow: auto;">
+				<div id="kyc_tab" class="tab-pane fade " style="margin-top: 1em; overflow: auto;">
 					<div >
 						<ul class="list-group">
 							<li class="list-group-item">
