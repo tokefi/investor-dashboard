@@ -516,7 +516,7 @@ class ProjectsController extends Controller
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
         
-        $customFields = CustomField::where('page', 'application_form')->get();
+        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get();
         if ($project->retail_vs_wholesale == 0) {
             $customFields = $customFields->filter(function ($item) {
                 return ($item->properties && $item->properties->is_retail_only) ? false : true;

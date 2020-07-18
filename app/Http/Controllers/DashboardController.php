@@ -610,7 +610,7 @@ class DashboardController extends Controller
         $siteconfiguration = SiteConfiguration::where('project_site',url())->first();
         $mail_setting = $siteconfiguration->mailSetting;
         $siteConfigurationHelper = SiteConfigurationHelper::getConfigurationAttr();
-        $customFields = CustomField::all();
+        $customFields = CustomField::where('site_url', url())->get();
         
         return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields'));
     }

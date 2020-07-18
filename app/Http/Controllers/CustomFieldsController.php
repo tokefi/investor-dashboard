@@ -45,6 +45,7 @@ class CustomFieldsController extends Controller
 
         $customField = new CustomField;
         $customField->page = $request->page ?? null;
+        $customField->site_url = url();
         $customField->type = $request->type;
         $customField->name = str_slug(strtolower($request->label) . ' ' . strtolower($request->type) . ' ' . rand(1, 999), '_');
         $customField->label = $request->label;
