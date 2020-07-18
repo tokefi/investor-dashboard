@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use View;
 use Session;
 use App\User;
 use App\Color;
@@ -10,19 +11,24 @@ use Validator;
 use App\Project;
 use Carbon\Carbon;
 use App\Investment;
+use App\ProjectEOI;
 use App\ProjectFAQ;
-use App\ProjectProg;
+use App\CustomField;
 use App\MasterChild;
+use App\ProjectProg;
 use App\Http\Requests;
 use App\InvestingJoint;
 use App\ProjectSpvDetail;
 use App\Mailers\AppMailer;
+use App\SiteConfiguration;
 use App\InvestmentInvestor;
+use App\ProspectusDownload;
 use Illuminate\Http\Request;
 use App\ProjectConfiguration;
 use App\Jobs\SendReminderEmail;
 use App\Http\Requests\FAQRequest;
 use Illuminate\Support\Facades\DB;
+use App\AgentInvestmentApplication;
 use App\Http\Controllers\Controller;
 use App\ProjectConfigurationPartial;
 use Illuminate\Support\Facades\Auth;
@@ -30,15 +36,10 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\ProjectRequest;
 use Intercom\IntercomBasicAuthClient;
 use Intervention\Image\Facades\Image;
+use App\Helpers\SiteConfigurationHelper;
 use App\Http\Requests\InvestmentRequest;
 use App\Jobs\SendInvestorNotificationEmail;
 use App\Jobs\SendDeveloperNotificationEmail;
-use App\SiteConfiguration;
-use App\ProjectEOI;
-use App\ProspectusDownload;
-use App\Helpers\SiteConfigurationHelper;
-use App\AgentInvestmentApplication;
-use View;
 
 
 class ProjectsController extends Controller
@@ -514,6 +515,14 @@ class ProjectsController extends Controller
         $projects_spv = ProjectSpvDetail::where('project_id',$project_id)->first();
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
+        
+        $customFields = CustomField::where('page', 'application_form')->get();
+        if ($project->retail_vs_wholesale == 0) {
+            $customFields = $customFields->filter(function ($item) {
+                return ($item->properties && $item->properties->is_retail_only) ? false : true;
+            });
+        }
+        
         if(!$project->show_invest_now_button) {
             return redirect()->route('projects.show', $project);
         }
@@ -560,17 +569,17 @@ class ProjectsController extends Controller
             if($request->source == 'eoi'){
                 $user = User::find($request->uid);
                 $eoi = ProjectEOI::find($request->id);
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment','agent_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment','agent_investment', 'customFields'));
             }
             if($request->source == 'clientApplication'){
                 // $action = '/offer/submit/'.$project_id.'/step1';
                 $clientApplication = AgentInvestmentApplication::findOrFail($request->id);
                 $user = User::where('email', $clientApplication->client_email)->where('registration_site', url())->first();
                 $agent_investment = 1;
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields'));
             }
             if(!$project->eoi_button){
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
             } else{
                 return response()->view('errors.404', [], 404);
             }

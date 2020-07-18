@@ -19,7 +19,7 @@ class InvestmentInvestor extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'project_id', 'investment_id','amount', 'accepted','investment_confirmation', 'share_certificate_issued_at', 'share_number', 'share_certificate_path', 'is_cancelled', 'is_repurchased', 'signature_data', 'application_path', 'interested_to_buy','signature_type','signature_data_type', 'hide_investment', 'investing_as', 'admin_investment','master_investment','agent_investment','agent_id'];
+    protected $fillable = ['user_id', 'project_id', 'investment_id','amount', 'accepted','investment_confirmation', 'share_certificate_issued_at', 'share_number', 'share_certificate_path', 'is_cancelled', 'is_repurchased', 'signature_data', 'application_path', 'interested_to_buy','signature_type','signature_data_type', 'hide_investment', 'investing_as', 'admin_investment','master_investment','agent_investment','agent_id', 'custom_field_values'];
 
     /**
      * boolean fields
@@ -63,5 +63,10 @@ class InvestmentInvestor extends Model
     public function childInvestment()
     {
         return $this->hasMany('App\InvestmentInvestor','master_investment');
+    }
+
+    public function getCustomFieldValuesAttribute($value)
+    {
+        return json_decode($value);
     }
 }

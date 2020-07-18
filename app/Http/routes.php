@@ -335,3 +335,8 @@ Route::get('/dashboard/project/{project_id}/registry/records/download',['as'=>'d
 Route::post('/configuration/updateProjectUrl', ['as'=> 'configuration.updateProjectUrl', 'uses'=>'SiteConfigurationsController@updateProjectUrl']);
 Route::get('/financialserviceguide', ['as'=>'financialserviceguide', 'uses'=>'PagesController@fsg']);
 Route::post('/dashboard/projects/allocation',['as'=>'dashboard.projects.allocation','uses'=>'DashboardController@updateAllocation']);
+
+
+/** Custom Fields actions */
+Route::post('/dashboard/site-configuration/custom-fields', 'CustomFieldsController@store')->name('custom-field.store');
+Route::post('/dashboard/site-configuration/custom-fields/{custom_field}/delete', 'CustomFieldsController@destroy')->name('custom-field.delete');

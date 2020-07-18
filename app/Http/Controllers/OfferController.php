@@ -159,6 +159,7 @@ class OfferController extends Controller
           'bsb'=>$request->bsb,
           'account_number'=>$request->account_number,
           'project_site' => url(),
+          'custom_field_values' => isset($request->custom) ? json_encode($request->custom) : null
         ]);
 
         if($request->investing_as == 'Trust or Company'){
@@ -349,6 +350,9 @@ class OfferController extends Controller
     // $pdf = PDF::loadView('pdf.application', ['project' => $project, 'investment' => $investor, 'user' => $user]);
     // $pdf->save($pdfPath);
     // $investor->application_path = $pdfBasePath;
+
+      // Add custom fields
+      $investor->custom_field_values = isset($request->custom) ? json_encode($request->custom) : null;
       $investor->save();
       
       $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));

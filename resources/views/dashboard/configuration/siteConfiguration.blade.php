@@ -28,6 +28,12 @@ Configuration | Dashboard | @parent
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-offset-1 col-md-10">
+                    @if (Session::has('success'))
+                        <div class="alert alert-success alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {!! Session::get('success') !!}
+                        </div>
+                    @endif
 					<div class="row" style="padding-top:1.2em;">
 						<div class="col-md-4">
 							<div class="thumbnail text-center">
@@ -361,6 +367,7 @@ Configuration | Dashboard | @parent
                     <hr>
                 </div>
             </section>
+            @include('dashboard.configuration.partials.customFields')
         </div>
     </div>
 </div>

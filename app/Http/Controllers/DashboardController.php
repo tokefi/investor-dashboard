@@ -2,50 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Credit;
-use App\Color;
-use App\Helpers\BulkEmailHelper;
-use App\Helpers\ModelHelper;
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Investment;
-use App\InvestmentInvestor;
-use App\InvestingJoint;
-use App\Invite;
-use App\Mailers\AppMailer;
+use View;
+use Session;
 use App\Note;
-use App\Project;
 use App\User;
+use App\Color;
+use App\Price;
+use App\Credit;
+use App\Invite;
+use App\Project;
+use App\Position;
 use Carbon\Carbon;
 use App\IdDocument;
-use Chumper\Datatable\Datatable;
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
-use App\SiteConfiguration;
-use Session;
-use Mailgun\Mailgun;
-use App\Transaction;
-use App\Position;
-use App\ProjectProg;
-use App\ReferralLink;
-use App\ReferralRelationship;
-use App\Helpers\SiteConfigurationHelper;
-use Illuminate\Mail\TransportManager;
-use App\ProjectInterest;
-use App\InvestmentRequest;
+use App\Investment;
 use App\ProjectEOI;
-use App\ProspectusDownload;
-use App\ProjectSpvDetail;
-use App\UserRegistration;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
-use SendGrid\Mail\Mail as SendgridMail;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\RedemptionRequest;
-use App\RedemptionStatus;
-use App\Price;
+use App\CustomField;
 use App\MasterChild;
-use View;
+use App\ProjectProg;
+use App\Transaction;
+use Mailgun\Mailgun;
+use App\ReferralLink;
+use App\Http\Requests;
+use App\InvestingJoint;
+use App\ProjectInterest;
+use App\ProjectSpvDetail;
+use App\RedemptionStatus;
+use App\UserRegistration;
+use App\InvestmentRequest;
+use App\Mailers\AppMailer;
+use App\RedemptionRequest;
+use App\SiteConfiguration;
+use App\InvestmentInvestor;
+use App\ProspectusDownload;
+use App\Helpers\ModelHelper;
+use Illuminate\Http\Request;
+use App\ReferralRelationship;
+use App\Helpers\BulkEmailHelper;
+use Chumper\Datatable\Datatable;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Mail\TransportManager;
+use SendGrid\Mail\Mail as SendgridMail;
+use App\Helpers\SiteConfigurationHelper;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class DashboardController extends Controller
@@ -609,7 +610,9 @@ class DashboardController extends Controller
         $siteconfiguration = SiteConfiguration::where('project_site',url())->first();
         $mail_setting = $siteconfiguration->mailSetting;
         $siteConfigurationHelper = SiteConfigurationHelper::getConfigurationAttr();
-        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper'));
+        $customFields = CustomField::all();
+        
+        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields'));
     }
 
     public function investmentMoneyReceived(Request $request, AppMailer $mailer, $investment_id)

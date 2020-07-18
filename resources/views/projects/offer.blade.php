@@ -616,6 +616,38 @@ Offer Doc
 
 										</div>
 									</div>
+									<br>
+									@if ($customFields->count())
+									<div class="row " id="section-8">
+										<div class="col-md-12">
+											<h3>Additional Info</h3>
+											<hr />
+											<div class="row">
+												@foreach ($customFields as $customField)
+													<div class="col-md-4" style="margin-bottom:20px;">
+														<label>{{ $customField->label }}</label>
+														@if(in_array($customField->type, ['text']))
+															<input class="form-control" 
+																type="{{ $customField->type }}" 
+																name="custom[{{ $customField->name }}]"
+																placeholder="{{ $customField->label }}" 
+																@if(isset($clientApplication) && $custom = $clientApplication->custom_field_values) value="{{ json_decode($custom)->{$customField->name} ?? '' }}" @endif
+																@if($customField->is_required) required @endif />
+														@endif
+														@if(in_array($customField->type, ['date']))
+															<input class="form-control" 
+																type="{{ $customField->type }}" 
+																name="custom[{{ $customField->name }}]" 
+																@if(isset($clientApplication) && $custom = $clientApplication->custom_field_values) value="{{ json_decode($custom)->{$customField->name} ?? '' }}" @endif
+																@if($customField->is_required) required @endif />
+														@endif
+													</div>
+												@endforeach
+											</div>
+										</div>
+									</div>
+									<br />
+									@endif
 									@if(Auth::guest())
 									<input type="password" name="password" class="hidden" id="passwordOffer">
 									<input type="text" name="role" class="hidden" value="investor">
