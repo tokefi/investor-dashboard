@@ -527,7 +527,7 @@ Configuration | Dashboard | @parent
                                 <br>
                             </div>
                         </div>
-                        {!! Form::submit('Change Mail Settings', array('class'=>'btn btn-primary col-md-4 col-md-offset-4', 'tabindex'=>'2', 'style'=>'margin-bottom: 20px; margin-top: 10px;', 'id'=>'submit_title_text_btn')) !!}
+                        {!! Form::submit('Change Mail Settings', array('class'=>'btn btn-primary col-md-4 col-md-offset-4', 'tabindex'=>'8', 'style'=>'margin-bottom: 20px; margin-top: 10px;', 'id'=>'submit_title_text_btn')) !!}
                         {!! Form::close() !!}
                     </div>
                 </div>
