@@ -23,17 +23,6 @@
 								@endif
 							</h2>
 						</div>
-						{{-- <div class="row">
-							<div class="col-md-offset-2 col-md-8" style="text-align: left;"></div>
-								<p>Thank you for completing your online Application.</p>
-								<p>Your Application has been sent to {{$project->projectspvdetail->spv_name}} for approval.</p>
-								<p>Please ensure your Identification documents are provided to fast track your Application.</p>
-								<p>You have been sent an email with a copy of your Application. Please check your email for a copy, sent from @if($siteConfiguration->mailSetting){{$siteConfiguration->mailSetting->username}}@endif.</p>
-								<p>Please deposit your Application monies of ${{number_format($amount)}} to the Company’s bank account below.</p>
-								<p>Thank you</p>
-								<p>{{$project->title}}</p>
-							</div>
-						</div> --}}
 					</div>
 					<br>
 					@if($project->investment)
@@ -43,7 +32,7 @@
 							<p class="text-center"><strong style="font-size: 1.5em;">Thank you for completing your online Application.</strong></p>
 							<p>Your Application has been sent to {{$project->projectspvdetail->spv_name}} for approval.</p>
 							<p>Please ensure your Identification documents are provided to fast track your Application.</p>
-							<p>You have been sent an email with a copy of your Application. Please check your email for a copy, sent from @if($siteConfiguration->mailSetting){{$siteConfiguration->mailSetting->username}}@endif.</p>
+							<p>You have been sent an email with a copy of your Application. Please check your email for a copy, sent from @if($siteConfiguration->mailSetting){{$siteConfiguration->mailSetting->from}}@endif.</p>
 							<p>Please deposit your Application monies of ${{number_format($amount)}} to the Company’s bank account below.</p>
 							<br>
 							{{-- <h2 class="text-center">
