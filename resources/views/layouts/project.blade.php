@@ -262,6 +262,7 @@ $_SESSION['code'] = md5(microtime(true));
                                         <ul class="dropdown-menu dashboard-submenu">
                                             @if(!Auth::user()->roles->contains('role', 'agent'))
                                             @foreach($allProjects as $allProject)
+                                            @if(!$allProject->hide_project)
                                             <li class="dropdown-submenu">
                                                 <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
                                                 <ul class="dropdown-menu dashboard-submenu">
@@ -279,6 +280,7 @@ $_SESSION['code'] = md5(microtime(true));
                                                     <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
                                                 </ul>
                                             </li>
+                                            @endif
                                             @endforeach
                                             @endif
                                         </ul>

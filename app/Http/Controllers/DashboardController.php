@@ -645,6 +645,17 @@ class DashboardController extends Controller
         }
     }
 
+    public function hideProject(Request $request)
+    {
+        // dd(1);
+        if ($request->ajax()) {
+            $project = Project::findOrFail($request->project_id);
+            $project->hide_project = 1;
+            $project->save();
+            return 1;
+        }
+    }
+
     public function hideApplicationFillupRequest(Request $request)
     {
         if ($request->ajax()) {

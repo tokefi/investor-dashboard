@@ -29,11 +29,13 @@ Projects | Dashboard | @parent
 							<th>Active</th>
 							<th>Goal</th>
 							<th>Collected</th>
+							<th>#</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach($projects as $project)
-						<tr class="@if(!$project->active) inactive @endif">
+						@if(!$project->hide_project)
+						<tr class="@if(!$project->active) inactive @endif" id="project_{{$project->id}}">
 							<td class="dt-first-column">{{$project->id}}</td>
 							<td>
 								<a href="{{route('dashboard.projects.edit', [$project])}}">{{$project->title}}</a><br><br>
@@ -56,7 +58,11 @@ Projects | Dashboard | @parent
 							<td>@if($project->investment)${{number_format($project->investment->goal_amount)}} @else Not Specified @endif</td>
 							<?php $pledged_amount = $pledged_investments->where('project_id', $project->id)->sum('amount');?>
 							<td>@if($project->investment)${{ number_format($pledged_amount)}} @else Not Specified @endif</td>
+							<td>
+								<a href="javascript:void(0);" class="hide-project" data="{{$project->id}}" title="Delete project"><i class="fa fa-trash"></i></a>
+							</td>
 						</tr>
+						@endif
 						@endforeach
 					</tbody>
 				</table>
@@ -84,6 +90,30 @@ Projects | Dashboard | @parent
 		});
 		// $('.description').text(desc.substring(0,50));
 	});
+
+	$('#projectsTable').on('click','.hide-project', function(e){
+			e.preventDefault();
+			var project_id = $(this).attr('data');
+			if (confirm('Are you sure you want to delete this project? This action cannot be reverted back.')) {
+				$('.loader-overlay').show();
+				$.ajax({
+					url: '/dashboard/hideProject',
+					type: 'PATCH',
+					dataType: 'JSON',
+					data: {project_id},
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+				}).done(function(data){
+					if(data){
+						$('.loader-overlay').hide();
+						$("#projectsTable").DataTable().row( $('#project_' + project_id) ).remove().draw( false );
+						alert("Project deleted successfully");
+					}
+				});
+			}
+		});
+
 
 	$(document).on("click","#alert",function(){
 		swal ( "Oops !" ,  "Please add the Project SPV Details first." ,  "error" );
