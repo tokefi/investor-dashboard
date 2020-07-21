@@ -1404,7 +1404,7 @@
 				</div>
 				@endif
 				@endif
-				<div class="row show_custodian_section" @if(!$project->projectconfiguration->show_risk_section) style="display: none;" @endif >
+				<div class="row show_custodian_section" @if(!$project->projectconfiguration->show_custodian_section) style="display: none;" @endif >
 					<div class="col-md-2 text-center">
 						
 						<h4 class="second_color " style="margin-top:30px; color:#fed405;font-size:1.375em;">Custodian</h4><br>

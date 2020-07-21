@@ -632,13 +632,12 @@
 									</div>
 								</div>
 							</div>
-							<div class="row show_custodian_section" >
+							<div class="row show_custodian_section" @if(!$project->projectconfiguration->show_custodian_section) style="display: none;" @endif >
 								<div class="col-md-2 text-center">
 									<h4 class="second_color show-risk-input" style="margin-top:30px; color:#fed405;font-size:1.375em;"> Custodian </h4><br>
 								</div>
 								<div class="col-md-10 text-left">
 									 <p style="font-size:0.875em;" class="project-custodian-field"><input type="text" name="project_custodian_txt" class="form-control" value= "{{ $project->custodian }}" placeholder="Enter the Custodian"> @if($project->custodian){{$project->custodian}}</p> @endif
-									
 								</div>
 							</div>
 							<br><br>
