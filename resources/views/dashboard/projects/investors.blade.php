@@ -649,6 +649,7 @@
 										<th>Investor Name</th>
 										<th>Phone</th>
 										<th>Email</th>
+										<th>Investor Type</th>
 										<th>Address</th>
 										<th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
 										{{-- <th>Price ($)</th> --}}
@@ -666,6 +667,31 @@
 											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
 											<td>{{$registry->user->phone_number}}</td>
 											<td>{{$registry->user->email}}</td>
+											<td class="text-left">
+													<span class="badge">{{ $investment->investing_as }}</span><br />
+													@if ($investment->investing_as == 'Joint Investor')
+														@if($investment->userInvestmentDoc)
+															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
+																<a href="/{{$doc->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
+																<br />
+															@else
+																NA
+															@endif
+														@endif
+													@endif
+													@if ($investment->investing_as == 'Trust or Company')
+														@if($investment->userInvestmentDoc)
+															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
+																<a href="/{{$doc->path}}" target="_blank">
+																{{$investment->investingJoint->investing_company}} Doc </a>
+															@else
+																NA
+															@endif
+														@else
+														NA
+														@endif
+													@endif
+												</td>
 											<td>
 												{{$registry->user->line_1}},
 												{{$registry->user->line_2}},

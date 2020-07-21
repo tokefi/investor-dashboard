@@ -1400,10 +1400,11 @@
 				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
 				<div class="row text-center">
 					<h5><b>Custodian</b></h5>
+					<input type="checkbox" class="checkbox-switch" autocomplete="off" data-label-text="Show" action="show_custodian_section" data-size="mini" @if($project->projectconfiguration->show_custodian_section) checked value="1" @else value="0" @endif>
 				</div>
 				@endif
 				@endif
-				<div class="row show_custodian_section" >
+				<div class="row show_custodian_section" @if(!$project->projectconfiguration->show_risk_section) style="display: none;" @endif >
 					<div class="col-md-2 text-center">
 						
 						<h4 class="second_color " style="margin-top:30px; color:#fed405;font-size:1.375em;">Custodian</h4><br>
