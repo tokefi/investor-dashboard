@@ -647,10 +647,13 @@ class DashboardController extends Controller
 
     public function hideProject(Request $request)
     {
-        // dd(1);
         if ($request->ajax()) {
             $project = Project::findOrFail($request->project_id);
             $project->hide_project = 1;
+            $project->active = 0;
+            $project->is_coming_soon = 0;
+            $project->is_funding_closed = 0;
+            $project->eoi_button = 0;
             $project->save();
             return 1;
         }
