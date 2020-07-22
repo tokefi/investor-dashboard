@@ -647,8 +647,8 @@
 										<th class="select-check hide nosort"><input type="checkbox" class="check-all" name=""></th>
 										{{-- <th>Project SPV Name</th> --}}
 										<th>Investor Name</th>
-										<th>Phone</th>
-										<th>Email</th>
+										{{-- <th>Phone</th> --}}
+										{{-- <th>Email</th> --}}
 										<th>Investor Type</th>
 										<th>Address</th>
 										<th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
@@ -664,9 +664,7 @@
 										<tr>
 											<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
 											{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
-											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}</td>
-											<td>{{$registry->user->phone_number}}</td>
-											<td>{{$registry->user->email}}</td>
+											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
 											<td class="text-left">
 													<span class="badge">{{ $investment->investing_as }}</span><br />
 													@if ($investment->investing_as == 'Joint Investor')
@@ -675,7 +673,7 @@
 																<a href="/{{$doc->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
 																<br />
 															@else
-																NA
+																
 															@endif
 														@endif
 													@endif
