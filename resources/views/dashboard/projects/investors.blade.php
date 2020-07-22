@@ -666,22 +666,22 @@
 											{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
 											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
 											<td class="text-left">
-													<span class="badge">{{ $investment->investing_as }}</span><br />
-													@if ($investment->investing_as == 'Joint Investor')
-														@if($investment->userInvestmentDoc)
-															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
-																<a href="/{{$doc->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
+													<span class="badge">{{ $registry->investing_as }}</span><br />
+													@if ($registry->investing_as == 'Joint Investor')
+														@if($registry->userInvestmentDoc)
+															@if($doc = $registry->userInvestmentDoc->where('type','joint_investor')->last())
+																<a href="/{{$doc->path}}" target="_blank">{{$registry->investingJoint->joint_investor_first_name}} {{$registry->investingJoint->joint_investor_last_name}} Doc</a>
 																<br />
 															@else
 																
 															@endif
 														@endif
 													@endif
-													@if ($investment->investing_as == 'Trust or Company')
-														@if($investment->userInvestmentDoc)
-															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
+													@if ($registry->investing_as == 'Trust or Company')
+														@if($registry->userInvestmentDoc)
+															@if($doc = $registry->userInvestmentDoc->where('type','trust_or_company')->last())
 																<a href="/{{$doc->path}}" target="_blank">
-																{{$investment->investingJoint->investing_company}} Doc </a>
+																{{$registry->investingJoint->investing_company}} Doc </a>
 															@else
 																NA
 															@endif
