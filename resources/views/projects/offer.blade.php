@@ -303,7 +303,7 @@ Offer Doc
 												<label>Company or Trust Name</label>
 												<div class="row">
 													<div class="col-md-9">
-														<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled" >
+														<input type="text" name="investing_company_name" class="form-control" placeholder="Trust or Company" required disabled="disabled"@if(isset($user->idDoc) && $user->idDoc->investing_as == 'Trust or Company') value="{{$user->idDoc->trust_or_company}}" readonly @endif>
 													</div>
 												</div><br>
 											</div>
