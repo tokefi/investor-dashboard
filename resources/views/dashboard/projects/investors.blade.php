@@ -265,18 +265,17 @@
 												<td class="text-left">
 													<span class="badge">{{ $investment->investing_as }}</span><br />
 													@if ($investment->investing_as == 'Joint Investor')
-														{{-- @if($investment->userInvestmentDoc)
+														@if($investment->userInvestmentDoc)
 															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
 																<a href="/{{$doc->path}}" target="_blank">{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}} Doc</a>
 																<br />
 															@else
-																{{$investment->investingJoint->joint_investor_first_name}} {{$investment->investingJoint->joint_investor_last_name}}
+																NA
 															@endif
-														@endif --}}
-														{{ $investment->user->idDoc->joint_first_name }}{{ $investment->user->idDoc->joint_last_name }}
+														@endif
 													@endif
 													@if ($investment->investing_as == 'Trust or Company')
-														{{-- @if($investment->userInvestmentDoc)
+														@if($investment->userInvestmentDoc)
 															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
 																<a href="/{{$doc->path}}" target="_blank">
 																{{$investment->investingJoint->investing_company}} Doc </a>
@@ -285,8 +284,7 @@
 															@endif
 														@else
 														NA
-														@endif --}}
-														{{ $investment->user->idDoc->trust_or_company }}
+														@endif
 													@endif
 												</td>
 												{{-- <td>
@@ -490,18 +488,17 @@
 										<td class="text-left">
 											<span class="badge">{{ $shareInvestment->investing_as }}</span><br />
 											@if ($shareInvestment->investing_as == 'Joint Investor')
-												{{-- @if($shareInvestment->userInvestmentDoc)
+												@if($shareInvestment->userInvestmentDoc)
 													@if($doc = $shareInvestment->userInvestmentDoc->where('type','joint_investor')->last())
 														<a href="/{{$doc->path}}" target="_blank">{{$shareInvestment->investingJoint->joint_investor_first_name}} {{$shareInvestment->investingJoint->joint_investor_last_name}} Doc</a>
 														<br />
 													@else
 														NA
 													@endif
-												@endif --}}
-												{{ $shareInvestment->user->idDoc->joint_first_name }}{{ $shareInvestment->user->idDoc->joint_last_name }}
+												@endif
 											@endif
 											@if ($shareInvestment->investing_as == 'Trust or Company')
-												{{-- @if($shareInvestment->userInvestmentDoc)
+												@if($shareInvestment->userInvestmentDoc)
 													@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
 														<a href="/{{$doc->path}}" target="_blank">
 														{{$shareInvestment->investingJoint->investing_company}} Doc </a>
@@ -510,8 +507,7 @@
 													@endif
 												@else
 												NA
-												@endif --}}
-												{{ $shareInvestment->user->idDoc->trust_or_company }}
+												@endif
 											@endif
 										</td>
 										{{-- <td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
@@ -672,18 +668,17 @@
 											<td class="text-left">
 													<span class="badge">{{ $registry->investing_as }}</span><br />
 													@if ($registry->investing_as == 'Joint Investor')
-														{{-- @if($registry->userInvestmentDoc)
+														@if($registry->userInvestmentDoc)
 															@if($doc = $registry->userInvestmentDoc->where('type','joint_investor')->last())
 																<a href="/{{$doc->path}}" target="_blank">{{$registry->investingJoint->joint_investor_first_name}} {{$registry->investingJoint->joint_investor_last_name}} Doc</a>
 																<br />
 															@else
 																
 															@endif
-														@endif --}}
-														{{ $registry->user->idDoc->joint_first_name }}{{ $registry->user->idDoc->joint_last_name }}
+														@endif
 													@endif
 													@if ($registry->investing_as == 'Trust or Company')
-														{{-- @if($registry->userInvestmentDoc)
+														@if($registry->userInvestmentDoc)
 															@if($doc = $registry->userInvestmentDoc->where('type','trust_or_company')->last())
 																<a href="/{{$doc->path}}" target="_blank">
 																{{$registry->investingJoint->investing_company}} Doc </a>
@@ -692,8 +687,7 @@
 															@endif
 														@else
 														NA
-														@endif --}}
-														{{ $registry->user->idDoc->trust_or_company }}
+														@endif
 													@endif
 												</td>
 											<td>
