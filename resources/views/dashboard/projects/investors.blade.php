@@ -654,6 +654,8 @@
 										{{-- <th>Phone</th> --}}
 										{{-- <th>Email</th> --}}
 										<th>Investor Type</th>
+										<th>Custodian</th>
+										<th>Responsible Entity</th>
 										<th>Address</th>
 										<th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
 										{{-- <th>Price ($)</th> --}}
@@ -670,7 +672,7 @@
 											{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
 											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
 											<td class="text-left">
-													<span class="badge">{{ $registry->investing_as }}</span><br />
+													<span class="">{{ $registry->investing_as }}</span><br />
 													@if ($registry->investing_as == 'Joint Investor')
 														{{-- @if($registry->userInvestmentDoc)
 															@if($doc = $registry->userInvestmentDoc->where('type','joint_investor')->last())
@@ -696,6 +698,8 @@
 														@if(isset($registry->investingJoint->investing_company )){{  $registry->investingJoint->investing_company}} @endif
 													@endif
 												</td>
+												<td>{{ $registry->project->custodian }}</td>
+												<td>{{ $registry->project->responsible_entity }}</td>
 											<td>
 												{{$registry->user->line_1}},
 												{{$registry->user->line_2}},

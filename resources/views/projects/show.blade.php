@@ -1413,6 +1413,24 @@
 						@if($project) <p style="font-size:0.875em;" class="project-risk-field text-justify second_color">{!!nl2br($project->custodian)!!}</p> @endif
 					</div>
 				</div>
+				@if(Auth::guest())
+				@else
+				@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
+				<div class="row text-center">
+					<h5><b>Responsible Entity</b></h5>
+					<input type="checkbox" class="checkbox-switch" autocomplete="off" data-label-text="Show" action="show_responsible_entity_section" data-size="mini" @if($project->projectconfiguration->show_responsible_entity_section) checked value="1" @else value="0" @endif>
+				</div>
+				@endif
+				@endif
+				<div class="row show_responsible_entity_section" @if(!$project->projectconfiguration->show_responsible_entity_section) style="display: none;" @endif >
+					<div class="col-md-2 text-center">
+						
+						<h4 class="second_color " style="margin-top:30px; color:#fed405;font-size:1.375em;">Responsible Entity</h4><br>
+					</div>
+					<div class="col-md-10 text-left">
+						@if($project) <p style="font-size:0.875em;" class="project-risk-field text-justify second_color">{!!nl2br($project->responsible_entity)!!}</p> @endif
+					</div>
+				</div>
 				<br><br>
 			</div>
 		</div>
