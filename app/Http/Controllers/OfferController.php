@@ -199,7 +199,7 @@ class OfferController extends Controller
       $amount = floatval(str_replace(',', '', str_replace('A$ ', '', $request->amount_to_invest)));
         $amount_5 = $amount*0.05; //5 percent of investment
         if($user->idDoc != NULL){
-          $investingAs = $user->idDoc->get()->last()->investing_as;
+          $investingAs = $user->idDoc->investing_as;
         }else{
           $investingAs = $request->investing_as;
         }
