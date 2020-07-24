@@ -2400,14 +2400,29 @@ class DashboardController extends Controller
         try {
             $csvTmpPath = $request->file('clients_file')->getRealPath();
             $alldata = array_map('str_getcsv', file($csvTmpPath));
+            $csvFields = $alldata[0];
             $csv_data = array_slice($alldata, 1);
+            
+            $preCustomFields = CustomField::where('site_url', url())
+                ->where('page', 'application_form')
+                ->get()->pluck('name')
+                ->toArray();
+            
             // import client application
             if(!empty($csv_data)) {
                 foreach ($csv_data as $key => $clientAppliation) {
                     //Define the user existing or new
                     if($clientAppliation[3]){
+                        $requestCustomFields = [];
                         $activatedUser = User::where('email', $clientAppliation[3])->first();
                         
+                        foreach($preCustomFields as $key=>$value) {
+                            $fieldIndex = array_search($value, $clientAppliation);
+                            if ($fieldIndex !== false) {
+                                $requestCustomFields[$value] = $clientAppliation['$fieldIndex'];
+                            }
+                        }
+
                         if(!$activatedUser){
                             $nonActivatedUser = UserRegistration::where('email', $request->email)->first();
                             // dd($nonActivatedUser,$clientAppliation[3],$activatedUser);
@@ -2437,11 +2452,46 @@ class DashboardController extends Controller
                             ]);
                             // dd($activatedUser);
                         }
-
+                        
                         //submit application and issue share certificate
                         if($clientAppliation[0]){
                             $project = Project::where('id',$clientAppliation[0])->where('project_site',url())->first();
-                            $activatedUser->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$clientAppliation[5], 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'accepted'=>1,]);
+                            $activatedUser->investments()->attach($project, [
+                                'investment_id'=>$project->investment->id,
+                                'amount'=>$clientAppliation[5], 
+                                'buy_rate' => $project->share_per_unit_price, 
+                                'project_site'=>url(),
+                                'investing_as'=>$clientAppliation[20], 
+                                'interested_to_buy'=>$clientAppliation[30],
+                                'money_received'=>1,
+                                'accepted'=>1,
+                                'created_at' => $clientAppliation[31],
+                                'updated_at' => $clientAppliation[31],
+                                'share_certificate_issued_at' => $clientAppliation[32],
+                                'custom_field_values' => json_encode($requestCustomFields)
+                            ]);
+                            
+                            if ($clientAppliation[20] != 'Individual Investor') {
+                                $investor = InvestmentInvestor::get()->last();
+                                $investing_joint = new InvestingJoint;
+                                $investing_joint->project_id = $project->id;
+                                $investing_joint->investment_investor_id = $investor->id;
+                                $investing_joint->joint_investor_first_name = $clientAppliation[17];
+                                $investing_joint->joint_investor_last_name = $clientAppliation[18];
+                                $investing_joint->investing_company = $clientAppliation[19];
+                                $investing_joint->account_name = $clientAppliation[6];
+                                $investing_joint->bsb = $clientAppliation[7];
+                                $investing_joint->account_number = $clientAppliation[8];
+                                $investing_joint->line_1 = $clientAppliation[9];
+                                $investing_joint->line_2 = $clientAppliation[10];
+                                $investing_joint->city = $clientAppliation[11];
+                                $investing_joint->state = $clientAppliation[12];
+                                $investing_joint->postal_code = $clientAppliation[13];
+                                $investing_joint->country = $clientAppliation[15];
+                                $investing_joint->tfn = $clientAppliation[16];
+                                $investing_joint->save();
+                            }
+
                             $masterTransaction = Transaction::create([
                                 'user_id' => $activatedUser->id,
                                 'project_id' => $project->id,
@@ -2456,7 +2506,20 @@ class DashboardController extends Controller
                                 foreach($project->children as $child){
                                     $percAmount = round($clientAppliation[5]* ($child->allocation)/100 * $project->share_per_unit_price);
                                     $childProject = Project::find($child->child);
-                                    $activatedUser->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$clientAppliation[20], 'interested_to_buy'=>$clientAppliation[30],'money_received'=>1,'accepted'=>1,]);
+                                    $activatedUser->investments()->attach($childProject, [
+                                        'investment_id'=>$childProject->investment->id,
+                                        'amount'=>round($percAmount/$childProject->share_per_unit_price), 
+                                        'buy_rate' => $childProject->share_per_unit_price, 
+                                        'project_site'=>url(),
+                                        'investing_as'=>$clientAppliation[20], 
+                                        'interested_to_buy'=>$clientAppliation[30],
+                                        'money_received'=>1,
+                                        'accepted'=>1,
+                                        'created_at' => $clientAppliation[31],
+                                        'updated_at' => $clientAppliation[31],
+                                        'share_certificate_issued_at' => $clientAppliation[32],
+                                        'custom_field_values' => json_encode($requestCustomFields)
+                                    ]);
 
                                     Transaction::create([
                                         'user_id' => $activatedUser->id,
@@ -2483,6 +2546,40 @@ class DashboardController extends Controller
             return redirect()->back()->withMessage('<p class="alert alert-danger text-center">' . $e->getMessage() . '</p>');
         }
         return redirect()->back()->withMessage('<p class="alert alert-success text-center">CSV file import done successfully.</p>');
+    }
+
+    public function exportImportApplicationSampleCSV()
+    {
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=file.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+    
+        $columns = ['project_id', 'client_first_name', 'client_last_name', 'client_email', 'phone_number', 'investment_amount', 'account_name', 'bsb', 'account_number', 'line_1', 'line_2', 'city', 'state', 'postal_code', 'project_site', 'country', 'tfn', 'joint_investor_first_name', 'joint_investor_last_name', 'investing_company', 'investing_as', 'wholesale_investing_as', 'accountant_name_and_firm', 'accountant_professional_body_designation', 'accountant_email', 'accountant_phone', 'equity_investment_experience_text', 'experience_period', 'unlisted_investment_experience_text', 'understand_risk_text', 'interested_to_buy', 'investment_date', 'accepted_date'];
+        
+        $sampleValue = ['xxx', 'xxxxx', 'xxxxx', 'xxx@xxx.xx', 'xxxxxxxxxx', 'xxx', 'xxxxxxx', 'xxx', 'xxxxxxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxxx', 'xxx', 'https://xxx.xx', 'xxx', 'xxx', 'xxx', 'xxxx', 'xxx', 'xxxxx', 'xxx', 'xxx', 'xxxx', 'xxx@xxx.xx', 'xxx', 'xxx', 'xxx', 'xxxx', 'xxx', 'X(0/1)', 'yyyy-mm-dd hh:ii:ss', 'yyyy-mm-dd hh:ii:ss'];
+
+        $customFields = CustomField::where('site_url', url())
+            ->where('page', 'application_form')
+            ->get();
+        
+        foreach ($customFields as $key => $value) {
+            array_push($columns, $value->name);
+            array_push($sampleValue, ($value->type == 'date') ? 'yyyy-mm-dd' : 'xxxxx');
+        }
+        
+        $callback = function() use ($sampleValue, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            fputcsv($file, $sampleValue);
+            fputcsv($file, $sampleValue);
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 
     public function downloadProjectRegistryRecord($project_id)

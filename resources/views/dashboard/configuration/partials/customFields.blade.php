@@ -44,7 +44,7 @@
             <thead>
                 <th>Type</th>
                 <th>Label</th>
-                <th>Description</th>
+                <th>Name</th>
                 <th>Is Required</th>
                 <th>Attributes</th>
                 <th>Properties</th>
@@ -55,7 +55,7 @@
                     <tr style="font-size: 0.9em;">
                         <td>{{ $customField->type }}</td>
                         <td>{{ $customField->label }}</td>
-                        <td>{{ $customField->description }}</td>
+                        <td>{{ $customField->name }}</td>
                         <td class="text-center">{{ $customField->is_required ? 'Yes' : 'No' }}</td>
                         <td>
                             @if ($customField->attributes)

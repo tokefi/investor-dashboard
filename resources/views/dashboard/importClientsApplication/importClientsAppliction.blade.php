@@ -27,7 +27,7 @@ Import Contacts | Dashboard | @parent
                 @endif
                 <div class="row text-center ">
                     <h2>Import Clients file</h2>
-                    <p>Download sample file <a href="{{route('home')}}/assets/documents/sample-applications-import.csv" download>HERE</a></p>
+                    <p>Download sample file <a href="{{ route('dashboard.import.clients.sample') }}" target="_blank">HERE</a></p>
                 </div>
                 <hr>
                 <div class="row">

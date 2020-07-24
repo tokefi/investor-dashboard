@@ -525,10 +525,13 @@ class UsersController extends Controller
         // $shareStart =  explode('-',$shareStart);
         // $shareEnd = $shareStart[1];
         // $shareStart = $shareStart[0];
-        $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
+        $allUserInvestments = InvestmentInvestor::where('user_id', $userId)->where('project_id', $projectId)->get();
+        $allUserInvestmentIds = $allUserInvestments->pluck('id')->toArray();
+        $investing = InvestingJoint::wherein('investment_investor_id', $allUserInvestmentIds)->get()->last();
+        $investingAs = $allUserInvestments->last()->investing_as;
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing'));
+        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing', 'investingAs'));
         // $pdf->setPaper('a4', 'landscape');
         // $pdf->setOptions(['Content-Type' => 'application/pdf','images' => true]);
         // return $pdf->stream('invoice.pdf',200,['Content-Type' => 'application/pdf','Content-Disposition' => 'inline']);
@@ -560,10 +563,15 @@ class UsersController extends Controller
         $shareStart =  explode('-',$shareStart);
         $shareEnd = $shareStart[1];
         $shareStart = $shareStart[0];
-        $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
+        
+        $allUserInvestments = InvestmentInvestor::where('user_id', $userId)->where('project_id', $projectId)->get();
+        $allUserInvestmentIds = $allUserInvestments->pluck('id')->toArray();
+        $investing = InvestingJoint::wherein('investment_investor_id', $allUserInvestmentIds)->get()->last();
+        $investingAs = $allUserInvestments->last()->investing_as;
+        
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing','shareEnd','shareStart'));
+        return view('pdf.invoiceHtml',compact('investment','color','user','project','investing','shareEnd','shareStart', 'investingAs'));
         // return view('pdf.invoice',compact('investment','color','user','project','investing','shareEnd','shareStart'));
     }
 
