@@ -82,6 +82,28 @@
 							</small>
 						</address> --}}
 					</h2>
+					<div class="responsible row hide" >
+						<div class="col-md-6 col-md-offset-3">
+							<table class="table " style="">
+								<tbody>
+									<tr>
+										<td>
+											<span class="pull-right">Custodian:</span>
+										</td>
+										<td>
+											<span class="pull-left"> {{ $project->custodian }} </span>
+										</td>
+										<td>
+											<span class="pull-right">Responsible Entity:</span>
+										</td>
+										<td>
+											<span class="pull-left">{{ $project->responsible_entity }}</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 					<form id="update_share_price_form" action="{{route('dashboard.projects.updateSharePrice', [$project->id])}}" method="POST" class="pull-right">
 						{{csrf_field()}}
 						<label for="#update_share_price">Share Price:   $</label>
@@ -92,7 +114,7 @@
 			<ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
 				<li class="active" style="width: 19%;"><a data-toggle="tab" href="#investors_tab" style="padding: 0em 2em"><h3 class="text-center">Applications</h3></a></li>
 				<li style="width: 26%;"><a data-toggle="tab" href="#share_registry_tab" style="padding: 0em 2em"><h3 class="text-center">Accepted applications</h3></a></li>
-				<li style="width: 19%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em"><h3 class="text-center">Registry</h3></a></li>
+				<li style="width: 19%;"><a data-toggle="tab" href="#new_registry" style="padding: 0em 2em" id="custodian"><h3 class="text-center">Registry</h3></a></li>
 				{{-- <li style="width: 20%;"><a data-toggle="tab" href="#transactions_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a></li> --}}
 				{{-- <li style="width: 30%;"><a data-toggle="tab" href="#positions_tab" style="padding: 0em 2em"><h3 class="text-center">Position records</h3></a></li> --}}
 				<li style="width: 18%;"><a data-toggle="tab" href="#expression_of_interest_tab" style="padding: 0em 2em"><h3 class="text-center">Project EOI</h3></a></li>
@@ -119,22 +141,22 @@
 								<th>Investor Document</th>
 								<th>Investor Type</th>
 								{{-- <th>Joint Investor</th>
-								<th>Entity Details</th> --}}
-								@if(!$project->retail_vs_wholesale)<th>Wholesale Investment</th>@endif
-								<th>Application Form</th>
-								<th>Interested to Buy</th>
-								<th>Agent name</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($investments as $investment)
-							@if(!$investment->hide_investment)
-							<tr id="application{{$investment->id}}">
-								<td data-sort="{{$investment->id}}">INV{{$investment->id}}
-									<a href="{{route('dashboard.application.view', [$investment->id])}}" class="edit-application" style="margin-top: 1.2em;"><br>
-										<i class="fa fa-edit" aria-hidden="true"></i>
-									</a>
-									@if(!$investment->money_received && !$investment->accepted)
+									<th>Entity Details</th> --}}
+									@if(!$project->retail_vs_wholesale)<th>Wholesale Investment</th>@endif
+									<th>Application Form</th>
+									<th>Interested to Buy</th>
+									<th>Agent name</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($investments as $investment)
+								@if(!$investment->hide_investment)
+								<tr id="application{{$investment->id}}">
+									<td data-sort="{{$investment->id}}">INV{{$investment->id}}
+										<a href="{{route('dashboard.application.view', [$investment->id])}}" class="edit-application" style="margin-top: 1.2em;"><br>
+											<i class="fa fa-edit" aria-hidden="true"></i>
+										</a>
+										@if(!$investment->money_received && !$investment->accepted)
 												{{-- <form action="{{route('dashboard.investment.hideInvestment', $investment->id)}}" method="POST">
 												{{method_field('PATCH')}}
 												{{csrf_field()}} --}}
@@ -190,7 +212,7 @@
 																			
 																		</path>
 																	</svg>
-																 <label></label>
+																	<label></label>
 																</div>
 															</div>
 															@endif
@@ -217,7 +239,7 @@
 																			
 																		</path>
 																	</svg>
-																 <label></label>
+																	<label></label>
 																</div>
 															</div>
 															@endif
@@ -272,10 +294,10 @@
 															@else
 																NA
 															@endif
-														@endif --}}
-														@if(isset($investment->investingJoint->joint_investor_first_name )){{  $investment->investingJoint->joint_investor_first_name}} @endif @if(isset($investment->investingJoint->joint_investor_last_name )){{  $investment->investingJoint->joint_investor_last_name}} @endif
-													@endif
-													@if ($investment->investing_as == 'Trust or Company')
+															@endif --}}
+															@if(isset($investment->investingJoint->joint_investor_first_name )){{  $investment->investingJoint->joint_investor_first_name}} @endif @if(isset($investment->investingJoint->joint_investor_last_name )){{  $investment->investingJoint->joint_investor_last_name}} @endif
+															@endif
+															@if ($investment->investing_as == 'Trust or Company')
 														{{-- @if($investment->userInvestmentDoc)
 															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
 																<a href="/{{$doc->path}}" target="_blank">
@@ -287,8 +309,8 @@
 														NA
 														@endif --}}
 														@if(isset($investment->investingJoint->investing_company )){{  $investment->investingJoint->investing_company}} @endif
-													@endif
-												</td>
+														@endif
+													</td>
 												{{-- <td>
 													@if($investment->userInvestmentDoc)
 													@if($investment->userInvestmentDoc->where('type','joint_investor')->last())
@@ -455,14 +477,14 @@
 										<th>Investor Document</th>
 										<th>Investor type</th>
 										{{-- <th>Joint Investor <br> Name</th>
-										<th>Entity details</th> --}}
-										<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
-										<th>Share Price ($)</th>
-										<th>Market Value</th>
-										{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
-										{{-- <th>TFN</th> --}}
-										<th>Investment Documents</th>
-										<th>Application Form</th>
+											<th>Entity details</th> --}}
+											<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
+											<th>Share Price ($)</th>
+											<th>Market Value</th>
+											{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
+											{{-- <th>TFN</th> --}}
+											<th>Investment Documents</th>
+											<th>Application Form</th>
 										{{-- <th>Account Name</th>
 										<th>BSB</th>
 										<th>Account Number</th> --}}
@@ -479,11 +501,11 @@
 										<td><a href="{{route('dashboard.users.show', [$investment->user->id])}}" >{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</a> <br> {{$shareInvestment->user->email}} <br> {{$shareInvestment->user->phone_number}}</td>
 										<td class="text-left">
 											@if ($shareInvestment->user->idDoc)
-												<a href="{{$shareInvestment->user->idDoc['media_url']}}/{{$shareInvestment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
+											<a href="{{$shareInvestment->user->idDoc['media_url']}}/{{$shareInvestment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
 											@endif
 											@if ($id2 = $shareInvestment->user->idDocs()->where('type', 'Document_2')->first())
-												<br />
-												<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+											<br />
+											<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
 											@endif
 											<br /><br />
 										</td>
@@ -497,10 +519,10 @@
 													@else
 														NA
 													@endif
-												@endif --}}
-												@if(isset($shareInvestment->investingJoint->joint_investor_first_name )){{  $shareInvestment->investingJoint->joint_investor_first_name}} @endif @if(isset($shareInvestment->investingJoint->joint_investor_last_name )){{  $shareInvestment->investingJoint->joint_investor_last_name}} @endif
-											@endif
-											@if ($shareInvestment->investing_as == 'Trust or Company')
+													@endif --}}
+													@if(isset($shareInvestment->investingJoint->joint_investor_first_name )){{  $shareInvestment->investingJoint->joint_investor_first_name}} @endif @if(isset($shareInvestment->investingJoint->joint_investor_last_name )){{  $shareInvestment->investingJoint->joint_investor_last_name}} @endif
+													@endif
+													@if ($shareInvestment->investing_as == 'Trust or Company')
 												{{-- @if($shareInvestment->userInvestmentDoc)
 													@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
 														<a href="/{{$doc->path}}" target="_blank">
@@ -512,8 +534,8 @@
 												NA
 												@endif --}}
 												@if(isset($shareInvestment->investingJoint->investing_company )){{  $shareInvestment->investingJoint->investing_company}} @endif
-											@endif
-										</td>
+												@endif
+											</td>
 										{{-- <td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->investing_company) {{$shareInvestment->investingJoint->investing_company}}@endif @else{{'NA'}} @endif</td> --}}
 										{{-- <td>{{$shareInvestment->user->phone_number}}</td> --}}
@@ -578,13 +600,13 @@
 											</script>
 											@else
 											NA
-											@endif</a>
-										</td>
-										<td>
-											<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
-												Application form
-											</a>
-										</td>
+										@endif</a>
+									</td>
+									<td>
+										<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
+											Application form
+										</a>
+									</td>
 										{{-- <td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_name}} @else {{$shareInvestment->user->account_name}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->bsb}} @else {{$shareInvestment->user->bsb}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_number}} @else {{$shareInvestment->user->account_number}} @endif</td> --}}
@@ -654,8 +676,6 @@
 										{{-- <th>Phone</th> --}}
 										{{-- <th>Email</th> --}}
 										<th>Investor Type</th>
-										<th>Custodian</th>
-										<th>Responsible Entity</th>
 										<th>Address</th>
 										<th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
 										{{-- <th>Price ($)</th> --}}
@@ -667,13 +687,13 @@
 								</thead>
 								<tbody>
 									@foreach ($newRegistries as $registry)
-										<tr>
-											<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
-											{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
-											<td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
-											<td class="text-left">
-													<span class="">{{ $registry->investing_as }}</span><br />
-													@if ($registry->investing_as == 'Joint Investor')
+									<tr>
+										<td class="text-center select-check hide"><input type="checkbox" class="investor-check" name="" value="{{$registry->user_id}}"></td>
+										{{-- <td>@if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@endif</td> --}}
+										<td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
+										<td class="text-left">
+											<span class="">{{ $registry->investing_as }}</span><br />
+											@if ($registry->investing_as == 'Joint Investor')
 														{{-- @if($registry->userInvestmentDoc)
 															@if($doc = $registry->userInvestmentDoc->where('type','joint_investor')->last())
 																<a href="/{{$doc->path}}" target="_blank">{{$registry->investingJoint->joint_investor_first_name}} {{$registry->investingJoint->joint_investor_last_name}} Doc</a>
@@ -681,10 +701,10 @@
 															@else
 																
 															@endif
-														@endif --}}
-														@if(isset($registry->investingJoint->joint_investor_first_name )){{  $registry->investingJoint->joint_investor_first_name}} @endif @if(isset($registry->investingJoint->joint_investor_last_name )){{  $registry->investingJoint->joint_investor_last_name}} @endif
-													@endif
-													@if ($registry->investing_as == 'Trust or Company')
+															@endif --}}
+															@if(isset($registry->investingJoint->joint_investor_first_name )){{  $registry->investingJoint->joint_investor_first_name}} @endif @if(isset($registry->investingJoint->joint_investor_last_name )){{  $registry->investingJoint->joint_investor_last_name}} @endif
+															@endif
+															@if ($registry->investing_as == 'Trust or Company')
 														{{-- @if($registry->userInvestmentDoc)
 															@if($doc = $registry->userInvestmentDoc->where('type','trust_or_company')->last())
 																<a href="/{{$doc->path}}" target="_blank">
@@ -696,42 +716,40 @@
 														NA
 														@endif --}}
 														@if(isset($registry->investingJoint->investing_company )){{  $registry->investingJoint->investing_company}} @endif
-													@endif
-												</td>
-												<td>{{ $registry->project->custodian }}</td>
-												<td>{{ $registry->project->responsible_entity }}</td>
-											<td>
-												{{$registry->user->line_1}},
-												{{$registry->user->line_2}},
-												{{$registry->user->city}},
-												{{$registry->user->state}},
-												{{$registry->user->country}},
-												{{$registry->user->postal_code}}
-											</td>
-											<td>{{ round($registry->shares) }}</td>
-											{{-- <td>{{ number_format($project->share_per_unit_price, 4) }}</td> --}}
-											<td>{{ number_format(($registry->shares * $project->share_per_unit_price), 2) }}</td>
-											<td>
-												@if($project->share_vs_unit)
-												<a href="{{route('user.view.share', [base64_encode($registry->id)])}}" target="_blank">
-													Share Certificate
-												</a>
-												@else
-												<a href="{{route('user.view.unit', [base64_encode($registry->id)])}}" target="_blank">
-													Unit Certificate
-												</a>
-												@endif
-											</td>
-											{{-- <td></td> --}}
-											<td>
-												<button type="button" class="btn btn-danger btn-sm preview-investor-statement-btn" data-investor-id="{{ $registry->user_id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Statement</button>
-											</td>
-										</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
+														@endif
+													</td>
+													<td>
+														{{$registry->user->line_1}},
+														{{$registry->user->line_2}},
+														{{$registry->user->city}},
+														{{$registry->user->state}},
+														{{$registry->user->country}},
+														{{$registry->user->postal_code}}
+													</td>
+													<td>{{ round($registry->shares) }}</td>
+													{{-- <td>{{ number_format($project->share_per_unit_price, 4) }}</td> --}}
+													<td>{{ number_format(($registry->shares * $project->share_per_unit_price), 2) }}</td>
+													<td>
+														@if($project->share_vs_unit)
+														<a href="{{route('user.view.share', [base64_encode($registry->id)])}}" target="_blank">
+															Share Certificate
+														</a>
+														@else
+														<a href="{{route('user.view.unit', [base64_encode($registry->id)])}}" target="_blank">
+															Unit Certificate
+														</a>
+														@endif
+													</td>
+													{{-- <td></td> --}}
+													<td>
+														<button type="button" class="btn btn-danger btn-sm preview-investor-statement-btn" data-investor-id="{{ $registry->user_id }}"><i class="fa fa-file-text-o" aria-hidden="true"></i> Statement</button>
+													</td>
+												</tr>
+												@endforeach
+											</tbody>
+										</table>
+									</div>
+								</div>
 					{{-- <div id="transactions_tab" class="tab-pane fade" style="margin-top: 2em;overflow: auto;">
 						<div>
 							<table class="table table-bordered table-striped text-center" id="transactionTable">
@@ -877,264 +895,264 @@
 							</table>
 						</div>
 					</div>
-				
+
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<!--Dividend confirm Modal -->
-<div id="dividend_confirm_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:90%;">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM DIVIDEND</h4>
-			</div>
-			<div class="modal-body" style="padding: 15px 30px;">
-				<p class="text-center">
-					<i><small>** Please check and confirm the below dividend details.</small></i>
-				</p><br>
-				<div class="text-center">
-					<h2>{{$project->title}}</h2>
-					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
-				</div><br>
-				<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
-					<tbody>
-						<tr>
-							<td><b>Dividend Rate: </b></td>
-							<td><small><span id="modal_dividend_rate"></span>%</small></td>
-						</tr>
-						<tr>
-							<td><b>Start Date <small>(DD/MM/YYYY)</small>: </b></td>
-							<td><small><span id="modal_dividend_start_date"></span></small></td>
-						</tr>
-						<tr>
-							<td>End Date <small>(DD/MM/YYYY)</small>:</td>
-							<td><small><span id="modal_dividend_end_date"></span></small></td>
-						</tr>
-					</tbody>
-				</table>
-				<br>
-				<h2 class="text-center">Dividend calculation preview</h2><br>
-				<div id="calculation_preview_table" style="width: 100%; overflow-x: auto;">
-					<!-- Render through JS -->
+	<!--Dividend confirm Modal -->
+	<div id="dividend_confirm_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:90%;">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">CONFIRM DIVIDEND</h4>
 				</div>
-				<br>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="submit_dividend_confirmation">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!--Fixed Dividend confirm Modal -->
-<div id="fixed_dividend_confirm_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:90%;">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM DIVIDEND</h4>
-			</div>
-			<div class="modal-body" style="padding: 15px 30px;">
-				<p class="text-center">
-					<i><small>** Please check and confirm the below dividend details.</small></i>
-				</p><br>
-				<div class="text-center">
-					<h2>{{$project->title}}</h2>
-					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
-				</div><br>
-				<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
-					<tbody>
-						<tr>
-							<td><b>Dividend Rate: </b></td>
-							<td><small><span id="modal_fixed_dividend_rate"></span> cents per @if($project->share_vs_unit) share @else unit @endif</small></td>
-						</tr>
-					</tbody>
-				</table>
-				<br>
-				<h2 class="text-center">Dividend calculation preview</h2><br>
-				<div id="fixed_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
-					<!-- Render through JS -->
-				</div>
-				<br>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="submit_fixed_dividend_confirmation">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!--Cents Per Share Dividend confirm Modal -->
-<div id="cents_per_share_dividend_confirm_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:90%;">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM DIVIDEND</h4>
-			</div>
-			<div class="modal-body" style="padding: 15px 30px;">
-				<p class="text-center">
-					<i><small>** Please check and confirm the below dividend details.</small></i>
-				</p><br>
-				<div class="text-center">
-					<h2>{{$project->title}}</h2>
-					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
-				</div><br>
-				<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
-					<tbody>
-						<tr>
-							<td><b>Dividend Rate: </b></td>
-							<td><small><span id="modal_cents_per_share_dividend_rate"></span> % fixed</small></td>
-						</tr>
-					</tbody>
-				</table>
-				<br>
-				<h2 class="text-center">Dividend calculation preview</h2><br>
-				<div id="cents_per_share_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
-					<!-- Render through JS -->
-				</div>
-				<br>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="submit_cents_per_share_dividend_confirmation">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<!--Rupurchase confirm Modal -->
-<div id="repurchase_confirm_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog" style="width:90%;">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM REPURCHASE</h4>
-			</div>
-			<div class="modal-body" style="padding: 15px 30px;">
-				<p class="text-center">
-					<i><small>** Please check and confirm the below repurchase details.</small></i>
-				</p><br>
-				<div class="text-center">
-					<h2>{{$project->title}}</h2>
-					<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
-				</div><br>
-				<table class="table-striped repurchase-confirm-table" border="0" cellpadding="10">
-					<tbody>
-						<tr>
-							<td><b>Repurchase Rate: </b></td>
-							<td><small><span id="modal_repurchase_rate"></span>$</small></td>
-						</tr>
-					</tbody>
-				</table>
-				<br>
-				<h2 class="text-center">Repurchase calculation preview</h2><br>
-				<div id="repurchase_calculation_preview_table" style="width: 100%; overflow-x: auto;">
-					<!-- Render through JS -->
-				</div>
-				<br>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="submit_repurchase_confirmation">Confirm</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!--Investor Statement Modal -->
-<div id="investor_statement_modal" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<!-- Modal content-->
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">CONFIRM INVESTOR STATEMENT</h4>
-			</div>
-			<div class="modal-body" style="padding: 15px 30px;">
-				<div class="">
-					<small>** Select dates to search records.</small>
-					<form name="statement_search_form" action="#">
-						<div class="row">
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label for="statement_start_date"><small>Start date:</small></label>
-									<input type="date" class="form-control input-sm" name="statement_start_date" id="statement_start_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
-								</div>
-							</div>
-							<div class="col-sm-4">
-								<div class="form-group">
-									<label for="statement_end_date"><small>End date:</small></label>
-									<input type="date" class="form-control input-sm" name="statement_end_date" id="statement_end_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
-								</div>
-							</div>
-						</div>
-						<button class="btn btn-danger search-statement-by-date-btn" type="submit">Search</button>
-					</form>
-				</div>
-				<div class="hide transactions-section">
-					<hr>
-					<h5 class="text-center opening-balance">
-						<span class="pull-left"><label>OPENING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_opening_balance"></span></span>
-						<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
-						<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
-					</h5>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<p class="text-center">
+						<i><small>** Please check and confirm the below dividend details.</small></i>
+					</p><br>
+					<div class="text-center">
+						<h2>{{$project->title}}</h2>
+						<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+					</div><br>
+					<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
+						<tbody>
+							<tr>
+								<td><b>Dividend Rate: </b></td>
+								<td><small><span id="modal_dividend_rate"></span>%</small></td>
+							</tr>
+							<tr>
+								<td><b>Start Date <small>(DD/MM/YYYY)</small>: </b></td>
+								<td><small><span id="modal_dividend_start_date"></span></small></td>
+							</tr>
+							<tr>
+								<td>End Date <small>(DD/MM/YYYY)</small>:</td>
+								<td><small><span id="modal_dividend_end_date"></span></small></td>
+							</tr>
+						</tbody>
+					</table>
 					<br>
-					<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
+					<h2 class="text-center">Dividend calculation preview</h2><br>
+					<div id="calculation_preview_table" style="width: 100%; overflow-x: auto;">
 						<!-- Render through JS -->
 					</div>
 					<br>
-					<h5 class="text-center closing-balance">
-						<span class="pull-left"><label>CLOSING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_closing_balance"></span></span>
-						<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
-						<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
-					</h5>
-					<br>
 				</div>
-			</div>
-			<div class="modal-footer">
-				<form name="investor_statement" action="#">
-					<input hidden value="" name="start_date" required>
-					<input hidden value="" name="end_date" required>
-					<input hidden value="" name="investor_id" required>
-					<button type="submit" class="btn btn-primary" id="submit_investor_statement">Confirm</button>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="submit_dividend_confirmation">Confirm</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-@stop
 
-@section('js-section')
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/fnAddDataAndDisplay.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("[data-toggle=tooltip").tooltip();
+	<!--Fixed Dividend confirm Modal -->
+	<div id="fixed_dividend_confirm_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:90%;">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">CONFIRM DIVIDEND</h4>
+				</div>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<p class="text-center">
+						<i><small>** Please check and confirm the below dividend details.</small></i>
+					</p><br>
+					<div class="text-center">
+						<h2>{{$project->title}}</h2>
+						<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+					</div><br>
+					<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
+						<tbody>
+							<tr>
+								<td><b>Dividend Rate: </b></td>
+								<td><small><span id="modal_fixed_dividend_rate"></span> cents per @if($project->share_vs_unit) share @else unit @endif</small></td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2 class="text-center">Dividend calculation preview</h2><br>
+					<div id="fixed_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+						<!-- Render through JS -->
+					</div>
+					<br>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="submit_fixed_dividend_confirmation">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Cents Per Share Dividend confirm Modal -->
+	<div id="cents_per_share_dividend_confirm_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:90%;">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">CONFIRM DIVIDEND</h4>
+				</div>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<p class="text-center">
+						<i><small>** Please check and confirm the below dividend details.</small></i>
+					</p><br>
+					<div class="text-center">
+						<h2>{{$project->title}}</h2>
+						<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+					</div><br>
+					<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">
+						<tbody>
+							<tr>
+								<td><b>Dividend Rate: </b></td>
+								<td><small><span id="modal_cents_per_share_dividend_rate"></span> % fixed</small></td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2 class="text-center">Dividend calculation preview</h2><br>
+					<div id="cents_per_share_dividend_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+						<!-- Render through JS -->
+					</div>
+					<br>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="submit_cents_per_share_dividend_confirmation">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--Rupurchase confirm Modal -->
+	<div id="repurchase_confirm_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:90%;">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">CONFIRM REPURCHASE</h4>
+				</div>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<p class="text-center">
+						<i><small>** Please check and confirm the below repurchase details.</small></i>
+					</p><br>
+					<div class="text-center">
+						<h2>{{$project->title}}</h2>
+						<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}</small>
+					</div><br>
+					<table class="table-striped repurchase-confirm-table" border="0" cellpadding="10">
+						<tbody>
+							<tr>
+								<td><b>Repurchase Rate: </b></td>
+								<td><small><span id="modal_repurchase_rate"></span>$</small></td>
+							</tr>
+						</tbody>
+					</table>
+					<br>
+					<h2 class="text-center">Repurchase calculation preview</h2><br>
+					<div id="repurchase_calculation_preview_table" style="width: 100%; overflow-x: auto;">
+						<!-- Render through JS -->
+					</div>
+					<br>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="submit_repurchase_confirmation">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Investor Statement Modal -->
+	<div id="investor_statement_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">CONFIRM INVESTOR STATEMENT</h4>
+				</div>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<div class="">
+						<small>** Select dates to search records.</small>
+						<form name="statement_search_form" action="#">
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label for="statement_start_date"><small>Start date:</small></label>
+										<input type="date" class="form-control input-sm" name="statement_start_date" id="statement_start_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label for="statement_end_date"><small>End date:</small></label>
+										<input type="date" class="form-control input-sm" name="statement_end_date" id="statement_end_date" max="{{ \Carbon\Carbon::now()->toDateString() }}" required>
+									</div>
+								</div>
+							</div>
+							<button class="btn btn-danger search-statement-by-date-btn" type="submit">Search</button>
+						</form>
+					</div>
+					<div class="hide transactions-section">
+						<hr>
+						<h5 class="text-center opening-balance">
+							<span class="pull-left"><label>OPENING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_opening_balance"></span></span>
+							<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
+							<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
+						</h5>
+						<br>
+						<div id="investor_statement_preview_table" style="width: 100%; overflow-x: auto;">
+							<!-- Render through JS -->
+						</div>
+						<br>
+						<h5 class="text-center closing-balance">
+							<span class="pull-left"><label>CLOSING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_closing_balance"></span></span>
+							<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
+							<span class="pull-right"><label>NUMBER OF SHARES:</label>&nbsp;&nbsp; <span id="numbers"></span></span>
+						</h5>
+						<br>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form name="investor_statement" action="#">
+						<input hidden value="" name="start_date" required>
+						<input hidden value="" name="end_date" required>
+						<input hidden value="" name="investor_id" required>
+						<button type="submit" class="btn btn-primary" id="submit_investor_statement">Confirm</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	@stop
+
+	@section('js-section')
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/api/fnAddDataAndDisplay.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("[data-toggle=tooltip").tooltip();
 		// Javascript to enable link to tab
 		var hash = document.location.hash;
 		var prefix = "tab_";
 		if (hash) {
-		    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
-		    window.scrollTo(0, 0);
+			$('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+			window.scrollTo(0, 0);
 		} 
 
 		// Change hash for page-reload
 		$('.nav-tabs a').on('shown', function (e) {
-		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
-		    window.scrollTo(0, 0);
+			window.location.hash = e.target.hash.replace("#", "#" + prefix);
+			window.scrollTo(0, 0);
 		});
 
 		$('a.edit').click(function () {
@@ -1157,7 +1175,9 @@
 				e.preventDefault();
 			}
 		});
-
+		$('#custodian').click(function (e) {
+			$('.responsible').removeClass('hide');
+		})
 		$('.money-received-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');
@@ -1321,8 +1341,8 @@
 			},
 			],
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 			"fnDrawCallback": function( oSettings ) {
 				if($('.share-registry-actions').hasClass('hide')){
@@ -1334,44 +1354,44 @@
 			"order": [2, 'desc'],
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 		});
 		var transactionTable = $('#transactionTable').DataTable({
 			"order": [[3, 'desc']],
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 		});
 		var positionTable = $('#positionTable').DataTable({
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			}
 		});
 		var eoiTable = $('#eoiTable').DataTable({
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 		});
 		var expression_of_interest_table = $('#expression_of_interest_table').DataTable({
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 		});
 		let newRegistryTable = $('#new_registry_table').DataTable({
 			"iDisplayLength": 25,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			},
 		});
 
@@ -1393,17 +1413,17 @@
 			$('.check-all').change(function(e){
 				var investors = [];
 				if($(this).is(":checked")){
-	                $('.investor-check').prop('checked', true);
-	                $('.investor-check').each(function() {
-		                investors.push($(this).val());
-		            });
-	            }
-	            else{
-	                $('.investor-check').prop('checked', false);
-	                investors = [];
-	            }
-	            $('.investors-list').val(investors.join(','));
-	        });
+					$('.investor-check').prop('checked', true);
+					$('.investor-check').each(function() {
+						investors.push($(this).val());
+					});
+				}
+				else{
+					$('.investor-check').prop('checked', false);
+					investors = [];
+				}
+				$('.investors-list').val(investors.join(','));
+			});
 
 			// Set selected investor ids in a hidden field
 			$(document).on('click', '.investor-check, .check-all', function(e) {
@@ -1412,21 +1432,21 @@
 				if(investorList != '') {
 					investors = investorList.split(',');
 				}
-	            $('.investor-check').each(function() {
-	            	let thisInvestorId = $(this).val();
-	            	let arrayIndex = $.inArray(thisInvestorId, investors);
-	                if($(this).is(":checked")){
-	            		if (arrayIndex == -1) {
-	                    	investors.push(thisInvestorId);
+				$('.investor-check').each(function() {
+					let thisInvestorId = $(this).val();
+					let arrayIndex = $.inArray(thisInvestorId, investors);
+					if($(this).is(":checked")){
+						if (arrayIndex == -1) {
+							investors.push(thisInvestorId);
 						}
-	                } else {
+					} else {
 						if (arrayIndex != -1) {
 							investors.splice(arrayIndex, 1);
 						}
 					}
-	            });
-	            $('.investors-list').val(investors.join(','));
-	        });
+				});
+				$('.investors-list').val(investors.join(','));
+			});
 
 			// Declare dividend
 			declareDividend();
@@ -1472,40 +1492,40 @@
 
     });
 
-	function sendInvestorStatement(form) {
-		$('.loader-overlay').show();
-		let investorId = form.find('input[name=investor_id]').val();
-		let projectId = {{ $project->id }};
-		let formData = new FormData(form[0]);
-		$.ajax({
-			url: '/dashboard/projects/' + projectId + '/investor/' + investorId + '/statement/send',
-			type: 'POST',
-			dataType: 'JSON',
-			data: formData,
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			},
-			contentType: false,
-			processData: false
-		}).done(function(data){
-			if (!data.status) {
-				alert (data.message);
-				$('.loader-overlay').hide();
-				return;
-			}
-			alert('Investor statement is sent to investor!');
-			location.reload();
-		});
-	}
+function sendInvestorStatement(form) {
+	$('.loader-overlay').show();
+	let investorId = form.find('input[name=investor_id]').val();
+	let projectId = {{ $project->id }};
+	let formData = new FormData(form[0]);
+	$.ajax({
+		url: '/dashboard/projects/' + projectId + '/investor/' + investorId + '/statement/send',
+		type: 'POST',
+		dataType: 'JSON',
+		data: formData,
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		contentType: false,
+		processData: false
+	}).done(function(data){
+		if (!data.status) {
+			alert (data.message);
+			$('.loader-overlay').hide();
+			return;
+		}
+		alert('Investor statement is sent to investor!');
+		location.reload();
+	});
+}
 
-	function previewInvestmentInvestorStatement(investor, startDate = null, endDate = null) {
-		$('.loader-overlay').show();
-		let projectId = {{ $project->id }};
-		
-		$.ajax({
-			url: '/dashboard/projects/' + projectId + '/investor/' + investor + '/statement',
-			type: 'POST',
-			dataType: 'JSON',
+function previewInvestmentInvestorStatement(investor, startDate = null, endDate = null) {
+	$('.loader-overlay').show();
+	let projectId = {{ $project->id }};
+
+	$.ajax({
+		url: '/dashboard/projects/' + projectId + '/investor/' + investor + '/statement',
+		type: 'POST',
+		dataType: 'JSON',
 			// async: false,
 			data: {
 				start_date: startDate,
