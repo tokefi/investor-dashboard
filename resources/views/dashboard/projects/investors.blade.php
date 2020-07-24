@@ -83,18 +83,18 @@
 						</address> --}}
 					</h2>
 					<div class="responsible row hide" >
-						<div class="col-md-6 col-md-offset-3">
+						<div class="col-md-4 col-md-offset-4">
 							<table class="table " style="background-color: transparent !important;">
 								<tbody>
 									<tr>
 										<td>
-											<span class="pull-right">Custodian:</span>
+											<span class="pull-right"><b>Custodian:</b></span>
 										</td>
 										<td>
 											<span class="pull-left"> {{ $project->custodian }} </span>
 										</td>
 										<td>
-											<span class="pull-right">Responsible Entity:</span>
+											<span class="pull-right"><b>Responsible Entity:</b></span>
 										</td>
 										<td>
 											<span class="pull-left">{{ $project->responsible_entity }}</span>
