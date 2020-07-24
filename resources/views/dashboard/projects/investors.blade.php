@@ -84,7 +84,7 @@
 					</h2>
 					<div class="responsible row hide" >
 						<div class="col-md-6 col-md-offset-3">
-							<table class="table " style="">
+							<table class="table " style="background-color: transparent !important;">
 								<tbody>
 									<tr>
 										<td>
