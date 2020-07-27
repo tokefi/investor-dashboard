@@ -163,6 +163,18 @@
 		<h4><b>Tax File Number</b></h4>
 		<input type="text" class="form-control" name="" placeholder="Tax File Number" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->tfn}}@else{{$user->tfn}}@endif @else{{$user->tfn}}@endif">
 		<p>You are not required to provide your TFN, but in it being unavailable we will be required to withhold tax at the highest marginal rate of 49.5%</p><br>
+		@if (isset($investment->custom_field_values_parsed))
+		<br />
+		<h4><b>Additional Info</b></h4>
+		<div class="row">
+			@foreach ($investment->custom_field_values_parsed as $customField)
+			<div class="col-sm-4" style="margin-bottom:20px;">
+				<p>{{ $customField->label }}</p>
+				<input class="form-control" type="text" placeholder="{{ $customField->label }}" value="{{ $customField->value }}" readonly />
+			</div>
+			@endforeach
+		</div>
+		@endif
 		<hr><br>
 		<p>Account Name</p>
 		<input type="text" class="form-control" name="" placeholder="Account Name" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->account_name}}@else{{$user->account_name}}@endif @else{{$user->account_name}}@endif"><br>

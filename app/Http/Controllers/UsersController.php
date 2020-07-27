@@ -6,6 +6,7 @@ use App\UserKyc;
 use Session;
 use App\Credit;
 use App\Color;
+use App\CustomField;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAuthRequest;
 use App\Http\Requests\UserRequest;
@@ -581,6 +582,17 @@ class UsersController extends Controller
         $investment_id = base64_decode($investment_id);
         $color = Color::where('project_site',url())->first();
         $investment = InvestmentInvestor::find($investment_id);
+        if ($investment->custom_field_values && is_object($investment->custom_field_values)) {
+            $fields = [];
+            foreach ($investment->custom_field_values as $key => $item) {
+                $tmp = CustomField::where('name', $key)->first();
+                if ($tmp) {
+                    $tmp->value = $item;
+                    array_push($fields, $tmp);    
+                }
+            }
+            $investment['custom_field_values_parsed'] = $fields;
+        }
         $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
