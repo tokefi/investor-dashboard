@@ -15,10 +15,10 @@ Reporting | Dashboard | @parent
     <div class="row">
         <div class="col-md-8 col-md-offset-2" style="">
             <ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
-                <li class="active" style="width: 50%;">
+                <li class="" style="width: 50%;">
                     <a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Reporting Transaction</h3></a>
                 </li>
-                <li class="" style="width: 50%;">
+                <li class="active" style="width: 50%;">
                     <a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">Report Registry</h3></a>
                 </li>
             </ul>
@@ -26,7 +26,7 @@ Reporting | Dashboard | @parent
     </div>
     {{-- <h2 class="text-center">Reporting</h2><br> --}}
     <div class="tab-content">
-        <div id="profile_tab" class="tab-pane fade in active" style="overflow: auto; margin-top: 1em;">
+        <div id="profile_tab" class="tab-pane fade " style="overflow: auto; margin-top: 1em;">
             <form action="{{ route('dashboard.reporting') }}" method="GET">
                 {{ csrf_field() }}
                 <div class="row">
@@ -94,6 +94,7 @@ Reporting | Dashboard | @parent
                 No Records found for given search.
             </div>
             @endif
+           {{--  
             @if ($transactions->count())
             <div class="pull-right">
                 <h4>Summary:</h4>
@@ -197,9 +198,9 @@ Reporting | Dashboard | @parent
                     </tbody>
                 </table>
             </div>
-            @endif
+            @endif --}}
         </div>
-        <div id="kyc_tab" class="tab-pane fade " style="margin-top: 1em; overflow: auto;">
+        <div id="kyc_tab" class="tab-pane fade in active" style="margin-top: 1em; overflow: auto;">
             <form action="{{ route('dashboard.registry.reporting') }}" method="GET">
                 {{ csrf_field() }}
                 <div class="row">
@@ -229,6 +230,7 @@ Reporting | Dashboard | @parent
                                 <label><input type="checkbox" class="tx-type" name="tx_type[]" value="{{ \App\Transaction::ANNUALIZED_DIVIDEND }}" @if(in_array(\App\Transaction::ANNUALIZED_DIVIDEND, $txTypes)) {{ 'checked' }} @endif> &nbsp;<small>{{ \App\Transaction::ANNUALIZED_DIVIDEND }}</small></label><br>
                             </div>
                         </div> --}}
+                        <br>
                         <label>Select Project:</label>
                         <div class="row">
                             <div class="col-xs-6 col-sm-3">
@@ -249,7 +251,7 @@ Reporting | Dashboard | @parent
                             @foreach ($projects as $project)
                             @if($project->custodian)
                             <div class="col-xs-6 col-sm-3">
-                                <label><input type="checkbox" class="custodian" name="custodian[]" value="{{ $project->custodian }}" @if(in_array($project->custodian, $projectCustodians)) {{ 'checked' }} @endif> &nbsp;<small>{{ $project->custodian }}</small></label><br>
+                                <label><input type="checkbox" class="custodian" name="custodian[]" value="{{ $project->id }}" @if(in_array($project->id, $projectCustodians)) {{ 'checked' }} @endif> &nbsp;<small>{{ $project->custodian }}</small></label><br>
                             </div>
                             @endif
                             @endforeach
@@ -263,7 +265,7 @@ Reporting | Dashboard | @parent
                             @foreach ($projects as $project)
                             @if($project->responsible_entity)
                             <div class="col-xs-6 col-sm-3">
-                                <label><input type="checkbox" class="responsible" name="responsible[]" value="{{ $project->responsible_entity }}" @if(in_array($project->responsible_entity, $projectResponsibles)) {{ 'checked' }} @endif> &nbsp;<small>{{ $project->responsible_entity }}</small></label><br>
+                                <label><input type="checkbox" class="responsible" name="responsible[]" value="{{ $project->id }}" @if(in_array($project->id, $projectResponsibles)) {{ 'checked' }} @endif> &nbsp;<small>{{ $project->responsible_entity }}</small></label><br>
                             </div>
                             @endif
                             @endforeach
@@ -275,11 +277,60 @@ Reporting | Dashboard | @parent
                     </div>
                 </div>
             </form>
-            @if (empty($projectIds) && !$transactions->count())
+            @if (empty($projectIds) && !$registries->count())
             <div class="alert alert-danger text-center">
                 No Records found for given search.
             </div>
             @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        @if ($registries->count())
+                        <table class="table table-bordered table-striped" id="reportingTable">
+                            <thead>
+                                <tr>
+                                    <th>Project Title</th>
+                                    <th>Investor Details</th>
+                                    <th>Investor Type</th>
+                                    <th>Address</th>
+                                    <th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
+                                    <th>Market value ($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($registries as $registry)
+                                <tr>
+                                    <td>{{ $registry->project->title }}</td>
+                                    <td>{{$registry->user->first_name}} {{$registry->user->last_name}}<br>{{$registry->user->email}}<br>{{$registry->user->phone_number}}</td>
+                                    <td class="text-left">
+                                        <span class="">{{ $registry->investing_as }}</span><br />
+                                        @if ($registry->investing_as == 'Joint Investor')
+
+                                        @if(isset($registry->investingJoint->joint_investor_first_name )){{  $registry->investingJoint->joint_investor_first_name}} @endif @if(isset($registry->investingJoint->joint_investor_last_name )){{  $registry->investingJoint->joint_investor_last_name}} @endif
+                                        @endif
+                                        @if ($registry->investing_as == 'Trust or Company')
+                                        @if(isset($registry->investingJoint->investing_company )){{  $registry->investingJoint->investing_company}} @endif
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{$registry->user->line_1}},
+                                        {{$registry->user->line_2}},
+                                        {{$registry->user->city}},
+                                        {{$registry->user->state}},
+                                        {{$registry->user->country}},
+                                        {{$registry->user->postal_code}}
+                                    </td>
+                                    <td>{{ round($registry->shares) }}</td>
+                                    <td>{{ number_format(($registry->shares * $project->share_per_unit_price), 2) }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            <br>
         </div>
     </div>
 </div>
@@ -334,6 +385,24 @@ Reporting | Dashboard | @parent
                 return;
             }
             $('.project').prop('checked', false);
+        });
+
+        // Selector deselect all custodians
+        $('input[name=custodians_all]').change(function(e){
+            if ($(this).is(":checked")) {
+                $('.custodian').prop('checked', true);
+                return;
+            }
+            $('.custodian').prop('checked', false);
+        });
+
+        // Selector deselect all responsible Entities
+        $('input[name=responsibles_all]').change(function(e){
+            if ($(this).is(":checked")) {
+                $('.responsible').prop('checked', true);
+                return;
+            }
+            $('.responsible').prop('checked', false);
         });
 
     });

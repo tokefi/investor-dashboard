@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+
 use View;
 use App\Color;
 use App\Project;
@@ -9,16 +11,18 @@ use Carbon\Carbon;
 use App\Transaction;
 use App\Http\Requests;
 use App\SiteConfiguration;
-use Illuminate\Http\Request;
+use App\InvestmentInvestor;
 use App\Http\Controllers\Controller;
 
-class ReportingController extends Controller
+
+class RegistryReportingController extends Controller
 {
+
     protected $siteConfiguration;
     protected $color;
 
     /**
-     * constructor for ReportingController
+     * constructor for RegistryReportingController
      */
     public function __construct()
     {
@@ -36,9 +40,10 @@ class ReportingController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->all());
+
         $startDate = Carbon::parse($request->start_date ?? '2019-12-01')->toDateString();
         $endDate = $request->end_date ? Carbon::parse($request->end_date)->toDateString() : Carbon::now()->toDateString();
-
         $txTypes = $request->tx_type ?? [];
         $projectIds = $request->project ?? [];
         $projectCustodians = $request->custodian ?? [];
@@ -47,7 +52,11 @@ class ReportingController extends Controller
             'count' => 0,
             'sum' => 0
         ];
-        
+
+
+        $projectIds = array_unique(array_merge($projectIds,$projectCustodians));
+        $projectIds = array_unique(array_merge($projectIds,$projectResponsibles));
+        // dd($projectIds);
         $transactions = Transaction::whereHas('project', function ($q) {
             $q->where('project_site', url());
         })
@@ -88,7 +97,17 @@ class ReportingController extends Controller
 
         $projects = Project::where('project_site', url())->get();
 
-        return view('dashboard.reporting.index', [
+        $registries = InvestmentInvestor::whereIn('project_id', $projectIds)
+            ->whereHas('project', function ($q) {
+                $q->where('project_site', url());
+            })
+            ->where('accepted', 1)
+            ->where('is_cancelled', false)
+            ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
+            ->groupBy('user_id', 'project_id')
+            ->get();
+            $projectIds = $request->project ?? [];
+        return view('dashboard.registry.index', [
             'color' => $this->color,
             'transactions' => $transactions,
             'projects' => $projects,
@@ -101,8 +120,10 @@ class ReportingController extends Controller
             'startDate' => $request->start_date ?? null,
             'endDate' => $request->end_date ?? null,
             'projectCustodians'=>$projectCustodians,
-            'projectResponsibles'=>$projectResponsibles
+            'projectResponsibles'=>$projectResponsibles,
+            'registries' => $registries
         ]);
+        
     }
 
     /**
