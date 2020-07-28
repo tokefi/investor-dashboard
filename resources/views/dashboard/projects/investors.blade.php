@@ -284,7 +284,7 @@
 														{{$investment->investingJoint->joint_investor_first_name ?? ''}} {{$investment->investingJoint->joint_investor_last_name ?? ''}}
 														@if($investment->userInvestmentDoc)
 															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
-																<a href="/{{$doc->path}}" target="_blank">Doc</a>
+																<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
 																<br />
 															@endif
 														@endif
@@ -293,7 +293,7 @@
 														{{ $investment->investingJoint->investing_company ?? '' }}
 														@if($investment->userInvestmentDoc)
 															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
-																<a href="/{{$doc->path}}" target="_blank"> Doc </a>
+																<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank"> Doc </a>
 															@endif
 														@endif
 														@if(isset($investment->investingJoint->investing_company )){{  $investment->investingJoint->investing_company}} @endif
@@ -504,7 +504,7 @@
 												{{$shareInvestment->investingJoint->joint_investor_first_name ?? ''}} {{$shareInvestment->investingJoint->joint_investor_last_name ?? ''}}  <br>
 												@if($shareInvestment->userInvestmentDoc)
 													@if($doc = $shareInvestment->userInvestmentDoc->where('type','joint_investor')->last())
-														<a href="/{{$doc->path}}" target="_blank">Doc</a>
+														<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
 														<br />
 													@endif
 												@endif
@@ -513,7 +513,7 @@
 												{{$shareInvestment->investingJoint->investing_company ?? ''}}  <br>
 												@if($shareInvestment->userInvestmentDoc)
 													@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
-														<a href="/{{$doc->path}}" target="_blank">
+														<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank">
 														Doc </a>
 													@endif
 												@endif
