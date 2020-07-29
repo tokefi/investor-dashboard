@@ -25,7 +25,7 @@ class ReportingController extends Controller
         $this->siteConfiguration = SiteConfiguration::where('project_site', url())->first();
         $this->color = Color::where('project_site', url())->first();
 
-        $this->allProjects = Project::where('project_site', url())->get();
+        $this->allProjects = Project::where('project_site', url())->where('hide_project', 0)->get();
         View::share('allProjects', $this->allProjects);
     }
 
@@ -81,12 +81,11 @@ class ReportingController extends Controller
                     break;
 
                 default:
-                    # code...
                     break;
             }
         }
 
-        $projects = Project::where('project_site', url())->get();
+        $projects = Project::where('project_site', url())->where('hide_project', 0)->get();
 
         return view('dashboard.reporting.index', [
             'color' => $this->color,
