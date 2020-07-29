@@ -84,109 +84,109 @@ $_SESSION['code'] = md5(microtime(true));
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/Html5shiv/3.7.0/Html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+<![endif]-->
 
 
+@if($siteConfiguration->font_family != '')
+<link href="https://fonts.googleapis.com/css?family={{preg_replace('/\s+/', '+', $siteConfiguration->font_family)}}" rel="stylesheet">
+@endif
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Mr+De+Haviland" />
+<style type="text/css">
     @if($siteConfiguration->font_family != '')
-    <link href="https://fonts.googleapis.com/css?family={{preg_replace('/\s+/', '+', $siteConfiguration->font_family)}}" rel="stylesheet">
-    @endif
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Mr+De+Haviland" />
-    <style type="text/css">
-        @if($siteConfiguration->font_family != '')
-        /*Override fonts*/
-        body, .font-regular, p {
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 400;
-        }
-        .heading-font-light, .h1-faq, h1>small, h2>small, h3>small, h4>small{
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 300;
-        }
-        .font-semibold{
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 600;
-        }
-        h1, h2, h3, h4, a, .font-bold {
-          font-family: {{$siteConfiguration->font_family}};
-          font-weight: 700;
-        }
-        @endif
-        .investment-title1-description-section, .csef-text {
-            color: #fff !important;
-        }
-        .swal-footer{
-            text-align: center;
-        }
+    /*Override fonts*/
+    body, .font-regular, p {
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 400;
+  }
+  .heading-font-light, .h1-faq, h1>small, h2>small, h3>small, h4>small{
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 300;
+  }
+  .font-semibold{
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 600;
+  }
+  h1, h2, h3, h4, a, .font-bold {
+      font-family: {{$siteConfiguration->font_family}};
+      font-weight: 700;
+  }
+  @endif
+  .investment-title1-description-section, .csef-text {
+    color: #fff !important;
+}
+.swal-footer{
+    text-align: center;
+}
 
-        .konkrete-slide-link {
-            color: #337ab7;
-        }
+.konkrete-slide-link {
+    color: #337ab7;
+}
 
-        .konkrete-slide-link:hover {
-            color: #23527c !important;
-            text-decoration: underline !important;
-        }
+.konkrete-slide-link:hover {
+    color: #23527c !important;
+    text-decoration: underline !important;
+}
 
-        .konkrete-slide-link:visited {
-            color: #23527c !important;
-        }
+.konkrete-slide-link:visited {
+    color: #23527c !important;
+}
 
-        .konkrete-slide-link:focus {
-            color: #23527c !important;
-            text-decoration: underline !important;
-        }
+.konkrete-slide-link:focus {
+    color: #23527c !important;
+    text-decoration: underline !important;
+}
 
-        .dropdown-menu>li>a {
-            padding: 12px 20px;
-        }
+.dropdown-menu>li>a {
+    padding: 12px 20px;
+}
 
-        /** dropdown sub-menu */
-        .dropdown-submenu:hover>.dropdown-menu {
-            display: block;
-            min-width: 200px;
-        }
-        .dropdown-submenu {
-            position: relative;
-        }
-        .dashboard-submenu {
-            width: 240px;
-            margin-top: 0;
-            font-size: 16px;
-        }
-        .dashboard-submenu li a {
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
-        .submenu-item {
-            font-size: 0.9em;
-        }
+/** dropdown sub-menu */
+.dropdown-submenu:hover>.dropdown-menu {
+    display: block;
+    min-width: 200px;
+}
+.dropdown-submenu {
+    position: relative;
+}
+.dashboard-submenu {
+    width: 240px;
+    margin-top: 0;
+    font-size: 16px;
+}
+.dashboard-submenu li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.submenu-item {
+    font-size: 0.9em;
+}
 
-        @media (min-width: 768px) {
-			.dashboard-submenu {
-				margin-top: -36px;
-    			left: -237px !important;
-			}
-		}
+@media (min-width: 768px) {
+ .dashboard-submenu {
+    margin-top: -36px;
+    left: -237px !important;
+}
+}
 
-    </style>
+</style>
 
-    <!-- Google Analytics -->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<!-- Google Analytics -->
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-73934803-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+    ga('create', 'UA-73934803-1', 'auto');
+    ga('send', 'pageview');
+</script>
 </head>
 <body data-spy="scroll">
     <?php
-  if(isset($_SESSION['code'])){
+    if(isset($_SESSION['code'])){
     // echo 'code:'.$_SESSION['code'];
-  }
-  ?>
+    }
+    ?>
     <!-- Google tag manager body script if set  -->
     @if($siteConfiguration->tag_manager_body)
     {!!$siteConfiguration->tag_manager_body!!}
@@ -262,25 +262,25 @@ $_SESSION['code'] = md5(microtime(true));
                                         <ul class="dropdown-menu dashboard-submenu">
                                             @if(!Auth::user()->roles->contains('role', 'agent'))
                                             @foreach($allProjects as $allProject)
-                                                @if(!$allProject->hide_project)
-                                                <li class="dropdown-submenu">
-                                                    <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
-                                                    <ul class="dropdown-menu dashboard-submenu">
-                                                        {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors </a></li> --}}
-                                                        <li class="dropdown-submenu">
-                                                            <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}" >Investors <span class="caret"></span></a>
-                                                            <ul class="dropdown-menu dashboard-submenu">
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_tab"}}">Upcoming </a></li>
-                                                                <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI </a></li>
-                                                            </ul>
-                                                        </li>
-                                                        <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details </a></li>
-                                                    </ul>
-                                                </li>
-                                                @endif
+                                            @if(!$allProject->hide_project)
+                                            <li class="dropdown-submenu">
+                                                <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
+                                                <ul class="dropdown-menu dashboard-submenu">
+                                                    {{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors </a></li> --}}
+                                                    <li class="dropdown-submenu">
+                                                        <a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}" >Investors <span class="caret"></span></a>
+                                                        <ul class="dropdown-menu dashboard-submenu">
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications </a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications </a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry </a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_tab"}}">Upcoming </a></li>
+                                                            <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI </a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details </a></li>
+                                                </ul>
+                                            </li>
+                                            @endif
                                             @endforeach
                                             @endif
                                         </ul>
@@ -292,7 +292,16 @@ $_SESSION['code'] = md5(microtime(true));
                                     <li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
                                     <li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
-                                    <li class="nav-item"><a href="{{ route('dashboard.reporting') }}">Reporting<i class="fa fa-exchange pull-right"></i></a></li>
+                                    <li class="dropdown-submenu"><a href="{{ route('dashboard.reporting') }}">Reporting<span class="caret"></span> <i class="fa fa-exchange pull-right"></i></a>
+                                        <ul class="dropdown-menu dashboard-submenu">
+                                            <li class="nav-items">
+                                                <a href="{{ route('dashboard.reporting') }}">Transactions</a>
+                                            </li>
+                                            <li class="nav-items">
+                                                <a href="{{ route('dashboard.registry.reporting') }}">Positions</a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                     <li class="nav-item"><a href="https://docs.google.com/document/d/1kNf4wC8YPs95rUy8UbmhV9RuKF3sftj7JlAmd2rT81M/edit?usp=sharing" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
                                     @endif
                                 </ul>
@@ -426,21 +435,21 @@ $_SESSION['code'] = md5(microtime(true));
                         <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
                         <li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif"><a href="{{$siteConfiguration->faq_link}}" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
                     </ul>
-                <br>
+                    <br>
+                </div>
             </div>
-        </div>
-        <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
-          <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
-            <p>
+            <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
+              <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
+              <p>
                 <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
             </p>
         </div>
         <br>
         <p class="investment-title1-description-section text-center" style="font-size:16px;">
-        <small><small>@if($siteConfiguration->compliance_description != '')
-        {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
-        The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages. <span class="hide"> {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.
-        </span>@endif</small></small>
+            <small><small>@if($siteConfiguration->compliance_description != '')
+                {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
+                The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages. <span class="hide"> {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.
+            </span>@endif</small></small>
         </p>
         <p class="csef-text text-justify hide"><small><small>In particular note that this website does not rely on the Crowd Sourced Equity Funding (CSEF) regulation (RG261) and does not have an ASIC authorization to act as a Crowdfunding intermediary platform. Any use of the term crowdfunding anywhere on this site should not be be construed to mean that such an authorization exists. Investment offers listed here typically rely on RG228 to provide effective disclosure to Retail investors using a Prospectus. We believe the CSEF regulation is unsuited for Property development investment opportunities and have hence relied on providing a full prospectus to provide clear concise and effective disclosure.</small></small></p>
     </div>
@@ -473,23 +482,23 @@ $_SESSION['code'] = md5(microtime(true));
 <script type="text/javascript">
 
     // Signin bonus message
-        @if (Session::has('loginaction'))
-        @if(\Cookie::get('login_bonus'))
-        swal("Welcome back {{Auth::user()->first_name}}", "We have added {{\Cookie::get('login_bonus')}} KONKRETE as a sign in bonus", "success", {
-            buttons: {
-                start_over: "Continue to site >>"
-            }
-        });
-        $('.swal-icon').replaceWith('<div style="margin-top: 25px;"><center><a href="https://konkrete.io" target="_blank"><img src="{{asset('assets/images/konkrete_logo_white.png')}}" width="100px"></a></center></div>');
-        $('.swal-text').replaceWith('<div class="swal-text text-center"><p>We have added {{\Cookie::get("login_bonus")}} KONKRETE as a sign in bonus</p><a href="https://www.konkrete.io" target="_blank" class="konkrete-slide-link">What is the KONKRETE crypto token?</a><br><small class="text-grey">Login everyday to receive bonus KONKRETE every 24 hours</small></div>');
-        @else
-        $('body').append('<div id="session_flash_message" style=" position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 10000;background-color: rgba(255,255,255,0.7); display: none;"><div class="text-center" style="position: absolute; background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; padding: 30px 30px; color: #fff; top: 50%; left:20%; border: 1px solid rgba(0, 0, 0, 0.2); font-size: 250%; width: 60%"><span>Welcome {{Auth::user()->first_name}}</span></div></div>');
-        $('#session_flash_message').show()
-        setInterval(function() {
-            $('#session_flash_message').fadeOut(500);
-        }, 2500);
-        @endif
-        @endif
+    @if (Session::has('loginaction'))
+    @if(\Cookie::get('login_bonus'))
+    swal("Welcome back {{Auth::user()->first_name}}", "We have added {{\Cookie::get('login_bonus')}} KONKRETE as a sign in bonus", "success", {
+        buttons: {
+            start_over: "Continue to site >>"
+        }
+    });
+    $('.swal-icon').replaceWith('<div style="margin-top: 25px;"><center><a href="https://konkrete.io" target="_blank"><img src="{{asset('assets/images/konkrete_logo_white.png')}}" width="100px"></a></center></div>');
+    $('.swal-text').replaceWith('<div class="swal-text text-center"><p>We have added {{\Cookie::get("login_bonus")}} KONKRETE as a sign in bonus</p><a href="https://www.konkrete.io" target="_blank" class="konkrete-slide-link">What is the KONKRETE crypto token?</a><br><small class="text-grey">Login everyday to receive bonus KONKRETE every 24 hours</small></div>');
+    @else
+    $('body').append('<div id="session_flash_message" style=" position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 10000;background-color: rgba(255,255,255,0.7); display: none;"><div class="text-center" style="position: absolute; background-color: rgba(0, 0, 0, 0.7); border-radius: 10px; padding: 30px 30px; color: #fff; top: 50%; left:20%; border: 1px solid rgba(0, 0, 0, 0.2); font-size: 250%; width: 60%"><span>Welcome {{Auth::user()->first_name}}</span></div></div>');
+    $('#session_flash_message').show()
+    setInterval(function() {
+        $('#session_flash_message').fadeOut(500);
+    }, 2500);
+    @endif
+    @endif
 
     $(function () {
         // $('[data-toggle="tooltip"]').tooltip();

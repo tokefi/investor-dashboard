@@ -16,10 +16,10 @@ Reporting | Dashboard | @parent
         <div class="col-md-8 col-md-offset-2" style="">
             <ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
                 <li class="active" style="width: 50%;">
-                    <a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Reporting Transaction</h3></a>
+                    <a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a>
                 </li>
                 <li class="" style="width: 50%;">
-                    <a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">Report Registry</h3></a>
+                    <a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a>
                 </li>
             </ul>
         </div>

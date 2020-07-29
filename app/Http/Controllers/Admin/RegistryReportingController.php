@@ -95,8 +95,6 @@ class RegistryReportingController extends Controller
             }
         }
 
-        $projects = Project::where('project_site', url())->get();
-
         $registries = InvestmentInvestor::whereIn('project_id', $projectIds)
             ->whereHas('project', function ($q) {
                 $q->where('project_site', url());
@@ -106,6 +104,16 @@ class RegistryReportingController extends Controller
             ->select(['*', 'user_id', \DB::raw("SUM(amount) as shares")])
             ->groupBy('user_id', 'project_id')
             ->get();
+
+            $projects = Project::where('project_site', url())->get();
+
+        $countNumberOfShares = 0 ;
+        $totalMarketValue = 0;
+        foreach ($registries as $key => $registry) {
+            $countNumberOfShares = $countNumberOfShares + round($registry->shares);
+            $totalMarketValue = $totalMarketValue + $registry->shares * $registry->project->share_per_unit_price ;
+        }
+
             $projectIds = $request->project ?? [];
         return view('dashboard.registry.index', [
             'color' => $this->color,
@@ -121,7 +129,9 @@ class RegistryReportingController extends Controller
             'endDate' => $request->end_date ?? null,
             'projectCustodians'=>$projectCustodians,
             'projectResponsibles'=>$projectResponsibles,
-            'registries' => $registries
+            'registries' => $registries,
+            'countNumberOfShares' => $countNumberOfShares,
+            'totalMarketValue' => $totalMarketValue
         ]);
         
     }

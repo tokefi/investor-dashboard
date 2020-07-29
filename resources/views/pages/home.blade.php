@@ -114,42 +114,42 @@
 		}
 
 		/** dropdown sub-menu */
-        .dropdown-submenu:hover>.dropdown-menu {
-            display: block;
-            min-width: 200px;
-        }
-        .dropdown-submenu {
-            position: relative;
+		.dropdown-submenu:hover>.dropdown-menu {
+			display: block;
+			min-width: 200px;
+		}
+		.dropdown-submenu {
+			position: relative;
 		}
 		.dashboard-submenu {
-            width: 240px;
-            font-size: 15px;
-        }
-        .dashboard-submenu li a {
-            padding-top: 12px;
-            padding-bottom: 12px;
-        }
+			width: 240px;
+			font-size: 15px;
+		}
+		.dashboard-submenu li a {
+			padding-top: 12px;
+			padding-bottom: 12px;
+		}
         /*.submenu-item {
             font-size: 0.9em;
-        }*/
+            }*/
 
-		@media (min-width: 768px) {
-			.dashboard-submenu {
-				margin-top: -44px;
-    			left: -237px !important;
-			}
-		}
+            @media (min-width: 768px) {
+            	.dashboard-submenu {
+            		margin-top: -44px;
+            		left: -237px !important;
+            	}
+            }
 
-	</style>
+        </style>
 
-	<!-- Google tag manager header script if set  -->
-	@if($siteConfiguration->tag_manager_header)
-	{!!$siteConfiguration->tag_manager_header!!}
-	@endif
+        <!-- Google tag manager header script if set  -->
+        @if($siteConfiguration->tag_manager_header)
+        {!!$siteConfiguration->tag_manager_header!!}
+        @endif
 
-	{!! Html::script('assets/plugins/jscolor-2.0.4/jscolor.min.js') !!}
-	<!-- Html5 Shim and Respond.js IE8 support of Html5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        {!! Html::script('assets/plugins/jscolor-2.0.4/jscolor.min.js') !!}
+        <!-- Html5 Shim and Respond.js IE8 support of Html5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/Html5shiv/3.7.0/Html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -244,25 +244,25 @@
 												<ul class="dropdown-menu dashboard-submenu">
 													@if(!Auth::user()->roles->contains('role', 'agent'))
 													@foreach($allProjects as $allProject)
-														@if(!$allProject->hide_project)
-														<li class="dropdown-submenu">
-															<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
-															<ul class="dropdown-menu dashboard-submenu">
-																{{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
-																<li class="dropdown-submenu">
-																	<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
-																	<ul class="dropdown-menu dashboard-submenu">
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_tab"}}">Upcoming</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
-																	</ul>
-																</li>
-																<li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
-															</ul>
-														</li>
-														@endif
+													@if(!$allProject->hide_project)
+													<li class="dropdown-submenu">
+														<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
+														<ul class="dropdown-menu dashboard-submenu">
+															{{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
+															<li class="dropdown-submenu">
+																<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
+																<ul class="dropdown-menu dashboard-submenu">
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_tab"}}">Upcoming</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
+																</ul>
+															</li>
+															<li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
+														</ul>
+													</li>
+													@endif
 													@endforeach
 													@endif
 												</ul>
@@ -274,7 +274,16 @@
 											<li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
 											<li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
 											<li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
-											<li class="nav-item"><a href="{{ route('dashboard.reporting') }}">Reporting<i class="fa fa-exchange pull-right"></i></a></li>
+											<li class="dropdown-submenu"><a href="{{ route('dashboard.reporting') }}">Reporting<span class="caret"></span> <i class="fa fa-exchange pull-right"></i></a>
+												<ul class="dropdown-menu dashboard-submenu">
+													<li class="nav-items">
+														<a href="{{ route('dashboard.reporting') }}">Transactions</a>
+													</li>
+													<li class="nav-items">
+														<a href="{{ route('dashboard.registry.reporting') }}">Positions</a>
+													</li>
+												</ul>
+											</li>
 											<li class="nav-item"><a href="https://docs.google.com/document/d/1kNf4wC8YPs95rUy8UbmhV9RuKF3sftj7JlAmd2rT81M/edit?usp=sharing" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
 											@endif
 										</ul>
@@ -286,9 +295,9 @@
 									{{-- <li>
 										{!! Html::linkRoute('users.show', 'Profile', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
 									</li> --}}
-									 <li>
-                                        {!! Html::linkRoute('users.investments', 'Investments', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
-                                    </li>
+									<li>
+										{!! Html::linkRoute('users.investments', 'Investments', Auth::id(), ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
+									</li>
 									<li>
 										{!! Html::linkRoute('users.logout', 'logout', null, ['class'=>'anchor-color', 'style'=>'padding:12px 17px;']) !!}
 									</li>
@@ -355,23 +364,23 @@
 												<ul class="dropdown-menu dashboard-submenu">
 													@if(!Auth::user()->roles->contains('role', 'agent'))
 													@foreach($allProjects as $allProject)
-														<li class="dropdown-submenu">
-															<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
-															<ul class="dropdown-menu dashboard-submenu">
-																{{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
-																<li class="dropdown-submenu">
-																	<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
-																	<ul class="dropdown-menu dashboard-submenu">
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming</a></li>
-																		<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
-																	</ul>
-																</li>
-																<li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
-															</ul>
-														</li>
+													<li class="dropdown-submenu">
+														<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.edit', [$allProject->id])}}">{{mb_strimwidth("$allProject->title", 0, 25, "...")}} <span class="caret"></span></a>
+														<ul class="dropdown-menu dashboard-submenu">
+															{{-- <li class="nav-item"><a href="{{route('dashboard.projects.investors', [$project->id])}}">Investors</a></li> --}}
+															<li class="dropdown-submenu">
+																<a class="submenu-item" tabindex="-1" href="{{route('dashboard.projects.investors', [$allProject->id])}}">Investors <span class="caret"></span></a>
+																<ul class="dropdown-menu dashboard-submenu">
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#investors_tab"}}">Applications</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#share_registry_tab"}}">Accepted applications</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#new_registry"}}">Registry</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#eoi_registry"}}">Upcoming</a></li>
+																	<li class="nav-item"><a href="{{route('dashboard.projects.investors', [$allProject->id])."#expression_of_interest_tab"}}">EOI</a></li>
+																</ul>
+															</li>
+															<li class="nav-item"><a href="{{route('dashboard.projects.edit', [$allProject->id])}}">Project Details</a></li>
+														</ul>
+													</li>
 													@endforeach
 													@endif
 												</ul>
@@ -382,7 +391,16 @@
 											<li class="nav-item"><a href="{{route('dashboard.investmentRequests')}}">Requests<i class="fa fa-comments-o pull-right"></i></a></li>
 											<li class="nav-item"><a href="{{route('dashboard.prospectus.downloads')}}">Prospectus Downloads<i class="fa fa-download pull-right"></i></a></li>
 											<li class="nav-item"><a href="{{ route('dashboard.redemption.requests') }}">Redemption Requests<i class="fa fa-comments pull-right"></i></a></li>
-											<li class="nav-item"><a href="{{ route('dashboard.reporting') }}">Reporting<i class="fa fa-exchange pull-right"></i></a></li>
+											<li class="dropdown-submenu"><a href="{{ route('dashboard.reporting') }}">Reporting<span class="caret"></span> <i class="fa fa-exchange pull-right"></i></a>
+												<ul class="dropdown-menu dashboard-submenu">
+													<li class="nav-items">
+														<a href="{{ route('dashboard.reporting') }}">Transactions</a>
+													</li>
+													<li class="nav-items">
+														<a href="{{ route('dashboard.registry.reporting') }}">Positions</a>
+													</li>
+												</ul>
+											</li>
 											<li class="nav-item"><a href="https://docs.google.com/document/d/1MvceKeyqd93GmjXBSa4r0Y9rJOKfJq38VNk4smPr3l8/edit#heading=h.mgf45ju607e6" target="_blank">FAQ Help<i class="fa fa-info-circle pull-right"></i></a></li>
 										</ul>
 									</li>

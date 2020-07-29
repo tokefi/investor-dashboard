@@ -16,10 +16,10 @@ Reporting | Dashboard | @parent
         <div class="col-md-8 col-md-offset-2" style="">
             <ul class="nav nav-tabs" style="margin-top: 0.8em; width: 100%;">
                 <li class="" style="width: 50%;">
-                    <a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Reporting Transaction</h3></a>
+                    <a data-toggle="tab" href="#profile_tab" style="padding: 0em 2em"><h3 class="text-center">Transactions</h3></a>
                 </li>
                 <li class="active" style="width: 50%;">
-                    <a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">Report Registry</h3></a>
+                    <a data-toggle="tab" href="#kyc_tab" style="padding: 0em 2em"><h3 class="text-center">Positions</h3></a>
                 </li>
             </ul>
         </div>
@@ -282,6 +282,25 @@ Reporting | Dashboard | @parent
                 No Records found for given search.
             </div>
             @endif
+            <br>
+            @if ($registries->count())
+            <div class="pull-right">
+                <h4>Summary:</h4>
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>The Total Count of Number of shares: </td>
+                            <td class="text-center">{{ round($countNumberOfShares) }}</td>
+                        </tr>
+                        <tr>
+                            <td>The Total Sum of Market Value ($): </td>
+                            <td class="text-center">{{ number_format($totalMarketValue, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @endif
+            <br>
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -292,6 +311,8 @@ Reporting | Dashboard | @parent
                                     <th>Project Title</th>
                                     <th>Investor Details</th>
                                     <th>Investor Type</th>
+                                    <th>Custodian</th>
+                                    <th>Responsible Entity</th>
                                     <th>Address</th>
                                     <th>Number of @if($project->share_vs_unit) Shares @else Units @endif</th>
                                     <th>Market value ($)</th>
@@ -312,6 +333,8 @@ Reporting | Dashboard | @parent
                                         @if(isset($registry->investingJoint->investing_company )){{  $registry->investingJoint->investing_company}} @endif
                                         @endif
                                     </td>
+                                    <td>{{ $registry->project->custodian }}</td>
+                                    <td>{{ $registry->project->responsible_entity }}</td>
                                     <td>
                                         {{$registry->user->line_1}},
                                         {{$registry->user->line_2}},
