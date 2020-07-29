@@ -2,37 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\UserKyc;
 use Session;
-use App\Credit;
-use App\Color;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserAuthRequest;
-use App\Http\Requests\UserRequest;
-use App\InvestmentInvestor;
-use App\Invite;
-use App\Mailers\AppMailer;
 use App\Role;
 use App\User;
+use App\Color;
+use App\Credit;
+use App\Invite;
 use App\Project;
+use App\UserKyc;
 use Carbon\Carbon;
 use App\IdDocument;
 use App\Investment;
+use App\CustomField;
+use App\MasterChild;
+use App\Transaction;
 use App\ReferralLink;
 use App\InvestingJoint;
+use App\RedemptionStatus;
+use App\Mailers\AppMailer;
+use App\RedemptionRequest;
+use App\SiteConfiguration;
+use App\InvestmentInvestor;
+use App\Helpers\ModelHelper;
 use Illuminate\Http\Request;
 use App\ReferralRelationship;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
-use App\SiteConfiguration;
+use App\Http\Requests\UserRequest;
 use Barryvdh\DomPDF\Facade as PDF;
-use App\Transaction;
-use App\Helpers\ModelHelper;
-use App\RedemptionRequest;
-use App\RedemptionStatus;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
-use App\MasterChild;
+use Intervention\Image\Facades\Image;
+use App\Http\Requests\UserAuthRequest;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
