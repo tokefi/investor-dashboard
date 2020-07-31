@@ -493,7 +493,7 @@
 													<label>ID DOCS 1</label>
 													<input type="file" name="user_id_doc" class="form-control" required><br>
 													<label>ID DOCS 2</label>
-													<input type="file" name="user_id_doc_2" class="form-control" required><br>
+													<input type="file" name="user_id_doc_2" class="form-control" ><br>
 													<p>If you have not completed your verification process. Please upload a copy of your Driver License or Passport for AML/CTF purposes</p>
 												</div>
 
