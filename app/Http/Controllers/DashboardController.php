@@ -2589,13 +2589,20 @@ class DashboardController extends Controller
         $project = Project::findOrFail($project_id);
         $table = ModelHelper::getTotalInvestmentByProject($project_id);
         
-        
         $filename = storage_path().'/app/registry/'.$project->title."-registry-record.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, array("Investor Name", "Phone", "Email", "Address", "Number of shares", "Market Value"));
+        fputcsv($handle, array("Project Name","Investor Name", "Phone", "Email", "Address", "Number of shares", "Market Value","investing_as","Joint Investor First Name","Joint Investor Last Name","Investing Company", "Account Name", "BSB","Account Number","TFN"));
 
         foreach($table as $row) {
-            fputcsv($handle, array($row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1.', '.$row->user->line_2.', '.$row->user->city.', '.$row->user->state.', '.$row->user->country.'-'.$row->user->postal_code,round($row->shares),number_format(($row->shares * $project->share_per_unit_price), 2)));
+            
+            if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
+                // dd($row->user);
+                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1.', '.$row->user->line_2.', '.$row->user->city.', '.$row->user->state.', '.$row->user->country.'-'.$row->user->postal_code,round($row->shares),number_format(($row->shares * $project->share_per_unit_price), 2),$row->user->idDoc->investing_as,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->investing_company, $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
+            }elseif($row->investing_as != 'Individual Investor'){
+                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1.', '.$row->user->line_2.', '.$row->user->city.', '.$row->user->state.', '.$row->user->country.'-'.$row->user->postal_code,round($row->shares),number_format(($row->shares * $project->share_per_unit_price), 2),$row->investing_as,$row->investingJoint->joint_investor_first_name,$row->investingJoint->joint_investor_last_name,$row->investingJoint->investing_company, $row->investingJoint->account_name,$row->investingJoint->bsb, $row->investingJoint->account_number,$row->investingJoint->tfn));
+            }else{
+                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1.', '.$row->user->line_2.', '.$row->user->city.', '.$row->user->state.', '.$row->user->country.'-'.$row->user->postal_code,round($row->shares),number_format(($row->shares * $project->share_per_unit_price), 2),$row->investing_as,'','','', $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
+            }
         }
 
         fclose($handle);
