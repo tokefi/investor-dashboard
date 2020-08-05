@@ -34,4 +34,9 @@ class AgentInvestmentApplication extends Model
     {
     	return $this->belongsTo('App\Project');
     }
+
+    public function customFieldValues()
+    {
+        return $this->hasMany('App\CustomFieldValue', 'agent_investment_id');
+    }
 }

@@ -184,6 +184,32 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 												<br>
 												<hr>
 											</div>
+											<div>
+												<div class="row">
+													@if (isset($customFields['investing_type']))
+														@foreach ($customFields['investing_type'] as $customField)
+															<div class="col-md-6" style="margin-bottom: 20px;">
+																<label>{{ $customField->label }}</label>
+																@if(in_array($customField->type, ['text']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]"
+																		placeholder="{{ $customField->label }}" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+																@if(in_array($customField->type, ['date']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+															</div>
+														@endforeach
+													@endif
+												</div>
+											</div>
 										</div>
 									</div>
 									{{-- @endif --}}
@@ -335,6 +361,28 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 														<label>Email</label>
 														<input type="text" name="email" id="offerEmail" class="form-control" placeholder="Email" required @if(!Auth::guest() && $investment->user->email)disabled value="{{$investment->user->email}}" @endif @if(isset($eoi))disabled value="{{$investment->user->email}}" @endif style="background:transparent;">
 													</div>
+													@if (isset($customFields['contact_details']))
+														@foreach ($customFields['contact_details'] as $customField)
+															<div class="col-md-6" style="margin-top: 20px;">
+																<label>{{ $customField->label }}</label>
+																@if(in_array($customField->type, ['text']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]"
+																		placeholder="{{ $customField->label }}" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+																@if(in_array($customField->type, ['date']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+															</div>
+														@endforeach
+													@endif
 												</div>
 											</div>
 										</div>
@@ -359,11 +407,64 @@ Edit {!! $investment->user->first_name !!} | Dashboard | @parent
 														<label>Account Number</label>
 														<input type="text" name="account_number" class="form-control" placeholder="Account Number"  @if(!Auth::guest() && $investment->user->account_number) value="{{$investment->user->account_number}}" @endif>
 													</div>
+													@if (isset($customFields['nominated_bank_account']))
+														@foreach ($customFields['nominated_bank_account'] as $customField)
+															<div class="col-md-4" style="margin-top: 20px;">
+																<label>{{ $customField->label }}</label>
+																@if(in_array($customField->type, ['text']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]"
+																		placeholder="{{ $customField->label }}" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+																@if(in_array($customField->type, ['date']))
+																	<input class="form-control" 
+																		type="{{ $customField->type }}" 
+																		name="custom[{{ $customField->id }}]" 
+																		@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																		@if($customField->is_required) required @endif />
+																@endif
+															</div>
+														@endforeach
+													@endif
 												</div>
 											</div>
 										</div>
 									</div>
 									<br>
+									@if (isset($customFields['other']))
+									<div class="row " id="section-8">
+										<div class="col-md-12">
+											<h3>Additional Info</h3>
+											<hr />
+											<div class="row">
+												@foreach ($customFields['other'] as $customField)
+													<div class="col-md-4" style="margin-top:20px;">
+														<label>{{ $customField->label }}</label>
+														@if(in_array($customField->type, ['text']))
+															<input class="form-control" 
+																type="{{ $customField->type }}" 
+																name="custom[{{ $customField->id }}]"
+																placeholder="{{ $customField->label }}" 
+																@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																@if($customField->is_required) required @endif />
+														@endif
+														@if(in_array($customField->type, ['date']))
+															<input class="form-control" 
+																type="{{ $customField->type }}" 
+																name="custom[{{ $customField->id }}]" 
+																@if(isset($customFieldValues) && isset($customFieldValues[$customField->id])) value="{{ $customFieldValues[$customField->id]->first() ?$customFieldValues[$customField->id]->first()->value : '' }}" @endif
+																@if($customField->is_required) required @endif />
+														@endif
+													</div>
+												@endforeach
+											</div>
+										</div>
+									</div>
+									<br />
+									@endif
 									<div class="row @if(!$investment->project->show_interested_to_buy_checkbox) hide @endif">
 										<div class="col-md-12">
 											<div>

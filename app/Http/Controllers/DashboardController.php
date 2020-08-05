@@ -25,6 +25,7 @@ use App\ReferralLink;
 use App\Http\Requests;
 use App\InvestingJoint;
 use App\ProjectInterest;
+use App\CustomFieldValue;
 use App\ProjectSpvDetail;
 use App\RedemptionStatus;
 use App\UserRegistration;
@@ -1622,7 +1623,10 @@ class DashboardController extends Controller
         $color = Color::where('project_site',url())->first();
         $investment = InvestmentInvestor::find($id);
         $projects_spv = ProjectSpvDetail::where('project_id', $investment->project_id)->first();
-        return view('dashboard.application.edit',compact('color','investment', 'projects_spv'));
+        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->groupBy('section');
+        $customFieldValues = CustomFieldValue::where(['investment_investor_id' => $investment->id])->get()->groupBy('custom_field_id');
+        
+        return view('dashboard.application.edit',compact('color','investment', 'projects_spv', 'customFields', 'customFieldValues'));
     }
 
 
@@ -1688,6 +1692,20 @@ class DashboardController extends Controller
             'investing_as'=> $request->investing_as,
             'interested_to_buy'=> $request->interested_to_buy,
         ]);
+
+        // Update custom fields
+        if (isset($request->custom)) {
+            foreach ($request->custom as $key => $value) {
+              $customFieldValue = CustomFieldValue::where(['custom_field_id' => $key, 'investment_investor_id' => $investment->id])->first();
+              if (!$customFieldValue) {
+                $customFieldValue = new CustomFieldValue;
+                $customFieldValue->custom_field_id = $key;
+                $customFieldValue->investment_investor_id = $investment->id;
+              }
+              $customFieldValue->value = $value;
+              $customFieldValue->save();
+            }
+          }
 
         if($request->investing_as !== 'Individual Investor'){
             if($investment->investingJoint){
@@ -2407,8 +2425,7 @@ class DashboardController extends Controller
             
             $preCustomFields = CustomField::where('site_url', url())
                 ->where('page', 'application_form')
-                ->get()->pluck('name')
-                ->toArray();
+                ->get();
             
             // import client application
             if(!empty($csv_data)) {
@@ -2418,14 +2435,7 @@ class DashboardController extends Controller
                         $requestCustomFields = [];
                         $activatedUser = User::where('email', $clientAppliation[3])->first();
                         
-                        foreach($preCustomFields as $key=>$value) {
-                            $fieldIndex = array_search($value, $clientAppliation);
-                            if ($fieldIndex !== false) {
-                                $requestCustomFields[$value] = $clientAppliation['$fieldIndex'];
-                            }
-                        }
-
-                        if(!$activatedUser){
+                        if (!$activatedUser){
                             $nonActivatedUser = UserRegistration::where('email', $request->email)->first();
                             // dd($nonActivatedUser,$clientAppliation[3],$activatedUser);
                             if($nonActivatedUser)
@@ -2472,6 +2482,19 @@ class DashboardController extends Controller
                                 'share_certificate_issued_at' => $clientAppliation[32],
                                 'custom_field_values' => json_encode($requestCustomFields)
                             ]);
+
+                            // Add custom field values
+                            $lastInvestment = InvestmentInvestor::where('user_id', $activatedUser->id)->orderBy('id', 'desc')->first();
+                            foreach($preCustomFields as $key=>$value) {
+                                $fieldIndex = array_search($value->name, $csvFields);
+                                if ($fieldIndex !== false) {
+                                    CustomFieldValue::create([
+                                        'custom_field_id' => $value->id, 
+                                        'investment_investor_id' => $lastInvestment->id,
+                                        'value' => $clientAppliation[$fieldIndex]
+                                    ]);
+                                }
+                            }
                             
                             if ($clientAppliation[20] != 'Individual Investor') {
                                 $investor = InvestmentInvestor::get()->last();
@@ -2522,6 +2545,19 @@ class DashboardController extends Controller
                                         'share_certificate_issued_at' => $clientAppliation[32],
                                         'custom_field_values' => json_encode($requestCustomFields)
                                     ]);
+
+                                    // Add custom field values
+                                    $lastInvestment = InvestmentInvestor::where('user_id', $activatedUser->id)->orderBy('id', 'desc')->first();
+                                    foreach($preCustomFields as $key=>$value) {
+                                        $fieldIndex = array_search($value->name, $csvFields);
+                                        if ($fieldIndex !== false) {
+                                            CustomFieldValue::create([
+                                                'custom_field_id' => $value->id, 
+                                                'investment_investor_id' => $lastInvestment->id,
+                                                'value' => $clientAppliation[$fieldIndex]
+                                            ]);
+                                        }
+                                    }
 
                                     Transaction::create([
                                         'user_id' => $activatedUser->id,

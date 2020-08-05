@@ -516,7 +516,7 @@ class ProjectsController extends Controller
         $color = Color::where('project_site',url())->first();
         $project = Project::findOrFail($project_id);
         
-        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get();
+        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->groupBy('section');
         if ($project->retail_vs_wholesale == 0) {
             $customFields = $customFields->filter(function ($item) {
                 return ($item->properties && $item->properties->is_retail_only) ? false : true;
@@ -576,7 +576,11 @@ class ProjectsController extends Controller
                 $clientApplication = AgentInvestmentApplication::findOrFail($request->id);
                 $user = User::where('email', $clientApplication->client_email)->where('registration_site', url())->first();
                 $agent_investment = 1;
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields'));
+                
+                $agentCustomValues = $clientApplication->customFieldValues->groupBy('custom_field_id');
+                // dd($agentCustomValues);
+
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields', 'agentCustomValues'));
             }
             if(!$project->eoi_button){
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));

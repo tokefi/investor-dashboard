@@ -69,4 +69,9 @@ class InvestmentInvestor extends Model
     {
         return json_decode($value);
     }
+
+    public function customFieldValues()
+    {
+        return $this->hasMany('App\CustomFieldValue', 'investment_investor_id');
+    }
 }
