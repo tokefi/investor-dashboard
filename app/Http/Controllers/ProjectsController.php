@@ -518,9 +518,12 @@ class ProjectsController extends Controller
         
         $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->groupBy('section');
         if ($project->retail_vs_wholesale == 0) {
-            $customFields = $customFields->filter(function ($item) {
-                return ($item->properties && $item->properties->is_retail_only) ? false : true;
-            });
+            foreach ($customFields as $section => $fields) {
+                $tmp = $fields->filter(function ($item) {
+                    return !($item->properties && $item->properties->is_retail_only);
+                });
+                $customFields[$section] = $tmp;
+            }
         }
         
         if(!$project->show_invest_now_button) {

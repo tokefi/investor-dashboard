@@ -689,7 +689,7 @@ Offer Doc
 										</div>
 									</div>
 									<br>
-									@if (isset($customFields['other']))
+									@if (isset($customFields['other']) && $customFields['other']->count())
 									<div class="row " id="section-8">
 										<div class="col-md-12">
 											<h3>Additional Info</h3>
