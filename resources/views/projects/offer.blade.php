@@ -153,9 +153,9 @@ Offer Doc
 										<div class="col-md-8">
 											<div class="switch-field ">
 												<input type="radio" id="switch_agent_on" name="agent_type" @if($admin_investment) @if($admin_investment == 1) value="0" @else value="1" @endif @endif checked/>
-												<label for="switch_agent_on">ON</label>
+												<label for="switch_agent_on">yes</label>
 												<input type="radio" id="switch_agent_off" name="agent_type" value="0" />
-												<label for="switch_agent_off">OFF</label>
+												<label for="switch_agent_off">No</label>
 											</div>
 										</div>
 									</div>

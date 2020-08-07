@@ -121,6 +121,9 @@
 							display: none;
 						}
 					</style>
+					<div style="margin-bottom: 1em;">
+					<a href="{{ route('dashboard.project.application.records.download',[$project->id]) }}" target=""><button class="btn btn-primary " action="" style="margin: 0 1rem;">Download Applications Records</button></a>
+				</div>
 					<table class="table table-bordered table-striped investors-table" id="investorsTable">
 						<thead>
 							<tr>
@@ -455,6 +458,9 @@
 						</div>
 						<br> --}}
 						<div class="">
+							<div style="margin-bottom: 1em;">
+								<a href="{{ route('dashboard.project.acceptedApplication.records.download',[$project->id]) }}" target=""><button class="btn btn-primary " action="" style="margin: 0 1 em ;">Download Accepted Application Records</button></a>
+							</div>
 							<table class="table table-bordered table-striped share-registry-table" id="shareRegistryTable">
 								<thead>
 									<tr>
