@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use View;
 use Session;
 use App\User;
+use App\Color;
 use Validator;
 use App\Project;
 use App\Http\Requests;
 use App\InvestingJoint;
+use App\CustomFieldValue;
 use App\ProjectSpvDetail;
+use App\InvestmentRequest;
 use App\Mailers\AppMailer;
 use App\InvestmentInvestor;
-use App\UserInvestmentDocument;
 use App\WholesaleInvestment;
-use App\InvestmentRequest;
-use App\Color;
 use Illuminate\Http\Request;
 use App\Jobs\SendReminderEmail;
+use App\UserInvestmentDocument;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\AgentInvestmentApplication;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Jobs\SendInvestorNotificationEmail;
 use App\Jobs\SendDeveloperNotificationEmail;
-use Barryvdh\DomPDF\Facade as PDF;
-use App\AgentInvestmentApplication;
-use View;
 
 
 class OfferController extends Controller
@@ -159,8 +160,21 @@ class OfferController extends Controller
           'bsb'=>$request->bsb,
           'account_number'=>$request->account_number,
           'project_site' => url(),
-          'custom_field_values' => isset($request->custom) ? json_encode($request->custom) : null
+          // 'custom_field_values' => isset($request->custom) ? json_encode($request->custom) : null
         ]);
+
+        if (isset($request->custom)) {
+          foreach ($request->custom as $key => $value) {
+            $customFieldValue = CustomFieldValue::where(['custom_field_id' => $key, 'agent_investment_id' => $clientApplication->id])->first();
+            if (!$customFieldValue) {
+              $customFieldValue = new CustomFieldValue;
+              $customFieldValue->custom_field_id = $key;
+              $customFieldValue->agent_investment_id = $clientApplication->id;
+            }
+            $customFieldValue->value = $value;
+            $customFieldValue->save();
+          }
+        }
 
         if($request->investing_as == 'Trust or Company'){
           $clientApplication->investing_as = $request->investing_as;
@@ -352,8 +366,21 @@ class OfferController extends Controller
     // $investor->application_path = $pdfBasePath;
 
       // Add custom fields
-      $investor->custom_field_values = isset($request->custom) ? json_encode($request->custom) : null;
+      // $investor->custom_field_values = isset($request->custom) ? json_encode($request->custom) : null;
       $investor->save();
+
+      if (isset($request->custom)) {
+        foreach ($request->custom as $key => $value) {
+          $customFieldValue = CustomFieldValue::where(['custom_field_id' => $key, 'investment_investor_id' => $investor->id])->first();
+          if (!$customFieldValue) {
+            $customFieldValue = new CustomFieldValue;
+            $customFieldValue->custom_field_id = $key;
+            $customFieldValue->investment_investor_id = $investor->id;
+          }
+          $customFieldValue->value = $value;
+          $customFieldValue->save();
+        }
+      }
       
       $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
       $this->dispatch(new SendReminderEmail($user,$project,$investor));

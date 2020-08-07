@@ -6,7 +6,7 @@
             <form action="{{ route('custom-field.store') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="row form-group">
-                    <div class="col-sm-6" style="margin-bottom: 20px;">
+                    <div class="col-sm-4" style="margin-bottom: 20px;">
                         <label for="type">Select field type<sup class="text-danger">*<sup></label>
                         <select class="form-control" id="type" name="type" required>
                             <option value="">-- Select --</option>
@@ -14,9 +14,19 @@
                             <option value="date">Date</option>
                         </select>
                     </div>
-                    <div class="col-sm-6" style="margin-bottom: 20px;">
+                    <div class="col-sm-4" style="margin-bottom: 20px;">
                         <label for="label">Label<sup class="text-danger">*<sup></label>
                         <input type="text" class="form-control" id="label" name="label" placeholder="Enter label" required>
+                    </div>
+                    <div class="col-sm-4" style="margin-bottom: 20px;">
+                        <label for="section">Select section<sup class="text-danger">*<sup></label>
+                        <select class="form-control" id="type" name="section" required>
+                            <option value="">-- Select --</option>
+                            <option value="investing_type">Investing Type</option>
+                            <option value="contact_details">Contact Details</option>
+                            <option value="nominated_bank_account">Nominated Bank Account</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
                     <div class="col-sm-12" style="margin-bottom: 20px;">
                         <label for="description">Description</label>
@@ -43,6 +53,7 @@
         <table class="table table-borderless table-striped table-responsive">
             <thead>
                 <th>Type</th>
+                <th>Section</th>
                 <th>Label</th>
                 <th>Name</th>
                 <th>Is Required</th>
@@ -54,6 +65,7 @@
                 @foreach ($customFields as $customField)
                     <tr style="font-size: 0.9em;">
                         <td>{{ $customField->type }}</td>
+                        <td>{{ $customField->section }}</td>
                         <td>{{ $customField->label }}</td>
                         <td>{{ $customField->name }}</td>
                         <td class="text-center">{{ $customField->is_required ? 'Yes' : 'No' }}</td>

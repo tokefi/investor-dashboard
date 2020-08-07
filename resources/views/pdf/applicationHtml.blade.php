@@ -92,6 +92,13 @@
 		</div>
 		@endif
 		@endif
+		@if (isset($customFieldValues['investing_type']))
+		@foreach ($customFieldValues['investing_type'] as $customFieldValue)
+		<h4><b>{{ $customFieldValue->customField->label }}</b></h4>
+		<input class="form-control" type="text" placeholder="{{ $customFieldValue->customField->label }}" value="{{ $customFieldValue->value }}" readonly />
+		</div>
+		@endforeach
+		@endif
 		<br>
 		<h4><b>AML/CTF requirements</b></h4>
 		<p>If investing via a Financial Adviser they will provide the Trustee the necessary verification otherwise you need to lodge the following information.</p>
@@ -163,25 +170,31 @@
 		<h4><b>Tax File Number</b></h4>
 		<input type="text" class="form-control" name="" placeholder="Tax File Number" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->tfn}}@else{{$user->tfn}}@endif @else{{$user->tfn}}@endif">
 		<p>You are not required to provide your TFN, but in it being unavailable we will be required to withhold tax at the highest marginal rate of 49.5%</p><br>
-		@if (isset($investment->custom_field_values_parsed))
-		<br />
-		<h4><b>Additional Info</b></h4>
-		<div class="row">
-			@foreach ($investment->custom_field_values_parsed as $customField)
-			<div class="col-sm-4" style="margin-bottom:20px;">
-				<p>{{ $customField->label }}</p>
-				<input class="form-control" type="text" placeholder="{{ $customField->label }}" value="{{ $customField->value }}" readonly />
-			</div>
-			@endforeach
+		@if (isset($customFieldValues['contact_details']))
+		@foreach ($customFieldValues['contact_details'] as $customFieldValue)
+		<p>{{ $customFieldValue->customField->label }}</p>
+		<input class="form-control" type="text" placeholder="{{ $customFieldValue->customField->label }}" value="{{ $customFieldValue->value }}" readonly />
 		</div>
+		@endforeach
+		<br><br>
 		@endif
+
 		<hr><br>
 		<p>Account Name</p>
 		<input type="text" class="form-control" name="" placeholder="Account Name" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->account_name}}@else{{$user->account_name}}@endif @else{{$user->account_name}}@endif"><br>
 		<p>BSB</p>
 		<input type="text" class="form-control" name="" placeholder="BSB" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->bsb}}@else{{$user->bsb}}@endif @else{{$user->bsb}}@endif"><br>
 		<p>Account Number</p>
-		<input type="text" class="form-control" name="" placeholder="Account Number" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->account_number}}@else{{$user->account_number}}@endif @else{{$user->account_number}}@endif"><br><br>
+		<input type="text" class="form-control" name="" placeholder="Account Number" value="@if($investment->investing_as)@if($investment->investing_as != 'Individual Investor'){{$investment->investingJoint->account_number}}@else{{$user->account_number}}@endif @else{{$user->account_number}}@endif"><br>
+		@if (isset($customFieldValues['nominated_bank_account']))
+		@foreach ($customFieldValues['nominated_bank_account'] as $customFieldValue)
+		<p>{{ $customFieldValue->customField->label }}</p>
+		<input class="form-control" type="text" placeholder="{{ $customFieldValue->customField->label }}" value="{{ $customFieldValue->value }}" readonly />
+		</div>
+		@endforeach
+		@endif
+		<br>
+
 		<h4><b>ID DOCS</b></h4>
 		@if($investment->userInvestmentDoc->count() > 0)
 		@foreach($investment->userInvestmentDoc as $doc)
@@ -193,6 +206,19 @@
 		No Document Available
 		@endif
 		<br>
+		@if (isset($customFieldValues['other']))
+		<br />
+		<h4><b>ADDITIONAL INFO</b></h4>
+		<div class="row">
+			@foreach ($customFieldValues['other'] as $customFieldValue)
+			<div class="col-sm-4" style="margin-bottom:20px;">
+				<p>{{ $customFieldValue->customField->label }}</p>
+				<input class="form-control" type="text" placeholder="{{ $customFieldValue->customField->label }}" value="{{ $customFieldValue->value }}" readonly />
+			</div>
+			@endforeach
+		</div>
+		<br />
+		@endif
 		<p>If you have not completed your verification process, please upload a copy of your Driver’s License or Passport for AML/CTF purposes</p><br>
 
 		I/We confirm that I/We have relied only on the contents of this @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Prospectus @endif in deciding to invest and will seek independent adviser from my financial adviser if needed.

@@ -40,7 +40,8 @@ class CustomFieldsController extends Controller
     {
         $this->validate($request, [
             'type' => 'required',
-            'label' => 'required'
+            'label' => 'required',
+            'section' => 'required'
         ]);
 
         $customField = new CustomField;
@@ -51,6 +52,7 @@ class CustomFieldsController extends Controller
         $customField->label = $request->label;
         $customField->description = $request->description ?? null;
         $customField->is_required = $request->is_required ? true : false;
+        $customField->section = $request->section;
         $customField->attributes = isset($request->attributes) ? json_encode($request->attributes) : null;
         $customField->properties = isset($request->properties) ? json_encode($request->properties) : null;
         $customField->save();

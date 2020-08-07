@@ -18,6 +18,7 @@ use App\MasterChild;
 use App\Transaction;
 use App\ReferralLink;
 use App\InvestingJoint;
+use App\CustomFieldValue;
 use App\RedemptionStatus;
 use App\Mailers\AppMailer;
 use App\RedemptionRequest;
@@ -582,21 +583,27 @@ class UsersController extends Controller
         $investment_id = base64_decode($investment_id);
         $color = Color::where('project_site',url())->first();
         $investment = InvestmentInvestor::find($investment_id);
-        if ($investment->custom_field_values && is_object($investment->custom_field_values)) {
-            $fields = [];
-            foreach ($investment->custom_field_values as $key => $item) {
-                $tmp = CustomField::where('name', $key)->first();
-                if ($tmp) {
-                    $tmp->value = $item;
-                    array_push($fields, $tmp);    
-                }
-            }
-            $investment['custom_field_values_parsed'] = $fields;
-        }
+        // if ($investment->custom_field_values && is_object($investment->custom_field_values)) {
+        //     $fields = [];
+        //     foreach ($investment->custom_field_values as $key => $item) {
+        //         $tmp = CustomField::where('name', $key)->first();
+        //         if ($tmp) {
+        //             $tmp->value = $item;
+        //             array_push($fields, $tmp);    
+        //         }
+        //     }
+        //     $investment['custom_field_values_parsed'] = $fields;
+        // }
+        $customFieldValues = CustomFieldValue::where(['investment_investor_id' => $investment->id])->get()->map(function ($item) {
+            $item->section = $item->customField->section;
+            return $item;
+        })->groupBy('section');
+        
         $investing = InvestingJoint::where('investment_investor_id', $investment->id)->get()->last();
         $project = $investment->project;
         $user = $investment->user;
-        return view('pdf.applicationHtml',compact('investment','color','user','project','investing'));
+        
+        return view('pdf.applicationHtml',compact('investment','color','user','project','investing', 'customFieldValues'));
     }
 
     public function usersNotifications($user_id)
