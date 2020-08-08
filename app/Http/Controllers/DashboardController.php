@@ -2674,42 +2674,79 @@ class DashboardController extends Controller
     {
         $project = Project::findOrFail($project_id);
         $table = InvestmentInvestor::where('project_id',$project_id)->where('accepted',1)->where('money_received',1)->get();
+        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->pluck('label')->toArray();
 
         // dd($project);
         $filename = storage_path().'/app/acceptedApplication/'.$project->title."-acceptedApplication-record.csv";
+        $columns = ["Project Name","Unique Id","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as", "Account Name", "BSB","Account Number","TFN"];
         $handle = fopen($filename, 'w+');
         if($project->retail_vs_wholesale){
-        fputcsv($handle, array("Project Name","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as","Joint Investor First Name","Joint Investor Last Name","Investing Company", "Account Name", "BSB","Account Number","TFN"));
+            array_push($columns,"Joint Investor First Name","Joint Investor Last Name","Investing Company");
+            foreach ($customFields as $key => $value) {
+                array_push($columns, $value);
+            }
+            fputcsv($handle, $columns);
 
-        foreach($table as $row) {
-
-            if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
+            foreach($table as $row) {
+                $columnValues = [$project->title,'INV'.$row->id,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null];
+                if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
                 // dd($row->user);
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->user->idDoc->investing_as,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company, $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
-            }elseif($row->investing_as != 'Individual Investor'){
+                    array_push($columnValues, $row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company);
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
+                }elseif($row->investing_as != 'Individual Investor'){
                 // dd($row->investingJoint);
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,$row->investingJoint->joint_investor_first_name,$row->investingJoint->joint_investor_last_name,$row->investingJoint->investing_company, $row->investingJoint->account_name,$row->investingJoint->bsb, $row->investingJoint->account_number,$row->investingJoint->tfn));
-            }else{
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,'','','', $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
+                    array_push($columnValues, isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null);
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
+                }else{
+                    array_push($columnValues,'','','');
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
+                }
+            }
+        }else{
+            array_push($columns, "Wholesale Investing As","Accountant Name And Firm","Accountant Professional Body Designation","Accountant Email","Accountant Phone","Equity Investment Experience Text","Experience Period","Unlisted Investment Experience Text","Understand Risk Text","Joint Investor First Name","Joint Investor Last Name","Investing Company");
+
+            foreach ($customFields as $key => $value) {
+                array_push($columns, $value);
+            }
+            // dd($columns);
+            fputcsv($handle, $columns);
+
+            foreach($table as $row) {
+                // dd($table[8]->customFieldValuesInvestment);
+                $columnValues = [$project->title,'INV'.$row->id,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null];
+                // dd($columnValues);
+                if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
+                    array_push($columnValues,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company );
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
+                }elseif($row->investing_as != 'Individual Investor'){
+                // dd($row->investingJoint);
+                    array_push($columnValues, isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null );
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
+                }else{
+                    array_push($columnValues, '','','');
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    // dd($columnValues);
+                    fputcsv($handle, $columnValues);
+                }
             }
         }
-    }else{
-        // dd($table->count());
-        fputcsv($handle, array("Project Name","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as","Joint Investor First Name","Joint Investor Last Name","Investing Company", "Account Name", "BSB","Account Number","TFN","Wholesale Investing As","Accountant Name And Firm","Accountant Professional Body Designation","Accountant Email","Accountant Phone","Equity Investment Experience Text","Experience Period","Unlisted Investment Experience Text","Understand Risk Text"));
-
-        foreach($table as $row) {
-
-            if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
-                // dd($row->user);
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->user->idDoc->investing_as,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company, $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn,$row->wholesaleInvestment->wholesale_investing_as,$row->wholesaleInvestment->accountant_name_and_firm,$row->wholesaleInvestment->accountant_professional_body_designation,$row->wholesaleInvestment->accountant_email,$row->wholesaleInvestment->accountant_phone,$row->wholesaleInvestment->equity_investment_experience_text,$row->wholesaleInvestment->experience_period,$row->wholesaleInvestment->unlisted_investment_experience_text,$row->wholesaleInvestment->understand_risk_text));
-            }elseif($row->investing_as != 'Individual Investor'){
-                // dd($row->investingJoint);
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null));
-            }else{
-                fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,'','','', $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null));
-            }
-        }
-    }
         fclose($handle);
 
         $headers = array(
@@ -2723,39 +2760,75 @@ class DashboardController extends Controller
     {
         $project = Project::findOrFail($project_id);
         $table = InvestmentInvestor::where('project_id',$project_id)->where('hide_investment',0)->get();
-        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get();
+        $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->pluck('label')->toArray();
 
         $filename = storage_path().'/app/application/'.$project->title."-application-record.csv";
+        $columns = ["Project Name","Unique ID","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as", "Account Name", "BSB","Account Number","TFN"];
         $handle = fopen($filename, 'w+');
         if($project->retail_vs_wholesale){
-
-            fputcsv($handle, array("Project Name","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as","Joint Investor First Name","Joint Investor Last Name","Investing Company", "Account Name", "BSB","Account Number","TFN"));
+            array_push($columns,"Joint Investor First Name","Joint Investor Last Name","Investing Company");
+            foreach ($customFields as $key => $value) {
+                array_push($columns, $value);
+            }
+            fputcsv($handle, $columns);
 
             foreach($table as $row) {
-
+                $columnValues = [$project->title,'INV'.$row->id,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null];
                 if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
                 // dd($row->user);
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->user->idDoc->investing_as,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company, $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
+                    array_push($columnValues, $row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company);
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
                 }elseif($row->investing_as != 'Individual Investor'){
                 // dd($row->investingJoint);
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null));
+                    array_push($columnValues, isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null);
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
                 }else{
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,'','','', $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn));
+                    array_push($columnValues,'','','');
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
                 }
             }
         }else{
-            // dd($table[7]);
-            fputcsv($handle, array("Project Name","Investor Name", "Phone", "Email", "Line_1","Line_2","City","State","Country","Postal code", "Number of shares", "Market Value","investing_as","Joint Investor First Name","Joint Investor Last Name","Investing Company", "Account Name", "BSB","Account Number","TFN","Wholesale Investing As","Accountant Name And Firm","Accountant Professional Body Designation","Accountant Email","Accountant Phone","Equity Investment Experience Text","Experience Period","Unlisted Investment Experience Text","Understand Risk Text"));
+            array_push($columns, "Wholesale Investing As","Accountant Name And Firm","Accountant Professional Body Designation","Accountant Email","Accountant Phone","Equity Investment Experience Text","Experience Period","Unlisted Investment Experience Text","Understand Risk Text","Joint Investor First Name","Joint Investor Last Name","Investing Company");
+
+            foreach ($customFields as $key => $value) {
+                array_push($columns, $value);
+            }
+            // dd($columns);
+            fputcsv($handle, $columns);
 
             foreach($table as $row) {
-                // dd($table[6]);
+                // dd($table[8]->customFieldValuesInvestment);
+                $columnValues = [$project->title,'INV'.$row->id,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null];
+                // dd($columnValues);
                 if($row->user->idDoc != NULL && $row->user->idDoc->investing_as != 'Individual Investor'){
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->user->idDoc->investing_as,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company, $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null));
+                    array_push($columnValues,$row->user->idDoc->joint_investor_first_name,$row->user->idDoc->joint_investor_last_name,$row->user->idDoc->trust_or_company );
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
                 }elseif($row->investing_as != 'Individual Investor'){
                 // dd($row->investingJoint);
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null, isset($row->investingJoint->account_name)?$row->investingJoint->account_name:null,isset($row->investingJoint->bsb)?$row->investingJoint->bsb:null, isset($row->investingJoint->account_number)?$row->investingJoint->account_number:null,isset($row->investingJoint->tfn)?$row->investingJoint->tfn:null,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null));
+                    array_push($columnValues, isset($row->investingJoint->joint_investor_first_name)?$row->investingJoint->joint_investor_first_name:null,isset($row->investingJoint->joint_investor_last_name)?$row->investingJoint->joint_investor_last_name:null,isset($row->investingJoint->investing_company)?$row->investingJoint->investing_company:null );
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    fputcsv($handle, $columnValues);
                 }else{
-                    fputcsv($handle, array($project->title,$row->user->first_name.' '.$row->user->last_name,$row->user->phone_number,$row->user->email,$row->user->line_1,$row->user->line_2,$row->user->city,$row->user->state,$row->user->country,$row->user->postal_code,round($row->amount),number_format(($row->amount * $project->share_per_unit_price), 2),$row->investing_as,'','','', $row->user->account_name,$row->user->bsb, $row->user->account_number,$row->user->tfn,isset($row->wholesaleInvestment->wholesale_investing_as)?$row->wholesaleInvestment->wholesale_investing_as:null,isset($row->wholesaleInvestment->accountant_name_and_firm)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_professional_body_designation)?$row->wholesaleInvestment->accountant_name_and_firm:null,isset($row->wholesaleInvestment->accountant_email)?$row->wholesaleInvestment->accountant_email:null,isset($row->wholesaleInvestment->accountant_phone)?$row->wholesaleInvestment->accountant_phone:null,isset($row->wholesaleInvestment->equity_investment_experience_text)?$row->wholesaleInvestment->equity_investment_experience_text:null,isset($row->wholesaleInvestment->experience_period)?$row->wholesaleInvestment->experience_period:null,isset($row->wholesaleInvestment->unlisted_investment_experience_text)?$row->wholesaleInvestment->unlisted_investment_experience_text:null,isset($row->wholesaleInvestment->understand_risk_text)?$row->wholesaleInvestment->understand_risk_text:null));
+                    array_push($columnValues, '','','');
+                    foreach ($row->customFieldValuesInvestment as $key => $value) {
+                        array_push($columnValues,$value->value);
+                    }
+                    // dd($columnValues);
+                    fputcsv($handle, $columnValues);
                 }
             }
         }

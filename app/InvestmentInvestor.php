@@ -74,4 +74,8 @@ class InvestmentInvestor extends Model
     {
         return $this->hasMany('App\CustomFieldValue', 'investment_investor_id');
     }
+    public function customFieldValuesInvestment()
+    {
+        return $this->hasMany('App\CustomFieldValue');
+    }
 }
