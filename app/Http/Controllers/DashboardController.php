@@ -2873,8 +2873,7 @@ class DashboardController extends Controller
 
     public function uploadTransactionHardCopy(Request $request)
     {
-        dd($this->validate($request, ['hard_copy' => 'required|mimes:pdf']));
-        dd($request->hard_copy);
+        $this->validate($request, ['hard_copy' => 'required|mimes:pdf']);
         $investment = InvestmentInvestor::findOrFail($request->investment_id);
         $destinationPath = 'assets/investment/hard/copy/';
         $filename = $investment->id ;
