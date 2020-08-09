@@ -180,8 +180,8 @@
 											<form class="form-group" action="{{route('transaction.hardCopy.upload',[$investment->id])}}" method="POST" enctype="multipart/form-data" rel="form">
 
 												{{ csrf_field() }}
-												<input type="file" name="hard_copy" class="" style="color: transparent;" id="paperId" required><br>
-												<span id="uploadFile" class="hide text-success" >File Selected </span>
+												<input type="file" name="hard_copy" class="paperId" style="color: transparent;" data-investment-id={{ $investment->id }} required><br>
+												<span id="uploadFile_{{ $investment->id }}" class="hide text-success" >File Selected </span>
 												<input type="hidden" name="investment_id" value="{{ $investment->id }}">
 												<button type="submit" id="paperUpload" >upload</button>
 											</form>
@@ -1172,8 +1172,10 @@
 			$(this).hide();
 			dad.find('input[type="text"]').show().focus();
 		});
-		$('#paperId').click(function (e) {
-			$('#uploadFile').removeClass('hide');
+		$('.paperId').click(function (e) {
+			let investorId = $(this).attr('data-investment-id');
+			// console.log(investorId);
+			$('#uploadFile_'+investorId).removeClass('hide');
 		});
 		$('#paperUpload').click(function (e) {
 			$('.loader-overlay').show();
