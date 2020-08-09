@@ -76,6 +76,9 @@
 					@if (Session::has('message'))
 					{!! Session::get('message') !!}
 					@endif
+					@foreach ($errors->all() as $error)
+					<p class="alert alert-danger text-center">{{ $error }}</p><br>
+					@endforeach
 					<h2 class="text-center" style="margin-top: 0.9rem;"><a href='{{ url() }}/dashboard/projects/{{ $project->id }}/edit'>{{$project->title}}</a>
 						{{-- <address class="text-center">
 							<small>{{$project->location->line_1}}, {{$project->location->line_2}}, {{$project->location->city}}, {{$project->location->postal_code}},{{$project->location->country}}
@@ -122,13 +125,14 @@
 						}
 					</style>
 					<div style="margin-bottom: 1em;">
-					<a href="{{ route('dashboard.project.application.records.download',[$project->id]) }}" target=""><button class="btn btn-primary " action="" style="margin: 0 1rem;">Download Applications Records</button></a>
-				</div>
+						<a href="{{ route('dashboard.project.application.records.download',[$project->id]) }}" target=""><button class="btn btn-primary " action="" style="margin: 0 1rem;">Download Applications Records</button></a>
+					</div>
 					<table class="table table-bordered table-striped investors-table" id="investorsTable">
 						<thead>
 							<tr>
 								<th>Unique ID</th>
 								<th>Investors Details</th>
+								<th>Hard Copy</th>
 								<th>Investment Date</th>
 								<th>Number of Shares</th>
 								<th>Share Price ($)</th>
@@ -154,106 +158,121 @@
 											<i class="fa fa-edit" aria-hidden="true"></i>
 										</a>
 										@if(!$investment->money_received && !$investment->accepted)
-												{{-- <form action="{{route('dashboard.investment.hideInvestment', $investment->id)}}" method="POST">
-												{{method_field('PATCH')}}
-												{{csrf_field()}} --}}
-												{{-- <a class="send-app-form-link" href="javascript:void(0);" data="{{$projectsEoi->id}}" onclick="sendEOIAppFormLink()"><b>Resend link</b></a> --}}
-												<a href="javascript:void(0);" class="hide-investment" data="{{$investment->id}}"><br>
-													<i class="fa fa-trash" aria-hidden="true"></i>
+											{{-- <form action="{{route('dashboard.investment.hideInvestment', $investment->id)}}" method="POST">
+											{{method_field('PATCH')}}
+											{{csrf_field()}} --}}
+											{{-- <a class="send-app-form-link" href="javascript:void(0);" data="{{$projectsEoi->id}}" onclick="sendEOIAppFormLink()"><b>Resend link</b></a> --}}
+											<a href="javascript:void(0);" class="hide-investment" data="{{$investment->id}}"><br>
+												<i class="fa fa-trash" aria-hidden="true"></i>
+											</a>
+											@endif
+										</td>
+										<td>
+											<div class="text-left">
+												<a href="{{route('dashboard.users.show', [$investment->user_id])}}" >
+													<b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
 												</a>
-												@endif
-												<td>
-													<div class="text-left">
-														<a href="{{route('dashboard.users.show', [$investment->user_id])}}" >
-															<b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
-														</a>
-														<br>{{$investment->user->email}}<br>{{$investment->user->phone_number}}
-													</div>
-												</td>
-												<td data-sort="{{$investment->created_at->toFormattedDateString()}}">
-													<div class="text-center">{{$investment->created_at->toFormattedDateString()}}</div>
-												</td>
-												<td class="text-center">
-													<div class="">
-														<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
-															{{method_field('PATCH')}}
-															{{csrf_field()}}
-															<a href="#edit" class="edit">{{ round($investment->amount) }}</a>
+												<br>{{$investment->user->email}}<br>{{$investment->user->phone_number}}
+											</div>
+										</td>
+										<td>
+											@if(!$investment->hard_copy_path)
+											<form class="form-group" action="{{route('transaction.hardCopy.upload',[$investment->id])}}" method="POST" enctype="multipart/form-data" rel="form">
 
-															<input type="text" class="edit-input form-control" name="amount" id="amount" value="{{$investment->amount}}" style="width: 100px;">
-															<input type="hidden" name="investor" value="{{$investment->user->id}}">
-														</form>
-													</div>
-												</td>
-												<td class="text-center">
-													{{ number_format($investment->buy_rate, 4) }}
-												</td>
-												<td class="text-center">
-													${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
-												</td>
-												<td>
-													<div class="text-center">
-														<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
-															{{method_field('PATCH')}}
-															{{csrf_field()}}
-															@if($investment->money_received || $investment->accepted)
-															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
-															@else
-															{{-- <input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received"> --}}
-															<div class="pretty p-svg ">
-																<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif>
-																<div class="state p-success">
-																	<!-- svg path --> 
-																	<svg class="svg svg-icon" viewBox="0 0 20 20">
-																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
-																			
-																		</path>
-																	</svg>
-																	<label></label>
-																</div>
-															</div>
-															@endif
-														</form>
-													</div>
-												</td>
-												<td>
-													<div class="text-center">
-														<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
-															{{method_field('PATCH')}}
-															{{csrf_field()}}
+												{{ csrf_field() }}
+												<input type="file" name="hard_copy" class="" style="color: transparent;" id="paperId" required><br>
+												<span id="uploadFile" class="hide text-success" >File Selected </span>
+												<input type="hidden" name="investment_id" value="{{ $investment->id }}">
+												<button type="submit" id="paperUpload" >upload</button>
+											</form>
+											@else
+											<a href="{{ $investment->hard_copy_path }}" target="_blank">Hard copy</a>
+											@endif
+										</td>
+										<td data-sort="{{$investment->created_at->toFormattedDateString()}}">
+											<div class="text-center">{{$investment->created_at->toFormattedDateString()}}</div>
+										</td>
+										<td class="text-center">
+											<div class="">
+												<form action="{{route('dashboard.investment.update', [$investment->id])}}" method="POST">
+													{{method_field('PATCH')}}
+													{{csrf_field()}}
+													<a href="#edit" class="edit">{{ round($investment->amount) }}</a>
 
-															{{-- <input type="checkbox" name="accepted" onChange="this.form.submit()" value={{$investment->accepted ? 0 : 1}} {{$investment->accepted ? 'checked' : '' }}> Money {{$investment->accepted ? 'Received' : 'Not Received' }} --}}
-															@if($investment->accepted)
-															<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">@if($project->share_vs_unit) Share @else Unit @endif certificate issued</small></i>
-															@else
-															{{-- <input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate"> --}}
-															<div class="pretty p-svg">
-																<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
-																<div class="state p-success">
-																	<!-- svg path --> 
-																	<svg class="svg svg-icon" viewBox="0 0 20 20">
-																		<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
-																			
-																		</path>
-																	</svg>
-																	<label></label>
-																</div>
-															</div>
-															@endif
-															<input type="hidden" name="investor" value="{{$investment->user->id}}">
-														</form>
+													<input type="text" class="edit-input form-control" name="amount" id="amount" value="{{$investment->amount}}" style="width: 100px;">
+													<input type="hidden" name="investor" value="{{$investment->user->id}}">
+												</form>
+											</div>
+										</td>
+										<td class="text-center">
+											{{ number_format($investment->buy_rate, 4) }}
+										</td>
+										<td class="text-center">
+											${{ number_format(round($investment->amount * $investment->buy_rate, 2)) }}
+										</td>
+										<td>
+											<div class="text-center">
+												<form action="{{route('dashboard.investment.moneyReceived', $investment->id)}}" method="POST">
+													{{method_field('PATCH')}}
+													{{csrf_field()}}
+													@if($investment->money_received || $investment->accepted)
+													<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">Money Received</small></i>
+													@else
+													{{-- <input type="submit" name="money_received" class="btn btn-primary money-received-btn" value="Money Received"> --}}
+													<div class="pretty p-svg ">
+														<input type="checkbox" name="money_received" value="Money Received" class="money-received-btn" data-toggle="tooltip" title="Money received" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif>
+														<div class="state p-success">
+															<!-- svg path --> 
+															<svg class="svg svg-icon" viewBox="0 0 20 20">
+																<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+
+																</path>
+															</svg>
+															<label></label>
+														</div>
 													</div>
-												</td>
-												<td class="text-left">
-													@if ($investment->user->idDoc)
-													<a href="{{$investment->user->idDoc['media_url']}}/{{$investment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
 													@endif
-													@if ($id2 = $investment->user->idDocs()->where('type', 'Document_2')->first())
-													<br />
-													<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+												</form>
+											</div>
+										</td>
+										<td>
+											<div class="text-center">
+												<form action="{{route('dashboard.investment.accept', $investment->id)}}" method="POST">
+													{{method_field('PATCH')}}
+													{{csrf_field()}}
+
+													{{-- <input type="checkbox" name="accepted" onChange="this.form.submit()" value={{$investment->accepted ? 0 : 1}} {{$investment->accepted ? 'checked' : '' }}> Money {{$investment->accepted ? 'Received' : 'Not Received' }} --}}
+													@if($investment->accepted)
+													<i class="fa fa-check" aria-hidden="true" style="color: #6db980;">&nbsp;<br><small style=" font-family: SourceSansPro-Regular;">@if($project->share_vs_unit) Share @else Unit @endif certificate issued</small></i>
+													@else
+													{{-- <input type="submit" name="accepted" class="btn btn-primary issue-share-certi-btn" value="Issue @if($project->share_vs_unit) share @else unit @endif certificate"> --}}
+													<div class="pretty p-svg">
+														<input type="checkbox" name="accepted" value="issue @if($project->share_vs_unit) share @else unit @endif certificate" @if(SiteConfigurationHelper::isSiteAgent()) disabled @endif @if($investment->master_investment) disabled @endif class="issue-share-certi-btn" data-toggle="tooltip" title="Issue share certificate">
+														<div class="state p-success">
+															<!-- svg path --> 
+															<svg class="svg svg-icon" viewBox="0 0 20 20">
+																<path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;">
+
+																</path>
+															</svg>
+															<label></label>
+														</div>
+													</div>
 													@endif
-													<br /><br />
-													<a href="/dashboard/users/{{ $investment->user->id}}#kyc_tab" alt="Edit user" class="btn btn-sm btn-primary">Edit</a>
+													<input type="hidden" name="investor" value="{{$investment->user->id}}">
+												</form>
+											</div>
+										</td>
+										<td class="text-left">
+											@if ($investment->user->idDoc)
+											<a href="{{$investment->user->idDoc['media_url']}}/{{$investment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>
+											@endif
+											@if ($id2 = $investment->user->idDocs()->where('type', 'Document_2')->first())
+											<br />
+											<a href="{{$id2->media_url}}/{{$id2->path}}" target="_blank">Your Doc 2</a>
+											@endif
+											<br /><br />
+											<a href="/dashboard/users/{{ $investment->user->id}}#kyc_tab" alt="Edit user" class="btn btn-sm btn-primary">Edit</a>
 													{{-- @if($investment->userInvestmentDoc->where('type','normal_name')->last())
 													<a href="/{{$investment->userInvestmentDoc->where('type','normal_name')->last()->path}}" target="_blank">{{$investment->user->first_name}} {{$investment->user->last_name}} Doc</a>
 													<a href="#" class="pop">
@@ -284,24 +303,24 @@
 												<td class="text-left">
 													<span class="badge">{{ $investment->investing_as }}</span><br />
 													@if ($investment->investing_as == 'Joint Investor')
-														{{$investment->investingJoint->joint_investor_first_name ?? ''}} {{$investment->investingJoint->joint_investor_last_name ?? ''}}
-														@if($investment->userInvestmentDoc)
-															@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
-																<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
-																<br />
-															@endif
-														@endif
+													{{$investment->investingJoint->joint_investor_first_name ?? ''}} {{$investment->investingJoint->joint_investor_last_name ?? ''}}
+													@if($investment->userInvestmentDoc)
+													@if($doc = $investment->userInvestmentDoc->where('type','joint_investor')->last())
+													<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
+													<br />
+													@endif
+													@endif
 													@endif
 													@if ($investment->investing_as == 'Trust or Company')
-														{{ $investment->investingJoint->investing_company ?? '' }}
-														@if($investment->userInvestmentDoc)
-															@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
-																<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank"> Doc </a>
-															@endif
-														@endif
-														@if(isset($investment->investingJoint->investing_company )){{  $investment->investingJoint->investing_company}} @endif
-														@endif
-													</td>
+													{{ $investment->investingJoint->investing_company ?? '' }}
+													@if($investment->userInvestmentDoc)
+													@if($doc = $investment->userInvestmentDoc->where('type','trust_or_company')->last())
+													<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank"> Doc </a>
+													@endif
+													@endif
+													@if(isset($investment->investingJoint->investing_company )){{  $investment->investingJoint->investing_company}} @endif
+													@endif
+												</td>
 												{{-- <td>
 													@if($investment->userInvestmentDoc)
 													@if($investment->userInvestmentDoc->where('type','joint_investor')->last())
@@ -471,15 +490,15 @@
 										<th>Investor Document</th>
 										<th>Investor type</th>
 										{{-- <th>Joint Investor <br> Name</th>
-										<th>Entity details</th> --}}
-										<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
-										<th>Share Price ($)</th>
-										<th>Market Value</th>
-										{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
-										{{-- <th>TFN</th> --}}
-										<th>Investment Documents</th>
-										<th>Application Form</th>
-										<th>Accepted On</th>
+											<th>Entity details</th> --}}
+											<th>Number of @if($project->share_vs_unit) Share @else Unit @endif</th>
+											<th>Share Price ($)</th>
+											<th>Market Value</th>
+											{{-- <th>Link to @if($project->share_vs_unit) share @else unit @endif certificate</th> --}}
+											{{-- <th>TFN</th> --}}
+											<th>Investment Documents</th>
+											<th>Application Form</th>
+											<th>Accepted On</th>
 										{{-- <th>Account Name</th>
 										<th>BSB</th>
 										<th>Account Number</th> --}}
@@ -507,25 +526,25 @@
 										<td class="text-left">
 											<span class="badge">{{ $shareInvestment->investing_as }}</span><br />
 											@if ($shareInvestment->investing_as == 'Joint Investor')
-												{{$shareInvestment->investingJoint->joint_investor_first_name ?? ''}} {{$shareInvestment->investingJoint->joint_investor_last_name ?? ''}}  <br>
-												@if($shareInvestment->userInvestmentDoc)
-													@if($doc = $shareInvestment->userInvestmentDoc->where('type','joint_investor')->last())
-														<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
-														<br />
-													@endif
-												@endif
+											{{$shareInvestment->investingJoint->joint_investor_first_name ?? ''}} {{$shareInvestment->investingJoint->joint_investor_last_name ?? ''}}  <br>
+											@if($shareInvestment->userInvestmentDoc)
+											@if($doc = $shareInvestment->userInvestmentDoc->where('type','joint_investor')->last())
+											<a href="{{$doc->media_url}}/{{$doc->joint_id_path}}" target="_blank">Doc</a>
+											<br />
+											@endif
+											@endif
 											@endif
 											@if ($shareInvestment->investing_as == 'Trust or Company')
-												{{$shareInvestment->investingJoint->investing_company ?? ''}}  <br>
-												@if($shareInvestment->userInvestmentDoc)
-													@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
-														<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank">
-														Doc </a>
-													@endif
-												@endif
-												@if(isset($shareInvestment->investingJoint->investing_company )){{  $shareInvestment->investingJoint->investing_company}} @endif
-												@endif
-											</td>
+											{{$shareInvestment->investingJoint->investing_company ?? ''}}  <br>
+											@if($shareInvestment->userInvestmentDoc)
+											@if($doc = $shareInvestment->userInvestmentDoc->where('type','trust_or_company')->last())
+											<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank">
+											Doc </a>
+											@endif
+											@endif
+											@if(isset($shareInvestment->investingJoint->investing_company )){{  $shareInvestment->investingJoint->investing_company}} @endif
+											@endif
+										</td>
 										{{-- <td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->joint_investor_first_name != '') {{$shareInvestment->investingJoint->joint_investor_first_name.' '.$shareInvestment->investingJoint->joint_investor_last_name}} @endif @else {{'NA'}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) @if($shareInvestment->investingJoint->investing_company) {{$shareInvestment->investingJoint->investing_company}}@endif @else{{'NA'}} @endif</td> --}}
 										{{-- <td>{{$shareInvestment->user->phone_number}}</td> --}}
@@ -590,16 +609,16 @@
 											</script>
 											@else
 											NA
-											@endif</a>
-										</td>
-										<td>
-											<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
-												Application form
-											</a>
-										</td>
-										<td>
-											{{ $shareInvestment->share_certificate_issued_at ? $shareInvestment->share_certificate_issued_at->toFormattedDateString() : '' }}
-										</td>
+										@endif</a>
+									</td>
+									<td>
+										<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
+											Application form
+										</a>
+									</td>
+									<td>
+										{{ $shareInvestment->share_certificate_issued_at ? $shareInvestment->share_certificate_issued_at->toFormattedDateString() : '' }}
+									</td>
 										{{-- <td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_name}} @else {{$shareInvestment->user->account_name}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->bsb}} @else {{$shareInvestment->user->bsb}} @endif</td>
 										<td>@if($shareInvestment->investingJoint) {{$shareInvestment->investingJoint->account_number}} @else {{$shareInvestment->user->account_number}} @endif</td> --}}
@@ -1153,6 +1172,12 @@
 			$(this).hide();
 			dad.find('input[type="text"]').show().focus();
 		});
+		$('#paperId').click(function (e) {
+			$('#uploadFile').removeClass('hide');
+		});
+		$('#paperUpload').click(function (e) {
+			$('.loader-overlay').show();
+		});
 
 		$('input[type=text]').focusout(function() {
 			var dad = $(this).parent();
@@ -1170,7 +1195,7 @@
 		});
 		$('#custodian').click(function (e) {
 			$('.responsible').removeClass('hide');
-		})
+		});
 		$('.money-received-btn').click(function(e){
 			if (confirm('Are you sure ?')) {
 				console.log('confirmed');

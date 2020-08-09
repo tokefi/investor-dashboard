@@ -2870,4 +2870,18 @@ class DashboardController extends Controller
 
         return 1;
     }
+
+    public function uploadTransactionHardCopy(Request $request)
+    {
+        dd($this->validate($request, ['hard_copy' => 'required|mimes:pdf']));
+        dd($request->hard_copy);
+        $investment = InvestmentInvestor::findOrFail($request->investment_id);
+        $destinationPath = 'assets/investment/hard/copy/';
+        $filename = $investment->id ;
+            
+        $storagePath = \Storage::disk('s3')->put($destinationPath.$filename, file_get_contents($request->file('hard_copy')),'public');
+
+        $investment->update(['hard_copy_path'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket').'/'.$destinationPath.$filename]);
+        return redirect()->back()->withMessage('<p class="alert alert-success text-center">Upload Successfully!</p>');
+    }
 }

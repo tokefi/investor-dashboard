@@ -76,7 +76,7 @@ Route::post('/dashboard/users/{id}/documents',['as'=>'dashboard.users.document.u
 Route::get('/dashboard/application/{id}',['as'=>'dashboard.application.view','uses'=>'DashboardController@viewApplication']);
 Route::post('/dashboard/application/{investment_id}/update', ['as'=>'dashboard.application.update', 'uses'=>'DashboardController@updateApplication']);
 Route::post('/dashboard/application/{child_id}/delete',['as'=>'project.child.delete','uses'=>'ProjectsController@deleteChild']);
-
+Route::post('dashboard/transaction/hardCopy/{investment_id}/upload',['as'=>'transaction.hardCopy.upload','uses'=>'DashboardController@uploadTransactionHardCopy']);
 
 
 
