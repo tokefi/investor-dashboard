@@ -368,6 +368,8 @@
 														@endif
 														<label>ID DOCS</label>
 														<input type="file" name="user_id_doc" class="form-control" required><br>
+														<label>ID DOCS 2</label>
+														<input type="file" name="user_id_doc_2" class="form-control" ><br>
 														<p>If you have not completed your verification process. Please upload a copy of your Driver License or Passport for AML/CTF purposes</p>
 													</div>
 
@@ -403,14 +405,14 @@
 		var hash = document.location.hash;
 		var prefix = "tab_";
 		if (hash) {
-		    $('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
-		    window.scrollTo(0, 0);
+			$('.nav-tabs a[href="'+hash.replace(prefix,"")+'"]').tab('show');
+			window.scrollTo(0, 0);
 		} 
 
 		// Change hash for page-reload
 		$('.nav-tabs a').on('shown', function (e) {
-		    window.location.hash = e.target.hash.replace("#", "#" + prefix);
-		    window.scrollTo(0, 0);
+			window.location.hash = e.target.hash.replace("#", "#" + prefix);
+			window.scrollTo(0, 0);
 		});
 
 		
