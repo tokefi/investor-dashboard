@@ -183,7 +183,7 @@
 												<input type="file" name="hard_copy" class="paperId" style="color: transparent;" data-investment-id={{ $investment->id }} required><br>
 												<span id="uploadFile_{{ $investment->id }}" class="hide text-success" >File Selected </span>
 												<input type="hidden" name="investment_id" value="{{ $investment->id }}">
-												<button type="submit" id="paperUpload" >upload</button>
+												<button type="submit" class="paperUpload" >upload</button>
 											</form>
 											@else
 											<a href="{{ $investment->hard_copy_path }}" target="_blank">Hard copy</a>
@@ -1177,7 +1177,7 @@
 			// console.log(investorId);
 			$('#uploadFile_'+investorId).removeClass('hide');
 		});
-		$('#paperUpload').click(function (e) {
+		$('.paperUpload').click(function (e) {
 			$('.loader-overlay').show();
 		});
 
