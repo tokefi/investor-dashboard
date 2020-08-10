@@ -218,10 +218,10 @@
 			</div>
 		</div>
 	</section>
-	<h6 style="color: #707070; font-size: 14px; margin-bottom: 1.2em;">@if($project->edit_disclaimer) {{$project->edit_disclaimer}} @else ** The information provided on this webpage is only a summary of the offer and may not contain all the information needed to determine if this offer is right for you. You should read the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif in its entirety which can be downloaded in the Downloads section below as well as on the Project application page once you press the @if($project->button_label){{$project->button_label}}@else{{'Interest'}}@endif button. @if($project->add_additional_disclaimer){{$project->add_additional_disclaimer}} @endif @endif</h6>
+	<h6 style="color: #707070; font-size: 14px; margin-bottom: 1.2em;">@if($project->edit_disclaimer) {{$project->edit_disclaimer}} @else ** The information provided on this webpage is only a summary of the offer and may not contain all the information needed to determine if this offer is right for you. You should read the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif in its entirety which can be downloaded in the Downloads section below as well as on the Project application page once you press the @if($project->button_label) {{$project->button_label}} @else {{'Interest'}} @endif button. @if($project->add_additional_disclaimer) {{$project->add_additional_disclaimer}} @endif @endif</h6>
 	<div class="container-fluid">
 		<div class="col-md-12">
-			<textarea class="form-control text-textarea" name="add_disclaimer_txt" rows="3" placeholder="Edit Disclaimer" title="Edit Disclaimer" required="required">@if($project->edit_disclaimer) {{$project->edit_disclaimer}} @else ** The information provided on this webpage is only a summary of the offer and may not contain all the information needed to determine if this offer is right for you. You should read the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif in its entirety which can be downloaded in the Downloads section below as well as on the Project application page once you press the @if($project->button_label){{$project->button_label}}@else{{'Interest'}}@endif button. @if($project->add_additional_disclaimer){{$project->add_additional_disclaimer}} @endif @endif</textarea>
+			<textarea class="form-control text-textarea" name="add_disclaimer_txt" rows="3" placeholder="Edit Disclaimer" title="Edit Disclaimer" ></textarea>
 			<br>
 		</div>
 	</div>
@@ -695,7 +695,7 @@
 									<br>
 									<div class="col-md-10 col-md-offset-1">
 										@if($project->investment)
-										<a href="{{route('projects.interest', $project)}}" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
+										<a href="{{route('projects.interest', $project)}}" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn  @if(!$project->show_invest_now_button) disabled @endif btn-hover-default-color font_color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
 											@if($project->button_label)
 											<?php echo $project->button_label; ?>
 											@else

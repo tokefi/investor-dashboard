@@ -85,7 +85,12 @@ class ProjectsController extends Controller
      * @return Response
      */
     public function store(ProjectRequest $request, AppMailer $mailer)
-    {
+    {   
+        $config = SiteConfiguration::where('project_site',url())->first();
+        if(!isset($config->mailSetting->from) && !isset($config->mailSetting->from) && !isset($config->mailSetting->from)){
+            return redirect()->back()->withMessage('<p class="alert alert-danger text-center">Please update mail setting first</p>');
+        }
+    
         $user = Auth::user();
         // dd($request);
         $request['user_id'] = $request->user()->id;
