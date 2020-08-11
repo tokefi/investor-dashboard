@@ -456,7 +456,7 @@
 								<br><br><br>
 								<div class="row">
 									<div class="center-btn text-center homepg-btn1-section col-md-12" data-wow-duration="1.5s" data-wow-delay="0.5s">
-										<a href="@if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects'){!!$siteConfiguration->homepg_btn1_gotoid!!} @else /#projects @endif" @if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects') class=" @else data-href="/#{{'projects'}}" class="scrollto font-color scroll-links @endif btn btn-red btn-lg font-regular red-btn-style second_color_btn  reference-link-with-js" role="button" style="font-size:22px; border-color: transparent;z-index: 99999;">
+										<a href="@if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects'){!!$siteConfiguration->homepg_btn1_gotoid!!} @else /#projects @endif" @if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects') class=" @else data-href="/#{{'projects'}}" class="scrollto font-color scroll-links @endif btn btn-red btn-lg font-regular red-btn-style   reference-link-with-js" role="button" style="font-size:22px; border-color: transparent;z-index: 99999;">
 											@if(!empty($siteConfiguration))
 											@if($siteConfiguration->homepg_btn1_text != '')
 											{!! nl2br(e($siteConfiguration->homepg_btn1_text)) !!}
