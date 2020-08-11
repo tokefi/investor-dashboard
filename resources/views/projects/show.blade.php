@@ -102,7 +102,7 @@
 	{{csrf_field()}}
 	<div class="col-md-6 col-md-offset-3" style="position: absolute;margin-top: 15px;text-align: center;">
 		<!-- <button type="button" class="btn btn-primary btn-lg edit-project-page-details-btn">Edit Project Details</button> -->
-		<a href="{{route('projects.showedit', [$project->id])}}" type="button" class="btn btn-primary btn-lg edit-project-page-details-btn">Edit Project Details</a>
+		<a href="{{route('projects.showedit', [$project->id])}}" type="button" class="btn btn-primary btn-lg edit-project-page-details-btn font-color">Edit Project Details</a>
 		<div style="display: none;"><button type="submit" class="btn btn-default btn-lg store-project-page-details-btn" style="display: none;">Update Project</button><br></div>
 		<a href="" status="{{$project->active}}" style="color: #fff;"><u>
 			@if($project->active == '1')
@@ -122,8 +122,8 @@
 			<div class="container">
 				<div class="row" id="main-context" style="margin-top:10px; padding-top: 2em;">
 					<div class="col-md-5 col-sm-6">
-						<h2 class="text-left project-title-name font_color" style="font-size:2.625em; ">{{$project->title}}</h2>
-						<span class="text-left project-description-field text-justify font_color" style="font-size:0.875em;">{!!nl2br($project->description)!!}</span>
+						<h2 class="text-left project-title-name font-color" style="font-size:2.625em; ">{{$project->title}}</h2>
+						<span class="text-left project-description-field text-justify font-color" style="font-size:0.875em;">{!!nl2br($project->description)!!}</span>
 						<br>
 					</div>
 					{{-- <div class="col-md-4 col-md-offset-4 col-sm-6 text-center project-close-date-field"></div> --}}
@@ -198,17 +198,17 @@
 							@endif
 							<div class="row text-left">
 								<div class="col-md-2 col-sm-2 col-xs-4 min_investment_field" style="@if(!$project->projectconfiguration->show_min_investment_field) display:none; @endif border-right: thin solid #ffffff; ">
-									<h4 class="font-bold project-min-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Min Invest</h6>
+									<h4 class="font-bold project-min-investment-field font-color" style="font-size:1.375em;">${{number_format((int)$project->investment->minimum_accepted_amount)}}</h4><h6 class="font-regular font-color" style="font-size: 0.875em;">Min Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 max_investment_field" style="@if(!$project->projectconfiguration->show_max_investment_field) display:none; @endif border-right: thin solid #ffffff;">
-									<h4 class="font-bold project-max-investment-field" style="font-size:1.375em;color:#fff;">${{number_format((int)$project->investment->maximum_accepted_amount)}}</h4><h6 class="font-regular" style="font-size: 0.875em;color: #fff">Max Invest</h6>
+									<h4 class="font-bold project-max-investment-field font-color" style="font-size:1.375em;">${{number_format((int)$project->investment->maximum_accepted_amount)}}</h4><h6 class="font-regular font-color" style="font-size: 0.875em;">Max Invest</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 share_per_unit_price" style="@if(!$project->projectconfiguration->show_share_per_unit_price) display:none; @endif border-right: thin solid #ffffff; ">
-									<h4 class="font-bold project-share-per-unit-price" style="font-size:1.375em;color:#fff;">${{$project->share_per_unit_price}}</h4>
-									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;color: #fff" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
+									<h4 class="font-bold project-share-per-unit-price font-color" style="font-size:1.375em;">${{$project->share_per_unit_price}}</h4>
+									<h6 class="font-regular font-color @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-share-per-unit-price-text @endif @endif" style="font-size: 0.875em;" effect="share_per_unit_price_label_text">{{ $project->projectconfigurationpartial->share_per_unit_price_label_text }}</h6>
 								</div>
 								<div class="col-md-2 col-sm-2 col-xs-4 duration" style="@if(!$project->projectconfiguration->show_duration) display:none; @endif border-right: thin solid #ffffff;">
-									<h4 class="font-bold project-hold-period-field" style="font-size:1.375em;color:#fff;">{{$project->investment->hold_period}}</h4><h6 class="font-regular" style="font-size: 0.875em; color: #fff;">Months</h6>
+									<h4 class="font-bold project-hold-period-field font-color" style="font-size:1.375em;">{{$project->investment->hold_period}}</h4><h6 class="font-regular font-color" style="font-size: 0.875em;">Months</h6>
 								</div>
 
 								@if(Auth::guest())
@@ -220,15 +220,15 @@
 								@endif
 								@endif
 								<div class="col-md-2 col-sm-2 col-xs-6 expected_return" style="@if(!$project->projectconfiguration->show_expected_return) display:none; @endif @if($project->projectconfiguration->show_project_investor_count)border-right: thin solid #ffffff; @endif ">
-									<h4 class="font-bold project-returns-field" style="font-size:1.375em;color:#fff;">{{$project->investment->projected_returns}}%</h4>
-									<h6 class="font-regular @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;color: #fff" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
+									<h4 class="font-bold project-returns-field font-color" style="font-size:1.375em;">{{$project->investment->projected_returns}}%</h4>
+									<h6 class="font-regular font-color @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) edit-project-page-labels @endif @endif" style="font-size: 0.875em;" effect="expected_return_label_text">{{$project->projectconfiguration->expected_return_label_text}}</h6>
 								</div>
 
 								<div class="col-md-2 col-sm-2 col-xs-6 project_investor_count" @if(!$project->projectconfiguration->show_project_investor_count) style="display:none;" @endif>
-									<h4 class="text-left font-bold" style="font-size:1.375em;color:#fff; ">
+									<h4 class="text-left font-bold font-color" style="font-size:1.375em;color:#fff; ">
 										@if($project->investment) {{$number_of_investors}} @else ### @endif
 									</h4>
-									<h6 class="font-regular" style="font-size: 0.875em;color: #fff">Investors</h6>
+									<h6 class="font-regular font-color" style="font-size: 0.875em;color: #fff">Investors</h6>
 								</div>
 								@if(Auth::guest())
 								@else
@@ -247,7 +247,7 @@
 								<div class="progress-bar progress-bar-warning second_color_btn" role="progressbar" aria-valuenow="{{$completed_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{$completed_percent}}%">
 								</div>
 							</div>
-							<span class="font-regular" style="font-size:1em;color:#fff; margin-top:-10px;">
+							<span class="font-regular font-color" style="font-size:1em;color:#fff; margin-top:-10px;">
 								@if($project->investment)
 								${{number_format($pledged_amount)}} raised of $<span class="project-goal-amount-field">{{number_format($project->investment->goal_amount)}}</span>
 								@endif
@@ -265,7 +265,7 @@
 					<div class="col-md-4 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<br>
 						@if($project->investment)
-						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
+						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif  " @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b class="btn-hover-default-color font-color">
 							@if($project->is_funding_closed)
 							Funding Closed
 							@elseif($project->button_label)
@@ -274,7 +274,7 @@
 							Invest Now
 							@endif
 						</b></a>
-						<h6><small style="font-size:0.85em; color:#fff;">* Note that this is a No Obligation Expression of interest, you get to review the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif before making any decisions</small></h6>
+						<h6 ><small style="font-size:0.85em; " class="font-color">* Note that this is a No Obligation Expression of interest, you get to review the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif before making any decisions</small></h6>
 						@else
 						<a href="{{route('projects.interest', [$project])}}" class="btn btn-block btn-primary" disabled>NO Investment Policy Yet</a>
 						@endif
@@ -512,8 +512,8 @@
 		@if(Auth::guest())
 		@else
 		@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin())
-		<div class="text-center">
-			<input type="button" name="edit_sub_headings" value="Edit sub headings" class="btn btn-primary btn-lg edit-sub-headings">
+		<div class="text-center ">
+			<input type="button" name="edit_sub_headings" value="Edit sub headings" class="btn btn-primary btn-lg font-color edit-sub-headings">
 			<input type="button" name="save_sub_headings" value="Save sub headings" class="btn btn-default btn-lg save-sub-headings" style="display: none;">
 		</div>
 		<input type="file" name="project_sub_heading_image" id="project_sub_heading_image" class="hide">
@@ -1561,7 +1561,7 @@
 					<br>
 					<div class="col-md-10 col-md-offset-1">
 						@if($project->investment)
-						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px;border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button) disabled @endif @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b>
+						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px;border-radius: 50px !important;" class="btn btn-block btn-n1 btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button) disabled @endif @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif btn-hover-default-color" @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b class="font-color btn-hover-default-color">
 							@if($project->is_funding_closed)
 							Funding Closed
 							@elseif($project->button_label)

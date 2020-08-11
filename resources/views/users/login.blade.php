@@ -28,7 +28,7 @@ Login | @parent
 					<br>
 					<div class="text-left">
 						<h1 class="wow fadeIn animated font-bold first_color" data-wow-duration="1.5s" data-wow-delay="0.2s" style="font-weight:600 !important; font-size:2.625em; color:#2d2a6e;">Login</h1>
-						<h3 class="font-regular first_color" style="font-size:1.375em;">Sign in to see the current opportunities </h3>
+						<h3 class="font-regular " style="font-size:1.375em;">Sign in to see the current opportunities </h3>
 						<br>
 					</div>
 				</div>
@@ -50,8 +50,8 @@ Login | @parent
 							</div>
 							<input type="hidden" value="" id="next" name="next">
 							<div class="form-group" style="width:75%;">
-								{!! Form::submit('Login with Konkrete account', array('class'=>'btn btn-block second_color_btn hide', 'tabindex'=>'4', 'style'=>'border-radius:50px; background-color:#fed405;font-size:1.125em;color:#fff;')) !!}
-								<button type="submit" class='btn btn-lg btn-danger font-semibold text-right second_color_btn' id="submitform" href='#' style="width:300px; background-color: #fed405; font-size:1em; color:#fff;border-radius:50px; border: 0px;" data-toggle="tooltip" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) title="If you are an existing Konkrete user you can use the same username and password here without having to sign up again" @endif><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/konkrete_favicon.png')}}" style="width: 20px;"> Login @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) with Konkrete account @endif</button>
+								{!! Form::submit('Login with Konkrete account', array('class'=>'btn btn-block second_color_btn font-color hide', 'tabindex'=>'4', 'style'=>'border-radius:50px; background-color:#fed405;font-size:1.125em;')) !!}
+								<button type="submit" class='btn btn-lg btn-danger font-semibold text-right second_color_btn font-color ' id="submitform" href='#' style="width:300px; background-color: #fed405; font-size:1em; border-radius:50px; border: 0px;" data-toggle="tooltip" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) title="If you are an existing Konkrete user you can use the same username and password here without having to sign up again" @endif><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/konkrete_favicon.png')}}" style="width: 20px;"> Login @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) with Konkrete account @endif</button>
 							</div>
 							<p class="text-left" style="margin-left: -25px"> <a class="btn btn-link" href="{{ url('/password/email') }}"> Forgot Your Password?</a></p>
 						</fieldset>

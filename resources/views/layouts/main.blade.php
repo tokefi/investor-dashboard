@@ -231,21 +231,21 @@ $_SESSION['code'] = md5(microtime(true));
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="nav-item"><a href="{{route('home')}}" class="scrollto hide" id="nav_home">Home</a></li>
-                    <!-- <li class="nav-item"><a href="{{route('home')}}#what-is-this" class="scrollto">WHAT IS THIS</a></li> -->
-                    <li class="nav-item"><a href="{{route('home')}}#how-it-works">How it works</a></li>
-                    <li class="nav-item" style="color: #eee;"><a href="{{route('home')}}#projects">Investments</a></li>
+                    <li class="nav-item"><a href="{{route('home')}}" class="scrollto font-color hide" id="nav_home">Home</a></li>
+                    <!-- <li class="nav-item"><a href="{{route('home')}}#what-is-this" class="scrollto font-color">WHAT IS THIS</a></li> -->
+                    <li class="nav-item"><a href="{{route('home')}}#how-it-works" class="font-color">How it works</a></li>
+                    <li class="nav-item" style="color: #eee;"><a href="{{route('home')}}#projects" class="font-color">Investments</a></li>
                     @if($siteConfiguration->show_funding_options != '')
-                    <li class="nav-item" style="color: #eee;"><a href="{{route('home')}}#funding">Funding</a></li>
+                    <li class="nav-item" style="color: #eee;"><a href="{{route('home')}}#funding" class="font-color">Funding</a></li>
                     @endif
-                    <li class="nav-item"><a href="/pages/team">About us</a></li>
+                    <li class="nav-item"><a href="/pages/team" class="font-color">About us</a></li>
                     <!-- <li class="nav-item"><a href="/pages/faq">FAQ</a></li> -->
                     @if (Auth::guest())
-                    <li class="nav-item"><a href="{{route('users.create')}}">Register</a></li>
-                    <li class="nav-item"><a href="{{route('users.login')}}">Sign in</a></li>
+                    <li class="nav-item"><a href="{{route('users.create')}}" class="font-color">Register</a></li>
+                    <li class="nav-item"><a href="{{route('users.login')}}" class="font-color">Sign in</a></li>
                     @else
                     <li class="dropdown nav-item last">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <a href="#" class="dropdown-toggle font-color" data-toggle="dropdown" role="button" aria-expanded="false">
                             My Account <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
@@ -427,13 +427,13 @@ $_SESSION['code'] = md5(microtime(true));
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
                     <ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
-                        <li class="footer-list-item hide"><a href="{{route('home')}}" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
-                        <li class="footer-list-item @if(!$siteConfiguration->blog_link_new) hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
-                        <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link"><span class="font-semibold"  style="color:#fff; font-size: 16px;">Terms & conditions</span></a></li>
+                        <li class="footer-list-item hide"><a href="{{route('home')}}" style="color:#fff;" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Home</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->blog_link_new) hide @endif"><a href="{{$siteConfiguration->blog_link_new}}" target="_blank" style="color:#fff;" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Blog</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link font-color"><span class="font-semibold"  style="color:#fff; font-size: 16px;">Terms & conditions</span></a></li>
                         <span style="color:#fff;"> </span>
-                        <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
-                        <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
-                        <li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif"><a href="{{$siteConfiguration->faq_link}}" style="color:#fff;" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
+                        <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif"><a href="{{$siteConfiguration->faq_link}}" style="color:#fff;" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a></li>
                     </ul>
                     <br>
                 </div>
@@ -441,11 +441,11 @@ $_SESSION['code'] = md5(microtime(true));
             <div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
               <a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
               <p>
-                <span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
+                <span style="color: #fff;" class="font-color">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link font-color">Konkrete</a>
             </p>
         </div>
         <br>
-        <p class="investment-title1-description-section text-center" style="font-size:16px;">
+        <p class=" text-center font-color" style="font-size:16px;">
             <small><small>@if($siteConfiguration->compliance_description != '')
                 {!!html_entity_decode($siteConfiguration->compliance_description)!!} @else
                 The content provided on this website has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to any products offered on this website you should read the prospectus, product disclosure statement, information memorandum or any other offer documents relevant to that offer and consider whether they are right for you. The specific offer document is available at the Project and Project Application Pages. <span class="hide"> {{$siteConfiguration->licensee_name}} which is a Corporate Authorised Representative @if($siteConfiguration->car_no != '') {{$siteConfiguration->car_no}} @else 001251881 @endif of AFSL @if($siteConfiguration->afsl_no != '') {{$siteConfiguration->afsl_no}} @else 000299812 @endif provides technology, administrative and support services for the operation of this website. {{$siteConfiguration->licensee_name}} is authorised to deal in securities only and is not party to the offers made on the website. Here is a copy of our <a href="@if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link){{App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->financial_service_guide_link}} @else https://www.dropbox.com/s/gux7ly75n4ps4ub/Tech%20Baron%20AusFirst%20Financial%20Services%20Guide.pdf?dl=0 @endif" target="_blank"><span style="text-decoration: none; color: #fff;">Financial Services Guide</span></a>.
@@ -527,6 +527,7 @@ $_SESSION['code'] = md5(microtime(true));
         $('.first_color').css('color', '#{{$color->nav_footer_color}}');
         $('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
         $('.second_color').css('color','#{{$color->heading_color}}');
+        $('.font-color').css('color','#{{$color->font_color}}');
         $("a").mouseover(function() {
             $(this).css('color', '#{{$color->heading_color}}');
         }).mouseout(function() {
@@ -535,7 +536,10 @@ $_SESSION['code'] = md5(microtime(true));
         $(".a-link").mouseover(function() {
             $(this).css('color', '#{{$color->heading_color}}');
         }).mouseout(function() {
-            $(this).css('color', '#fff');
+            $(this).css('color', '#{{$color->font_color}}');
+        });
+        $(".font-color").mouseout(function() {
+            $(this).css('color', '#{{$color->font_color}}');
         });
         @endif
 

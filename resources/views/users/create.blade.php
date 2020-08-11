@@ -88,7 +88,7 @@ Sign up for free Australia's top Venture Crowdfunding
 								<div class="row">
 									<div class="col-md-12 wow fadeIn animated" data-wow-duration="1.5s" data-wow-delay="1s" style="margin-bottom: 10px;">
 										<input type="submit" value="Register" id="submit1" name="submit"  class="btn btn-block font-bold hide" hidden style="height:40px; width:50%; font-size: 1.125em; background-color:#fed405; border-radius:0px;color:#2d2d4b;" tabindex="8">
-										<button type="button" class='btn btn-lg btn-danger font-semibold text-right second_color_btn' id="submitform"  style="width:243px; background-color: #fed405; font-size:1em; color:#fff;border-radius:50px; border: 0px;"><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/konkrete_favicon.png')}}" style="width: 20px;"> Register</button>
+										<button type="button" class='btn btn-lg btn-danger font-semibold text-right second_color_btn font-color' id="submitform"  style="width:243px; background-color: #fed405; font-size:1em;border-radius:50px; border: 0px;"><img class="pull-left @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" src="{{asset('assets/images/konkrete_favicon.png')}}" style="width: 20px;"> Register</button>
 									</div>
 									<div class="col-md-12 @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif">
 										<span><small>** If you are an existing Konkrete user you can use the same username and password here without having to sign up again.</small></span>

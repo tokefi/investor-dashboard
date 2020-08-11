@@ -215,17 +215,17 @@
 					</div>
 					<div id="navbar" class="collapse navbar-collapse navbar-right" style="margin-top:10px;">
 						<ul class="nav navbar-nav">
-							<li class="active nav-item"><a href="{{route('home')}}/#promo" data-href="{{route('home')}}/#promo" class="scrollto hide scroll-links reference-link-with-js" id="nav_home">Home</a></li>
-							<li class="nav-item"><a href="{{route('home')}}/#how-it-works" data-href="{{route('home')}}/#how-it-works" class="scrollto scroll-links reference-link-with-js">How it works</a></li>
-							<li class="nav-item"><a href="{{route('home')}}/#projects" data-href="{{route('home')}}/#projects" class="scrollto scroll-links reference-link-with-js">Investments</a></li>
+							<li class="active nav-item"><a href="{{route('home')}}/#promo" data-href="{{route('home')}}/#promo" class="scrollto font-color hide scroll-links reference-link-with-js" id="nav_home">Home</a></li>
+							<li class="nav-item"><a href="{{route('home')}}/#how-it-works" data-href="{{route('home')}}/#how-it-works" class="scrollto font-color scroll-links reference-link-with-js">How it works</a></li>
+							<li class="nav-item"><a href="{{route('home')}}/#projects" data-href="{{route('home')}}/#projects" class="scrollto font-color scroll-links reference-link-with-js">Investments</a></li>
 							@if($siteConfiguration->show_funding_options != '')
-							<li class="nav-item"><a href="{{route('home')}}/#funding" data-href="{{route('home')}}/#funding" class="scrollto scroll-links reference-link-with-js">Funding</a></li>
+							<li class="nav-item"><a href="{{route('home')}}/#funding" data-href="{{route('home')}}/#funding" class="scrollto font-color scroll-links reference-link-with-js">Funding</a></li>
 							@endif
-							<li class="nav-item"><a href="/pages/team">About us</a></li>
+							<li class="nav-item"><a href="/pages/team" class="font-color">About us</a></li>
 							<!-- <li class="nav-item"><a href="/pages/faq">FAQ</a></li> -->
 							@if (Auth::guest())
-							<li class="nav-item"><a href="{{route('users.create')}}">Register</a></li>
-							<li class="nav-item">{!! Html::linkRoute('users.login', 'Sign in') !!}</li>
+							<li class="nav-item"><a href="{{route('users.create')}}" class="font-color">Register</a></li>
+							<li class="nav-item"><a href="{{route('users.login')}}" class="font-color">Sign in</a></li>
 							@else
 							<li class="nav-item last dropdown" role="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -336,12 +336,12 @@
 
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav navbar-right">
-							<li class="nav-item"><a href="{{route('home')}}" data-href="{{route('home')}}" class="scrollto hide scroll-links reference-link-with-js" id="nav_home">Home</a></li>
-							<!-- <li class="nav-item"><a href="{{route('home')}}#what-is-this" class="scrollto">WHAT IS THIS</a></li> -->
-							<li class="nav-item"><a href="{{route('home')}}/#how-it-works" data-href="{{route('home')}}/#how-it-works" class="scrollto scroll-links reference-link-with-js">How it works</a></li>
-							<li class="nav-item" style="color: #eee;"><a href="{{route('home')}}/#projects" data-href="{{route('home')}}/#projects" class="scrollto scroll-links reference-link-with-js">Investments</a></li>
+							<li class="nav-item"><a href="{{route('home')}}" data-href="{{route('home')}}" class="scrollto font-color hide scroll-links reference-link-with-js" id="nav_home">Home</a></li>
+							<!-- <li class="nav-item"><a href="{{route('home')}}#what-is-this" class="scrollto font-color">WHAT IS THIS</a></li> -->
+							<li class="nav-item"><a href="{{route('home')}}/#how-it-works" data-href="{{route('home')}}/#how-it-works" class="scrollto font-color scroll-links reference-link-with-js">How it works</a></li>
+							<li class="nav-item" style="color: #eee;"><a href="{{route('home')}}/#projects" data-href="{{route('home')}}/#projects" class="scrollto font-color scroll-links reference-link-with-js">Investments</a></li>
 							@if($siteConfiguration->show_funding_options != '')
-							<li class="nav-item" style="color: #eee;"><a href="{{route('home')}}/#funding" data-href="{{route('home')}}/#funding" class="scrollto scroll-links reference-link-with-js">Funding</a></li>
+							<li class="nav-item" style="color: #eee;"><a href="{{route('home')}}/#funding" data-href="{{route('home')}}/#funding" class="scrollto font-color scroll-links reference-link-with-js">Funding</a></li>
 							@endif
 							<li class="nav-item"><a href="/pages/team">About us</a></li>
 							<!-- <li class="nav-item"><a href="/pages/faq">FAQ</a></li> -->
@@ -433,7 +433,7 @@
 								<br><br><br><br>
 								<div class="row">
 									<div class="homepg-text1 text-center form-group col-md-6 col-md-offset-3">
-										<h2 class="text-center font_color" style=" font-size:32px;">
+										<h2 class="text-center font-color" style=" font-size:32px;">
 											@if(!empty($siteConfiguration))
 											@if($siteConfiguration->homepg_text1 != '')
 											{!! nl2br(e($siteConfiguration->homepg_text1)) !!}
@@ -456,7 +456,7 @@
 								<br><br><br>
 								<div class="row">
 									<div class="center-btn text-center homepg-btn1-section col-md-12" data-wow-duration="1.5s" data-wow-delay="0.5s">
-										<a href="@if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects'){!!$siteConfiguration->homepg_btn1_gotoid!!} @else /#projects @endif" @if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects') class=" @else data-href="/#{{'projects'}}" class="scrollto scroll-links @endif btn btn-red btn-lg font-regular red-btn-style second_color_btn  reference-link-with-js" role="button" style="font-size:22px; border-color: transparent;z-index: 99999;">
+										<a href="@if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects'){!!$siteConfiguration->homepg_btn1_gotoid!!} @else /#projects @endif" @if($siteConfiguration->homepg_btn1_gotoid!='' && $siteConfiguration->homepg_btn1_gotoid != 'projects') class=" @else data-href="/#{{'projects'}}" class="scrollto font-color scroll-links @endif btn btn-red btn-lg font-regular red-btn-style   reference-link-with-js" role="button" style="font-size:22px; border-color: transparent;z-index: 99999;">
 											@if(!empty($siteConfiguration))
 											@if($siteConfiguration->homepg_btn1_text != '')
 											{!! nl2br(e($siteConfiguration->homepg_btn1_text)) !!}
@@ -1184,7 +1184,7 @@
 					<input type="hidden" id="hidden_funding_section_title1" value="@if($siteConfiguration->funding_section_title1 != '') {!! nl2br(e($siteConfiguration->funding_section_title1)) !!} @endif">
 					<br>
 					<div class="text-center funding-section-btn1-field" data-wow-duration="1.5s" data-wow-delay="0.4s">
-						<a id="second_color_venture" href="{{route('projects.create')}}" class="btn btn-default text-center font-regular second_color_btn btn-hover-default-color" style="padding: 8px 24px;font-size:22px;background-color:#fed405; border-radius:50px; letter-spacing:1px; color: #fff !important">
+						<a id="second_color_venture" href="{{route('projects.create')}}" class="btn btn-default text-center font-regular second_color_btn font-color btn-hover-default-color" style="padding: 8px 24px;font-size:22px;background-color:#fed405; border-radius:50px; letter-spacing:1px; color: #fff !important">
 							@if($siteConfiguration->funding_section_btn1_text != ''){!!$siteConfiguration->funding_section_btn1_text!!} @else Submit Venture @endif
 						</a>
 					</div>
@@ -1488,33 +1488,33 @@
 				<div class="col-md-4 col-md-offset-4 text-center">
 					<ul class="list-inline footer-list " data-wow-duration="1.5s" data-wow-delay="0.4s" style="margin:0px;">
 						<li class="footer-list-item hide">
-							<a href="/#promo" data-href="/#promo" class="scrollto a-link scroll-links  "><span class="font-semibold" style="font-size: 16px;">Home</span></a>
+							<a href="/#promo" data-href="/#promo" class="scrollto a-link font-color scroll-links  "><span class="font-semibold" style="font-size: 16px;">Home</span></a>
 						</li>
 						<li class="footer-list-item @if($siteConfiguration->blog_link_new) @else hide @endif">
-							<a href="{{$siteConfiguration->blog_link_new}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Blog</span></a>
+							<a href="{{$siteConfiguration->blog_link_new}}" target="_blank" class="a-link font-color "><span class="font-semibold " style="font-size: 16px;">Blog</span></a>
 						</li>
 						{{-- @if($siteConfiguration->show_funding_options != '')
 						<li class="footer-list-item">
-							<a href="{{$siteConfiguration->funding_link}}" class="a-link"><span class="font-semibold" style="font-size: 16px;">Funding</span></a>
+							<a href="{{$siteConfiguration->funding_link}}" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Funding</span></a>
 						</li><br>
 						@endif --}}
 						<li class="footer-list-item @if($siteConfiguration->terms_conditions_link)  @else hide @endif">
 							{{-- <a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank"><span class="font-semibold" style="font-size: 16px;">Terms & conditions</span></a> --}}
-							<a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Terms & conditions</span></a>
+							<a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Terms & conditions</span></a>
 						</li>
 						<span style="color:#fff;"> </span>
 						<!-- <li class="footer-list-item"><a href="#"><span>Venture Finance</span></a></li> -->
 						<li class="footer-list-item @if($siteConfiguration->privacy_link) @else hide @endif">
-							<a href="{{$siteConfiguration->privacy_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a>
+							<a href="{{$siteConfiguration->privacy_link}}" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a>
 						</li><br>
 						<li class="footer-list-item @if($siteConfiguration->financial_service_guide_link) @else hide @endif">
-							<a href="{{$siteConfiguration->financial_service_guide_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a>
+							<a href="{{$siteConfiguration->financial_service_guide_link}}" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a>
 						</li>
 						<li class="footer-list-item @if(!$siteConfiguration->faq_link) hide @endif">
-							<a href="{{$siteConfiguration->faq_link}}" target="_blank" class="a-link"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a>
+							<a href="{{$siteConfiguration->faq_link}}" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">FAQ</span></a>
 						</li>
 						<!-- <li class="footer-list-item">
-							<a href="{{$siteConfiguration->media_kit_link}}" download class="a-link"><span class="font-semibold" style="font-size: 16px;">Media Kit</span></a>
+							<a href="{{$siteConfiguration->media_kit_link}}" download class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Media Kit</span></a>
 						</li> -->
 					</ul>
 				</div>
@@ -1528,7 +1528,7 @@
 			<div class="row text-center @if(!App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_powered_by_estatebaron) hide @endif" style="padding-top: 20px;">
 				<a href="https://konkrete.io" target="_blank" style="cursor: pointer;"><img style="max-width: 65px; margin-bottom: 1.2rem;" src="{{asset('assets/images/konkrete_logo_white.png')}}"></a>
 				<p>
-					<span style="color: #fff;">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer; color: #fff;" class="a-link">Konkrete</a>
+					<span style="" class="font-color">Built on </span><a href="https://konkrete.io" target="_blank" style="cursor: pointer;" class="a-link font-color">Konkrete</a>
 				</p>
 			</div>
 		</div>
@@ -1895,7 +1895,7 @@
 			$('.first_color').attr('style','color: #{{$color->nav_footer_color}}');
 			$('.second_color_btn').css('background-color', '#{{$color->heading_color}}');
 			$('.second_color').css('color','#{{$color->heading_color}}');
-			$('.font_color').css('color','#{{$color->font_color}}');
+			$('.font-color').css('color','#{{$color->font_color}}');
 			$("a").mouseover(function() {
 				$(this).css('color', '#{{$color->heading_color}}');
 			}).mouseout(function() {
@@ -1904,7 +1904,10 @@
 			$(".a-link").mouseover(function() {
 				$(this).css('color', '#{{$color->heading_color}}');
 			}).mouseout(function() {
-				$(this).css('color', '#fff');
+				$(this).css('color', '#{{$color->font_color}}');
+			});
+			$(".font-color").mouseout(function() {
+				$(this).css('color', '#{{$color->font_color}}');
 			});
 			@endif
 			$('.scrollto').click(function(e) {
