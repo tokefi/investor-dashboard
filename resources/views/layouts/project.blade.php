@@ -404,7 +404,7 @@ $_SESSION['code'] = md5(microtime(true));
                         <!-- @if($siteConfiguration->show_funding_options != '')
                         <li class="footer-list-item"><a href="{{$siteConfiguration->funding_link}}" style="color:#fff;" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Funding</span></a></li><br>
                         @endif -->
-                        <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link font-color"><span class="font-semibold"  style="color:#fff; font-size: 16px;">Terms & conditions</span></a></li>
+                        <li class="footer-list-item @if(!$siteConfiguration->terms_conditions_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->terms_conditions_link}}" target="_blank" class="a-link font-color"><span class="font-semibold"  style="font-size: 16px;">Terms & conditions</span></a></li>
                         <span style="color:#fff;"> </span>
                         <li class="footer-list-item @if(!$siteConfiguration->privacy_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->privacy_link}}"  style="color:#fff;" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Privacy</span></a></li><br>
                         <li class="footer-list-item @if(!$siteConfiguration->financial_service_guide_link == ' NULL ') hide @endif"><a href="{{$siteConfiguration->financial_service_guide_link}}"  style="color:#fff;" target="_blank" class="a-link font-color"><span class="font-semibold" style="font-size: 16px;">Financial Service Guide</span></a></li>
