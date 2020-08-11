@@ -145,13 +145,13 @@
 						@endif
 						@elseif($project->projectconfiguration->show_project_progress_circle)
 						<div id="circle" class="days-left-circle">
-							<div class="text-center" style="color:#fff">
+							<div class="text-center" style="">
 								<div class="circle" data-size="140" data-thickness="15" data-reverse="true" style="max-height: 140px;">
-									<div class="text-center"  style="color:#fff; position:relative; bottom:100px;">
-										<p style="color: #fff; font-size: 1.6em; margin: 0 0 -5px;">
-											<span id="daysremained" style="color: #fff;"></span>
+									<div class="text-center font-color"  style=" position:relative; bottom:100px;">
+										<p style=" font-size: 1.6em; margin: 0 0 -5px;">
+											<span id="daysremained" style="" class="font-color"></span>
 											<br>
-											<p style="font-size: 1.1em; margin: 0 0 -3px;" class="h1-faq avoid-p-color">Days Left</p>
+											<p style="font-size: 1.1em; margin: 0 0 -3px;" class="h1-faq avoid-p-color font-color">Days Left</p>
 										</p>
 									</div>
 								</div>
