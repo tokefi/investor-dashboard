@@ -318,6 +318,7 @@
 													<a href="{{$doc->media_url}}/{{$doc->path}}" target="_blank"> Doc </a>
 													@endif
 													@endif
+													@else
 													@if(isset($investment->investingJoint->investing_company )){{  $investment->investingJoint->investing_company}} @endif
 													@endif
 												</td>
@@ -542,6 +543,7 @@
 											Doc </a>
 											@endif
 											@endif
+											@else
 											@if(isset($shareInvestment->investingJoint->investing_company )){{  $shareInvestment->investingJoint->investing_company}} @endif
 											@endif
 										</td>
