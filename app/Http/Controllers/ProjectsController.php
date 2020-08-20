@@ -90,7 +90,7 @@ class ProjectsController extends Controller
         if(!isset($config->mailSetting->from) && !isset($config->mailSetting->from) && !isset($config->mailSetting->from)){
             return redirect()->back()->withMessage('<p class="alert alert-danger text-center">Please update mail setting first</p>');
         }
-    
+
         $user = Auth::user();
         // dd($request);
         $request['user_id'] = $request->user()->id;
@@ -591,7 +591,17 @@ class ProjectsController extends Controller
                 return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields', 'agentCustomValues'));
             }
             if(!$project->eoi_button){
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
+                if(!$user){
+                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
+                }else{
+                    $investment = InvestmentInvestor::where('user_id',$user->id)->where('project_id',$project_id)->get()->last();
+                    if($investment){
+                        $investmentCustomValues = $investment->customFieldValuesInvestment->groupBy('custom_field_id');
+                        // dd($investmentCustomValues);
+                        return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields','investmentCustomValues'));
+                    }
+                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
+                }
             } else{
                 return response()->view('errors.404', [], 404);
             }

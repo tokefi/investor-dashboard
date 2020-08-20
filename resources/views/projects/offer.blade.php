@@ -403,6 +403,7 @@ Offer Doc
 															name="custom[{{ $customField->id }}]"
 															placeholder="{{ $customField->label }}" 
 															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 															@if($customField->is_required) required @endif />
 													@endif
 													@if(in_array($customField->type, ['date']))
@@ -410,6 +411,7 @@ Offer Doc
 															type="{{ $customField->type }}" 
 															name="custom[{{ $customField->id }}]" 
 															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 															@if($customField->is_required) required @endif />
 													@endif
 												</div>
@@ -617,6 +619,7 @@ Offer Doc
 																		name="custom[{{ $customField->id }}]"
 																		placeholder="{{ $customField->label }}" 
 																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																		@if($customField->is_required) required @endif />
 																@endif
 																@if(in_array($customField->type, ['date']))
@@ -624,6 +627,7 @@ Offer Doc
 																		type="{{ $customField->type }}" 
 																		name="custom[{{ $customField->id }}]" 
 																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																		@if($customField->is_required) required @endif />
 																@endif
 															</div>
@@ -664,6 +668,7 @@ Offer Doc
 																		name="custom[{{ $customField->id }}]"
 																		placeholder="{{ $customField->label }}" 
 																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																		@if($customField->is_required) required @endif />
 																@endif
 																@if(in_array($customField->type, ['date']))
@@ -671,6 +676,7 @@ Offer Doc
 																		type="{{ $customField->type }}" 
 																		name="custom[{{ $customField->id }}]" 
 																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																		@if($customField->is_required) required @endif />
 																@endif
 															</div>
@@ -703,6 +709,7 @@ Offer Doc
 																name="custom[{{ $customField->id }}]"
 																placeholder="{{ $customField->label }}" 
 																@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																@if($customField->is_required) required @endif />
 														@endif
 														@if(in_array($customField->type, ['date']))
@@ -710,6 +717,7 @@ Offer Doc
 																type="{{ $customField->type }}" 
 																name="custom[{{ $customField->id }}]" 
 																@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+																@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
 																@if($customField->is_required) required @endif />
 														@endif
 													</div>
