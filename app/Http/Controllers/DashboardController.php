@@ -2425,8 +2425,7 @@ class DashboardController extends Controller
             
             $preCustomFields = CustomField::where('site_url', url())
             ->where('page', 'application_form')
-            ->get()->pluck('name')
-            ->toArray();
+            ->get();
             
             // import client application
             if(!empty($csv_data)) {
