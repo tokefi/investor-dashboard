@@ -48,6 +48,7 @@ use SendGrid\Mail\Mail as SendgridMail;
 use App\Helpers\SiteConfigurationHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\ApplicationSections;
 
 
 class DashboardController extends Controller
@@ -612,8 +613,9 @@ class DashboardController extends Controller
         $mail_setting = $siteconfiguration->mailSetting;
         $siteConfigurationHelper = SiteConfigurationHelper::getConfigurationAttr();
         $customFields = CustomField::where('site_url', url())->get();
+        $sections = ApplicationSections::where('site_url', url())->get();
         
-        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields'));
+        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields','sections'));
     }
 
     public function investmentMoneyReceived(Request $request, AppMailer $mailer, $investment_id)

@@ -348,3 +348,8 @@ Route::post('/dashboard/projects/allocation',['as'=>'dashboard.projects.allocati
 /** Custom Fields actions */
 Route::post('/dashboard/site-configuration/custom-fields', 'CustomFieldsController@store')->name('custom-field.store');
 Route::post('/dashboard/site-configuration/custom-fields/{custom_field}/delete', 'CustomFieldsController@destroy')->name('custom-field.delete');
+
+/** Application section actions */
+Route::post('/dashboard/site-configuration/application-section', 'ApplicationSectionsController@store')->name('application-section.store');
+Route::post('/dashboard/site-configuration/application-sections/{application_section}/delete', 'ApplicationSectionsController@destroy')->name('application-section.delete');
+Route::post('/dashboard/application/section/reorder', 'ApplicationSectionsController@reorder');

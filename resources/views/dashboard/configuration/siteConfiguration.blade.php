@@ -367,6 +367,7 @@ Configuration | Dashboard | @parent
                     <hr>
                 </div>
             </section>
+            @include('dashboard.configuration.partials.applicationSections')
             @include('dashboard.configuration.partials.customFields')
         </div>
     </div>
@@ -914,6 +915,31 @@ Configuration | Dashboard | @parent
 
 <script type="text/javascript">
 	$(document).ready(function(){
+        $('#reorder').on('click',function (f) {
+            f.preventDefault();
+            var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();
+            var sectionIds = $("input[name='sectionIds[]']")
+              .map(function(){return $(this).val();}).get();
+            console.log(rank,sectionIds);
+            $('.loader-overlay').show();
+            $.ajax({
+                url: '/dashboard/application/section/reorder',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {rank,sectionIds,},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function (data) {
+                    $('#reorderMsg').removeClass('hide');
+                    $('.loader-overlay').hide();
+                },
+                error: function (error) {
+                    console.log('You are in error');
+                    // location.reload();
+                }
+            });
+
+        });
+
         $('.change-tag-manager-btn').click(function(){
             $('#tag_manager_edit_modal').modal({
                 'show':true,
@@ -1087,6 +1113,8 @@ Configuration | Dashboard | @parent
         }
         performCropOnImage();
     });
+       
+
         // Additional functionality functions
         editProspectusText();
         editClientName();

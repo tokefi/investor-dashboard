@@ -283,10 +283,16 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
+									@foreach($sections as $section)
+									@if($section->name === 'investing_type')
+										
+									<br class="@if($section->rank == 1) hide @endif">
 									@if(!Auth::guest())
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
+												
+												
 												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
 												<h4>Are you Investing as</h4>
@@ -518,7 +524,8 @@ Offer Doc
 											</div>
 										</div>
 									</div>
-
+									@elseif($section->name === 'contact_details')
+										
 									<div class="row" >
 										<div class="col-md-12">
 											<div style="">
@@ -637,6 +644,9 @@ Offer Doc
 											</div>
 										</div>
 									</div>
+
+									@elseif($section->name === 'nominated_bank_account')
+										
 									<br>
 									<div class="row " id="section-7">
 										<div class="col-md-12">
@@ -693,14 +703,18 @@ Offer Doc
 
 										</div>
 									</div>
+
+									@else
 									<br>
-									@if (isset($customFields['other']) && $customFields['other']->count())
+									 
+									@if (isset($customFields[$section->name]) && $customFields[$section->name]->count())
 									<div class="row " id="section-8">
 										<div class="col-md-12">
-											<h3>Additional Info</h3>
+											<h3>{{ $section->label }}</h3>
+											<p>{{ $section->description }}</p>
 											<hr />
 											<div class="row">
-												@foreach ($customFields['other'] as $customField)
+												@foreach ($customFields[$section->name] as $customField)
 													<div class="col-md-4" style="margin-top:20px;">
 														<label>{{ $customField->label }}</label>
 														@if(in_array($customField->type, ['text']))
@@ -727,6 +741,8 @@ Offer Doc
 									</div>
 									<br />
 									@endif
+									@endif
+								@endforeach
 									@if(Auth::guest())
 									<input type="password" name="password" class="hidden" id="passwordOffer">
 									<input type="text" name="role" class="hidden" value="investor">

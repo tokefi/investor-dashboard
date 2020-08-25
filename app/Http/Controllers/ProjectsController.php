@@ -40,6 +40,7 @@ use App\Helpers\SiteConfigurationHelper;
 use App\Http\Requests\InvestmentRequest;
 use App\Jobs\SendInvestorNotificationEmail;
 use App\Jobs\SendDeveloperNotificationEmail;
+use App\ApplicationSections;
 
 
 class ProjectsController extends Controller
@@ -522,6 +523,37 @@ class ProjectsController extends Controller
         $project = Project::findOrFail($project_id);
         
         $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->groupBy('section');
+        $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
+        
+        //add basic sections
+        if(!$sections->count()){
+            // section Investing Type
+            $sections = new ApplicationSections;
+            $sections->site_url = url();
+            $sections->name = 'investing_type';
+            $sections->label = 'Are you Investing as';
+            $sections->description =  null;
+            $sections->rank = 1;
+            $sections->save();
+        // Contact Details section
+            $sections = new ApplicationSections;
+            $sections->site_url = url();
+            $sections->name = 'contact_details';
+            $sections->label = 'Contact Details';
+            $sections->description =  null;
+            $sections->rank = 2;
+            $sections->save();
+        // Nominated Bank Account
+            $sections = new ApplicationSections;
+            $sections->site_url = url();
+            $sections->name = 'nominated_bank_account';
+            $sections->label = 'Nominated Bank Account';
+            $sections->description =  'Please enter your bank account details where you would like to receive any Dividend or other payments related to this investment';
+            $sections->rank = 3;
+            $sections->save();
+            $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
+        }
+        // dd($sections->count());
         if ($project->retail_vs_wholesale == 0) {
             foreach ($customFields as $section => $fields) {
                 $tmp = $fields->filter(function ($item) {
@@ -577,7 +609,7 @@ class ProjectsController extends Controller
             if($request->source == 'eoi'){
                 $user = User::find($request->uid);
                 $eoi = ProjectEOI::find($request->id);
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment','agent_investment', 'customFields'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'eoi', 'admin_investment','agent_investment', 'customFields','sections'));
             }
             if($request->source == 'clientApplication'){
                 // $action = '/offer/submit/'.$project_id.'/step1';
@@ -588,19 +620,19 @@ class ProjectsController extends Controller
                 $agentCustomValues = $clientApplication->customFieldValues->groupBy('custom_field_id');
                 // dd($agentCustomValues);
 
-                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields', 'agentCustomValues'));
+                return view('projects.offer', compact('project','color','action','projects_spv','user', 'clientApplication','admin_investment','agent_investment', 'customFields', 'agentCustomValues','sections'));
             }
             if(!$project->eoi_button){
                 if(!$user){
-                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
+                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields','sections'));
                 }else{
                     $investment = InvestmentInvestor::where('user_id',$user->id)->where('project_id',$project_id)->get()->last();
                     if($investment){
                         $investmentCustomValues = $investment->customFieldValuesInvestment->groupBy('custom_field_id');
                         // dd($investmentCustomValues);
-                        return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields','investmentCustomValues'));
+                        return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields','investmentCustomValues','sections'));
                     }
-                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields'));
+                    return view('projects.offer', compact('project','color','action','projects_spv','user', 'admin_investment','agent_investment','agent_type', 'customFields','sections'));
                 }
             } else{
                 return response()->view('errors.404', [], 404);

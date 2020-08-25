@@ -1,7 +1,7 @@
 <section style="padding: 5% 0%;">
     <div class="col-md-offset-1 col-md-10">
         <h2 class="text-center">Application form custom fields</h2>
-        <hr>
+        
         <div class="well">
             <form action="{{ route('custom-field.store') }}" method="POST">
                 {{ csrf_field() }}
@@ -18,14 +18,14 @@
                         <label for="label">Label<sup class="text-danger">*<sup></label>
                         <input type="text" class="form-control" id="label" name="label" placeholder="Enter label" required>
                     </div>
+                    
                     <div class="col-sm-4" style="margin-bottom: 20px;">
                         <label for="section">Select section<sup class="text-danger">*<sup></label>
                         <select class="form-control" id="type" name="section" required>
                             <option value="">-- Select --</option>
-                            <option value="investing_type">Investing Type</option>
-                            <option value="contact_details">Contact Details</option>
-                            <option value="nominated_bank_account">Nominated Bank Account</option>
-                            <option value="other">Other</option>
+                            @foreach ($sections as $section)
+                                <option value="{{ $section->name }}">{{ $section->label }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-sm-12" style="margin-bottom: 20px;">
