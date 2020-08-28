@@ -27,17 +27,15 @@
         <form >
         <table class="table table-borderless table-striped table-responsive ">
             <thead>
-                <th>Label</th>
-                <th>Name</th>
-                <th class="text-center">Rank</th>
-                <th>Action</th>
+                <th>Section Label</th>
+                <th class="pull-left">Rank</th>
+                <th class="text-center">Action</th>
             </thead>
             <tbody>
                 @foreach ($sections as $section)
                     <tr style="font-size: 0.9em;">
                         <td>{{ $section->label }}</td>
-                        <td>{{ $section->name }}</td>
-                        <td><input type="integer" name="rank[]" value="{{ $section->rank }}" style="border-color:#fff; border:0px; text-align: right; background-color: transparent;">
+                        <td class="pull-left"><input type="integer" name="rank[]" value="{{ $section->rank }}" style="border-color:#fff; border:0px;  background-color: transparent;">
                             <input type="hidden" name="sectionIds[]" value="{{ $section->name }}">
                         </td>
                         <td class="text-center">

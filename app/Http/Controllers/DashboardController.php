@@ -613,7 +613,7 @@ class DashboardController extends Controller
         $mail_setting = $siteconfiguration->mailSetting;
         $siteConfigurationHelper = SiteConfigurationHelper::getConfigurationAttr();
         $customFields = CustomField::where('site_url', url())->get();
-        $sections = ApplicationSections::where('site_url', url())->get();
+        $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
         
         return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields','sections'));
     }

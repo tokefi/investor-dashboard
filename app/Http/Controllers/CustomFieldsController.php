@@ -7,6 +7,7 @@ use Session;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\ApplicationSections;
 
 class CustomFieldsController extends Controller
 {
@@ -44,6 +45,8 @@ class CustomFieldsController extends Controller
             'section' => 'required'
         ]);
 
+        $section = ApplicationSections::where('site_url',url())->where('name',$request->section)->first();
+        
         $customField = new CustomField;
         $customField->page = $request->page ?? null;
         $customField->site_url = url();
@@ -53,6 +56,7 @@ class CustomFieldsController extends Controller
         $customField->description = $request->description ?? null;
         $customField->is_required = $request->is_required ? true : false;
         $customField->section = $request->section;
+        $customField->section_id = $section->id;
         $customField->attributes = isset($request->attributes) ? json_encode($request->attributes) : null;
         $customField->properties = isset($request->properties) ? json_encode($request->properties) : null;
         $customField->save();
@@ -90,9 +94,18 @@ class CustomFieldsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // dd($request->customIds,$request->customFieldLabels,$request->sectionLabels,$request->customFieldTypes);
+        for($i=0; $i<count($request->customIds); $i++){
+            // $rank = $request->rank[$i];
+            $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();
+            // dd($customField);
+            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i]]);
+            $section = ApplicationSections::where('site_url',url())->where('id',$customField->section_id)->first();
+            $section->update(['label'=>$request->sectionLabels[$i]]);
+        }
+        return 1;
     }
 
     /**

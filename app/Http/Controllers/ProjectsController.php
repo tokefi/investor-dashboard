@@ -527,13 +527,21 @@ class ProjectsController extends Controller
         
         //add basic sections
         if(!$sections->count()){
+            //section investment details
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'investment_details';
+            $section->label = null;
+            $section->description =  null;
+            $section->rank = 1;
+            $section->save();
             // section Investing Type
             $sections = new ApplicationSections;
             $sections->site_url = url();
             $sections->name = 'investing_type';
             $sections->label = 'Are you Investing as';
             $sections->description =  null;
-            $sections->rank = 1;
+            $sections->rank = 2;
             $sections->save();
         // Contact Details section
             $sections = new ApplicationSections;
@@ -541,7 +549,7 @@ class ProjectsController extends Controller
             $sections->name = 'contact_details';
             $sections->label = 'Contact Details';
             $sections->description =  null;
-            $sections->rank = 2;
+            $sections->rank = 3;
             $sections->save();
         // Nominated Bank Account
             $sections = new ApplicationSections;
@@ -549,8 +557,24 @@ class ProjectsController extends Controller
             $sections->name = 'nominated_bank_account';
             $sections->label = 'Nominated Bank Account';
             $sections->description =  'Please enter your bank account details where you would like to receive any Dividend or other payments related to this investment';
-            $sections->rank = 3;
+            $sections->rank = 4;
             $sections->save();
+            // Interested to buy
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'interested_to_buy';
+            $section->label = 'Interested To Buy';
+            $section->description =  '';
+            $section->rank = 5;
+            $section->save();
+            // Interested to buy
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'signature';
+            $section->label = 'Signature';
+            $section->description =  '';
+            $section->rank = 6;
+            $section->save();
             $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
         }
         // dd($sections->count());

@@ -20,4 +20,8 @@ class CustomField extends Model
     {
         return json_decode($value);
     }
+    public function applicationSection()
+    {
+        return $this->belongsTo('App\ApplicationSections','section_id');
+    }
 }

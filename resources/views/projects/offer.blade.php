@@ -162,7 +162,8 @@ Offer Doc
 									<hr>
 									@endif
 									@endif
-
+									@foreach($sections as $section)
+									@if($section->name === 'investment_details')
 									<div class="row" id="section-1">
 										<div class="col-md-12">
 											<div>
@@ -217,6 +218,35 @@ Offer Doc
 											</div>
 										</div>
 									</div>
+									<div class="row">
+										@if (isset($customFields['investment_details']))
+											@foreach ($customFields['investment_details'] as $customField)
+												<div class="col-md-6" style="margin-bottom: 20px;">
+													<label>{{ $customField->label }}</label>
+													@if(in_array($customField->type, ['text']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]"
+															placeholder="{{ $customField->label }}" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+													@if(in_array($customField->type, ['date']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+												</div>
+											@endforeach
+										@endif
+									</div>
+									
+									@elseif($section->name === 'investing_type')
+										
 									<br><br>
 									<div class="row">
 										<div class="col-md-12">
@@ -283,10 +313,7 @@ Offer Doc
 										</div>
 									</div>
 									<br><br>
-									@foreach($sections as $section)
-									@if($section->name === 'investing_type')
-										
-									<br class="@if($section->rank == 1) hide @endif">
+
 									@if(!Auth::guest())
 									<div class="row " id="section-2">
 										<div class="col-md-12">
@@ -704,7 +731,7 @@ Offer Doc
 										</div>
 									</div>
 
-									@else
+									@elseif($section->name !== 'signature' && $section->name !== 'interested_to_buy' && $section->name !== 'nominated_bank_account' && $section->name !== 'contact_details' && $section->name !== 'investing_type' && $section->name !== 'investment_details')
 									<br>
 									 
 									@if (isset($customFields[$section->name]) && $customFields[$section->name]->count())
@@ -741,13 +768,13 @@ Offer Doc
 									</div>
 									<br />
 									@endif
-									@endif
-								@endforeach
+
 									@if(Auth::guest())
 									<input type="password" name="password" class="hidden" id="passwordOffer">
 									<input type="text" name="role" class="hidden" value="investor">
 									@endif
 									<br>
+									@elseif($section->name === 'interested_to_buy')
 									<div class="row " id="section-8">
 										<div class="col-md-12">
 											<div>
@@ -785,6 +812,33 @@ Offer Doc
 										</div>
 										<br>
 									</div>
+									<div class="row">
+										@if (isset($customFields['interested_to_buy']))
+											@foreach ($customFields['interested_to_buy'] as $customField)
+												<div class="col-md-6" style="margin-bottom: 20px;">
+													<label>{{ $customField->label }}</label>
+													@if(in_array($customField->type, ['text']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]"
+															placeholder="{{ $customField->label }}" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+													@if(in_array($customField->type, ['date']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+												</div>
+											@endforeach
+										@endif
+									</div>
+									@elseif($section->name === 'signature')
 									<div class="row text-center @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="typeAgentDiv">
 										<div class="col-md-8 col-md-offset-4">
 											<div class="switch-field">
@@ -825,9 +879,36 @@ Offer Doc
 									</script>
 									@endif @endif
 									<button class="btn pull-right @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="signatureClear">Clear</button>
-									<div class="" id="signature" >
-										
+									<div class="" id="signature" >	
 									</div>
+									<div class="row">
+										@if (isset($customFields['signature']))
+											@foreach ($customFields['signature'] as $customField)
+												<div class="col-md-6" style="margin-bottom: 20px;">
+													<label>{{ $customField->label }}</label>
+													@if(in_array($customField->type, ['text']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]"
+															placeholder="{{ $customField->label }}" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+													@if(in_array($customField->type, ['date']))
+														<input class="form-control" 
+															type="{{ $customField->type }}" 
+															name="custom[{{ $customField->id }}]" 
+															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+															@if($customField->is_required) required @endif />
+													@endif
+												</div>
+											@endforeach
+										@endif
+									</div>
+									@endif
+									@endforeach
 									<h4 class="text-center @if(Auth::guest()) @else @if(App\Helpers\SiteConfigurationHelper::isSiteAdmin() || App\Helpers\SiteConfigurationHelper::isSiteAgent()) hidden @endif @endif" id="signh4">Please Sign Here</h4>
 									<input type="hidden" name="signature_data" id="signature_data" value="" >
 									

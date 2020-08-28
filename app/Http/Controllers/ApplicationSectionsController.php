@@ -42,17 +42,24 @@ class ApplicationSectionsController extends Controller
             'label' => 'required'
         ]);
         $section = ApplicationSections::where('site_url',url());
-
-        
+        $count = $section->count();
         //add basic sections
         if(!$section->count()){
-            // section Investing Type
+            //section investment details
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'investment_details';
+            $section->label = null;
+            $section->description =  null;
+            $section->rank = 1;
+            $section->save();
+            // section Investing Type  
             $section = new ApplicationSections;
             $section->site_url = url();
             $section->name = 'investing_type';
             $section->label = 'Are you Investing as';
             $section->description =  null;
-            $section->rank = 1;
+            $section->rank = 2;
             $section->save();
         // Contact Details section
             $section = new ApplicationSections;
@@ -60,7 +67,7 @@ class ApplicationSectionsController extends Controller
             $section->name = 'contact_details';
             $section->label = 'Contact Details';
             $section->description =  null;
-            $section->rank = 2;
+            $section->rank = 3;
             $section->save();
         // Nominated Bank Account
             $section = new ApplicationSections;
@@ -68,9 +75,30 @@ class ApplicationSectionsController extends Controller
             $section->name = 'nominated_bank_account';
             $section->label = 'Nominated Bank Account';
             $section->description =  'Please enter your bank account details where you would like to receive any Dividend or other payments related to this investment';
-            $section->rank = 3;
+            $section->rank = 4;
+            $section->save();
+            // Interested to buy
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'interested_to_buy';
+            $section->label = 'Interested To Buy';
+            $section->description =  '';
+            $section->rank = 5;
+            $section->save();
+            // Interested to buy
+            $section = new ApplicationSections;
+            $section->site_url = url();
+            $section->name = 'signature';
+            $section->label = 'Signature';
+            $section->description =  '';
+            $section->rank = 6;
             $section->save();
         }
+       
+        $section = ApplicationSections::where('name','interested_to_buy')->where('site_url',url())->first();
+        $section->update(['rank'=>$count]);
+        $section = ApplicationSections::where('site_url',url())->where('name','signature')->first();
+        $section->update(['rank'=>$count+1]);
 
         // add custom section
         $newSection = new ApplicationSections;
@@ -78,7 +106,7 @@ class ApplicationSectionsController extends Controller
             $newSection->name = 'section_'. rand(1, 999);
             $newSection->label = $request->label;
             $newSection->description =  $request->description ?? null;
-            $newSection->rank = $section->count()+1;
+            $newSection->rank = $count-1;
             $newSection->save();
 
         Session::flash('success', 'Created new section - "' . $request->label . '"!');
