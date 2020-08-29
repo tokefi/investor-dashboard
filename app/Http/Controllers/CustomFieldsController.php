@@ -96,14 +96,11 @@ class CustomFieldsController extends Controller
      */
     public function update(Request $request)
     {
-        // dd($request->customIds,$request->customFieldLabels,$request->sectionLabels,$request->customFieldTypes);
         for($i=0; $i<count($request->customIds); $i++){
             // $rank = $request->rank[$i];
             $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();
             // dd($customField);
             $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i]]);
-            $section = ApplicationSections::where('site_url',url())->where('id',$customField->section_id)->first();
-            $section->update(['label'=>$request->sectionLabels[$i]]);
         }
         return 1;
     }

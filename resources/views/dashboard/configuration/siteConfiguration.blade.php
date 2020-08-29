@@ -943,16 +943,15 @@ Configuration | Dashboard | @parent
         $('#updateCustomField').on('click',function (f) {
             f.preventDefault();
             var customFieldLabels = $('input[name="customFieldLabels[]"]').map(function () {return $(this).val();}).get();
-            var sectionLabels = $('input[name="sectionLabels[]"]').map(function () {return $(this).val();}).get();
             var customIds = $("input[name='customIds[]']").map(function(){return $(this).val();}).get();
             var customFieldTypes =$("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
-            console.log(customFieldLabels,customIds,sectionLabels,);
+            console.log(customFieldLabels,customIds,);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/site-configuration/custom-fields/update',
                 type: 'POST',
                 dataType: 'JSON',
-                data: {customFieldLabels,customIds,sectionLabels,customFieldTypes,},
+                data: {customFieldLabels,customIds,customFieldTypes,},
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (data) {
                     $('#custom-fields-msg').removeClass('hide');

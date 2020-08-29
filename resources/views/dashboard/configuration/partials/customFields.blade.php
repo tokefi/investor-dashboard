@@ -71,7 +71,7 @@
                                         <option value="date">Date</option>
                                     </select>
                                 </td>
-                                <td><input type="text" name="sectionLabels[]" value="{{  $customField->applicationSection->label }}" style="border:0px;  background-color: transparent;"> </td>
+                                <td>{{  $customField->applicationSection->label }}</td>
                                 <td><input type="text" name="customFieldLabels[]" value="{{ $customField->label }}" style="border:0px;  background-color: transparent;"> </td>
                                 <td class="text-center">{{ $customField->is_required ? 'Yes' : 'No' }}</td>
                                 <td>
