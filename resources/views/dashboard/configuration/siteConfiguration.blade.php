@@ -918,15 +918,16 @@ Configuration | Dashboard | @parent
         $('#reorder').on('click',function (f) {
             f.preventDefault();
             var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();
+            var sectionLabels = $('input[name="sectionLabels[]"]').map(function () {return $(this).val();}).get();
             var sectionIds = $("input[name='sectionIds[]']")
               .map(function(){return $(this).val();}).get();
-            console.log(rank,sectionIds);
+            console.log(rank,sectionIds,sectionLabels);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/application/section/reorder',
                 type: 'POST',
                 dataType: 'JSON',
-                data: {rank,sectionIds,},
+                data: {rank,sectionIds,sectionLabels,},
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (data) {
                     $('#reorderMsg').removeClass('hide');

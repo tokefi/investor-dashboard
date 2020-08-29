@@ -171,7 +171,7 @@ class ApplicationSectionsController extends Controller
         for($i=0; $i<count($request->rank); $i++){
             $rank = $request->rank[$i];
             $section = ApplicationSections::where('site_url',url())->where('name',$request->sectionIds[$i])->first();
-            $section->update(['rank'=>$rank]);
+            $section->update(['rank'=>$rank,'label'=>$request->sectionLabels[$i]]);
         }
         return 1;
     }

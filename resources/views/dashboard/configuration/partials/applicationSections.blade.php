@@ -34,7 +34,7 @@
             <tbody>
                 @foreach ($sections as $section)
                     <tr style="font-size: 0.9em;">
-                        <td>{{ $section->label }}</td>
+                        <td><input type="text" name="sectionLabels[]" value="{{ $section->label }}" style="border:0px;  background-color: transparent;"></td>
                         <td class="pull-left"><input type="integer" name="rank[]" value="{{ $section->rank }}" style="border-color:#fff; border:0px;  background-color: transparent;">
                             <input type="hidden" name="sectionIds[]" value="{{ $section->name }}">
                         </td>
@@ -48,7 +48,7 @@
                 @endforeach
             </tbody>
         </table>
-        <button type="submit" class="btn btn-primary pull-right" id="reorder">Reorder</button>
+        <button type="submit" class="btn btn-primary pull-right" id="reorder">Update</button>
     </form>
     </div>
 </section>
