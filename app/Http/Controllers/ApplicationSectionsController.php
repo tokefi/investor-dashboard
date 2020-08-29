@@ -49,7 +49,7 @@ class ApplicationSectionsController extends Controller
             $section = new ApplicationSections;
             $section->site_url = url();
             $section->name = 'investment_details';
-            $section->label = null;
+            $section->label = 'Investment Details';
             $section->description =  null;
             $section->rank = 1;
             $section->save();
