@@ -24,7 +24,7 @@
         @if(!$sections->count())
             <div class="alert alert-info text-center">No sections created yet!</div>
         @endif
-        <form >
+        
         <table class="table table-borderless table-striped table-responsive ">
             <thead>
                 <th>Section Label</th>
@@ -34,21 +34,25 @@
             <tbody>
                 @foreach ($sections as $section)
                     <tr style="font-size: 0.9em;">
-                        <td><input type="text" name="sectionLabels[]" value="{{ $section->label }}" style="border:0px;  background-color: transparent;"></td>
+                        <td><input type="text" name="sectionLabels[]" value="{{ $section->label }}" style="border:0px;  background-color: transparent; width: 100%;"></td>
                         <td class="pull-left"><input type="integer" name="rank[]" value="{{ $section->rank }}" style="border-color:#fff; border:0px;  background-color: transparent;">
                             <input type="hidden" name="sectionIds[]" value="{{ $section->name }}">
                         </td>
                         <td class="text-center">
-                            <form name="delete_custom_field" action="{{ route('application-section.delete', [$section->id]) }}" method="POST" style="cursor:pointer;">
+                            
+                            {{-- <div class="@if($section->name === 'investment_details' || $section->name === 'investing_type' || $section->name === 'contact_details' || $section->name === 'nominated_bank_account' || $section->name === 'interested_to_buy' || $section->name === 'signature') hide  @endif">
+                            <form action="{{ route('application-section.delete', [$section->id]) }}" method="POST" style="cursor:pointer;">
+
                                 {{ csrf_field() }}
                                 <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>
                             </form>
+                            <div> --}}
+                           
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
         <button type="submit" class="btn btn-primary pull-right" id="reorder">Update</button>
-    </form>
     </div>
 </section>

@@ -100,7 +100,7 @@ class CustomFieldsController extends Controller
             // $rank = $request->rank[$i];
             $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();
             // dd($customField);
-            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i]]);
+            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i],'is_required'=>$request->agent_type[$i]]);
         }
         return 1;
     }

@@ -945,14 +945,15 @@ Configuration | Dashboard | @parent
             f.preventDefault();
             var customFieldLabels = $('input[name="customFieldLabels[]"]').map(function () {return $(this).val();}).get();
             var customIds = $("input[name='customIds[]']").map(function(){return $(this).val();}).get();
+            var agent_type = $("input[name='agent_type[]']").map(function(){return $(this).val();}).get();
             var customFieldTypes =$("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
-            console.log(customFieldLabels,customIds,);
+            // console.log(customFieldLabels,customIds,);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/site-configuration/custom-fields/update',
                 type: 'POST',
                 dataType: 'JSON',
-                data: {customFieldLabels,customIds,customFieldTypes,},
+                data: {customFieldLabels,customIds,customFieldTypes,agent_type,},
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (data) {
                     $('#custom-fields-msg').removeClass('hide');
@@ -964,6 +965,20 @@ Configuration | Dashboard | @parent
                 }
             });
 
+        });
+
+        $('.toggle-elements').bootstrapSwitch({
+            onColor: 'primary',
+            offColor: 'danger',
+            onText: 'yes',
+            offText: 'No',
+            animate: true,
+        });
+        $('.toggle-elements').on('switchChange.bootstrapSwitch', function () {
+            var toggleAction = $(this).attr('action');
+            var setVal = $(this).val() == 1? 0 : 1;
+            $(this).val(setVal);
+            console.log(toggleAction,setVal,$(this).attr('data-label-text'));
         });
 
         $('.change-tag-manager-btn').click(function(){

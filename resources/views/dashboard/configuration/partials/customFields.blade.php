@@ -73,7 +73,10 @@
                                 </td>
                                 <td>{{  $customField->applicationSection->label }}</td>
                                 <td><input type="text" name="customFieldLabels[]" value="{{ $customField->label }}" style="border:0px;  background-color: transparent;"> </td>
-                                <td class="text-center">{{ $customField->is_required ? 'Yes' : 'No' }}</td>
+                                <td class="text-center">
+                                    {{-- {{ $customField->is_required ? 'Yes' : 'No' }} --}}
+                                    <input type="checkbox" name='agent_type[]' class="toggle-elements" action="expected_return_{{ $customField->id }}" autocomplete="off"  data-size="mini" @if($customField->is_required) checked value="1" @else value="0" @endif id="expected_return_{{ $customField->id }}">
+                                </td>
                                 <td>
                                     @if ($customField->attributes)
                                     @foreach ($customField->attributes as $key => $attribute)
