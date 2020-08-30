@@ -322,7 +322,7 @@ Offer Doc
 												
 												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
-												<h4>Are you Investing as</h4>
+												<h4>{{ $section->label }}</h4>
 												<input type="radio" name="investing_as" value="Individual Investor" checked> Individual Investor<br>
 												<input type="radio" name="investing_as" value="Joint Investor" > Joint Investor<br>
 												<input type="radio" name="investing_as" value="Trust or Company" > Company, Trust or SMSF<br>
@@ -376,7 +376,7 @@ Offer Doc
 											<div >
 												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
-												<h4>Are you Investing as</h4>
+												<h4>{{ $section->label }}</h4>
 												<input type="radio" name="investing_as" value="Individual Investor" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Individual Investor')) checked @elseif(Auth::guest()) checked @endif> Individual Investor<br>
 												<input type="radio" name="investing_as" value="Joint Investor" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Joint Investor')) checked @endif> Joint Investor<br>
 												<input type="radio" name="investing_as" value="Trust or Company" @if(isset($clientApplication) && ($clientApplication->investing_as == 'Trust or Company')) checked @endif> Company, Trust or SMSF<br>
@@ -557,7 +557,7 @@ Offer Doc
 										<div class="col-md-12">
 											<div style="">
 												<h3>
-													Contact Details
+													{{ $section->label }}
 												</h3>
 												<hr>
 												<label>Enter your Postal Address</label>
@@ -677,7 +677,7 @@ Offer Doc
 									<br>
 									<div class="row " id="section-7">
 										<div class="col-md-12">
-											<h3>Nominated Bank Account</h3>
+											<h3>{{ $section->label }}</h3>
 											<h5 style="color: #000">Please enter your bank account details where you would like to receive any Dividend or other payments related to this investment</h5>
 											<hr>
 											<div>

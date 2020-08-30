@@ -29,7 +29,7 @@
                 </form>
             </div>
             @endif
-            <div id="reorderMsg" class="hide alert alert-info text-center">Successfully reorder the sections!!!</div>
+            <div id="reorderMsg" class="hide alert alert-info text-center">Successfully updated the sections!!!</div>
             @if(!$sections->count())
             <div class="alert alert-info text-center">No sections created yet!</div>
             @endif
