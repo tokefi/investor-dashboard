@@ -95,7 +95,9 @@ class ApplicationSectionsController extends Controller
         $this->validate($request, [
             'label' => 'required'
         ]);
-
+        $section = ApplicationSections::where('site_url',url());
+        $count = $section->count();
+        
         $section = ApplicationSections::where('name','interested_to_buy')->where('site_url',url())->first();
         $section->update(['rank'=>$count]);
         $section = ApplicationSections::where('site_url',url())->where('name','signature')->first();
