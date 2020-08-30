@@ -93,8 +93,6 @@ class ApplicationSectionsController extends Controller
             $section->description =  '';
             $section->rank = 6;
             $section->save();
-            Session::flash('success', 'Created basic sections !');
-        return redirect()->back();
         }
        
         $section = ApplicationSections::where('name','interested_to_buy')->where('site_url',url())->first();
