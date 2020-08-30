@@ -23,7 +23,8 @@
         <div id="reorderMsg" class="hide alert alert-info text-center">Successfully reorder the sections!!!</div>
         @if(!$sections->count())
             <div class="alert alert-info text-center">No sections created yet!</div>
-        @endif
+            <button type="submit" class="btn btn-primary pull-right" id="reorder">Add Basic section</button>
+        @else
         
         <table class="table table-borderless table-striped table-responsive ">
             <thead>
@@ -54,5 +55,6 @@
             </tbody>
         </table>
         <button type="submit" class="btn btn-primary pull-right" id="reorder">Update</button>
+        @endif
     </div>
 </section>
