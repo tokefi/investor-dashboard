@@ -353,4 +353,5 @@ Route::post('/dashboard/site-configuration/custom-fields/update', 'CustomFieldsC
 /** Application section actions */
 Route::post('/dashboard/site-configuration/application-section', 'ApplicationSectionsController@store')->name('application-section.store');
 Route::post('/dashboard/site-configuration/application-sections/{application_section}/delete', 'ApplicationSectionsController@destroy')->name('application-section.delete');
+Route::post('/dashboard/site-configuration/application-section/create', 'ApplicationSectionsController@create')->name('application-section.create');
 Route::post('/dashboard/application/section/reorder', 'ApplicationSectionsController@reorder');

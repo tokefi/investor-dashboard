@@ -27,20 +27,6 @@ class ApplicationSectionsController extends Controller
      */
     public function create()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'label' => 'required'
-        ]);
         $section = ApplicationSections::where('site_url',url());
         $count = $section->count();
         //add basic sections
@@ -94,7 +80,22 @@ class ApplicationSectionsController extends Controller
             $section->rank = 6;
             $section->save();
         }
-       
+        Session::flash('success', 'Created basic sections !!');
+        return redirect()->back();
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'label' => 'required'
+        ]);
+
         $section = ApplicationSections::where('name','interested_to_buy')->where('site_url',url())->first();
         $section->update(['rank'=>$count]);
         $section = ApplicationSections::where('site_url',url())->where('name','signature')->first();
