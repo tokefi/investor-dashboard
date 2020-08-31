@@ -301,7 +301,7 @@
 													@endif --}}
 												</td>
 												<td class="text-left">
-													<span class="badge">{{ $investment->investing_as }}</span><br />
+													<span class="">{{ $investment->investing_as }}</span><br />
 													@if ($investment->investing_as == 'Joint Investor')
 													{{$investment->investingJoint->joint_investor_first_name ?? ''}} {{$investment->investingJoint->joint_investor_last_name ?? ''}}
 													@if($investment->userInvestmentDoc)
@@ -525,7 +525,7 @@
 											<br /><br />
 										</td>
 										<td class="text-left">
-											<span class="badge">{{ $shareInvestment->investing_as }}</span><br />
+											<span class="">{{ $shareInvestment->investing_as }}</span><br />
 											@if ($shareInvestment->investing_as == 'Joint Investor')
 											{{$shareInvestment->investingJoint->joint_investor_first_name ?? ''}} {{$shareInvestment->investingJoint->joint_investor_last_name ?? ''}}  <br>
 											@if($shareInvestment->userInvestmentDoc)
