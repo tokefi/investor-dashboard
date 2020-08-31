@@ -70,7 +70,7 @@
                                     <option value="date">Date</option>
                                 </select>
                             </td>
-                            <td>{{  $customField->applicationSection->label }}</td>
+                            <td>@if(isset($customField->applicationSection)){{  $customField->applicationSection->label }} @endif</td>
                             <td><input type="text" name="customFieldLabels[]" value="{{ $customField->label }}" style="border:0px;  background-color: transparent;"> </td>
                             <td class="text-center">
                                 <input type="checkbox" name='agent_type[]' class="toggle-elements" action="expected_return_{{ $customField->id }}" autocomplete="off"  data-size="mini" @if($customField->is_required) checked value="1" @else value="0" @endif id="expected_return_{{ $customField->id }}">
