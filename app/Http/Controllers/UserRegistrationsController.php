@@ -264,14 +264,14 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
 }
 
 public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
-    
+
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
         'first_name' => 'required|regex:/^[\w]*$/',
         'last_name' => 'required|regex:/^[\w]*$/',
         'role'=>'required',
         'g-recaptcha-response' => 'required',
-        'password'=>'required|max:60'
+        'password'=>'required|max:60',
     ]);
     $validator1 = Validator::make($request->all(), [
         'email' => 'unique:users,email||unique:user_registrations,email',
@@ -903,7 +903,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $color = Color::where('project_site',url())->first();
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password'=>'required|max:60'
+            'password'=>'required|max:60',
         ]);
 
         if(isset($request->reg_first_name) && isset($request->reg_last_name)) {
