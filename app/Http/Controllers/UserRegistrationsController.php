@@ -264,6 +264,7 @@ public function offerRegistrationCode(Request $request,$id,AppMailer $mailer)
 }
 
 public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer $mailer) {
+    
     $validator = Validator::make($request->all(), [
         'email' => 'required|email',
         'first_name' => 'required|regex:/^[\w]*$/',
