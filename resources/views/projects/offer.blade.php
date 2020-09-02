@@ -768,13 +768,12 @@ Offer Doc
 									</div>
 									<br />
 									@endif
-
+									@elseif($section->name === 'interested_to_buy')
 									@if(Auth::guest())
 									<input type="password" name="password" class="hidden" id="passwordOffer">
 									<input type="text" name="role" class="hidden" value="investor">
 									@endif
 									<br>
-									@elseif($section->name === 'interested_to_buy')
 									<div class="row " id="section-8">
 										<div class="col-md-12">
 											<div>
@@ -1584,6 +1583,7 @@ $(document).ready(function(){
     					$('#RegPassword').after('<div class="text-danger"><small>Password is Required</small></div>');
     					return false;
     				}
+    				console.log(password);
     				$('#passwordOffer').val(password);
     				$('.loader-overlay').show();
     				var offerData = $('#myform').serialize();
