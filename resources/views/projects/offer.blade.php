@@ -1063,9 +1063,9 @@ Offer Doc
 @include('projects.offer.terms')
 @endif
 @if(Auth::guest())
-@include('partials.loginModal');
-@include('partials.registerModal');
-@include('partials.emailCheck');
+@include('partials.loginModal')
+@include('partials.registerModal')
+@include('partials.emailCheck')
 @endif
 @stop
 @section('js-section')
@@ -1281,8 +1281,8 @@ Offer Doc
 								$('#reg_last_name').siblings('.text-danger').remove();
 							}
 							$('#RegPassword').on('input',function (e) {
-								var name=$('#RegPassword').val();
-								if(name.length == 0){
+								var password=$('#RegPassword').val();
+								if(password.length == 0){
 									$('#RegPassword').siblings('.text-danger').remove();
 									$('#RegPassword').after('<div class="text-danger"><small>Password is Required</small></div>');
 								}
@@ -1570,8 +1570,8 @@ $(document).ready(function(){
     				var projectId = {{$project->id}};
     				e.preventDefault();
     				$('#RegPassword').on('input',function (e) {
-    					var name=$('#RegPassword').val();
-    					if(name.length == 0){
+    					var password=$('#RegPassword').val();
+    					if(password.length == 0){
     						$('#RegPassword').siblings('.text-danger').remove();
     						$('#RegPassword').after('<div class="text-danger"><small>Password is Required</small></div>');
     					} else {
