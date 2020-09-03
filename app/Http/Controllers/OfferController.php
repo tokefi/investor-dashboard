@@ -8,6 +8,7 @@ use App\User;
 use App\Color;
 use Validator;
 use App\Project;
+use App\CustomField;
 use App\Http\Requests;
 use App\InvestingJoint;
 use App\CustomFieldValue;
@@ -17,6 +18,7 @@ use App\Mailers\AppMailer;
 use App\InvestmentInvestor;
 use App\WholesaleInvestment;
 use Illuminate\Http\Request;
+use App\ApplicationSections;
 use App\Jobs\SendReminderEmail;
 use App\UserInvestmentDocument;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -480,7 +482,17 @@ class OfferController extends Controller
             $project = $investmentRequest->project;
             $color = Color::where('project_site',url())->first();
             $projects_spv = ProjectSpvDetail::where('project_id',$investmentRequest->project_id)->first();
-            return view('projects.requestForm', compact('investmentRequest', 'project', 'projects_spv', 'user', 'color'));
+            $customFields = CustomField::where('page', 'application_form')->where('site_url', url())->get()->groupBy('section');
+            $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
+            if ($project->retail_vs_wholesale == 0) {
+            foreach ($customFields as $section => $fields) {
+                $tmp = $fields->filter(function ($item) {
+                    return !($item->properties && $item->properties->is_retail_only);
+                });
+                $customFields[$section] = $tmp;
+            }
+        }
+            return view('projects.requestForm', compact('investmentRequest', 'project', 'projects_spv', 'user', 'color','customFields','sections'));
           }
         }
       }
