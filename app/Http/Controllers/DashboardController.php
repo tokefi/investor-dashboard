@@ -2918,12 +2918,14 @@ class DashboardController extends Controller
                 $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> SurName </td><td>' . $investment->user->last_name .'</td></tr>';
                 $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investment->investing_as .'</td></tr>';
                 if($investment->investing_as === 'Joint Investor'){
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor First Name </td><td>' . $investment->investingJoint->joint_investor_first_name .'</td></tr>';
-                
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor Last Name </td><td>' . $investment->investingJoint->joint_investor_last_name .'</td></tr>';
+                    $joint_investor_first_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_first_name : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor First Name </td><td>' . $joint_investor_first_name .'</td></tr>';
+                    $joint_investor_last_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_last_name : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor Last Name </td><td>' . $joint_investor_last_name .'</td></tr>';
                 }
                 if($investment->investing_as === 'Trust or Company'){
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investment->investingJoint->investing_company .'</td></tr>';
+                    $investing_company = isset($investment->investingJoint) ? $investment->investingJoint->investing_company : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investing_company .'</td></tr>';
                 }
                 // dd( $investmentCustomValues);
                 if (isset($customFields['investing_type'])){
