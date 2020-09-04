@@ -343,7 +343,7 @@ Route::get('/dashboard/project/{project_id}/acceptedApplication/records/download
 Route::post('/configuration/updateProjectUrl', ['as'=> 'configuration.updateProjectUrl', 'uses'=>'SiteConfigurationsController@updateProjectUrl']);
 Route::get('/financialserviceguide', ['as'=>'financialserviceguide', 'uses'=>'PagesController@fsg']);
 Route::post('/dashboard/projects/allocation',['as'=>'dashboard.projects.allocation','uses'=>'DashboardController@updateAllocation']);
-
+Route::post('/dashboard/application/{id}/field/display',['as'=>'dashboard.application.field.display','uses'=>'DashboardController@displayApplicationFields']);
 
 /** Custom Fields actions */
 Route::post('/dashboard/site-configuration/custom-fields', 'CustomFieldsController@store')->name('custom-field.store');

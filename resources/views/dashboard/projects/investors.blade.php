@@ -153,7 +153,7 @@
 								@foreach($investments as $investment)
 								@if(!$investment->hide_investment)
 								<tr id="application{{$investment->id}}">
-									<td data-sort="{{$investment->id}}">INV{{$investment->id}}
+									<td data-sort="{{$investment->id}}"><button type="button" class="application-fields-display-btn " style="border: 0px solid; background-color: transparent;" data="{{$investment->id}}"> INV{{$investment->id}}</button>
 										<a href="{{route('dashboard.application.view', [$investment->id])}}" class="edit-application" style="margin-top: 1.2em;"><br>
 											<i class="fa fa-edit" aria-hidden="true"></i>
 										</a>
@@ -1146,6 +1146,28 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Fields from application display Modal -->
+	<div id="application_field_display_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:50%;">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header text-center">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Application Form Fields and Value</h4>
+				</div>
+				<div class="modal-body" style="padding: 15px 30px;">
+					<div id="application_field_preview_table" style="width: 100%; overflow-x: auto;">
+						<!-- Render through JS -->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	@stop
 
 	@section('js-section')
@@ -1241,6 +1263,39 @@
 			$('#investor_statement_modal').modal({
 				keyboard: false,
 				backdrop: 'static'
+			});
+		});
+	$('#investorsTable').on('click','.application-fields-display-btn', function(e){
+		let investmentId = $(this).attr('data');
+		var project_id = {{$project->id}};
+
+
+		$('.loader-overlay').show();
+			$.ajax({
+				url: '/dashboard/application/'+investmentId+'/field/display',
+				type: 'post',
+				dataType: 'JSON',
+				data: {
+					investmentId: investmentId
+				},
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+			}).done(function(data){
+				$('.loader-overlay').hide();
+				if(data.status) {
+					$('#application_field_preview_table').html(data.data);
+
+					// $('#modal_application_field').html(investment);
+
+					$('#application_field_display_modal').modal({
+						keyboard: false,
+						backdrop: 'static'
+					});
+
+				} else {
+					alert(data.message);
+				}
 			});
 		});
 
@@ -1373,7 +1428,7 @@
 			}
 		});
 		var investorsTable = $('#investorsTable').DataTable({
-			"order": [2, 'desc'],
+			"order": [3, 'desc'],
 			"iDisplayLength": 25,
 			"language": {
 				"search": "",
