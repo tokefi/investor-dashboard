@@ -2936,8 +2936,15 @@ class DashboardController extends Controller
                 }
 
                 //contact_details
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Address </td><td>' . $investment->user->line_1.','. $investment->user->line_2.','. $investment->user->city.','. $investment->user->state.','. $investment->user->country.'-'. $investment->user->postal_code .'</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> TFN </td><td>' . $investment->user->tfn .'</td></tr>';
+                $line_1 = ($investment->investingJoint) ? $investment->investingJoint->line_1 : $investment->user->line_1;
+                $line_2 = ($investment->investingJoint) ? $investment->investingJoint->line_2 : $investment->user->line_2;
+                $city = ($investment->investingJoint) ? $investment->investingJoint->city : $investment->user->city;
+                $state = ($investment->investingJoint) ? $investment->investingJoint->state : $investment->user->state;
+                $country = ($investment->investingJoint) ? $investment->investingJoint->country : $investment->user->country;
+                $postal_code = ($investment->investingJoint) ? $investment->investingJoint->postal_code : $investment->user->postal_code;
+                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Address </td><td>' . $line_1.','. $line_2.','. $city.','. $state.','. $country.'-'. $postal_code .'</td></tr>';
+                $tfn = ($investment->investingJoint) ? $investment->investingJoint->tfn : $investment->user->tfn;
+                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> TFN </td><td>' . $tfn .'</td></tr>';
                 $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Phone </td><td>' . $investment->user->phone_number .'</td></tr>';
                 $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Email </td><td>' . $investment->user->email .'</td></tr>';
                 if (isset($customFields['contact_details'])){
