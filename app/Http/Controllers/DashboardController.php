@@ -2925,7 +2925,7 @@ class DashboardController extends Controller
                 }
                 if($investment->investing_as === 'Trust or Company'){
                     $investing_company = isset($investment->investingJoint) ? $investment->investingJoint->investing_company : '';
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investing_company .'</td></tr>';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Company Name </td><td>' . $investing_company .'</td></tr>';
                 }
                 // dd( $investmentCustomValues);
                 if (isset($customFields['investing_type'])){
