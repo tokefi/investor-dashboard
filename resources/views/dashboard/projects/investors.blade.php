@@ -1156,13 +1156,10 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4 class="modal-title">Application Form Fields and Value</h4>
 				</div>
-				<div class="modal-body" style="padding: 15px 30px;">
+				<div class="modal-body" style="padding: 15px 0px;">
 					<div id="application_field_preview_table" style="width: 100%; overflow-x: auto;">
 						<!-- Render through JS -->
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>

@@ -2895,7 +2895,7 @@ class DashboardController extends Controller
         // dd($customFields);
         $tableContent = '';
 
-            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10">';
+            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10" width="100%">';
             $tableContent .= '<tbody>';
 
                 //investment_details section
