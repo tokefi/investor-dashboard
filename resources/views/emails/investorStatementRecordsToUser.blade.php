@@ -76,7 +76,7 @@
       padding:10px;
     }
     .templateContainer{
-      max-width:600px !important;
+      max-width:750px !important;
     }
     a.mcnButton{
       display:block;
@@ -319,7 +319,7 @@
   }
   @media only screen and (min-width:768px){
     .templateContainer{
-      width:600px !important;
+      width:750px !important;
     }
 
     } @media only screen and (max-width: 480px){
@@ -526,7 +526,7 @@
             <tr>
             <td align="center" valign="top" width="600" style="width:600px;">
             <![endif]-->
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;border: 0;max-width: 600px !important;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;border: 0;max-width: 750px !important;">
               <tr>
                 <td valign="top" id="templatePreheader" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;border-top: 0;border-bottom: 0;padding-top: 9px;padding-bottom: 9px;"></td>
               </tr>
@@ -579,15 +579,15 @@
                                             <th>Share price</th>
                                             <th>Cash amount</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                    </thead  >
+                                    <tbody >
                                         @foreach($transactions as $transaction)
                                         <tr>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{\Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y')}}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{$transaction->transaction_description ?? $transaction->transaction_type}}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{(strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-'}}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">{{ (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-' }}</span></td>
-                                        <td valign="top" class="mcnTextContent"><span style="color:#000; font-size: 13px;">$ {{ number_format($transaction->amount, 2) }}</span></td>
+                                        <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{\Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y')}}</span></td>
+                                        <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{$transaction->transaction_description ?? $transaction->transaction_type}}</span></td>
+                                        <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{(strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-'}}</span></td>
+                                        <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{ (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$ ' . number_format($transaction->rate, 4) : '-' }}</span></td>
+                                        <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">$ {{ number_format($transaction->amount, 2) }}</span></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
