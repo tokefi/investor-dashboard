@@ -2990,7 +2990,7 @@ class DashboardController extends Controller
                         }
                     }
                 //interested_to_buy
-                $is_interested_investment_offers = $investment->user->is_interested_investment_offers ? 'Yes' : 'No';
+                $is_interested_investment_offers = $investment->interested_to_buy ? 'Yes' : 'No';
                 $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Interested to Buy </td><td>' . $is_interested_investment_offers  .'</td></tr>';
                 if (isset($customFields['interested_to_buy'])){
                     foreach ($customFields['interested_to_buy'] as $customField){
