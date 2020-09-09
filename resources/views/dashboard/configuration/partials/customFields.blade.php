@@ -54,7 +54,7 @@
                     <table class="table table-borderless table-striped table-responsive">
                         <thead>
                             <th>Type</th>
-                            <th>Section Type</th>
+                            <th>Section label</th>
                             <th>Field Label</th>
                             <th>Is Required</th>
                             {{-- <th>Attributes</th> --}}
