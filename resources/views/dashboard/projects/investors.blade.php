@@ -170,9 +170,10 @@
 										<td>
 											<div class="text-left">
 												<a href="{{route('dashboard.users.show', [$investment->user_id])}}" >
-													<b>{{$investment->user->first_name}} {{$investment->user->last_name}}</b>
+													<b>@if(isset($investment->user->first_name)||isset($investment->user->first_name)){{$investment->user->first_name}} {{$investment->user->last_name}}@endif</b>
+													<br>{{$investment->user->email}}
 												</a>
-												<br>{{$investment->user->email}}<br>{{$investment->user->phone_number}}
+												<br>{{$investment->user->phone_number}}
 											</div>
 										</td>
 										<td>
@@ -513,7 +514,7 @@
 										<td data-sort="{{$shareInvestment->id}}">INV{{$shareInvestment->id}}</td>
 										{{-- <td>@if($shareInvestment->share_number){{$shareInvestment->share_number}}@else{{'NA'}}@endif</td> --}}
 										{{-- <td>@if($shareInvestment->project->projectspvdetail){{$shareInvestment->project->projectspvdetail->spv_name}}@endif</td> --}}
-										<td><a href="{{route('dashboard.users.show', [$investment->user->id])}}" >{{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}</a> <br> {{$shareInvestment->user->email}} <br> {{$shareInvestment->user->phone_number}}</td>
+										<td><a href="{{route('dashboard.users.show', [$investment->user->id])}}" >@if(isset($shareInvestment->user->first_name)||isset($shareInvestment->user->last_name)){{$shareInvestment->user->first_name}} {{$shareInvestment->user->last_name}}<br> {{$shareInvestment->user->email}} @endif</a>  <br> {{$shareInvestment->user->phone_number}}</td>
 										<td class="text-left">
 											@if ($shareInvestment->user->idDoc)
 											<a href="{{$shareInvestment->user->idDoc['media_url']}}/{{$shareInvestment->user->idDoc['path']}}" target="_blank">Your Doc 1</a>

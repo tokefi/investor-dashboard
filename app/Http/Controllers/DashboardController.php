@@ -2433,6 +2433,7 @@ class DashboardController extends Controller
             if(!empty($csv_data)) {
                 foreach ($csv_data as $key => $clientAppliation) {
                     //Define the user existing or new
+                    // dd($clientAppliation[32]);
                     if($clientAppliation[3]){
                         $requestCustomFields = [];
                         $activatedUser = User::where('email', $clientAppliation[3])->first();
@@ -2445,23 +2446,23 @@ class DashboardController extends Controller
 
                             $activatedUser = User::create([
                                 'username'=>str_slug($clientAppliation[1].' '.$clientAppliation[2].' '.rand(1, 9999)),
-                                'email' => $clientAppliation[3],
                                 'first_name' => $clientAppliation[1],
                                 'last_name' => $clientAppliation[2],
+                                'email' => $clientAppliation[3],
                                 'phone_number' => $clientAppliation[4],
                                 'password' => bcrypt('password'),
-                                'account_name' => $clientAppliation[6],
-                                'bsb' => $clientAppliation[7],
+                                'account_name' => $clientAppliation[7],
+                                'bsb' => $clientAppliation[8],
                                 'registration_site' => url(),
-                                'account_number' => $clientAppliation[8],
-                                'line_1' => $clientAppliation[9],
-                                'line_2' => $clientAppliation[10],
-                                'city' => $clientAppliation[11],
-                                'state' => $clientAppliation[12],
-                                'postal_code' => $clientAppliation[13],
+                                'account_number' => $clientAppliation[9],
+                                'line_1' => $clientAppliation[10],
+                                'line_2' => $clientAppliation[11],
+                                'city' => $clientAppliation[12],
+                                'state' => $clientAppliation[13],
+                                'postal_code' => $clientAppliation[14],
                                 'country' => $clientAppliation[15],
                                 'tfn' => $clientAppliation[16],
-                                'activated_on'=>  Carbon::now(),// user activation date
+                                'activated_on'=> $clientAppliation[31],// user activation date
                                 'active' => 1,
                             ]);
                             // dd($activatedUser);
@@ -2472,8 +2473,8 @@ class DashboardController extends Controller
                             $project = Project::where('id',$clientAppliation[0])->where('project_site',url())->first();
                             $activatedUser->investments()->attach($project, [
                                 'investment_id'=>$project->investment->id,
-                                'amount'=>$clientAppliation[5], 
-                                'buy_rate' => $project->share_per_unit_price, 
+                                'amount'=>round($clientAppliation[5]/$clientAppliation[6]),
+                                'buy_rate' => $clientAppliation[6], 
                                 'project_site'=>url(),
                                 'investing_as'=>$clientAppliation[20], 
                                 'interested_to_buy'=>$clientAppliation[30],
@@ -2488,7 +2489,7 @@ class DashboardController extends Controller
                             // Add custom field values
                             $lastInvestment = InvestmentInvestor::where('user_id', $activatedUser->id)->orderBy('id', 'desc')->first();
                             foreach($preCustomFields as $key=>$value) {
-                                $fieldIndex = array_search($value->name, $csvFields);
+                                $fieldIndex = array_search($value->label, $csvFields);
                                 if ($fieldIndex !== false) {
                                     CustomFieldValue::create([
                                         'custom_field_id' => $value->id, 
@@ -2506,13 +2507,13 @@ class DashboardController extends Controller
                                 $investing_joint->joint_investor_first_name = $clientAppliation[17];
                                 $investing_joint->joint_investor_last_name = $clientAppliation[18];
                                 $investing_joint->investing_company = $clientAppliation[19];
-                                $investing_joint->account_name = $clientAppliation[6];
-                                $investing_joint->bsb = $clientAppliation[7];
-                                $investing_joint->account_number = $clientAppliation[8];
-                                $investing_joint->line_1 = $clientAppliation[9];
-                                $investing_joint->line_2 = $clientAppliation[10];
-                                $investing_joint->city = $clientAppliation[11];
-                                $investing_joint->state = $clientAppliation[12];
+                                $investing_joint->account_name = $clientAppliation[7];
+                                $investing_joint->bsb = $clientAppliation[8];
+                                $investing_joint->account_number = $clientAppliation[9];
+                                $investing_joint->line_1 = $clientAppliation[10];
+                                $investing_joint->line_2 = $clientAppliation[11];
+                                $investing_joint->city = $clientAppliation[12];
+                                $investing_joint->state = $clientAppliation[13];
                                 $investing_joint->postal_code = $clientAppliation[13];
                                 $investing_joint->country = $clientAppliation[15];
                                 $investing_joint->tfn = $clientAppliation[16];
@@ -2525,8 +2526,8 @@ class DashboardController extends Controller
                                 'transaction_type' => Transaction::BUY,
                                 'transaction_date' => $clientAppliation[32],// update transaction date
                                 'amount' => round($clientAppliation[5],2),
-                                'rate' => round($project->share_per_unit_price,4),
-                                'number_of_shares' => round($clientAppliation[5]/$project->share_per_unit_price),
+                                'rate' => round($clientAppliation[6],4),
+                                'number_of_shares' => round($clientAppliation[5]/$clientAppliation[6]),
                             ]);
                         // $investor = InvestmentInvestor::get()->last();
                             if($project->master_child){
@@ -2551,7 +2552,7 @@ class DashboardController extends Controller
                                     // Add custom field values
                                     $lastInvestment = InvestmentInvestor::where('user_id', $activatedUser->id)->orderBy('id', 'desc')->first();
                                     foreach($preCustomFields as $key=>$value) {
-                                        $fieldIndex = array_search($value->name, $csvFields);
+                                        $fieldIndex = array_search($value->label, $csvFields);
                                         if ($fieldIndex !== false) {
                                             CustomFieldValue::create([
                                                 'custom_field_id' => $value->id, 
@@ -2598,23 +2599,22 @@ class DashboardController extends Controller
             "Expires" => "0"
         );
 
-        $columns = ['project_id', 'client_first_name', 'client_last_name', 'client_email', 'phone_number', 'investment_amount', 'account_name', 'bsb', 'account_number', 'line_1', 'line_2', 'city', 'state', 'postal_code', 'project_site', 'country', 'tfn', 'joint_investor_first_name', 'joint_investor_last_name', 'investing_company', 'investing_as', 'wholesale_investing_as', 'accountant_name_and_firm', 'accountant_professional_body_designation', 'accountant_email', 'accountant_phone', 'equity_investment_experience_text', 'experience_period', 'unlisted_investment_experience_text', 'understand_risk_text', 'interested_to_buy', 'investment_date', 'accepted_date'];
+        $columns = ['Project Id','Client First Name','Client Last Name','Client Email Id','Phone Number','Investment Amount','Share/Unit Price','Account Name','Bsb','Account Number','Line_1','Line_2','City','State','Postal Code','Country','Tfn','Joint Investor First Name','Joint Investor Last Name','Investing Company Name','Investing As','Wholesale Investing As','Accountant Name And Firm','Accountant Professional Body Designation','Accountant Email','Accountant Phone','Equity Investment Experience Text','Experience Period','Unlisted Investment Experience Text','Understand Risk Text','Interested To Buy','Investment Date','Accepted Date'];
         
-        $sampleValue = ['xxx', 'xxxxx', 'xxxxx', 'xxx@xxx.xx', 'xxxxxxxxxx', 'xxx', 'xxxxxxx', 'xxx', 'xxxxxxxxx', 'xxxxx', 'xxxxx', 'xxxxx', 'xxxxxx', 'xxx', 'https://xxx.xx', 'xxx', 'xxx', 'xxx', 'xxxx', 'xxx', 'xxxxx', 'xxx', 'xxx', 'xxxx', 'xxx@xxx.xx', 'xxx', 'xxx', 'xxx', 'xxxx', 'xxx', 'X(0/1)', 'yyyy-mm-dd hh:ii:ss', 'yyyy-mm-dd hh:ii:ss'];
+        $sampleValue = ['xxx*','xxxxx*','xxxxx*','xxx@xxx.xx*','xxxxxxxxxx','xxx*','xx.xxxx*','xxxxxxx','xxx','xxxxxxxxx','xxxxx','xxxxx','xxxxx','xxxxxx','xxx','xxx','xxx','xxx','xxxx','xxx','(Trust or Company/Joint Investor/Individual Investor)', '(Blank / [Wholesale Investor (Net Asset $2,500,000 plus)/Sophisticated Investor/Inexperienced Investor])','xxx','xxxx','xxx@xxx.xx','xxx','xxx','xxx','xxxx','xxx','(0/1)','yyyy-mm-dd(please follow this sequence)','yyyy-mm-dd(please follow this sequence)'];
 
         $customFields = CustomField::where('site_url', url())
         ->where('page', 'application_form')
         ->get();
         
         foreach ($customFields as $key => $value) {
-            array_push($columns, $value->name);
+            array_push($columns, $value->label);
             array_push($sampleValue, ($value->type == 'date') ? 'yyyy-mm-dd' : 'xxxxx');
         }
         
         $callback = function() use ($sampleValue, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
-            fputcsv($file, $sampleValue);
             fputcsv($file, $sampleValue);
             fclose($file);
         };
