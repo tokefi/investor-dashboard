@@ -57,8 +57,8 @@
                             <th>Section Type</th>
                             <th>Field Label</th>
                             <th>Is Required</th>
-                            <th>Attributes</th>
-                            <th>Properties</th>
+                            {{-- <th>Attributes</th> --}}
+                            {{-- <th>Properties</th> --}}
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -70,12 +70,19 @@
                                     <option value="date">Date</option>
                                 </select>
                             </td>
-                            <td>@if(isset($customField->applicationSection)){{  $customField->applicationSection->label }} @endif</td>
+                            <td>
+                                <select class="form-control" id="type" name="customFieldSections[]" required style="border:0px solid !important ; background-color: transparent; box-shadow: inset 0 1px 1px rgba(0,0,0,0);    height: 22px; padding: 0px 12px;">
+                                    <option value="@if(isset($customField->applicationSection)){{  $customField->applicationSection->name }} @endif">@if(isset($customField->applicationSection)){{  $customField->applicationSection->label }} @endif</option>
+                                    @foreach ($sections as $section)
+                                    <option value="{{ $section->name }}">{{ $section->label }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td><input type="text" name="customFieldLabels[]" value="{{ $customField->label }}" style="border:0px;  background-color: transparent;"> </td>
                             <td class="text-center">
                                 <input type="checkbox" name='agent_type[]' class="toggle-elements" action="expected_return_{{ $customField->id }}" autocomplete="off"  data-size="mini" @if($customField->is_required) checked value="1" @else value="0" @endif id="expected_return_{{ $customField->id }}">
                             </td>
-                            <td>
+                            {{-- <td>
                                 @if ($customField->attributes)
                                 @foreach ($customField->attributes as $key => $attribute)
                                 {{ $key }} : {{ $attribute == 'on' ? 'Yes' : $attribute }} <br />
@@ -88,7 +95,7 @@
                                 {{ $key }} : {{ $property == 'on' ? 'Yes' :  $property}} <br />
                                 @endforeach
                                 @endif
-                            </td>
+                            </td> --}}
                             <td class="text-center">
                                 <form name="delete_custom_field" action="{{ route('custom-field.delete', [$customField->id]) }}" method="POST" style="cursor:pointer;">
                                     {{ csrf_field() }}

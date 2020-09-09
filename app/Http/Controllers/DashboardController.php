@@ -2210,7 +2210,6 @@ class DashboardController extends Controller
                     $redemption->comments = $request->comments;
                     $redemption->save();
                 }
-
                 Transaction::create([
                     'user_id' => $redemption->user_id,
                     'project_id' => $redemption->project_id,
@@ -2220,8 +2219,6 @@ class DashboardController extends Controller
                     'rate' => $redemption->price,
                     'number_of_shares' => $redemption->accepted_amount,
                 ]);
-
-
             }
         }
         

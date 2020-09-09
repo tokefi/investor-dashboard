@@ -944,16 +944,17 @@ Configuration | Dashboard | @parent
         $('#updateCustomField').on('click',function (f) {
             f.preventDefault();
             var customFieldLabels = $('input[name="customFieldLabels[]"]').map(function () {return $(this).val();}).get();
+            var customFieldSections  = $("select[name='customFieldSections[]']").map(function(){return $(this).val();}).get();
             var customIds = $("input[name='customIds[]']").map(function(){return $(this).val();}).get();
             var agent_type = $("input[name='agent_type[]']").map(function(){return $(this).val();}).get();
-            var customFieldTypes =$("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
+            var customFieldTypes = $("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
             // console.log(customFieldLabels,customIds,);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/site-configuration/custom-fields/update',
                 type: 'POST',
                 dataType: 'JSON',
-                data: {customFieldLabels,customIds,customFieldTypes,agent_type,},
+                data: {customFieldLabels,customIds,customFieldTypes,agent_type,customFieldSections,},
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (data) {
                     $('#custom-fields-msg').removeClass('hide');

@@ -99,8 +99,10 @@ class CustomFieldsController extends Controller
         for($i=0; $i<count($request->customIds); $i++){
             // $rank = $request->rank[$i];
             $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();
-            // dd($customField);
-            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i],'is_required'=>$request->agent_type[$i]]);
+            $section = ApplicationSections::where('site_url',url())->where('name',$request->customFieldSections[$i])->first();
+            
+            // dd($section);
+            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i],'is_required'=>$request->agent_type[$i],'section'=>$section->name,'section_id'=>$section->id]);
         }
         return 1;
     }
