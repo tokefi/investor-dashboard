@@ -941,19 +941,24 @@ Configuration | Dashboard | @parent
 
         });
 
-        $('select[name="customFieldSections"]').click(function () {
-            var dad = $(this).parent();
-            $(this).hide();
-            dad.find('select[name="customFieldSections"]').show().focus();
-            dad.submit();
-        });
+        // $('select[name="customFieldSections"]').click(function () {
+        //     var dad = $(this).parent();
+        //     $(this).hide();
+        //     dad.find('select[name="customFieldSections"]').show().focus();
+        // });
+        // $('select[name="customFieldSections"]').focusout(function() {
+        //     var dad = $(this).parent();
+        //     dad.submit();
+        // });
 
         $('#updateCustomField').on('click',function (f) {
             f.preventDefault();
             var customFieldLabels = $('input[name="customFieldLabels[]"]').map(function () {return $(this).val();}).get();
+            // var customFieldSections  = $("select[name='customFieldSections[]']").map(function(){return $(this).val();}).get();
             var customIds = $("input[name='customIds[]']").map(function(){return $(this).val();}).get();
             var agent_type = $("input[name='agent_type[]']").map(function(){return $(this).val();}).get();
             var customFieldTypes = $("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
+            // console.log(customFieldLabels,customIds,);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/site-configuration/custom-fields/update',

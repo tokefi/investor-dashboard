@@ -125,7 +125,7 @@ class CustomFieldsController extends Controller
         $customField = CustomField::where('site_url',url())->where('id',$request->customIds)->first();
             $section = ApplicationSections::where('site_url',url())->where('name',$request->customFieldSections)->first();
             $customField->update(['section'=>$section->name,'section_id'=>$section->id]);
-            Session::flash('success', 'Section label updated successfully');
+            Session::flash('success', 'Section label updated successfully!!!');
             return redirect()->back();
     }
 }

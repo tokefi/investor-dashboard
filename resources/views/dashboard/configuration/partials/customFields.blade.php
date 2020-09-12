@@ -74,7 +74,7 @@
                                 <form action="{{route('custom-field.section.update', [$customField->id])}}" method="POST">
                                     {{method_field('PATCH')}}
                                     {{csrf_field()}}
-                                    <select class="form-control" id="type" name="customFieldSections" required style="border:0px solid !important ; background-color: transparent; box-shadow: inset 0 1px 1px rgba(0,0,0,0);    height: 22px; padding: 0px 12px;">
+                                    <select class="form-control" id="type" name="customFieldSections" required style="border:0px solid !important ; background-color: transparent; box-shadow: inset 0 1px 1px rgba(0,0,0,0);    height: 22px; padding: 0px 12px;" onchange="this.form.submit()">
                                         <option value="@if(isset($customField->applicationSection)){{  $customField->applicationSection->name }} @endif">@if(isset($customField->applicationSection)){{  $customField->applicationSection->label }} @endif</option>
                                         @foreach ($sections as $section)
                                         <option value="{{ $section->name }}">{{ $section->label }}</option>
