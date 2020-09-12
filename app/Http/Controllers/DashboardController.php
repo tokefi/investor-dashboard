@@ -1703,70 +1703,70 @@ class DashboardController extends Controller
                 $customFieldValue = new CustomFieldValue;
                 $customFieldValue->custom_field_id = $key;
                 $customFieldValue->investment_investor_id = $investment->id;
-              }
-              $customFieldValue->value = $value;
-              $customFieldValue->save();
             }
-          }
-
-        if($request->investing_as !== 'Individual Investor'){
-            if($investment->investingJoint){
-                $investing_joint = $investment->investingJoint;
-                $result = $investing_joint->update([
-                    'joint_investor_first_name' => $request->joint_investor_first,
-                    'joint_investor_last_name' => $request->joint_investor_last,
-                    'investing_company' => $request->investing_company_name,
-                    'account_name' => $request->account_name,
-                    'bsb' => $request->bsb,
-                    'account_number' => $request->account_number,
-                    'line_1' => $request->line_1,
-                    'line_2' => $request->line_2,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'postal_code' => $request->postal_code,
-                    'country' => $request->country,
-                    'country_code' => $request->country_code,
-                    'tfn' => $request->tfn,
-                ]);
-            }
-            else{
-                $investing_joint = new InvestingJoint;
-                $investing_joint->project_id = $project->id;
-                $investing_joint->investment_investor_id = $investment->id;
-                $investing_joint->joint_investor_first_name = $request->joint_investor_first;
-                $investing_joint->joint_investor_last_name = $request->joint_investor_last;
-                $investing_joint->investing_company = $request->investing_company_name;
-                $investing_joint->account_name = $request->account_name;
-                $investing_joint->bsb = $request->bsb;
-                $investing_joint->account_number = $request->account_number;
-                $investing_joint->line_1 = $request->line_1;
-                $investing_joint->line_2 = $request->line_2;
-                $investing_joint->city = $request->city;
-                $investing_joint->state = $request->state;
-                $investing_joint->postal_code = $request->postal_code;
-                $investing_joint->country = $request->country;
-                $investing_joint->country_code = $request->country_code;
-                $investing_joint->tfn = $request->tfn;
-                $investing_joint->save();
-            }
+            $customFieldValue->value = $value;
+            $customFieldValue->save();
         }
+    }
 
-        $updateUserDetails = $user->update([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'phone_number' => $request->phone,
-            'tfn' => $request->tfn,
-            'account_name' => $request->account_name,
-            'bsb' => $request->bsb,
-            'account_number' => $request->account_number,
-            'line_1' => $request->line_1,
-            'line_2' => $request->line_2,
-            'city' => $request->city,
-            'state' => $request->state,
-            'postal_code' => $request->postal_code,
-            'country' => $request->country,
-            'country_code' => $request->country_code,
-        ]);
+    if($request->investing_as !== 'Individual Investor'){
+        if($investment->investingJoint){
+            $investing_joint = $investment->investingJoint;
+            $result = $investing_joint->update([
+                'joint_investor_first_name' => $request->joint_investor_first,
+                'joint_investor_last_name' => $request->joint_investor_last,
+                'investing_company' => $request->investing_company_name,
+                'account_name' => $request->account_name,
+                'bsb' => $request->bsb,
+                'account_number' => $request->account_number,
+                'line_1' => $request->line_1,
+                'line_2' => $request->line_2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'postal_code' => $request->postal_code,
+                'country' => $request->country,
+                'country_code' => $request->country_code,
+                'tfn' => $request->tfn,
+            ]);
+        }
+        else{
+            $investing_joint = new InvestingJoint;
+            $investing_joint->project_id = $project->id;
+            $investing_joint->investment_investor_id = $investment->id;
+            $investing_joint->joint_investor_first_name = $request->joint_investor_first;
+            $investing_joint->joint_investor_last_name = $request->joint_investor_last;
+            $investing_joint->investing_company = $request->investing_company_name;
+            $investing_joint->account_name = $request->account_name;
+            $investing_joint->bsb = $request->bsb;
+            $investing_joint->account_number = $request->account_number;
+            $investing_joint->line_1 = $request->line_1;
+            $investing_joint->line_2 = $request->line_2;
+            $investing_joint->city = $request->city;
+            $investing_joint->state = $request->state;
+            $investing_joint->postal_code = $request->postal_code;
+            $investing_joint->country = $request->country;
+            $investing_joint->country_code = $request->country_code;
+            $investing_joint->tfn = $request->tfn;
+            $investing_joint->save();
+        }
+    }
+
+    $updateUserDetails = $user->update([
+        'first_name' => $request->first_name,
+        'last_name' => $request->last_name,
+        'phone_number' => $request->phone,
+        'tfn' => $request->tfn,
+        'account_name' => $request->account_name,
+        'bsb' => $request->bsb,
+        'account_number' => $request->account_number,
+        'line_1' => $request->line_1,
+        'line_2' => $request->line_2,
+        'city' => $request->city,
+        'state' => $request->state,
+        'postal_code' => $request->postal_code,
+        'country' => $request->country,
+        'country_code' => $request->country_code,
+    ]);
 
         // $pdfBasePath = '/app/application/application-'.$investment->id.'-'.time().'.pdf';
         // $pdfPath = storage_path().$pdfBasePath;
@@ -1775,9 +1775,9 @@ class DashboardController extends Controller
         // $investment->application_path = $pdfBasePath;
         // $investment->save();
 
-        return redirect()->back()->withMessage('<p class="alert alert-success text-center">Application form updated successfully.</p>');
+    return redirect()->back()->withMessage('<p class="alert alert-success text-center">Application form updated successfully.</p>');
 
-    }
+}
 
     /**
      * \brief Show import CSV form
@@ -2559,7 +2559,7 @@ class DashboardController extends Controller
                                         }
                                     }
 
-                                    Transaction::create([
+                                    $childTransaction =Transaction::create([
                                         'user_id' => $activatedUser->id,
                                         'project_id' => $childProject->id,
                                         'transaction_type' => Transaction::BUY,
@@ -2569,7 +2569,12 @@ class DashboardController extends Controller
                                         'number_of_shares' => round($percAmount/$childProject->share_per_unit_price),
                                         'transaction_description'=>'Child Application',
                                     ]);
+                                    $childTransaction->created_at = $clientAppliation[32];
+                                    $childTransaction->updated_at = $clientAppliation[32];
+                                    $childTransaction->save();
                                 }
+                                $masterTransaction->created_at = $clientAppliation[32];
+                                $masterTransaction->updated_at = $clientAppliation[32];
                                 $masterTransaction->transaction_description = 'Master Application';
                                 $masterTransaction->save();
                             }
@@ -2875,7 +2880,7 @@ class DashboardController extends Controller
         $investment = InvestmentInvestor::findOrFail($request->investment_id);
         $destinationPath = 'assets/investment/hard/copy/';
         $filename = $investment->id ;
-            
+
         $storagePath = \Storage::disk('s3')->put($destinationPath.$filename, file_get_contents($request->file('hard_copy')),'public');
 
         $investment->update(['hard_copy_path'=>'https://s3-' .  config('filesystems.disks.s3.region') . '.amazonaws.com/' . config('filesystems.disks.s3.bucket').'/'.$destinationPath.$filename]);
@@ -2892,123 +2897,123 @@ class DashboardController extends Controller
         // dd($customFields);
         $tableContent = '';
 
-            $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10" width="100%">';
-            $tableContent .= '<tbody>';
+        $tableContent .= '<table class="table-striped dividend-confirm-table" border="0" cellpadding="10" width="100%">';
+        $tableContent .= '<tbody>';
 
                 //investment_details section
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;" > Project Name </td><td>' . $investment->project->title . '</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Amount </td><td>' . $investment->amount*$investment->buy_rate . '</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Number of shares </td><td>' . $investment->amount .'</td></tr>';
-                
-                if (isset($customFields['investment_details'])){
-                    foreach ($customFields['investment_details'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
-                        $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
-                        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                    }
-                        }
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;" > Project Name </td><td>' . $investment->project->title . '</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Amount </td><td>' . $investment->amount*$investment->buy_rate . '</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Number of shares </td><td>' . $investment->amount .'</td></tr>';
+
+        if (isset($customFields['investment_details'])){
+            foreach ($customFields['investment_details'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
+            }
+        }
 
 
                 //section investing_type
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Given Name </td><td>' . $investment->user->first_name .'</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> SurName </td><td>' . $investment->user->last_name .'</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investment->investing_as .'</td></tr>';
-                if($investment->investing_as === 'Joint Investor'){
-                    $joint_investor_first_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_first_name : '';
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor First Name </td><td>' . $joint_investor_first_name .'</td></tr>';
-                    $joint_investor_last_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_last_name : '';
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor Last Name </td><td>' . $joint_investor_last_name .'</td></tr>';
-                }
-                if($investment->investing_as === 'Trust or Company'){
-                    $investing_company = isset($investment->investingJoint) ? $investment->investingJoint->investing_company : '';
-                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Company Name </td><td>' . $investing_company .'</td></tr>';
-                }
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Given Name </td><td>' . $investment->user->first_name .'</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> SurName </td><td>' . $investment->user->last_name .'</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Investing As </td><td>' . $investment->investing_as .'</td></tr>';
+        if($investment->investing_as === 'Joint Investor'){
+            $joint_investor_first_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_first_name : '';
+            $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor First Name </td><td>' . $joint_investor_first_name .'</td></tr>';
+            $joint_investor_last_name = isset($investment->investingJoint) ? $investment->investingJoint->joint_investor_last_name : '';
+            $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Joint Investor Last Name </td><td>' . $joint_investor_last_name .'</td></tr>';
+        }
+        if($investment->investing_as === 'Trust or Company'){
+            $investing_company = isset($investment->investingJoint) ? $investment->investingJoint->investing_company : '';
+            $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Company Name </td><td>' . $investing_company .'</td></tr>';
+        }
                 // dd( $investmentCustomValues);
-                if (isset($customFields['investing_type'])){
-                    foreach ($customFields['investing_type'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
-                        $value = $investmentCustomValues[$customField->id]->first() ? $investmentCustomValues[$customField->id]->first()->value : '';
-                        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                    }
+        if (isset($customFields['investing_type'])){
+            foreach ($customFields['investing_type'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ? $investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
-                }
+            }
+        }
 
                 //contact_details
-                $line_1 = ($investment->investingJoint) ? $investment->investingJoint->line_1 : $investment->user->line_1;
-                $line_2 = ($investment->investingJoint) ? $investment->investingJoint->line_2 : $investment->user->line_2;
-                $city = ($investment->investingJoint) ? $investment->investingJoint->city : $investment->user->city;
-                $state = ($investment->investingJoint) ? $investment->investingJoint->state : $investment->user->state;
-                $country = ($investment->investingJoint) ? $investment->investingJoint->country : $investment->user->country;
-                $postal_code = ($investment->investingJoint) ? $investment->investingJoint->postal_code : $investment->user->postal_code;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Address </td><td>' . $line_1.','. $line_2.','. $city.','. $state.','. $country.'-'. $postal_code .'</td></tr>';
-                $tfn = ($investment->investingJoint) ? $investment->investingJoint->tfn : $investment->user->tfn;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> TFN </td><td>' . $tfn .'</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Phone </td><td>' . $investment->user->phone_number .'</td></tr>';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Email </td><td>' . $investment->user->email .'</td></tr>';
-                if (isset($customFields['contact_details'])){
-                    foreach ($customFields['contact_details'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
-                        $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
-                        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                    }
+        $line_1 = ($investment->investingJoint) ? $investment->investingJoint->line_1 : $investment->user->line_1;
+        $line_2 = ($investment->investingJoint) ? $investment->investingJoint->line_2 : $investment->user->line_2;
+        $city = ($investment->investingJoint) ? $investment->investingJoint->city : $investment->user->city;
+        $state = ($investment->investingJoint) ? $investment->investingJoint->state : $investment->user->state;
+        $country = ($investment->investingJoint) ? $investment->investingJoint->country : $investment->user->country;
+        $postal_code = ($investment->investingJoint) ? $investment->investingJoint->postal_code : $investment->user->postal_code;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Address </td><td>' . $line_1.','. $line_2.','. $city.','. $state.','. $country.'-'. $postal_code .'</td></tr>';
+        $tfn = ($investment->investingJoint) ? $investment->investingJoint->tfn : $investment->user->tfn;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> TFN </td><td>' . $tfn .'</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Phone </td><td>' . $investment->user->phone_number .'</td></tr>';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Email </td><td>' . $investment->user->email .'</td></tr>';
+        if (isset($customFields['contact_details'])){
+            foreach ($customFields['contact_details'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
-                }
+            }
+        }
 
                 //nominated_bank_account
-                $investorAc = ($investment->investingJoint) ? $investment->investingJoint->account_name : $investment->user->account_name;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Account Name </td><td>' . $investorAc .'</td></tr>';
-                $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Bank Name </td><td>' . $bank.'</td></tr>';
-                $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> BSB </td><td>' . $bsb .'</td></tr>';
-                $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Account Number </td><td>' . $acNum .'</td></tr>';
-                if (isset($customFields['nominated_bank_account'])){
-                    foreach ($customFields['nominated_bank_account'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
-                        $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
-                        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                    }
+        $investorAc = ($investment->investingJoint) ? $investment->investingJoint->account_name : $investment->user->account_name;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Account Name </td><td>' . $investorAc .'</td></tr>';
+        $bank = ($investment->investingJoint) ? $investment->investingJoint->bank_name : $investment->user->bank_name;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Bank Name </td><td>' . $bank.'</td></tr>';
+        $bsb = ($investment->investingJoint) ? $investment->investingJoint->bsb : $investment->user->bsb;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> BSB </td><td>' . $bsb .'</td></tr>';
+        $acNum = ($investment->investingJoint) ? $investment->investingJoint->account_number : $investment->user->account_number;
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Account Number </td><td>' . $acNum .'</td></tr>';
+        if (isset($customFields['nominated_bank_account'])){
+            foreach ($customFields['nominated_bank_account'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
-                }
+            }
+        }
 
                 //other section
-                
-                    foreach ($customFields as $key => $fields){
-                        if ($key !== 'investment_details' && $key !== 'investing_type' && $key !== 'contact_details' && $key !== 'nominated_bank_account' && $key !== 'interested_to_buy' && $key !== 'signature'){
 
-                            foreach ($fields as $customField) { 
-                                if(isset($investmentCustomValues[$customField->id])){
-                                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
-                                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                                }
-                            }
-                        }
-                    }
-                //interested_to_buy
-                $is_interested_investment_offers = $investment->interested_to_buy ? 'Yes' : 'No';
-                $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Interested to Buy </td><td>' . $is_interested_investment_offers  .'</td></tr>';
-                if (isset($customFields['interested_to_buy'])){
-                    foreach ($customFields['interested_to_buy'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
+        foreach ($customFields as $key => $fields){
+            if ($key !== 'investment_details' && $key !== 'investing_type' && $key !== 'contact_details' && $key !== 'nominated_bank_account' && $key !== 'interested_to_buy' && $key !== 'signature'){
+
+                foreach ($fields as $customField) { 
+                    if(isset($investmentCustomValues[$customField->id])){
                         $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
                         $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                     }
                 }
+            }
+        }
+                //interested_to_buy
+        $is_interested_investment_offers = $investment->interested_to_buy ? 'Yes' : 'No';
+        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;"> Interested to Buy </td><td>' . $is_interested_investment_offers  .'</td></tr>';
+        if (isset($customFields['interested_to_buy'])){
+            foreach ($customFields['interested_to_buy'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
+            }
+        }
 
                 //signature
-                if (isset($customFields['signature'])){
-                    foreach ($customFields['signature'] as $customField){
-                        if(isset($investmentCustomValues[$customField->id])){
-                        $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
-                        $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
-                    }
+        if (isset($customFields['signature'])){
+            foreach ($customFields['signature'] as $customField){
+                if(isset($investmentCustomValues[$customField->id])){
+                    $value = $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '';
+                    $tableContent .= '<tr><td style="border-right:1px solid; border-color:#000;">'.$customField->label .' </td><td>' . $value .'</td></tr>';
                 }
-                }
+            }
+        }
 
-            $tableContent .= '</tbody></table>';
+        $tableContent .= '</tbody></table>';
 
 
         return response()->json([
