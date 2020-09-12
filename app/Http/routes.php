@@ -349,6 +349,7 @@ Route::post('/dashboard/application/{id}/field/display',['as'=>'dashboard.applic
 Route::post('/dashboard/site-configuration/custom-fields', 'CustomFieldsController@store')->name('custom-field.store');
 Route::post('/dashboard/site-configuration/custom-fields/{custom_field}/delete', 'CustomFieldsController@destroy')->name('custom-field.delete');
 Route::post('/dashboard/site-configuration/custom-fields/update', 'CustomFieldsController@update')->name('custom-field.update');
+Route::patch('/dashboard/site-configuration/custom-fields/{custom_field}/section/update', 'CustomFieldsController@updateSection')->name('custom-field.section.update');
 
 /** Application section actions */
 Route::post('/dashboard/site-configuration/application-section', 'ApplicationSectionsController@store')->name('application-section.store');

@@ -29,328 +29,328 @@ Configuration | Dashboard | @parent
 			<div class="row">
 				<div class="col-md-offset-1 col-md-10">
                     @if (Session::has('success'))
-                        <div class="alert alert-success alert-dismissible">
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            {!! Session::get('success') !!}
-                        </div>
+                    <div class="alert alert-success alert-dismissible">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {!! Session::get('success') !!}
+                    </div>
                     @endif
-					<div class="row" style="padding-top:1.2em;">
-						<div class="col-md-4">
-							<div class="thumbnail text-center">
-								@if (Session::has('message'))
-								@if(Session::get('action') == 'site-favicon')
-								<div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Favicon</b></h3>
-                                    <p><small>This Icon will appear on the title bar of the website page.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-favicon-btn" style="cursor: pointer;">
-                                                <strong>Change Favicon</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    <div class="row" style="padding-top:1.2em;">
+                      <div class="col-md-4">
+                         <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'site-favicon')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Favicon</b></h3>
+                                <p><small>This Icon will appear on the title bar of the website page.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-favicon-btn" style="cursor: pointer;">
+                                            <strong>Change Favicon</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'site-title')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Website Title</b></h3>
-                                    <p><small>This text will appear on the title bar of the website page.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-title-btn" style="cursor: pointer;">
-                                                <strong>Change Title</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'site-title')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Website Title</b></h3>
+                                <p><small>This text will appear on the title bar of the website page.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-title-btn" style="cursor: pointer;">
+                                            <strong>Change Title</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'website-name')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Website Name</b></h3>
-                                    <p><small>This will be the reference name for the website.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-site-name-btn" style="cursor: pointer;">
-                                                <strong>Change Website Name</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'website-name')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Website Name</b></h3>
+                                <p><small>This will be the reference name for the website.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-site-name-btn" style="cursor: pointer;">
+                                            <strong>Change Website Name</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'client-name')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Client Name</b></h3>
-                                    <p><small>This will be the client name who owns the website.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-client-name-btn" style="cursor: pointer;">
-                                                <strong>Change Client Name</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'client-name')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Client Name</b></h3>
+                                <p><small>This will be the client name who owns the website.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-client-name-btn" style="cursor: pointer;">
+                                            <strong>Change Client Name</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'mail_setting')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Mailer Email</b></h3>
-                                    <p><small>This will be the email address from which all emails will be sent.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-mailer-email-btn" style="cursor: pointer;">
-                                                <strong>Change Email address</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'mail_setting')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Mailer Email</b></h3>
+                                <p><small>This will be the email address from which all emails will be sent.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-mailer-email-btn" style="cursor: pointer;">
+                                            <strong>Change Email address</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4" style="display: none;">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'embedded_link')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Embedded Link</b></h3>
-                                    <p><small>This is the link embedded the interest form for projects.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-intrest-embed-link-btn" style="cursor: pointer;">
-                                                <strong>Change Embed Link</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4" style="display: none;">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'embedded_link')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Embedded Link</b></h3>
+                                <p><small>This is the link embedded the interest form for projects.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-intrest-embed-link-btn" style="cursor: pointer;">
+                                            <strong>Change Embed Link</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'tag_manager')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Tag Manager</b></h3>
-                                    <p><small>This script will be added in the head and body section of the layouts.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-tag-manager-btn" style="cursor: pointer;">
-                                                <strong>Change Tag Manager</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'tag_manager')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Tag Manager</b></h3>
+                                <p><small>This script will be added in the head and body section of the layouts.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-tag-manager-btn" style="cursor: pointer;">
+                                            <strong>Change Tag Manager</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'conversion_pixel')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Conversion pixel</b></h3>
-                                    <p><small>This code will be added on confirm page once user invest in project.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-conversion-pixel-btn" style="cursor: pointer;">
-                                                <strong>Change Conversion Pixel</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'conversion_pixel')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Conversion pixel</b></h3>
+                                <p><small>This code will be added on confirm page once user invest in project.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-conversion-pixel-btn" style="cursor: pointer;">
+                                            <strong>Change Conversion Pixel</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'change_prospectus')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Prospectus Text</b></h3>
-                                    <p><small>This will replace all the instances of prospectus with entered word.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-prospectus-text-btn" style="cursor: pointer;">
-                                                <strong>Change Prospectus Text</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'change_prospectus')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Prospectus Text</b></h3>
+                                <p><small>This will replace all the instances of prospectus with entered word.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-prospectus-text-btn" style="cursor: pointer;">
+                                            <strong>Change Prospectus Text</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'change_legal_details')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Legal Details</b></h3>
-                                    <p><small>Edit Operator name, AFSL <br> and CAR number.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-legal-details-btn" style="cursor: pointer;">
-                                                <strong>Change Legal Details</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'change_legal_details')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Legal Details</b></h3>
+                                <p><small>Edit Operator name, AFSL <br> and CAR number.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-legal-details-btn" style="cursor: pointer;">
+                                            <strong>Change Legal Details</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'change_konkrete_bonus_allocation')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Konkrete Bonus</b></h3>
-                                    <p><small>Edit the konkrete bonus allocation on this site.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-konkrete-bonus-allocation-btn" style="cursor: pointer;">
-                                                <strong>Change Konkrete Bonus Allocation</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'change_konkrete_bonus_allocation')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Konkrete Bonus</b></h3>
+                                <p><small>Edit the konkrete bonus allocation on this site.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-konkrete-bonus-allocation-btn" style="cursor: pointer;">
+                                            <strong>Change Konkrete Bonus Allocation</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'change_sendgrid_api_key')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Sendgrid API key</b></h3>
-                                    <p><small>Edit the sendgrid API key for this site with new key.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-sendgrid-api-key-btn" style="cursor: pointer;">
-                                                <strong>Change Sendgrid API key</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'change_sendgrid_api_key')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Sendgrid API key</b></h3>
+                                <p><small>Edit the sendgrid API key for this site with new key.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-sendgrid-api-key-btn" style="cursor: pointer;">
+                                            <strong>Change Sendgrid API key</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="thumbnail text-center">
-                                @if (Session::has('message'))
-                                @if(Session::get('action') == 'change_project_url')
-                                <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
-                                    <h5>{!! Session::get('message') !!}</h5>
-                                </div>
-                                @endif
-                                @endif
-                                <div class="caption">
-                                    <h3><b>Project Url</b></h3>
-                                    <p><small>Edit the project url for this site to redirect.</small></p>
-                                    <hr>
-                                    <p>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary btn-sm change-project-url-btn" style="cursor: pointer;">
-                                                <strong>Change Project Url</strong>
-                                            </span>
-                                        </label>
-                                    </p>
-                                </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="thumbnail text-center">
+                            @if (Session::has('message'))
+                            @if(Session::get('action') == 'change_project_url')
+                            <div style="background-color: #c9ffd5;color: #027039;width: 100%;padding: 1px;">
+                                <h5>{!! Session::get('message') !!}</h5>
+                            </div>
+                            @endif
+                            @endif
+                            <div class="caption">
+                                <h3><b>Project Url</b></h3>
+                                <p><small>Edit the project url for this site to redirect.</small></p>
+                                <hr>
+                                <p>
+                                    <label class="input-group-btn">
+                                        <span class="btn btn-primary btn-sm change-project-url-btn" style="cursor: pointer;">
+                                            <strong>Change Project Url</strong>
+                                        </span>
+                                    </label>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <section style="padding: 5% 0%;">
-                <div class="col-md-offset-1 col-md-10">
-                    <h2 class="text-center">Items Visibility</h2>
-                    <hr>
-                    <div class="row" style="padding: 0px 10px;">
-                        <div class="col-md-6">Splash Page</div>
-                        <div class="col-md-6 text-right"><input type="checkbox" class="common-switch-class" autocomplete="off" data-label-text="Show" action="show_splash_page" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_splash_page) value="1" checked @else value="0" @endif></div>
-                    </div>
-                    <hr>
-                    <div class="row" style="padding: 0px 10px;">
-                        <div class="col-md-6">Allow User Signup</div>
-                        <div class="col-md-6 text-right"><input type="checkbox" class="common-switch-class" autocomplete="off" data-label-text="Allow" action="allow_user_signup" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->allow_user_signup) value="1" checked @else value="0" @endif></div>
-                    </div>
-                    <hr>
+        </div>
+        <section style="padding: 5% 0%;">
+            <div class="col-md-offset-1 col-md-10">
+                <h2 class="text-center">Items Visibility</h2>
+                <hr>
+                <div class="row" style="padding: 0px 10px;">
+                    <div class="col-md-6">Splash Page</div>
+                    <div class="col-md-6 text-right"><input type="checkbox" class="common-switch-class" autocomplete="off" data-label-text="Show" action="show_splash_page" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->show_splash_page) value="1" checked @else value="0" @endif></div>
+                </div>
+                <hr>
+                <div class="row" style="padding: 0px 10px;">
+                    <div class="col-md-6">Allow User Signup</div>
+                    <div class="col-md-6 text-right"><input type="checkbox" class="common-switch-class" autocomplete="off" data-label-text="Allow" action="allow_user_signup" @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->allow_user_signup) value="1" checked @else value="0" @endif></div>
+                </div>
+                <hr>
 
                     <!-- <div class="row" style="padding: 0px 10px;">
                         <div class="col-md-6">Welcome Flash Message</div>
@@ -388,12 +388,12 @@ Configuration | Dashboard | @parent
                         <div class="row text-center" id="modal_body_container">
                         	<div class="col-md-10 col-md-offset-1">
                         		{!! Form::open(array('route'=>['configuration.updateFavicon'], 'files' => true, 'method'=>'POST', 'class'=>'form-horizontal', 'role'=>'form')) !!}
-                             <h5><i><small>Select image in below form and save to display new favicon for the website. Valid extension: png</small></i></h5>
-                             <br>
-                             <div class="row favicon-error" style="text-align: -webkit-center;"></div>
-                             <div class="input-group">
-                              <label class="input-group-btn">
-                                 <span class="btn btn-primary" style="padding: 10px 12px;">
+                               <h5><i><small>Select image in below form and save to display new favicon for the website. Valid extension: png</small></i></h5>
+                               <br>
+                               <div class="row favicon-error" style="text-align: -webkit-center;"></div>
+                               <div class="input-group">
+                                  <label class="input-group-btn">
+                                   <span class="btn btn-primary" style="padding: 10px 12px;">
                                     Browse&hellip; <input type="file" name="favicon_image_url" id="favicon_image_url" class="form-control" style="display: none;">
                                 </span>
                             </label>
@@ -419,21 +419,21 @@ Configuration | Dashboard | @parent
             </div>
             <div class="modal-body">
                 <div class="row text-center" id="modal_body_container">
-                   <div class="col-md-10 col-md-offset-1">
-                      {!! Form::open(array('route'=>['configuration.updateSiteTitle'], 'method'=>'POST', 'class'=>'form-horizontal', 'role'=>'form')) !!}
-                      <h5><i><small>Enter the text in below text field and save to display new title for the website.</small></i></h5>
-                      <br>
-                      <div class="row title-text-error" style="text-align: -webkit-center;"></div>
-                      {!! Form::text('title_text_imput', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->title_text, array('placeholder'=>'Enter website title', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'title_text_imput')) !!}
-                      {!! $errors->first('title_text_imput', '<small class="text-danger">:message</small>') !!}
-                      <br>
-                      {!! Form::submit('Save Title', array('class'=>'btn btn-primary col-md-4 col-md-offset-4', 'tabindex'=>'2', 'style'=>'margin-bottom: 20px; margin-top: 10px;', 'id'=>'submit_title_text_btn')) !!}
-                      {!! Form::close() !!}
-                  </div>
+                 <div class="col-md-10 col-md-offset-1">
+                  {!! Form::open(array('route'=>['configuration.updateSiteTitle'], 'method'=>'POST', 'class'=>'form-horizontal', 'role'=>'form')) !!}
+                  <h5><i><small>Enter the text in below text field and save to display new title for the website.</small></i></h5>
+                  <br>
+                  <div class="row title-text-error" style="text-align: -webkit-center;"></div>
+                  {!! Form::text('title_text_imput', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->title_text, array('placeholder'=>'Enter website title', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'title_text_imput')) !!}
+                  {!! $errors->first('title_text_imput', '<small class="text-danger">:message</small>') !!}
+                  <br>
+                  {!! Form::submit('Save Title', array('class'=>'btn btn-primary col-md-4 col-md-offset-4', 'tabindex'=>'2', 'style'=>'margin-bottom: 20px; margin-top: 10px;', 'id'=>'submit_title_text_btn')) !!}
+                  {!! Form::close() !!}
               </div>
           </div>
       </div>
   </div>
+</div>
 </div>
 <!-- Mailer Modal -->
 <div class="modal fade" id="mailer_email_edit_modal" role="dialog">
@@ -447,9 +447,9 @@ Configuration | Dashboard | @parent
             <div class="modal-body">
                 <div class="row text-center" id="modal_body_container">
                     <div class="col-md-10 col-md-offset-1">
-                    @if($siteconfiguration->mailSetting)
-                    {!! Form::model($mail_setting, array('route'=>['configuration.updatemailsettings',$mail_setting], 'method'=>'PATCH', 'class'=>'form-horizontal', 'role'=>'form')) !!}
-                    @else
+                        @if($siteconfiguration->mailSetting)
+                        {!! Form::model($mail_setting, array('route'=>['configuration.updatemailsettings',$mail_setting], 'method'=>'PATCH', 'class'=>'form-horizontal', 'role'=>'form')) !!}
+                        @else
                         {!! Form::open(array('route'=>['configuration.createmailsettings'], 'method'=>'POST', 'class'=>'form-horizontal', 'role'=>'form')) !!}
                         @endif
                         <h5><i><small>Enter the email in below text field and save to display new email for the website.</small></i></h5>
@@ -507,7 +507,7 @@ Configuration | Dashboard | @parent
                             </div>
                         </div>
                         <div class="row title-text-error">
-                        <div class="col-md-2">
+                            <div class="col-md-2">
                                 <label>
                                     <h4 class="text-center">Username</h4>
                                 </label>
@@ -779,9 +779,9 @@ Configuration | Dashboard | @parent
                             <div class="col-md-12">
                                 <label for="daily_login_bonus" style="text-align: left;" class="pull-left">Daily Login Bonus @if(isset($siteConfigurationHelper->daily_login_bonus_konkrete) && $siteConfigurationHelper->daily_login_bonus_konkrete == 0) (Currently Disabled) @endif</label>
                                 @if(isset($siteConfigurationHelper->daily_login_bonus_konkrete) && $siteConfigurationHelper->daily_login_bonus_konkrete!='')
-                                    {!! Form::input('number', 'daily_login_bonus_konkrete', $siteConfigurationHelper->daily_login_bonus_konkrete, array('placeholder'=>'Enter konkrete amount for daily login bonus', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'daily_login_bonus', 'required' => 'required', 'type'=>'number', 'min'=>'0', 'title'=>'Enter konkrete amount for daily login bonus. (If you want to disable login bonus, enter 0)')) !!}
+                                {!! Form::input('number', 'daily_login_bonus_konkrete', $siteConfigurationHelper->daily_login_bonus_konkrete, array('placeholder'=>'Enter konkrete amount for daily login bonus', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'daily_login_bonus', 'required' => 'required', 'type'=>'number', 'min'=>'0', 'title'=>'Enter konkrete amount for daily login bonus. (If you want to disable login bonus, enter 0)')) !!}
                                 @else
-                                    {!! Form::input('number', 'daily_login_bonus_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->daily_login_bonus_konkrete, array('placeholder'=>'Enter konkrete amount for daily login bonus', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'daily_login_bonus', 'required' => 'required', 'type'=>'number', 'min'=>'0', 'title'=>'Enter konkrete amount for daily login bonus. (If you want to disable login bonus, enter 0)')) !!}
+                                {!! Form::input('number', 'daily_login_bonus_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->daily_login_bonus_konkrete, array('placeholder'=>'Enter konkrete amount for daily login bonus', 'class'=>'form-control ', 'tabindex'=>'1', 'id'=>'daily_login_bonus', 'required' => 'required', 'type'=>'number', 'min'=>'0', 'title'=>'Enter konkrete amount for daily login bonus. (If you want to disable login bonus, enter 0)')) !!}
                                 @endif
                                 <br>
                             </div>
@@ -790,9 +790,9 @@ Configuration | Dashboard | @parent
                             <div class="col-md-12">
                                 <label for="user_sign_up" style="text-align: left;" class="pull-left">User Sign Up:</label>
                                 @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->user_sign_up_konkrete)
-                                    {!! Form::input('number', 'user_sign_up_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->user_sign_up_konkrete, array('placeholder'=>'Enter konkrete amount for user sign up', 'class'=>'form-control ', 'tabindex'=>'2', 'id'=>'user_sign_up', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for user sign up')) !!}
+                                {!! Form::input('number', 'user_sign_up_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->user_sign_up_konkrete, array('placeholder'=>'Enter konkrete amount for user sign up', 'class'=>'form-control ', 'tabindex'=>'2', 'id'=>'user_sign_up', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for user sign up')) !!}
                                 @else
-                                    {!! Form::input('number', 'user_sign_up_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->user_sign_up_konkrete, array('placeholder'=>'Enter konkrete amount for user sign up', 'class'=>'form-control ', 'tabindex'=>'2', 'id'=>'user_sign_up', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for user sign up')) !!}
+                                {!! Form::input('number', 'user_sign_up_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->user_sign_up_konkrete, array('placeholder'=>'Enter konkrete amount for user sign up', 'class'=>'form-control ', 'tabindex'=>'2', 'id'=>'user_sign_up', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for user sign up')) !!}
                                 @endif
                                 <br>
                             </div>
@@ -806,9 +806,9 @@ Configuration | Dashboard | @parent
                             <div class="col-md-12">
                                 <label for="kyc_approval" style="text-align: left;" class="pull-left">KYC Approval:</label>
                                 @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->kyc_approval_konkrete)
-                                    {!! Form::input('number', 'kyc_approval_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->kyc_approval_konkrete, array('placeholder'=>'Enter konkrete amount given on KYC approval', 'class'=>'form-control ', 'tabindex'=>'4', 'id'=>'kyc_approval', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount given on KYC approval')) !!}
+                                {!! Form::input('number', 'kyc_approval_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->kyc_approval_konkrete, array('placeholder'=>'Enter konkrete amount given on KYC approval', 'class'=>'form-control ', 'tabindex'=>'4', 'id'=>'kyc_approval', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount given on KYC approval')) !!}
                                 @else
-                                    {!! Form::input('number', 'kyc_approval_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->kyc_approval_konkrete, array('placeholder'=>'Enter konkrete amount given on KYC approval', 'class'=>'form-control ', 'tabindex'=>'4', 'id'=>'kyc_approval', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount given on KYC approval')) !!}
+                                {!! Form::input('number', 'kyc_approval_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->kyc_approval_konkrete, array('placeholder'=>'Enter konkrete amount given on KYC approval', 'class'=>'form-control ', 'tabindex'=>'4', 'id'=>'kyc_approval', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount given on KYC approval')) !!}
                                 @endif
                                 <br>
                             </div>
@@ -817,18 +817,18 @@ Configuration | Dashboard | @parent
                             <div class="col-md-6">
                                 <label for="referral" style="text-align: left;" class="pull-left">Referrer:</label>
                                 @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referrer_konkrete)
-                                    {!! Form::input('number', 'referrer_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referrer_konkrete, array('placeholder'=>'Enter konkrete amount for referrer', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'referral', 'required' => 'required', 'title'=>'Enter konkrete amount for referrer')) !!}
+                                {!! Form::input('number', 'referrer_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referrer_konkrete, array('placeholder'=>'Enter konkrete amount for referrer', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'referral', 'required' => 'required', 'title'=>'Enter konkrete amount for referrer')) !!}
                                 @else
-                                    {!! Form::input('number', 'referrer_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->referrer_konkrete, array('placeholder'=>'Enter konkrete amount for referrer', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'referral', 'required' => 'required', 'title'=>'Enter konkrete amount for referrer')) !!}
+                                {!! Form::input('number', 'referrer_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->referrer_konkrete, array('placeholder'=>'Enter konkrete amount for referrer', 'class'=>'form-control ', 'tabindex'=>'5', 'id'=>'referral', 'required' => 'required', 'title'=>'Enter konkrete amount for referrer')) !!}
                                 @endif
                                 <br>
                             </div>
                             <div class="col-md-6">
                                 <label for="referee" style="text-align: left;" class="pull-left">Referee:</label>
                                 @if(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referee_konkrete)
-                                    {!! Form::input('number', 'referee_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referee_konkrete, array('placeholder'=>'Enter konkrete amount for referee', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'referral', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for referee')) !!}
+                                {!! Form::input('number', 'referee_konkrete', App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->referee_konkrete, array('placeholder'=>'Enter konkrete amount for referee', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'referral', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for referee')) !!}
                                 @else
-                                    {!! Form::input('number', 'referee_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->referee_konkrete, array('placeholder'=>'Enter konkrete amount for referee', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'referral', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for referee')) !!}
+                                {!! Form::input('number', 'referee_konkrete', App\Helpers\SiteConfigurationHelper::getEbConfigurationAttr()->referee_konkrete, array('placeholder'=>'Enter konkrete amount for referee', 'class'=>'form-control ', 'tabindex'=>'6', 'id'=>'referral', 'required' => 'required', 'min'=>'1', 'title'=>'Enter konkrete amount for referee')) !!}
                                 @endif
                                 <br>
                             </div>
@@ -920,7 +920,7 @@ Configuration | Dashboard | @parent
             var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();
             var sectionLabels = $('input[name="sectionLabels[]"]').map(function () {return $(this).val();}).get();
             var sectionIds = $("input[name='sectionIds[]']")
-              .map(function(){return $(this).val();}).get();
+            .map(function(){return $(this).val();}).get();
             console.log(rank,sectionIds,sectionLabels);
             $('.loader-overlay').show();
             $.ajax({
@@ -941,20 +941,25 @@ Configuration | Dashboard | @parent
 
         });
 
+        $('select[name="customFieldSections"]').click(function () {
+            var dad = $(this).parent();
+            $(this).hide();
+            dad.find('select[name="customFieldSections"]').show().focus();
+            dad.submit();
+        });
+
         $('#updateCustomField').on('click',function (f) {
             f.preventDefault();
             var customFieldLabels = $('input[name="customFieldLabels[]"]').map(function () {return $(this).val();}).get();
-            var customFieldSections  = $("select[name='customFieldSections[]']").map(function(){return $(this).val();}).get();
             var customIds = $("input[name='customIds[]']").map(function(){return $(this).val();}).get();
             var agent_type = $("input[name='agent_type[]']").map(function(){return $(this).val();}).get();
             var customFieldTypes = $("select[name='customFieldTypes[]']").map(function(){return $(this).val();}).get();
-            // console.log(customFieldLabels,customIds,);
             $('.loader-overlay').show();
             $.ajax({
                 url: '/dashboard/site-configuration/custom-fields/update',
                 type: 'POST',
                 dataType: 'JSON',
-                data: {customFieldLabels,customIds,customFieldTypes,agent_type,customFieldSections,},
+                data: {customFieldLabels,customIds,customFieldTypes,agent_type,},
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (data) {
                     $('#custom-fields-msg').removeClass('hide');
@@ -1003,20 +1008,20 @@ Configuration | Dashboard | @parent
             }
         });
 
-		$('.change-title-btn').click(function(){
-			$('#title_text_edit_modal').modal({
-                'show': true,
-                'backdrop': false,
-            });
-            $('#title_text_imput').select();
+        $('.change-title-btn').click(function(){
+         $('#title_text_edit_modal').modal({
+            'show': true,
+            'backdrop': false,
         });
+         $('#title_text_imput').select();
+     });
 
-		$('#submit_title_text_btn').click(function(e){
-			if($('#title_text_imput').val() == ''){
-				e.preventDefault();
-				$('.title-text-error').html('<div style="color:#ea0000; border-radius:5px; width:80%"><h6>Title field is empty</h6></div>')
-			}
-		});
+        $('#submit_title_text_btn').click(function(e){
+         if($('#title_text_imput').val() == ''){
+            e.preventDefault();
+            $('.title-text-error').html('<div style="color:#ea0000; border-radius:5px; width:80%"><h6>Title field is empty</h6></div>')
+        }
+    });
 
         $('.change-site-name-btn').click(function(){
             $('#site_name_edit_modal').modal({
@@ -1064,37 +1069,37 @@ Configuration | Dashboard | @parent
         });
 
         $('.change-favicon-btn').click(function(){
-         $('#favicon_edit_modal').modal({
+           $('#favicon_edit_modal').modal({
             'show':true,
             'backdrop':false,
         });
 
 
-     });
+       });
 
         $('#modal_close_btn').click(function(){
-         $('#favicon_image_url').val('');
-         $('#favicon_image_name').val('');
-     });
+           $('#favicon_image_url').val('');
+           $('#favicon_image_name').val('');
+       });
 
         $('#favicon_image_url').change(function(){
-         $('.favicon-error').html('');
-         var file = $('#favicon_image_url')[0].files[0];
-         if (file){
+           $('.favicon-error').html('');
+           var file = $('#favicon_image_url')[0].files[0];
+           if (file){
             fileExtension = (file.name).substr(((file.name).lastIndexOf('.') + 1)).toLowerCase();
             if(fileExtension == 'png'){
-               $('#favicon_image_name').val(file.name);
-           }
-           else{
-               $('#favicon_image_url').val('');
-               $('#favicon_image_name').val('');
-               $('.favicon-error').html('<div style="color:#ea0000; border-radius:5px; width:80%"><h6>Not a valid file extension. Valid extension: png</h6></div>');
-           }
-       }
-   });
+             $('#favicon_image_name').val(file.name);
+         }
+         else{
+             $('#favicon_image_url').val('');
+             $('#favicon_image_name').val('');
+             $('.favicon-error').html('<div style="color:#ea0000; border-radius:5px; width:80%"><h6>Not a valid file extension. Valid extension: png</h6></div>');
+         }
+     }
+ });
 
         $('#submit_favicon_btn').click(function(e){
-         if($('#favicon_image_url').val() == ''){
+           if($('#favicon_image_url').val() == ''){
             $('.favicon-error').html('<div style="color:#ea0000; border-radius:5px; width:80%"><h6>No Image selected</h6></div>');
         }
         else{
@@ -1112,7 +1117,7 @@ Configuration | Dashboard | @parent
                 contentType: false,
                 processData: false
             }).done(function(data){
-               if(data.status == 1){
+             if(data.status == 1){
                 console.log(data);
                 var imgPath = data.fileName;
                 var str1 = $('<div class="col-sm-9"><img src="../../'+imgPath+'" width="530" id="image_cropbox" style="max-width:none !important"><br><span style="font-style: italic; font-size: 13px"><small>Select The Required Area To Crop Logo.</small></span></div><div class="col-sm-2" id="preview_favicon_img" style="float: right;"><img width="530" src="../../'+imgPath+'" id="preview_image"></div>');
@@ -1155,7 +1160,7 @@ Configuration | Dashboard | @parent
         }
         performCropOnImage();
     });
-       
+
 
         // Additional functionality functions
         editProspectusText();
@@ -1169,8 +1174,8 @@ Configuration | Dashboard | @parent
     });
 
 function updateCoords(coords, w, h, origWidth, origHeight){
-   var target_width= w;
-   var target_height=h;
+ var target_width= w;
+ var target_height=h;
         //Set New Coordinates
         $('#x_coord').val(coords.x);
         $('#y_coord').val(coords.y);
@@ -1244,12 +1249,12 @@ function updateCoords(coords, w, h, origWidth, origHeight){
                     $('.loader-overlay').hide();
                     $('#image_crop_modal').modal('toggle');
                     if (imgAction == 'favicon image'){
-                     $('#favicon_image_url, #favicon_image_name').val('');
-                 }
-                 alert(data.message);
-             }
+                       $('#favicon_image_url, #favicon_image_name').val('');
+                   }
+                   alert(data.message);
+               }
 
-         });
+           });
         });
     }
 

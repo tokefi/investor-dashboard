@@ -98,11 +98,9 @@ class CustomFieldsController extends Controller
     {
         for($i=0; $i<count($request->customIds); $i++){
             // $rank = $request->rank[$i];
-            $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();
-            $section = ApplicationSections::where('site_url',url())->where('name',$request->customFieldSections[$i])->first();
-            
+            $customField = CustomField::where('site_url',url())->where('id',$request->customIds[$i])->first();            
             // dd($section);
-            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i],'is_required'=>$request->agent_type[$i],'section'=>$section->name,'section_id'=>$section->id]);
+            $customField->update(['label'=>$request->customFieldLabels[$i],'type'=>$request->customFieldTypes[$i],'is_required'=>$request->agent_type[$i]]);
         }
         return 1;
     }
@@ -121,5 +119,13 @@ class CustomFieldsController extends Controller
 
         Session::flash('success', 'Deleted custom field - "' . $label . '"!');
         return redirect()->back();
+    }
+    public function updateSection(Request $request)
+    {
+        $customField = CustomField::where('site_url',url())->where('id',$request->customIds)->first();
+            $section = ApplicationSections::where('site_url',url())->where('name',$request->customFieldSections)->first();
+            $customField->update(['section'=>$section->name,'section_id'=>$section->id]);
+
+            return redirect()->back()->withMessage("Section label updated successfully");
     }
 }
