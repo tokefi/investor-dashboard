@@ -634,7 +634,7 @@ class AppMailer
         $this->deliverWithBcc();
     }
 
-    public function sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions)
+    public function sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions,$investment)
     {
         $role = Role::findOrFail(1);
         // $recipients = ['info@konkrete.io'];
@@ -648,7 +648,7 @@ class AppMailer
         $this->bcc = $recipients;
         $this->view = 'emails.investorStatementRecordsToUser';
         $this->subject = 'Investor statement for ' . $project->title;
-        $this->data = compact('project', 'user', 'startDate', 'endDate', 'openingBalance', 'closingBalance', 'transactions');
+        $this->data = compact('project', 'user', 'startDate', 'endDate', 'openingBalance', 'closingBalance', 'transactions','investment');
         $this->deliverWithBcc();
     }
 

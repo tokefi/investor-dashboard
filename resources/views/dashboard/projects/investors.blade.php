@@ -1117,6 +1117,12 @@
 					</div>
 					<div class="hide transactions-section">
 						<hr>
+						<h4 class="text-center">{{ $project->projectspvdetail?$project->projectspvdetail->spv_name:null }}</h4>
+						<p class="text-center">{{ $project->projectspvdetail?$project->projectspvdetail->spv_line_1:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_line_2:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_city:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_country:null }}-{{ $project->projectspvdetail?$project->projectspvdetail->spv_postal_code:null }}<br>{{ $project->projectspvdetail?$project->projectspvdetail->spv_email:null }}<br>{{ $project->projectspvdetail?$project->projectspvdetail->spv_contact_number:null }}</p>
+						<div id="investor_details" style="width: 100%; overflow-x: auto;">
+							<!-- Render through JS -->
+						</div>
+						<br>
 						<h5 class="text-center opening-balance">
 							<span class="pull-left"><label>OPENING BALANCE:</label>&nbsp;&nbsp; $ <span id="statement_opening_balance"></span></span>
 							<span class=""><label>SHARE PRICE:</label>&nbsp;&nbsp; $ <span id="price"></span></span>
@@ -1617,6 +1623,7 @@ function previewInvestmentInvestorStatement(investor, startDate = null, endDate 
 			}
 			let openingInvestment = data.data.openingBalance;
 			let closingInvestment = data.data.closingBalance;
+			$('#investor_details').html(data.data.investorDetails);
 			$('#statement_opening_balance').html(new Intl.NumberFormat('en-US').format(openingInvestment ? openingInvestment.balance : 0));
 			$('.opening-balance #price').html(parseFloat(openingInvestment ? openingInvestment.balance_price : {{ $project->prices->first()->price ?? $project->share_per_unit_price }}).toFixed(4));
 			$('.opening-balance #numbers').html(openingInvestment ? openingInvestment.shares : 0);

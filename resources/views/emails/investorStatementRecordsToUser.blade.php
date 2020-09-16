@@ -562,107 +562,112 @@
                             <td valign="top" class="mcnTextContent" style="padding: 0px 18px 9px;font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 14px;font-style: normal;font-weight: normal;line-height: 100%;text-align: left;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #202020;"><br> <br>
                               <strong><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-family:helvetica; font-weight:bolder; line-height:21px"><span style="font-size:20px">Dear {{$user->first_name}},</span></span></span></strong>
 
-                                <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Here is your investor statement for the period of <strong>{{ \Carbon\Carbon::parse($startDate)->format('d-m-Y') }}</strong> and <strong>{{ \Carbon\Carbon::parse($endDate)->format('d-m-Y') }}</strong> for <strong>{{ $project->title }}</strong>.</span><br><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Transaction details are given below -</span><br><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
+                              <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
+                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;"><h4 class="text-center">{{ $project->projectspvdetail?$project->projectspvdetail->spv_name:null }}</h4>
+                                  <p class="text-center">{{ $project->projectspvdetail?$project->projectspvdetail->spv_line_1:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_line_2:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_city:null }},{{ $project->projectspvdetail?$project->projectspvdetail->spv_country:null }}-{{ $project->projectspvdetail?$project->projectspvdetail->spv_postal_code:null }}<br>{{ $project->projectspvdetail?$project->projectspvdetail->spv_email:null }}<br>{{ $project->projectspvdetail?$project->projectspvdetail->spv_contact_number:null }}</p>
+                                  <br>
+                                  <p class="text-center">Investors: {{ $user->first_name }} {{ $user->last_name }}<br>@if($investment->investing_as === 'Joint Investor') Joint Investor: {{ $investment->investingJoint->joint_investor_first_name ?? '' }}{{ $investment->investingJoint->joint_investor_last_name ?? '' }} @elseif($investment->investing_as === 'Trust or Company'){{ $investment->investingJoint->investing_company ?? '' }} @endif</p>
+                                </span></span></span>
+                                  <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Here is your investor statement for the period of <strong>{{ \Carbon\Carbon::parse($startDate)->format('d-m-Y') }}</strong> and <strong>{{ \Carbon\Carbon::parse($endDate)->format('d-m-Y') }}</strong> for <strong>{{ $project->title }}</strong>.</span><br><br>
+                                  <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">Transaction details are given below -</span><br><br>
+                                  <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
                                     <strong>Opening balance: </strong> $ {{ number_format($openingBalance->balance ?? 0, 2) }}<br>
                                     <strong>Share price: </strong> $ {{ $openingBalance->balance_price ?? ($project->prices->first()->price ?? $project->share_per_unit_price) }}<br>
                                     <strong>Number of shares: </strong> {{ $openingBalance->shares ?? 0 }}
-                                </span><br><br>
-                                <table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%" >
+                                  </span><br><br>
+                                  <table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%" >
                                     <thead style=" font-size: 13px; text-align: center;">
-                                        <tr style="background: #dcdcdc;">
-                                            <th>Transaction Date</th>
-                                            <th>Transaction Type</th>
-                                            <th>Number of shares</th>
-                                            <th>Share price</th>
-                                            <th>Cash amount</th>
-                                        </tr>
+                                      <tr style="background: #dcdcdc;">
+                                        <th>Transaction Date</th>
+                                        <th>Transaction Type</th>
+                                        <th>Number of shares</th>
+                                        <th>Share price</th>
+                                        <th>Cash amount</th>
+                                      </tr>
                                     </thead  >
                                     <tbody >
-                                        @foreach($transactions as $transaction)
-                                        <tr>
+                                      @foreach($transactions as $transaction)
+                                      <tr>
                                         <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{\Carbon\Carbon::parse($transaction->created_at)->format('d-m-Y')}}</span></td>
                                         <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{$transaction->transaction_description ?? $transaction->transaction_type}}</span></td>
                                         <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{(strpos($transaction->transaction_type, 'DIVIDEND') === false) ? $transaction->number_of_shares : '-'}}</span></td>
                                         <td valign="top" class="mcnTextContent" style="text-align: center;"><span style="color:#000; font-size: 13px;">{{ (strpos($transaction->transaction_type, 'DIVIDEND') === false) ? '$' . number_format($transaction->rate, 4) : '-' }}</span></td>
                                         <td valign="top" class="mcnTextContent" style="text-align: center; width: 100px;"><span style="color:#000; font-size: 13px;">${{ number_format($transaction->amount, 2) }}</span></td>
-                                        </tr>
-                                        @endforeach
+                                      </tr>
+                                      @endforeach
                                     </tbody>
-                                </table>
-                                <br><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
+                                  </table>
+                                  <br><br>
+                                  <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">
                                     <strong>Closing balance: </strong> $ {{ number_format($closingBalance->balance, 2) }}<br>
                                     <strong>Share price: </strong> $ {{ $closingBalance->balance_price }}<br>
                                     <strong>Number of shares: </strong> {{ $closingBalance->shares }}
-                                </span><br><br>
-                                <span style="color:#000">Regards,</span><br>
-                                <span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-size:16px"><span style="font-family:helvetica; font-weight:bold; line-height:21px">
-                                  @if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@else {{'Estate Baron Team'}} @endif
-                                </span></span></span><br><br>
+                                  </span><br><br>
+                                  <span style="color:#000">Regards,</span><br>
+                                  <span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-size:16px"><span style="font-family:helvetica; font-weight:bold; line-height:21px">
+                                    @if($project->projectspvdetail){{$project->projectspvdetail->spv_name}}@else {{'Estate Baron Team'}} @endif
+                                  </span></span></span><br><br>
+                                </div>
                               </div>
-                            </div>
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" id="templateFooter" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;border-top: 0;border-bottom: 0;padding-top: 9px;padding-bottom: 9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <tbody class="mcnFollowBlockOuter">
+                  <tr>
+                    <td align="center" valign="top" style="padding: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowBlockInner">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <tbody><tr>
+                          <td align="center" style="padding-left: 9px;padding-right: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContent">
+                              <tbody><tr>
+                                <td align="center" valign="top" style="padding-top: 9px;padding-right: 9px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                  <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                    <tbody><tr>
+                                      <td align="center" valign="top" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                      </td>
+                                    </tr>
+                                  </tbody></table>
+                                </td>
+                              </tr>
+                            </tbody></table>
                           </td>
                         </tr>
                       </tbody></table>
                     </td>
                   </tr>
                 </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" id="templateFooter" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;background-color: #FAFAFA;border-top: 0;border-bottom: 0;padding-top: 9px;padding-bottom: 9px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-              <tbody class="mcnFollowBlockOuter">
-                <tr>
-                  <td align="center" valign="top" style="padding: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowBlockInner">
-                    <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                      <tbody><tr>
-                        <td align="center" style="padding-left: 9px;padding-right: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                          <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class="mcnFollowContent">
-                            <tbody><tr>
-                              <td align="center" valign="top" style="padding-top: 9px;padding-right: 9px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                  <tbody><tr>
-                                    <td align="center" valign="top" style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                                    </td>
-                                  </tr>
-                                </tbody></table>
-                              </td>
-                            </tr>
-                          </tbody></table>
-                        </td>
-                      </tr>
-                    </tbody></table>
-                  </td>
-                </tr>
-              </tbody>
-            </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;table-layout: fixed !important;">
-              <tbody class="mcnDividerBlockOuter">
-                <tr>
-                  <td class="mcnDividerBlockInner" style="min-width: 100%;padding: 10px 18px 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                    <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-top-width: 2px;border-top-style: solid;border-top-color: #EEEEEE;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                      <tbody><tr>
-                        <td style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                          <span></span>
-                        </td>
-                      </tr>
-                    </tbody></table>
-                  </td>
-                </tr>
-              </tbody>
-            </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-              <tbody class="mcnTextBlockOuter">
-                <tr>
-                  <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
-                    <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
-                      <tbody><tr>
+              </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;table-layout: fixed !important;">
+                <tbody class="mcnDividerBlockOuter">
+                  <tr>
+                    <td class="mcnDividerBlockInner" style="min-width: 100%;padding: 10px 18px 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                      <table class="mcnDividerContent" border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-top-width: 2px;border-top-style: solid;border-top-color: #EEEEEE;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <tbody><tr>
+                          <td style="mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                            <span></span>
+                          </td>
+                        </tr>
+                      </tbody></table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                <tbody class="mcnTextBlockOuter">
+                  <tr>
+                    <td valign="top" class="mcnTextBlockInner" style="padding-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                      <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" width="100%" class="mcnTextContentContainer">
+                        <tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #1e4762;font-family: Helvetica;font-size: 9px;line-height: 150%;text-align: justify;">
+                          <td valign="top" class="mcnTextContent" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-word;color: #1e4762;font-family: Helvetica;font-size: 9px;line-height: 150%;text-align: justify;">
 
-                          The advice provided in relation to the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform, including on the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform website, is general advice only and has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif or any products offered by @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif platform you should read the @if((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Offer documents @endif and consider whether they are right for you. This email and any attachment is confidential and may be protected by copyright. If you have received it by mistake, please notify us, delete it and do not use, copy or disclose it. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif accepts no liability for the content of this email, or the consequences of any actions taken on the basis of any information provided. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif does not guarantee that this email and any attachment is secure, free of viruses or error-free.<br>
-                          &nbsp;
-                          </html>
+                            The advice provided in relation to the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform, including on the @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif Platform website, is general advice only and has been prepared without taking into account your financial situation, objectives and needs. Before making any decision in relation to @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif or any products offered by @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif platform you should read the @if((App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)) {{(App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->prospectus_text)}} @else Offer documents @endif and consider whether they are right for you. This email and any attachment is confidential and may be protected by copyright. If you have received it by mistake, please notify us, delete it and do not use, copy or disclose it. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif accepts no liability for the content of this email, or the consequences of any actions taken on the basis of any information provided. @if($siteTitle=App\Helpers\SiteConfigurationHelper::getConfigurationAttr()->website_name){{$siteTitle}}@else Estate Baron @endif does not guarantee that this email and any attachment is secure, free of viruses or error-free.<br>
+                            &nbsp;
+                            </html>
 

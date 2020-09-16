@@ -2328,7 +2328,14 @@ class DashboardController extends Controller
         ->where('project_id', $projectId)
         ->whereRaw('DATE(created_at) BETWEEN ? AND ?', [$startDate, $endDate])
         ->get();
-
+        $investment = InvestmentInvestor::where('user_id',$investorId)->where('project_id', $projectId)->orderBy('id','desc')->first();
+        $investorDetails = '<p class="text-center">Investor: '.$investment->user->first_name.' '.$investment->user->last_name;
+        if($investment->investing_as === 'Joint Investor'){
+            $investorDetails .= '<br>Joint Investor: '.$investment->investingJoint->joint_investor_first_name ?? ''.' '.$investment->investingJoint->joint_investor_last_name ?? '';
+        }elseif($investment->investing_as ==="Trust or Company"){
+            $investorDetails .= '<br>Company or Trust Name: '.$investment->investingJoint->investing_company ?? '';
+        }
+        $investorDetails.= '</p>';
         $transactionTable = '<table class="table-striped investor-statement-confirm-table" border="0" cellpadding="10" width="100%">';
         $transactionTable .= '<thead><tr style="background: #dcdcdc;"><td>Transaction date</td><td>Transaction type</td><td>Number of shares</td><td>Share price</td><td>Cash amount</td></tr></thead>';
         $transactionTable .= '<tbody>';
@@ -2358,7 +2365,8 @@ class DashboardController extends Controller
                 'openingBalance' => $openingBalance,
                 'closingBalance' => $closingBalance,
                 'transactionTable' => $transactionTable,
-                'transactions' => $transactions 
+                'transactions' => $transactions,
+                'investorDetails' => $investorDetails
             ]
         ]);
     }
@@ -2381,7 +2389,7 @@ class DashboardController extends Controller
         $endDate = Carbon::parse($request->end_date)->toDateString();
         $project = Project::findOrFail($projectId);
         $user = User::findOrFail($investorId);
-
+        $investment = InvestmentInvestor::where('user_id',$investorId)->where('project_id',$projectId)->orderBy('id','desc')->first();
         // Get Position records of user for project based on Dates.
         $openingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $startDate);
         $closingBalance = ModelHelper::getTotalInvestmentByUserAndProject($investorId, $projectId, $endDate);
@@ -2393,7 +2401,7 @@ class DashboardController extends Controller
         ->get();
 
         // Send email to investor 
-        $mailer->sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions);
+        $mailer->sendInvestorStatementRecordsToUser($project, $user, $startDate, $endDate, $openingBalance, $closingBalance, $transactions,$investment);
 
         return response()->json([
             'status' => true,
