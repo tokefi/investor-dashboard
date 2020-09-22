@@ -177,26 +177,26 @@ Offer Doc
 												<label>I/We lodge full Application Money *</label>
 												<input required type="number" name="apply_for" class="form-control" placeholder="" 
 												@if(isset($eoi)) 
-													value="{{number_format(round($eoi->investment_amount * $project->share_per_unit_price, 2))}}" 
+												value="{{number_format(round($eoi->investment_amount * $project->share_per_unit_price, 2))}}" 
 												@endif 
 												@if(isset($clientApplication)) 
-													value="{{round($clientApplication->investment_amount * $project->share_per_unit_price) }}" 
+												value="{{round($clientApplication->investment_amount * $project->share_per_unit_price) }}" 
 												@endif 
 												@if (isset(request()->action) && request()->action == 'rollover')
-													value="{{round(request()->rollover_amount) }}" 
+												value="{{round(request()->rollover_amount) }}" 
 												@endif
 												style="width: 60%;" id="application_money" step="0.01" min="{{$project->investment->minimum_accepted_amount * $project->share_per_unit_price}}"><br>
 
 												<label>I/We apply for *</label>
 												<input type="text" readonly name="amount_to_invest" class="form-control" placeholder="Minimum Amount {{$project->investment->minimum_accepted_amount}}" style="width: 60%" id="apply_for" min="{{$project->investment->minimum_accepted_amount}}"  required 
 												@if(isset($eoi)) 
-													value="{{$eoi->investment_amount}}" 
+												value="{{$eoi->investment_amount}}" 
 												@endif 
 												@if(isset($clientApplication)) 
-													value="{{$clientApplication->investment_amount }}" 
+												value="{{$clientApplication->investment_amount }}" 
 												@endif
 												@if (isset(request()->action) && request()->action == 'rollover')
-													value="{{ round(request()->rollover_amount / $project->share_per_unit_price) }}" 
+												value="{{ round(request()->rollover_amount / $project->share_per_unit_price) }}" 
 												@endif
 												>
 												@if($project->share_vs_unit == 1)
@@ -220,33 +220,33 @@ Offer Doc
 									</div>
 									<div class="row">
 										@if (isset($customFields['investment_details']))
-											@foreach ($customFields['investment_details'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
-													<label>{{ $customField->label }}</label>
-													@if(in_array($customField->type, ['text']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]"
-															placeholder="{{ $customField->label }}" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-													@if(in_array($customField->type, ['date']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-												</div>
-											@endforeach
+										@foreach ($customFields['investment_details'] as $customField)
+										<div class="col-md-6" style="margin-bottom: 20px;">
+											<label>{{ $customField->label }}</label>
+											@if(in_array($customField->type, ['text']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]"
+											placeholder="{{ $customField->label }}" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+											@if(in_array($customField->type, ['date']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+										</div>
+										@endforeach
 										@endif
 									</div>
 									
 									@elseif($section->name === 'investing_type')
-										
+
 									<br><br>
 									<div class="row">
 										<div class="col-md-12">
@@ -318,8 +318,6 @@ Offer Doc
 									<div class="row " id="section-2">
 										<div class="col-md-12">
 											<div >
-												
-												
 												<h5>Individual/Joint applications - refer to naming standards for correct forms of registrable title(s)</h5>
 												<br>
 												<h4>{{ $section->label }}</h4>
@@ -427,28 +425,28 @@ Offer Doc
 
 									<div class="row">
 										@if (isset($customFields['investing_type']))
-											@foreach ($customFields['investing_type'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
-													<label>{{ $customField->label }}</label>
-													@if(in_array($customField->type, ['text']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]"
-															placeholder="{{ $customField->label }}" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-													@if(in_array($customField->type, ['date']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-												</div>
-											@endforeach
+										@foreach ($customFields['investing_type'] as $customField)
+										<div class="col-md-6" style="margin-bottom: 20px;">
+											<label>{{ $customField->label }}</label>
+											@if(in_array($customField->type, ['text']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]"
+											placeholder="{{ $customField->label }}" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+											@if(in_array($customField->type, ['date']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+										</div>
+										@endforeach
 										@endif
 									</div>
 
@@ -552,7 +550,7 @@ Offer Doc
 										</div>
 									</div>
 									@elseif($section->name === 'contact_details')
-										
+
 									<div class="row" >
 										<div class="col-md-12">
 											<div style="">
@@ -644,28 +642,28 @@ Offer Doc
 													</div>
 
 													@if (isset($customFields['contact_details']))
-														@foreach ($customFields['contact_details'] as $customField)
-															<div class="col-md-6" style="margin-top: 20px;">
-																<label>{{ $customField->label }}</label>
-																@if(in_array($customField->type, ['text']))
-																	<input class="form-control" 
-																		type="{{ $customField->type }}" 
-																		name="custom[{{ $customField->id }}]"
-																		placeholder="{{ $customField->label }}" 
-																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if($customField->is_required) required @endif />
-																@endif
-																@if(in_array($customField->type, ['date']))
-																	<input class="form-control" 
-																		type="{{ $customField->type }}" 
-																		name="custom[{{ $customField->id }}]" 
-																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if($customField->is_required) required @endif />
-																@endif
-															</div>
-														@endforeach
+													@foreach ($customFields['contact_details'] as $customField)
+													<div class="col-md-6" style="margin-top: 20px;">
+														<label>{{ $customField->label }}</label>
+														@if(in_array($customField->type, ['text']))
+														<input class="form-control" 
+														type="{{ $customField->type }}" 
+														name="custom[{{ $customField->id }}]"
+														placeholder="{{ $customField->label }}" 
+														@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if($customField->is_required) required @endif />
+														@endif
+														@if(in_array($customField->type, ['date']))
+														<input class="form-control" 
+														type="{{ $customField->type }}" 
+														name="custom[{{ $customField->id }}]" 
+														@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if($customField->is_required) required @endif />
+														@endif
+													</div>
+													@endforeach
 													@endif
 												</div>
 											</div>
@@ -673,7 +671,7 @@ Offer Doc
 									</div>
 
 									@elseif($section->name === 'nominated_bank_account')
-										
+
 									<br>
 									<div class="row " id="section-7">
 										<div class="col-md-12">
@@ -696,28 +694,28 @@ Offer Doc
 													</div>
 
 													@if (isset($customFields['nominated_bank_account']))
-														@foreach ($customFields['nominated_bank_account'] as $customField)
-															<div class="col-md-4" style="margin-top: 20px;">
-																<label>{{ $customField->label }}</label>
-																@if(in_array($customField->type, ['text']))
-																	<input class="form-control" 
-																		type="{{ $customField->type }}" 
-																		name="custom[{{ $customField->id }}]"
-																		placeholder="{{ $customField->label }}" 
-																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if($customField->is_required) required @endif />
-																@endif
-																@if(in_array($customField->type, ['date']))
-																	<input class="form-control" 
-																		type="{{ $customField->type }}" 
-																		name="custom[{{ $customField->id }}]" 
-																		@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																		@if($customField->is_required) required @endif />
-																@endif
-															</div>
-														@endforeach
+													@foreach ($customFields['nominated_bank_account'] as $customField)
+													<div class="col-md-4" style="margin-top: 20px;">
+														<label>{{ $customField->label }}</label>
+														@if(in_array($customField->type, ['text']))
+														<input class="form-control" 
+														type="{{ $customField->type }}" 
+														name="custom[{{ $customField->id }}]"
+														placeholder="{{ $customField->label }}" 
+														@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if($customField->is_required) required @endif />
+														@endif
+														@if(in_array($customField->type, ['date']))
+														<input class="form-control" 
+														type="{{ $customField->type }}" 
+														name="custom[{{ $customField->id }}]" 
+														@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+														@if($customField->is_required) required @endif />
+														@endif
+													</div>
+													@endforeach
 													@endif
 												</div>
 
@@ -730,38 +728,77 @@ Offer Doc
 
 										</div>
 									</div>
-
+									<script type="text/javascript">
+										function ShowHideFields(id){
+											$.ajax({
+												url: '/projects/custom-field/show',
+												type: 'GET',
+												dataType: 'JSON',
+												data: {customFieldId:id},
+												headers: {
+													'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+												},
+											}).done(function(data){
+												var fields = data.customField;
+												var hideFields = data.hideFields;
+												var field;
+												for (field of fields) {
+													console.log(field);
+													$('#'+field).removeClass('hide');
+												}
+												for (field of hideFields) {
+													console.log(field);
+													$('#'+field).addClass('hide');
+												}
+											});
+										}
+									</script>
 									@elseif($section->name !== 'signature' && $section->name !== 'interested_to_buy' && $section->name !== 'nominated_bank_account' && $section->name !== 'contact_details' && $section->name !== 'investing_type' && $section->name !== 'investment_details')
 									<br>
-									 
+
 									@if (isset($customFields[$section->name]) && $customFields[$section->name]->count())
 									<div class="row " id="section-8">
 										<div class="col-md-12">
 											<h3>{{ $section->label }}</h3>
 											<p>{{ $section->description }}</p>
 											<hr />
-											<div class="row">
+											<div class="row ">
 												@foreach ($customFields[$section->name] as $customField)
-													<div class="col-md-4" style="margin-top:20px;">
-														<label>{{ $customField->label }}</label>
-														@if(in_array($customField->type, ['text']))
-															<input class="form-control" 
-																type="{{ $customField->type }}" 
-																name="custom[{{ $customField->id }}]"
-																placeholder="{{ $customField->label }}" 
-																@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																@if($customField->is_required) required @endif />
-														@endif
-														@if(in_array($customField->type, ['date']))
-															<input class="form-control" 
-																type="{{ $customField->type }}" 
-																name="custom[{{ $customField->id }}]" 
-																@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-																@if($customField->is_required) required @endif />
-														@endif
-													</div>
+												<div class="@if(!$customField->show_custom_field)hide @endif" id="{{ $customField->name }}"> 
+													@if(in_array($customField->type, ['text']))
+													<label>{{ $customField->label }}</label>
+													<input class="form-control" 
+													type="{{ $customField->type }}" 
+													name="custom[{{ $customField->id }}]"
+													placeholder="{{ $customField->label }}" 
+													@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+													@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+													@if($customField->is_required) required @endif />
+													@endif
+													@if(in_array($customField->type, ['date']))
+													<label>{{ $customField->label }}</label>
+													<input class="form-control" 
+													type="{{ $customField->type }}" 
+													name="custom[{{ $customField->id }}]" 
+													@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+													@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+													@if($customField->is_required) required @endif />
+													@endif
+													@if(in_array($customField->type, ['checkbox']))
+													<input class="" 
+													type="{{ $customField->type }}" 
+													name="custom[{{ $customField->id }}]" value=""/> <label>{{ $customField->label }}</label>
+													<br />
+													@endif
+													@if(in_array($customField->type, ['radio']))
+													@foreach( $customField->radioField as $field) 
+													<input class="" 
+													type="{{ $customField->type }}" 
+													name="custom[{{ $customField->id }}]" value="{{ $field->value }}" onclick="ShowHideFields({{$field->id}})"/> <label>{{ $field->label }}</label>
+													<br/>
+													@endforeach
+													@endif
+												</div>
 												@endforeach
 											</div>
 										</div>
@@ -813,28 +850,28 @@ Offer Doc
 									</div>
 									<div class="row">
 										@if (isset($customFields['interested_to_buy']))
-											@foreach ($customFields['interested_to_buy'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
-													<label>{{ $customField->label }}</label>
-													@if(in_array($customField->type, ['text']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]"
-															placeholder="{{ $customField->label }}" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-													@if(in_array($customField->type, ['date']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-												</div>
-											@endforeach
+										@foreach ($customFields['interested_to_buy'] as $customField)
+										<div class="col-md-6" style="margin-bottom: 20px;">
+											<label>{{ $customField->label }}</label>
+											@if(in_array($customField->type, ['text']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]"
+											placeholder="{{ $customField->label }}" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+											@if(in_array($customField->type, ['date']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+										</div>
+										@endforeach
 										@endif
 									</div>
 									@elseif($section->name === 'signature')
@@ -882,28 +919,28 @@ Offer Doc
 									</div>
 									<div class="row">
 										@if (isset($customFields['signature']))
-											@foreach ($customFields['signature'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
-													<label>{{ $customField->label }}</label>
-													@if(in_array($customField->type, ['text']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]"
-															placeholder="{{ $customField->label }}" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-													@if(in_array($customField->type, ['date']))
-														<input class="form-control" 
-															type="{{ $customField->type }}" 
-															name="custom[{{ $customField->id }}]" 
-															@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
-															@if($customField->is_required) required @endif />
-													@endif
-												</div>
-											@endforeach
+										@foreach ($customFields['signature'] as $customField)
+										<div class="col-md-6" style="margin-bottom: 20px;">
+											<label>{{ $customField->label }}</label>
+											@if(in_array($customField->type, ['text']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]"
+											placeholder="{{ $customField->label }}" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+											@if(in_array($customField->type, ['date']))
+											<input class="form-control" 
+											type="{{ $customField->type }}" 
+											name="custom[{{ $customField->id }}]" 
+											@if(isset($agentCustomValues) && isset($agentCustomValues[$customField->id])) value="{{ $agentCustomValues[$customField->id]->first() ?$agentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if(isset($investmentCustomValues) && isset($investmentCustomValues[$customField->id])) value="{{ $investmentCustomValues[$customField->id]->first() ?$investmentCustomValues[$customField->id]->first()->value : '' }}" @endif
+											@if($customField->is_required) required @endif />
+											@endif
+										</div>
+										@endforeach
 										@endif
 									</div>
 									@endif
@@ -1141,6 +1178,7 @@ Offer Doc
 		});
 	});
 	$(document).ready( function() {
+		
 		$("input[name='investing_as']").on('change',function() {
 			if($(this).is(':checked') && $(this).val() == 'Individual Investor')
 			{
@@ -1184,7 +1222,6 @@ Offer Doc
 				$("input[name='trust_or_company_docs']").removeAttr('disabled');
 				$("input[name='user_id_doc']").attr('disabled','disabled');
 			}
-
 		});
 		@if(!Auth::guest() && isset($user->idDoc) && isset($user->idDoc->investing_as) == 'Individual Investor')
 		$("input[value='Individual Investor']").trigger("initCheckboxes");
