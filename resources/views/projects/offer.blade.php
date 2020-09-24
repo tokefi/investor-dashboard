@@ -787,7 +787,7 @@ Offer Doc
 													@if(in_array($customField->type, ['checkbox']))
 													<input class="" 
 													type="{{ $customField->type }}" 
-													name="custom[{{ $customField->id }}]" value=""/> <label>{{ $customField->label }}</label>
+													name="custom[{{ $customField->id }}]" value="{{ $customField->radioField[0]->value }}"/> <label>{{ $customField->label }}</label>
 													<br />
 													@endif
 													@if(in_array($customField->type, ['radio']))

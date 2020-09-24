@@ -11,7 +11,7 @@
                                 <option value="">-- Select --</option>
                                 <option value="text">Text</option>
                                 <option value="date">Date</option>
-                                {{-- <option value="checkbox">Checkbox</option> --}}
+                                <option value="checkbox">Checkbox</option>
                                 <option value="radio">Radio</option>
                             </select>
                         </div>
