@@ -257,6 +257,7 @@ Edit {{$project->title}} | Dashboard | @parent
 												<input type="radio" name="show_interested_to_buy_checkbox" value="0"> Off
 											</label>
 										</div>
+										@if($siteconfiguration->show_tokenization)
 										<br><br>
 										<div class="jumbotron">
 											<div class="container">
@@ -327,6 +328,7 @@ Edit {{$project->title}} | Dashboard | @parent
 												</div>
 											</div>
 										</div>
+										@endif
 										<br><br><br>
 										<div class="row">
 											<div class="form-group">

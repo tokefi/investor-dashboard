@@ -262,8 +262,8 @@ class DashboardController extends Controller
             $project->active = 0;
             $project->save();
         }
-
-        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild', 'projects'));
+        $siteconfiguration = SiteConfiguration::where('project_site',url())->first();
+        return view('dashboard.projects.edit', compact('project', 'investments','color','masterChild', 'projects','siteconfiguration'));
     }
 
     public function activateUser($user_id)
