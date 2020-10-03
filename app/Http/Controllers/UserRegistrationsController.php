@@ -316,7 +316,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $passwordString = $request['password'];
         $this->createNewUser($request);     // Create new user with request details
 
-        // $mailer->sendRegistrationNotificationAdmin($user,$referrer);
+        $mailer->sendRegistrationNotificationAdmin($user,$referrer);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $passwordString, 'active'=>1], $request->remember)) {
             Auth::user()->update(['last_login'=> Carbon::now()]);
@@ -484,6 +484,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $roleText = $userReg->role;
 
         $user = User::create($request->all());
+        $user->update(['wallet_address'=>$request->wallet_address]);
         $time_now = Carbon::now();
         $user->roles()->attach($role);
         $password = $oldPassword;
@@ -500,7 +501,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         }else{
             $credit = Credit::create(['user_id'=>$user->id, 'amount'=>$signup_konkrete, 'type'=>'sign up', 'currency'=>'konkrete', 'project_site' => url()]);
         }
-        $mailer->sendRegistrationNotificationAdmin($user,$referrer);
+        // $mailer->sendRegistrationNotificationAdmin($user,$referrer);
 
         $this->addUserToSendgridContacts($request->all());  // Add user to sendgrid
 

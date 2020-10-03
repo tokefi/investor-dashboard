@@ -257,7 +257,76 @@ Edit {{$project->title}} | Dashboard | @parent
 												<input type="radio" name="show_interested_to_buy_checkbox" value="0"> Off
 											</label>
 										</div>
-
+										<br><br>
+										<div class="jumbotron">
+											<div class="container">
+												<div class="row">
+													<div class="form-group @if($errors->first('wallet_address')){{'has-error'}} @endif">
+														{!!Form::label('wallet_address', 'Project ERC20 wallet address', array('class'=>'col-sm-4 control-label'))!!}
+														<div class="col-sm-7">
+															<div class="row">
+																<div class="col-sm-12 @if($errors->first('wallet_address')){{'has-error'}} @endif">
+																	{!! Form::text('wallet_address', $project->wallet_address?$project->wallet_address:null, array('placeholder'=>'Project ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'wallet_address')) !!}
+																	{!! $errors->first('wallet_address', '<small class="text-danger">:message</small>') !!}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-group @if($errors->first('contract_address')){{'has-error'}} @endif">
+														{!!Form::label('contract_address', 'Project ERC20 Contract Address', array('class'=>'col-sm-4 control-label'))!!}
+														<div class="col-sm-7">
+															<div class="row">
+																<div class="col-sm-12 @if($errors->first('contract_address')){{'has-error'}} @endif">
+																	{!! Form::text('contract_address', $project->contract_address?$project->contract_address:null, array('placeholder'=>'Project contract address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'contract_address')) !!}
+																	{!! $errors->first('contract_address', '<small class="text-danger">:message</small>') !!}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-group @if($errors->first('token_symbol')){{'has-error'}} @endif">
+														{!!Form::label('token_symbol', 'Project Token Symbol', array('class'=>'col-sm-4 control-label'))!!}
+														<div class="col-sm-7">
+															<div class="row">
+																<div class="col-sm-12 @if($errors->first('token_symbol')){{'has-error'}} @endif">
+																	{!! Form::text('token_symbol', $project->token_symbol?$project->token_symbol:null, array('placeholder'=>'Project Token Symbol', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'token_symbol')) !!}
+																	{!! $errors->first('token_symbol', '<small class="text-danger">:message</small>') !!}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-group @if($errors->first('payment_contract_address')){{'has-error'}} @endif">
+														{!!Form::label('payment_contract_address', 'Payment Token ERC20 contract address', array('class'=>'col-sm-4 control-label'))!!}
+														<div class="col-sm-7">
+															<div class="row">
+																<div class="col-sm-12 @if($errors->first('payment_contract_address')){{'has-error'}} @endif">
+																	{!! Form::text('payment_contract_address', $project->payment_contract_address?$project->payment_contract_address:null, array('placeholder'=>'Payment contract address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'payment_contract_address')) !!}
+																	{!! $errors->first('payment_contract_address', '<small class="text-danger">:message</small>') !!}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="form-group @if($errors->first('payment_token')){{'has-error'}} @endif">
+														{!!Form::label('payment_token', 'Payment Token Symbol', array('class'=>'col-sm-4 control-label'))!!}
+														<div class="col-sm-7">
+															<div class="row">
+																<div class="col-sm-12 @if($errors->first('payment_token')){{'has-error'}} @endif">
+																	{!! Form::text('payment_token', $project->payment_token?$project->payment_token:null, array('placeholder'=>'Payment Token Symbol', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'payment_token')) !!}
+																	{!! $errors->first('payment_token', '<small class="text-danger">:message</small>') !!}
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 										<br><br><br>
 										<div class="row">
 											<div class="form-group">
@@ -2160,11 +2229,11 @@ Edit {{$project->title}} | Dashboard | @parent
 			var childName = $('input[name="childProject[]"]').map(function () {return parseInt($(this).val());}).get();
 			var master = $('input[name="master"]').val();
 			if(percAll.reduce((a, b) => a + b, 0) === 100){
-					console.log('Ok');
-				}else{
-					f.preventDefault();
-					alert('Please make sure all children allocation should be total 100');
-				}
+				console.log('Ok');
+			}else{
+				f.preventDefault();
+				alert('Please make sure all children allocation should be total 100');
+			}
 			console.log(percAll,childName,master);
 			$('.loader-overlay').show();
 			$.ajax({

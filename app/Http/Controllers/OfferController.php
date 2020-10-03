@@ -387,9 +387,10 @@ class OfferController extends Controller
       $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
       $this->dispatch(new SendReminderEmail($user,$project,$investor));
 
+      $shares = $amount;
       $amount = $amount * $project->share_per_unit_price;
       $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
-      return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration'));
+      return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration','shares'));
     }
 
     /**

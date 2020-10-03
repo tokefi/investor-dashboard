@@ -58,8 +58,14 @@
 								<tr><td>Bitcoin wallet address</td><td>{!!$project->investment->bitcoin_wallet_address!!}</td></tr>
 							</table>
 							@endif
-
-
+							@endif
+							@if($siteConfiguration->show_tokenization)
+							<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
+							<p>send ${{number_format($amount)}} {{ $project->payment_token }} {{ $project->payment_contract_address }} to {{ $project->wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->wallet_address }}.</p>
+							@endif
+							@if($siteConfiguration->show_tokenization)
+							<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
+							<p>send {{ $shares }} {{ $project->token_symbol }} {{ $project->contract_address }} to {{ $project->wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->wallet_address }}.</p>
 							@endif
 						</div>
 					</div>

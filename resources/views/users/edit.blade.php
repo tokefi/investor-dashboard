@@ -173,7 +173,18 @@ Edit {!! $user->first_name !!} | @parent
 									</div>
 								</div>
 							</div>
-							<br><br>
+							<br>
+							<h3 class="text-center" style="font-size: 1.7em; word-spacing: 3px;">ERC20 Wallet Address</h3>
+							<br>
+							<div class="row">
+								<div class="form-group">
+									{!!Form::label('wallet_address', 'Wallet Address', array('class'=>'col-sm-2 control-label'))!!}
+									<div class="col-sm-9">
+										{!! Form::text('wallet_address', $user->wallet_address, array('placeholder'=>'ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'13')) !!}
+									</div>
+								</div>
+							</div>
+							<br>
 							<div class="row">
 								<div class="form-group">
 									<div class="col-sm-offset-2 col-sm-9">

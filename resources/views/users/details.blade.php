@@ -45,8 +45,15 @@ Fill the user details | @parent
 							<div class="row">
 								<div class="form-group <?php if($errors->first('phone_number')){echo 'has-error';}?>">
 									<div class="col-sm-offset-1 col-sm-10">
+
 										{!! Form::input('tel', 'phone_number', null, array('placeholder'=>'Phone Number', 'class'=>'form-control', 'tabindex'=>'3', 'required'=>'true')) !!}
 										{!! $errors->first('phone_number', '<small class="text-danger">:message</small>') !!}
+									</div>
+								</div>
+								<div class="form-group <?php if($errors->first('wallet_address')){echo 'has-error';}?>" style="@if(!$siteConfiguration->show_tokenization) display:none; @endif " >
+									<div class="col-sm-offset-1 col-sm-10">
+										{!! Form::input('wallet', 'wallet_address', null, array('placeholder'=>'Wallet Address', 'class'=>'form-control', 'tabindex'=>'3', 'required'=>'false')) !!}
+										{!! $errors->first('wallet_address', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
 							</div>
