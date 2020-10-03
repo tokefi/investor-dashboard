@@ -262,39 +262,39 @@ Edit {{$project->title}} | Dashboard | @parent
 										<div class="jumbotron">
 											<div class="container">
 												<div class="row">
-													<div class="form-group @if($errors->first('wallet_address')){{'has-error'}} @endif">
-														{!!Form::label('wallet_address', 'Project ERC20 wallet address', array('class'=>'col-sm-4 control-label'))!!}
+													<div class="form-group @if($errors->first('erc20_wallet_address')){{'has-error'}} @endif">
+														{!!Form::label('erc20_wallet_address', 'Project ERC20 wallet address', array('class'=>'col-sm-4 control-label'))!!}
 														<div class="col-sm-7">
 															<div class="row">
-																<div class="col-sm-12 @if($errors->first('wallet_address')){{'has-error'}} @endif">
-																	{!! Form::text('wallet_address', $project->wallet_address?$project->wallet_address:null, array('placeholder'=>'Project ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'wallet_address')) !!}
-																	{!! $errors->first('wallet_address', '<small class="text-danger">:message</small>') !!}
+																<div class="col-sm-12 @if($errors->first('erc20_wallet_address')){{'has-error'}} @endif">
+																	{!! Form::text('erc20_wallet_address', $project->erc20_wallet_address?$project->erc20_wallet_address:null, array('placeholder'=>'Project ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'erc20_wallet_address')) !!}
+																	{!! $errors->first('erc20_wallet_address', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="row">
-													<div class="form-group @if($errors->first('contract_address')){{'has-error'}} @endif">
-														{!!Form::label('contract_address', 'Project ERC20 Contract Address', array('class'=>'col-sm-4 control-label'))!!}
+													<div class="form-group @if($errors->first('erc20_contract_address')){{'has-error'}} @endif">
+														{!!Form::label('erc20_contract_address', 'Project ERC20 Contract Address', array('class'=>'col-sm-4 control-label'))!!}
 														<div class="col-sm-7">
 															<div class="row">
-																<div class="col-sm-12 @if($errors->first('contract_address')){{'has-error'}} @endif">
-																	{!! Form::text('contract_address', $project->contract_address?$project->contract_address:null, array('placeholder'=>'Project contract address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'contract_address')) !!}
-																	{!! $errors->first('contract_address', '<small class="text-danger">:message</small>') !!}
+																<div class="col-sm-12 @if($errors->first('erc20_contract_address')){{'has-error'}} @endif">
+																	{!! Form::text('erc20_contract_address', $project->erc20_contract_address?$project->erc20_contract_address:null, array('placeholder'=>'Project contract address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'erc20_contract_address')) !!}
+																	{!! $errors->first('erc20_contract_address', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 												<div class="row">
-													<div class="form-group @if($errors->first('token_symbol')){{'has-error'}} @endif">
-														{!!Form::label('token_symbol', 'Project Token Symbol', array('class'=>'col-sm-4 control-label'))!!}
+													<div class="form-group @if($errors->first('erc20_project_token')){{'has-error'}} @endif">
+														{!!Form::label('erc20_project_token', 'Project Token Symbol', array('class'=>'col-sm-4 control-label'))!!}
 														<div class="col-sm-7">
 															<div class="row">
-																<div class="col-sm-12 @if($errors->first('token_symbol')){{'has-error'}} @endif">
-																	{!! Form::text('token_symbol', $project->token_symbol?$project->token_symbol:null, array('placeholder'=>'Project Token Symbol', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'token_symbol')) !!}
-																	{!! $errors->first('token_symbol', '<small class="text-danger">:message</small>') !!}
+																<div class="col-sm-12 @if($errors->first('erc20_project_token')){{'has-error'}} @endif">
+																	{!! Form::text('erc20_project_token', $project->erc20_project_token?$project->erc20_project_token:null, array('placeholder'=>'Project Token Symbol', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'erc20_project_token')) !!}
+																	{!! $errors->first('erc20_project_token', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
 														</div>

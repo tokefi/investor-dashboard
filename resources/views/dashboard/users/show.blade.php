@@ -245,9 +245,9 @@
 												<br>
 												<div class="row">
 													<div class="form-group">
-														{!!Form::label('wallet_address', 'Wallet Address', array('class'=>'col-sm-2 control-label'))!!}
+														{!!Form::label('erc20_wallet_address', 'Wallet Address', array('class'=>'col-sm-2 control-label'))!!}
 														<div class="col-sm-9">
-															{!! Form::text('wallet_address', $user->wallet_address, array('placeholder'=>'ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'13')) !!}
+															{!! Form::text('erc20_wallet_address', $user->erc20_wallet_address, array('placeholder'=>'ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'13')) !!}
 														</div>
 													</div>
 												</div>

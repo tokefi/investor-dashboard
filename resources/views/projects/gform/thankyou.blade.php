@@ -61,11 +61,11 @@
 							@endif
 							@if($siteConfiguration->show_tokenization)
 							<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
-							<p>send ${{number_format($amount)}} {{ $project->payment_token }} {{ $project->payment_contract_address }} to {{ $project->wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->wallet_address }}.</p>
+							<p>send ${{number_format($amount)}} {{ $project->payment_token }} {{ $project->payment_contract_address }} to {{ $project->erc20_wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->erc20_wallet_address }}.</p>
 							@endif
 							@if($siteConfiguration->show_tokenization)
 							<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
-							<p>send {{ $shares }} {{ $project->token_symbol }} {{ $project->contract_address }} to {{ $project->wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->wallet_address }}.</p>
+							<p>send {{ $shares }} {{ $project->erc20_project_token }} {{ $project->erc20_contract_address }} to {{ $project->erc20_wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->erc20_wallet_address }}.</p>
 							@endif
 						</div>
 					</div>

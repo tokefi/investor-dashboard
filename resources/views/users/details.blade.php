@@ -50,10 +50,10 @@ Fill the user details | @parent
 										{!! $errors->first('phone_number', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
-								<div class="form-group <?php if($errors->first('wallet_address')){echo 'has-error';}?>" style="@if(!$siteConfiguration->show_tokenization) display:none; @endif " >
+								<div class="form-group <?php if($errors->first('erc20_wallet_address')){echo 'has-error';}?>" style="@if(!$siteConfiguration->show_tokenization) display:none; @endif " >
 									<div class="col-sm-offset-1 col-sm-10">
-										{!! Form::input('wallet', 'wallet_address', null, array('placeholder'=>'Wallet Address', 'class'=>'form-control', 'tabindex'=>'3', 'required'=>'false')) !!}
-										{!! $errors->first('wallet_address', '<small class="text-danger">:message</small>') !!}
+										{!! Form::input('wallet', 'erc20_wallet_address', null, array('placeholder'=>'Wallet Address', 'class'=>'form-control', 'tabindex'=>'3', 'required'=>'false')) !!}
+										{!! $errors->first('erc20_wallet_address', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
 							</div>
