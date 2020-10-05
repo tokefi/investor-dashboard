@@ -931,9 +931,6 @@ Configuration | Dashboard | @parent
                 // $('.masterField').removeClass('hide');
                 $('.nameField').addClass('hide');
                 $('.buttonValue').addClass('hide');
-                if($(this).val() == 'checkbox'){
-                    $('.buttonValue').removeClass('hide');
-                }
             }
         });
         $("select[name='radioField']").on('click',function() {

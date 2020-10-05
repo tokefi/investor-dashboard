@@ -72,9 +72,6 @@ class CustomFieldsController extends Controller
             $customField->attributes = isset($request->attributes) ? json_encode($request->attributes) : null;
             $customField->properties = isset($request->properties) ? json_encode($request->properties) : null;
             $customField->save();
-            if($request->type === 'checkbox'){
-                $button = RadioButtonCustomField::create(['radio_custom_field'=>$customField->id,'label' => $request->label,'value'=>$request->buttonValue,'site_url'=>url()]);
-            }
 
             Session::flash('success', 'Created new custom field - "' . $request->label . '"!');
             return redirect()->back();
@@ -146,13 +143,13 @@ class CustomFieldsController extends Controller
     }
     public function showCustomField(Request $request)
     {
+        $fields = CustomField::where('radio_master_field',$request->customFieldId)->get();
         $customField = array();
         $hideField = array();
-        $fields = CustomField::where('site_url',url())->where('radio_master_field',$request->customFieldId)->get();
         $mainField = RadioButtonCustomField::where('id',$request->customFieldId)->first() ;
         $otherField = RadioButtonCustomField::where('radio_custom_field', $mainField->radio_custom_field)->lists('id')->toArray();
         array_splice($otherField, array_search($mainField->id, $otherField ), 1);
-        $hideFields = CustomField::where('site_url',url())->WhereIn('radio_master_field',$otherField)->get();
+        $hideFields = CustomField::where('section_id',$fields[0]->section_id)->WhereIn('radio_master_field',$otherField)->get();
         foreach ($hideFields as $field) {
             array_push($hideField, $field->name);
         }
