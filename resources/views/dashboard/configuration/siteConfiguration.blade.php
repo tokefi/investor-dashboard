@@ -922,25 +922,6 @@ Configuration | Dashboard | @parent
 
 <script type="text/javascript">
 	$(document).ready(function(){
-        $("select[name='type']").on('click',function() {
-            if($(this).val() == 'radio'){
-                $('.nameField').removeClass('hide');
-                $('.masterField').addClass('hide');
-            }else
-            {
-                // $('.masterField').removeClass('hide');
-                $('.nameField').addClass('hide');
-                $('.buttonValue').addClass('hide');
-            }
-        });
-        $("select[name='radioField']").on('click',function() {
-            if($(this).val() !== ''){
-                $('.buttonValue').removeClass('hide');
-            }else{
-                $('.buttonValue').addClass('hide');
-            }
-        });
-
         $('#reorder').on('click',function (f) {
             f.preventDefault();
             var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();

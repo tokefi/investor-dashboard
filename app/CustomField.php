@@ -24,8 +24,4 @@ class CustomField extends Model
     {
         return $this->belongsTo('App\ApplicationSections','section_id');
     }
-    public function radioField()
-    {
-        return $this->hasMany('App\RadioButtonCustomField', 'radio_custom_field');
-    }
 }
