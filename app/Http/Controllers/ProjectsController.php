@@ -361,6 +361,8 @@ class ProjectsController extends Controller
      */
     public function update(ProjectRequest $request, $id)
     {
+        $this->validate($request, ['erc20_wallet_address' => 'required']);
+        
         //TODO::add transation
         $project = Project::findOrFail($id);
         if($request->invite_only)
@@ -368,7 +370,10 @@ class ProjectsController extends Controller
             $this->validate($request, ['developerEmail' => 'required|email|exists:users,email']);
             $request['developer_id'] = User::whereEmail($request->developerEmail)->firstOrFail()->id;
         }
-
+        $isWallet = Project::where('project_site',url())->where('erc20_wallet_address',$request->erc20_wallet_address)->first();
+        if($isWallet && $isWallet->id != $id){
+            return redirect()->back()->withMessage('<p class="alert alert-danger text-center">This wallet address is already used for '.$isWallet->title.', please enter a new wallet address.</p>');
+        }
         //Check for minimum investment amount
         if((int)$request->project_min_investment_txt % 5 != 0)
         {

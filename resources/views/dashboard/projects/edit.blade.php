@@ -267,7 +267,7 @@ Edit {{$project->title}} | Dashboard | @parent
 														<div class="col-sm-7">
 															<div class="row">
 																<div class="col-sm-12 @if($errors->first('erc20_wallet_address')){{'has-error'}} @endif">
-																	{!! Form::text('erc20_wallet_address', $project->erc20_wallet_address?$project->erc20_wallet_address:null, array('placeholder'=>'Project ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'erc20_wallet_address')) !!}
+																	{!! Form::text('erc20_wallet_address', $project->erc20_wallet_address?$project->erc20_wallet_address:null, array('placeholder'=>'Project ERC20 wallet address', 'class'=>'form-control', 'tabindex'=>'21', 'id'=>'erc20_wallet_address', 'required' =>'yes')) !!}
 																	{!! $errors->first('erc20_wallet_address', '<small class="text-danger">:message</small>') !!}
 																</div>
 															</div>
