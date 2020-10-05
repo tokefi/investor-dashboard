@@ -933,7 +933,6 @@ Configuration | Dashboard | @parent
                 $('.buttonValue').addClass('hide');
                 if($(this).val() == 'checkbox'){
                     $('.buttonValue').removeClass('hide');
-                    $('#buttonValue').attr('required','required');
                 }
             }
         });
