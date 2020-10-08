@@ -312,6 +312,8 @@ Route::get('/project/{request_id}/interest/fill', ['as'=>'project.interest.fill'
 Route::get('/project/{request_id}/interest/cancel', ['as'=>'project.interest.cancel', 'uses'=>'OfferController@cancelRequestForm']);
 Route::get('/dashboard/investment/requests', ['as'=>'dashboard.investmentRequests', 'uses'=>'DashboardController@investmentRequests']);
 Route::get('/project/{request_id}/interest/cancel', ['as'=>'project.interest.cancel', 'uses'=>'OfferController@cancelRequestForm']);
+Route::get('/project/custom/field/visibility', ['as'=>'project.custom.field.visibility', 'uses'=>'OfferController@visibility']);
+
 Route::get('/dashboard/investment/requests', ['as'=>'dashboard.investmentRequests', 'uses'=>'DashboardController@investmentRequests']);
 Route::get('/dashboard/redemption/requests', ['as'=>'dashboard.redemption.requests', 'uses'=>'DashboardController@getAllRedemptionRequests']);
 Route::post('/dashboard/redemption/{redemption_id}/accept', ['as'=>'dashboard.redemption.accept', 'uses'=>'DashboardController@acceptRedemptionRequest']);
@@ -344,6 +346,7 @@ Route::post('/configuration/updateProjectUrl', ['as'=> 'configuration.updateProj
 Route::get('/financialserviceguide', ['as'=>'financialserviceguide', 'uses'=>'PagesController@fsg']);
 Route::post('/dashboard/projects/allocation',['as'=>'dashboard.projects.allocation','uses'=>'DashboardController@updateAllocation']);
 Route::post('/dashboard/application/{id}/field/display',['as'=>'dashboard.application.field.display','uses'=>'DashboardController@displayApplicationFields']);
+Route::post('/dashboard/checkbox/link/update',['as'=>'','uses'=>'DashboardController@checkboxUpdate']);
 
 /** Custom Fields actions */
 Route::post('/dashboard/site-configuration/custom-fields', 'CustomFieldsController@store')->name('custom-field.store');

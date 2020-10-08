@@ -922,6 +922,34 @@ Configuration | Dashboard | @parent
 
 <script type="text/javascript">
 	$(document).ready(function(){
+        $('.is_conditional').click(function() {
+            var field_id = $(this).attr('field-id');
+            var checkbox_id = $(this).attr('checkbox-id');
+            var checkbox_value = this.checked?1:0;
+             $.ajax({
+                type: "POST",
+                url: '/dashboard/checkbox/link/update',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {checkbox_id,field_id,checkbox_value,},
+                success: function(data) {
+                    alert('Successfully updated');
+                },
+                 error: function() {
+                    alert('it broke');
+                },
+                complete: function() {
+                    
+                }
+            });
+        });
+        $('input[name="is_conditional"]').click(function(){
+            console.log($('select[name="type"]').val());
+            if($('select[name="type"]').val() === 'checkbox'){
+                $('.checkboxName').removeClass('hide');
+            }else{
+                $('.checkboxName').addClass('hide');
+            }
+        });
         $('#reorder').on('click',function (f) {
             f.preventDefault();
             var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();
