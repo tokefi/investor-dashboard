@@ -221,7 +221,7 @@ Offer Doc
 									<div class="row">
 										@if (isset($customFields['investment_details']))
 											@foreach ($customFields['investment_details'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
+												<div class="col-md-6 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-bottom: 20px;">
 													<label>{{ $customField->label }}</label>
 													@if(in_array($customField->type, ['text']))
 														<input class="form-control" 
@@ -645,7 +645,7 @@ Offer Doc
 
 													@if (isset($customFields['contact_details']))
 														@foreach ($customFields['contact_details'] as $customField)
-															<div class="col-md-6" style="margin-top: 20px;">
+															<div class="col-md-6 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-top: 20px;">
 																<label>{{ $customField->label }}</label>
 																@if(in_array($customField->type, ['text']))
 																	<input class="form-control" 
@@ -697,7 +697,7 @@ Offer Doc
 
 													@if (isset($customFields['nominated_bank_account']))
 														@foreach ($customFields['nominated_bank_account'] as $customField)
-															<div class="col-md-4" style="margin-top: 20px;">
+															<div class="col-md-4 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-top: 20px;">
 																<label>{{ $customField->label }}</label>
 																@if(in_array($customField->type, ['text']))
 																	<input class="form-control" 
@@ -742,7 +742,7 @@ Offer Doc
 											<hr />
 											<div class="row">
 												@foreach ($customFields[$section->name] as $customField)
-													<div class="col-md-4" style="margin-top:20px;">
+													<div class="col-md-4 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-top:20px;">
 														<label>{{ $customField->label }}</label>
 														@if(in_array($customField->type, ['text']))
 															<input class="form-control" 
@@ -814,7 +814,7 @@ Offer Doc
 									<div class="row">
 										@if (isset($customFields['interested_to_buy']))
 											@foreach ($customFields['interested_to_buy'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
+												<div class="col-md-6 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-bottom: 20px;">
 													<label>{{ $customField->label }}</label>
 													@if(in_array($customField->type, ['text']))
 														<input class="form-control" 
@@ -883,7 +883,7 @@ Offer Doc
 									<div class="row">
 										@if (isset($customFields['signature']))
 											@foreach ($customFields['signature'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
+												<div class="col-md-6 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-bottom: 20px;">
 													<label>{{ $customField->label }}</label>
 													@if(in_array($customField->type, ['text']))
 														<input class="form-control" 
