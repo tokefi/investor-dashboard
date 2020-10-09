@@ -51,11 +51,7 @@ class CustomFieldsController extends Controller
         $customField->page = $request->page ?? null;
         $customField->site_url = url();
         $customField->type = $request->type;
-        if($request->type === 'checkbox'){
-            $customField->name = $request->checkboxName;
-        }else{
-            $customField->name = str_slug(strtolower($request->label) . ' ' . strtolower($request->type) . ' ' . rand(1, 999), '_');
-        }
+        $customField->name = str_slug(strtolower($request->label) . ' ' . strtolower($request->type) . ' ' . rand(1, 999), '_');
         $customField->label = $request->label;
         $customField->description = $request->description ?? null;
         $customField->is_required = $request->is_required ? true : false;
@@ -63,9 +59,6 @@ class CustomFieldsController extends Controller
         $customField->section_id = $section->id;
         $customField->attributes = isset($request->attributes) ? json_encode($request->attributes) : null;
         $customField->properties = isset($request->properties) ? json_encode($request->properties) : null;
-        if($request->is_conditional){
-            $customField->is_conditional = 1;
-        }
         $customField->save();
 
         Session::flash('success', 'Created new custom field - "' . $request->label . '"!');

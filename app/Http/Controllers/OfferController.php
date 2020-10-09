@@ -12,13 +12,11 @@ use App\CustomField;
 use App\Http\Requests;
 use App\InvestingJoint;
 use App\CustomFieldValue;
-use App\CheckboxConditional;
 use App\ProjectSpvDetail;
 use App\InvestmentRequest;
 use App\Mailers\AppMailer;
 use App\InvestmentInvestor;
 use App\WholesaleInvestment;
-use App\CustomFieldCheckboxValue;
 use Illuminate\Http\Request;
 use App\ApplicationSections;
 use App\Jobs\SendReminderEmail;
@@ -41,7 +39,7 @@ class OfferController extends Controller
      */
     public function __construct()
     {
-      $this->middleware('auth',['except'=>['visibility']]);
+      $this->middleware('auth');
       $this->middleware('admin', ['only' => ['requestForm', 'cancelRequestForm']]);
       $this->allProjects = Project::where('project_site', url())->get();
       View::share('allProjects', $this->allProjects);
@@ -385,19 +383,6 @@ class OfferController extends Controller
           $customFieldValue->save();
         }
       }
-
-      if (isset($request->checkbox)) {
-        foreach ($request->checkbox as $key => $value) {
-          $customFieldValue = CustomFieldCheckboxValue::where(['custom_field_name' => $key, 'investment_investor_id' => $investor->id])->first();
-          if (!$customFieldValue) {
-            $customFieldValue = new CustomFieldCheckboxValue;
-            $customFieldValue->custom_field_name = $key;
-            $customFieldValue->investment_investor_id = $investor->id;
-          }
-          $customFieldValue->value = $value;
-          $customFieldValue->save();
-        }
-      }
       
       $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
       $this->dispatch(new SendReminderEmail($user,$project,$investor));
@@ -542,27 +527,6 @@ class OfferController extends Controller
       else {
         return redirect()->back()->withErrors('Something went wrong');
       }
-    }
-    public function visibility(Request $req)
-    {
-      $showField = array();
-      $hideField = $hideCheckbox = array();
-      $showField = CheckboxConditional::where('custom_checkbox_id',$req->id)->where('is_linked',1)->lists('custom_field_id')->toArray();
-      // dd($showField);
-      //main checkbox 
-      $mainCheckbox = CustomField::findOrFail($req->id);
-      // sort out other checkbox
-      $hideCheckbox = CustomField::where('site_url',url())->where('name',$mainCheckbox->name)->lists('id')->toArray();
-      //sort out customfield ids
-      $hideField = CheckboxConditional::whereIn('custom_checkbox_id',$hideCheckbox)->orderBy('custom_field_id', 'asc')->lists('custom_field_id')->unique()->toArray();
-      $hideField = array_values($hideField);
-      // dd($hideField);
-      foreach ($showField as $field) {
-        array_splice($hideField, array_search($field, $hideField ), 1);
-      }
-      // dd($hideField);
-      return response()->json([
-            'status' => '1','showField' => $showField, 'hideField' => $hideField]);
     }
   }
 

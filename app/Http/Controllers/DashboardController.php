@@ -49,7 +49,6 @@ use App\Helpers\SiteConfigurationHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ApplicationSections;
-use App\CheckboxConditional;
 
 
 class DashboardController extends Controller
@@ -615,8 +614,8 @@ class DashboardController extends Controller
         $siteConfigurationHelper = SiteConfigurationHelper::getConfigurationAttr();
         $customFields = CustomField::where('site_url', url())->get();
         $sections = ApplicationSections::where('site_url', url())->orderBy('rank', 'asc')->get();
-        $customCheckboxs = CustomField::where('site_url', url())->where('type','checkbox')->where('is_conditional', 1)->get();
-        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields','sections','customCheckboxs'));
+        
+        return view('dashboard.configuration.siteConfiguration',compact('color','siteconfiguration','mail_setting', 'siteConfigurationHelper', 'customFields','sections'));
     }
 
     public function investmentMoneyReceived(Request $request, AppMailer $mailer, $investment_id)
@@ -3030,16 +3029,5 @@ class DashboardController extends Controller
             'message' => 'Successful.',
             'data' => $tableContent
         ]);
-    }
-    public function checkboxUpdate(Request $request)
-    {
-        // dd($request->checkbox_id,$request->field_id,$request->checkbox_value);
-        $field = CheckboxConditional::where('custom_field_id',$request->field_id)->where('custom_checkbox_id',$request->checkbox_id)->first();
-        if(!$field){
-        CheckboxConditional::create(['custom_checkbox_id'=>$request->checkbox_id,'custom_field_id'=>$request->field_id,'is_linked'=>$request->checkbox_value]);
-        return 1;
-        }
-        $field->update(['is_linked'=>$request->checkbox_value]);
-        return 1;
     }
 }

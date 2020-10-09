@@ -24,8 +24,4 @@ class CustomField extends Model
     {
         return $this->belongsTo('App\ApplicationSections','section_id');
     }
-    public function isConditional()
-    {
-        return $this->hasMany('App\CheckboxConditional','custom_field_id');
-    }
 }
