@@ -922,6 +922,29 @@ Configuration | Dashboard | @parent
 
 <script type="text/javascript">
 	$(document).ready(function(){
+        $('.checkbox_custom').on('click',function (f) {
+            var field_id = $(this).attr('field-id');
+            var checkbox_id = $(this).attr('checkbox-id');
+            var checkbox_value = this.checked?1:0;
+            console.log(field_id,checkbox_id,checkbox_value);
+            $('.loader-overlay').show();
+            $.ajax({
+                type: "POST",
+                url: '/dashboard/checkbox/link/update',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {checkbox_id,field_id,checkbox_value,},
+                success: function(data) {
+                    $('.loader-overlay').hide();
+                    alert('Successfully updated');
+                },
+                 error: function() {
+                    alert('it broke');
+                },
+                complete: function() {
+                    
+                }
+            });
+        });
         $('#reorder').on('click',function (f) {
             f.preventDefault();
             var rank = $('input[name="rank[]"]').map(function () {return parseInt($(this).val());}).get();

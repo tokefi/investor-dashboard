@@ -428,7 +428,7 @@ Offer Doc
 									<div class="row">
 										@if (isset($customFields['investing_type']))
 											@foreach ($customFields['investing_type'] as $customField)
-												<div class="col-md-6" style="margin-bottom: 20px;">
+												<div class="col-md-6 @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checkbox_individual @else hide @endif @endif @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checkbox_joint @endif @endif @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checkbox_company @endif @endif" style="margin-bottom: 20px;">
 													<label>{{ $customField->label }}</label>
 													@if(in_array($customField->type, ['text']))
 														<input class="form-control" 
@@ -1155,6 +1155,9 @@ Offer Doc
 				$("input[name='user_id_doc']").removeAttr('disabled');
 				$("input[name='trust_or_company_docs']").attr('disabled','disabled');
 				$("input[name='joint_investor_id_doc']").attr('disabled','disabled');
+				$('.checkbox_joint').addClass('hide');
+				$('.checkbox_company').addClass('hide');
+				$('.checkbox_individual').removeClass('hide');
 			}
 			else if($(this).is(':checked') && $(this).val() == 'Joint Investor')
 			{
@@ -1169,6 +1172,9 @@ Offer Doc
 				$("input[name='joint_investor_id_doc']").removeAttr('disabled');
 				$("input[name='trust_or_company_docs']").attr('disabled','disabled');
 				$("input[name='user_id_doc']").removeAttr('disabled');
+				$('.checkbox_individual').addClass('hide');
+				$('.checkbox_company').addClass('hide');
+				$('.checkbox_joint').removeClass('hide');
 			}
 			else
 			{
@@ -1183,6 +1189,9 @@ Offer Doc
 				$("input[name='joint_investor_id_doc']").attr('disabled','disabled');
 				$("input[name='trust_or_company_docs']").removeAttr('disabled');
 				$("input[name='user_id_doc']").attr('disabled','disabled');
+				$('.checkbox_joint').addClass('hide');
+				$('.checkbox_individual').addClass('hide');
+				$('.checkbox_company').removeClass('hide');
 			}
 
 		});

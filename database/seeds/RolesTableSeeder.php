@@ -17,5 +17,6 @@ class RolesTableSeeder extends Seeder
         Role::updateOrCreate(['role'=>'investor'],['role'=>'investor', 'description'=>'Almost Every user is investor']);
         Role::updateOrCreate(['role'=>'superadmin'],['role'=>'superadmin', 'description'=>'Superadmin for wensite Configuration']);        
         Role::updateOrCreate(['role'=>'master'],['role'=>'master', 'description'=>'This user will be admin for all the sub domains']);
+        Role::updateOrCreate(['role'=>'agent'],['role'=>'agent', 'description'=>'submitting application as an Agent on behalf of another user']);
     }
 }

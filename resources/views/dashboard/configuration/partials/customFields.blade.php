@@ -37,6 +37,10 @@
                                     <label for="is_required">Is Required ?</label>
                                 </div>
                                 <div class="col-sm-12">
+                                    <input type="checkbox" name="is_conditional" id="is_conditional" />
+                                    <label for="is_conditional">Is conditional on checkbox ?</label>
+                                </div>
+                                <div class="col-sm-12">
                                     <input type="checkbox" name="properties[is_retail_only]" id="is_retail_only" />
                                     <label for="is_retail_only">Show on only retail project ?</label>
                                 </div>
@@ -56,6 +60,7 @@
                             <th>Type</th>
                             <th>Section label</th>
                             <th>Field Label</th>
+                            <th>Checkbox</th>
                             <th>Is Required</th>
                             {{-- <th>Attributes</th> --}}
                             {{-- <th>Properties</th> --}}
@@ -84,6 +89,7 @@
                                 </form>
                             </td>
                             <td><input type="text" name="customFieldLabels[]" value="{{ $customField->label }}" style="border:0px;  background-color: transparent;"> </td>
+                            <td>@if($customField->show_checkbox) <input class="checkbox_custom" type="checkbox" name="individual" field-id="{{ $customField->id }}" checkbox-id="1" @if($customField->isConditional->where('checkbox_id',1)->first()) @if( $customField->isConditional->where('checkbox_id',1)->first()->is_linked) checked @else @endif @endif> Individual Investor <br><input class="checkbox_custom" type="checkbox" name="joint" field-id="{{ $customField->id }}" checkbox-id="2" @if($customField->isConditional->where('checkbox_id',2)->first()) @if( $customField->isConditional->where('checkbox_id',2)->first()->is_linked) checked @else @endif @endif> Joint Investor <br><input class="checkbox_custom" type="checkbox" name="company" field-id="{{ $customField->id }}" checkbox-id="3" @if($customField->isConditional->where('checkbox_id',3)->first()) @if( $customField->isConditional->where('checkbox_id',3)->first()->is_linked) checked @else @endif @endif> Company, Trust or SMSF @endif </td>
                             <td class="text-center">
                                 <input type="checkbox" name='agent_type[]' class="toggle-elements" action="expected_return_{{ $customField->id }}" autocomplete="off"  data-size="mini" @if($customField->is_required) checked value="1" @else value="0" @endif id="expected_return_{{ $customField->id }}">
                             </td>

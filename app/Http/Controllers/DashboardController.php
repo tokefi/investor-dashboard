@@ -26,6 +26,7 @@ use App\Http\Requests;
 use App\InvestingJoint;
 use App\ProjectInterest;
 use App\CustomFieldValue;
+use App\CheckboxConditional;
 use App\ProjectSpvDetail;
 use App\RedemptionStatus;
 use App\UserRegistration;
@@ -3029,5 +3030,17 @@ class DashboardController extends Controller
             'message' => 'Successful.',
             'data' => $tableContent
         ]);
+    }
+
+    public function checkboxUpdate(Request $request)
+    {
+        // dd($request->checkbox_id,$request->field_id,$request->checkbox_value);
+        $field = CheckboxConditional::where('custom_field_id',$request->field_id)->where('checkbox_id',$request->checkbox_id)->first();
+        if(!$field){
+        CheckboxConditional::create(['checkbox_id'=>$request->checkbox_id,'custom_field_id'=>$request->field_id,'is_linked'=>$request->checkbox_value]);
+        return 1;
+        }
+        $field->update(['is_linked'=>$request->checkbox_value]);
+        return 1;
     }
 }

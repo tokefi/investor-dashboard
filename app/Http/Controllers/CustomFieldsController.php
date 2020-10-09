@@ -59,6 +59,7 @@ class CustomFieldsController extends Controller
         $customField->section_id = $section->id;
         $customField->attributes = isset($request->attributes) ? json_encode($request->attributes) : null;
         $customField->properties = isset($request->properties) ? json_encode($request->properties) : null;
+        $customField->show_checkbox = $request->is_conditional ? 1 : 0 ;
         $customField->save();
 
         Session::flash('success', 'Created new custom field - "' . $request->label . '"!');
