@@ -626,7 +626,14 @@ Australia’s leading venture crowdfunding investment platform --></span></span>
 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">Account No <b> {!!$project->investment->bank_account_number!!} </b>.</span></span></span><br>
 <span style="color:#"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px">Reference <b> {!!$project->investment->bank_reference!!} </b>.</span></span></span><br><br>
 &nbsp;</div>
-
+@if($siteConfiguration->show_tokenization)
+<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
+<p>send ${{number_format($amount)}} {{ $project->payment_token }} {{ $project->payment_contract_address }} to {{ $project->erc20_wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->erc20_wallet_address }}.</p>
+@endif
+@if($siteConfiguration->show_tokenization)
+<h2 class="text-center" style="font-size: 1.4em; font-weight: 600; margin-bottom: 1.5rem;">Or </h2>
+<p>send {{ $shares }} {{ $project->erc20_project_token }} {{ $project->erc20_contract_address }} to {{ $project->erc20_wallet_address }}. Please ensure to do the transaction only via your recorded wallet address {{ $user->erc20_wallet_address }}.</p>
+@endif
 </td>
 </tr>
 </tbody></table>

@@ -58,13 +58,15 @@ class SendInvestorNotificationEmail extends Job implements SelfHandling, ShouldQ
         $user = $investor->user;
         // $amount = $user->investments->last()->pivot->amount;
         $amount = number_format(round($investor->amount * $investor->buy_rate, 2));
+        $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
+        $shares = $amount;
         $investment = $user->investments->last()->pivot;
         $project = $this->project;
         $this->from = SiteConfigurationHelper::overrideMailerConfig();
         $this->to = $user->email;
         $this->view = 'emails.interest';
         $this->subject = 'Thank you for investing in '.$project->title;
-        $this->data = compact('user', 'project','amount','investment');
+        $this->data = compact('user', 'project','amount','investment','shares','siteConfiguration');
 
         $mailer->send($this->view, $this->data, function ($message) {
             $message->from($this->from, ($titleName=SiteConfigurationHelper::getConfigurationAttr()->title_text) ? $titleName : 'Estate Baron')->to($this->to)->subject($this->subject);
