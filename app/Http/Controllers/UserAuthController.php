@@ -356,8 +356,9 @@ class UserAuthController extends Controller
         $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
         $this->dispatch(new SendReminderEmail($user,$project,$investor));
         $amount = $amount * $project->share_per_unit_price;
+        $shares = $amount;
         $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
-        $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration'))->render();
+        $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration','shares'))->render();
         return response()->json(array('success'=>true,'html'=>$viewHtml,'auth'=>$auth));
     }
     return response()->json(array('success'=>false,'auth'=>$auth));
