@@ -319,6 +319,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         if (Auth::attempt(['email' => $request->email, 'password' => $passwordString, 'active'=>1], $request->remember)) {
             Auth::user()->update(['last_login'=> Carbon::now()]);
             $user = Auth::user();
+            $referrer = isset($cookies['referrer']) ? $cookies['referrer'] : "";
             $mailer->sendRegistrationNotificationAdmin($user,$referrer);
             return Response::json(['status' => true, 'message' => 'Login Successfull']);
         }
