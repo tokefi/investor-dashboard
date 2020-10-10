@@ -316,11 +316,10 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
         $passwordString = $request['password'];
         $this->createNewUser($request);     // Create new user with request details
 
-        $mailer->sendRegistrationNotificationAdmin($user,$referrer);
-
         if (Auth::attempt(['email' => $request->email, 'password' => $passwordString, 'active'=>1], $request->remember)) {
             Auth::user()->update(['last_login'=> Carbon::now()]);
-
+            $user = Auth::user();
+            $mailer->sendRegistrationNotificationAdmin($user,$referrer);
             return Response::json(['status' => true, 'message' => 'Login Successfull']);
         }
     }
