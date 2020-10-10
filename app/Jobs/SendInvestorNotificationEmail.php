@@ -57,7 +57,7 @@ class SendInvestorNotificationEmail extends Job implements SelfHandling, ShouldQ
         $investor = $this->investor;
         $user = $investor->user;
         // $amount = $user->investments->last()->pivot->amount;
-        $amount = number_format(round($investor->amount * $investor->buy_rate, 2));
+        $amount = $investor->amount * $investor->buy_rate;
         $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
         $shares = $investor->amount;
         $investment = $user->investments->last()->pivot;
