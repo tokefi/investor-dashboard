@@ -50,12 +50,14 @@ Fill the user details | @parent
 										{!! $errors->first('phone_number', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
-								<div class="form-group <?php if($errors->first('erc20_wallet_address')){echo 'has-error';}?>" style="@if(!$siteConfiguration->show_tokenization) display:none; @endif " >
+								@if($siteConfiguration->show_tokenization)
+								<div class="form-group <?php if($errors->first('erc20_wallet_address')){echo 'has-error';}?>" >
 									<div class="col-sm-offset-1 col-sm-10">
 										{!! Form::input('wallet', 'erc20_wallet_address', null, array('placeholder'=>'Wallet Address', 'class'=>'form-control', 'tabindex'=>'3', 'required'=>'false')) !!}
 										{!! $errors->first('erc20_wallet_address', '<small class="text-danger">:message</small>') !!}
 									</div>
 								</div>
+								@endif
 							</div>
 							<div class="row">
 								<div class="form-group">
