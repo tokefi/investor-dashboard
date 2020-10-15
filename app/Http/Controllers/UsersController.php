@@ -22,6 +22,8 @@ use App\CustomFieldValue;
 use App\RedemptionStatus;
 use App\Mailers\AppMailer;
 use App\RedemptionRequest;
+use App\TokenizationRequest;
+use App\TokenizationStatus;
 use App\SiteConfiguration;
 use App\InvestmentInvestor;
 use App\Helpers\ModelHelper;
@@ -495,6 +497,13 @@ class UsersController extends Controller
         ->where('user_id', $user->id)
         ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
         ->get();
+        $tokenizations = TokenizationRequest::whereHas('project', function ($q) {
+            $q->where('project_site', url());
+        })
+        ->where('user_id', $user->id)
+        ->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+        ->get();
+
         // $allTransactions = collect();
         // foreach ($usersInvestments as $usersInvestment){
         //     $allTransactions->push($usersInvestment);
@@ -504,8 +513,8 @@ class UsersController extends Controller
         // }
 
         $projects = Project::where(['active'=>'1','project_site'=>url()])->select(['id', 'title'])->orderBy('project_rank', 'asc')->get();
-        
-        return view('users.investments', compact('user','color', 'investments', 'transactions', 'projects','usersInvestments','redemptions', 'investmentsWithoutMasterFund'));
+        $siteConfiguration = SiteConfiguration::where('project_site',url())->first();
+        return view('users.investments', compact('user','color', 'investments', 'transactions', 'projects','usersInvestments','redemptions', 'investmentsWithoutMasterFund','siteConfiguration','tokenizations'));
     }
 
     /**
@@ -890,6 +899,99 @@ class UsersController extends Controller
 
         // Send email to user
         $mailer->sendRedemptionRequestEmailToUser($user, $project, $request->num_shares);
+
+        return response()->json([
+            'status' => true,
+            'data' => $data
+        ]);
+
+    }
+
+    public function requestTokenization(Request $request, AppMailer $mailer)
+    {
+        $validation_rules = array(
+            'num_shares'    => 'numeric|required',
+            'project_id'    => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $validation_rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $user = Auth::user();
+        $investment = ModelHelper::getTotalInvestmentByUsersAndProject(array($user->id), $request->project_id)->first();
+        if ($request->num_shares < 1 || $request->num_shares > $investment->shares) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tokenization shares should be between 1 and ' . $investment->shares
+            ]);
+        }
+
+        $pendingRequest = TokenizationRequest::where('user_id', $user->id)
+        ->where('project_id', $request->project_id)
+        ->where('status_id', TokenizationStatus::STATUS_PENDING)
+        ->where('master_tokenization', null)
+        ->get();
+
+        if ($pendingRequest->count()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You already have a request in pending status!'
+            ]);
+        }
+        $project = Project::findOrFail($request->project_id);
+
+        if($project->isChild){
+            $masterInvestment = ModelHelper::getTotalInvestmentByUsersAndProject(array($user->id), $project->isChild->master)->first();
+            $childShareAvailableForDirectTokenization = $investment->shares-(($masterInvestment->shares * ($project->isChild->allocation/100))/$project->share_per_unit_price);
+
+            if(($childShareAvailableForDirectTokenization - $request->num_shares) < 0){
+                return response()->json([ 
+                'status' => false,
+                'message' => 'This Tokenization cannot be allowed as '.$project->title.' is a '.$project->isChild->allocation.' % constituent of '.$masterInvestment->project->title.', Please reduce the amount'
+            ]);
+            }
+        }
+
+        $shares = $request->num_shares;
+        $amount = $request->num_shares * $investment->project->share_per_unit_price;
+        $data = [];
+        $data['shares'] = $shares;
+
+        // Create Tokenization record in DB
+        TokenizationRequest::create([
+            'user_id' => $user->id,
+            'project_id' => $request->project_id,
+            'request_amount' => $request->num_shares,
+            'status_id' => TokenizationStatus::STATUS_PENDING,
+            'type' => strtoupper($request->rollover_action),
+        ]);
+        $tokenizationRequest = TokenizationRequest::get()->last();
+        if($project->master_child){
+            foreach($project->children as $child){
+                $childProject = Project::find($child->child);
+                TokenizationRequest::create([
+            'user_id' => $user->id,
+            'project_id' => $childProject->id,
+            'request_amount' => round(($amount*$child->allocation/100)/$childProject->share_per_unit_price),
+            'status_id' => TokenizationStatus::STATUS_PENDING,
+            'type' => strtoupper($request->rollover_action),
+            'master_tokenization'=>$tokenizationRequest->id
+        ]);
+            }
+        }
+
+
+        // Send email to admin
+        $mailer->sendTokenizationRequestEmailToAdmin($user, $project, $request->num_shares);
+
+        // Send email to user
+        $mailer->sendTokenizationRequestEmailToUser($user, $project, $request->num_shares);
 
         return response()->json([
             'status' => true,

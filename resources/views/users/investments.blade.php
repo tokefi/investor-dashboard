@@ -64,6 +64,8 @@
 					</div>
 				</div>	 --}}			
 			</div>
+		</div>
+		<div class="col-md-12">
 			<hr>
 			@endif
 			{{-- <ul class="list-group">
@@ -179,8 +181,8 @@
 										<th>Price ($)</th>
 										<th>Market Value</th>
 										<th>Link to share certificate</th>
-										<th>Encash/Rollover</th>
-										<th>Redemptions</th>
+										<th></th>
+										<th>@if($siteConfiguration->show_tokenization)Redemptions/Rollover/Tokenization @else Redemptions/Rollover @endif </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -195,27 +197,47 @@
 											<a href="{{route('user.view.share', [base64_encode($investment->id)])}}" target="_blank">Share Certificate</a>
 										</td>
 										<td>
-											<div class="btn-group project-progress-3way-switch" id="rollover_toggle_{{ $investment->project_id }}" data-toggle="buttons" style="width:110px">
+											<div class="btn-group project-progress-3way-switch" id="rollover_toggle_{{ $investment->project_id }}" data-toggle="buttons" style="width:200px">
 												<label class="btn btn-sm btn-default active" style="padding:5px;">
 													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="encash" data-project-id="{{$investment->project_id}}"> Encash
 												</label>
 												<label class="btn btn-sm btn-default" style="padding:5px;">
 													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="rollover" data-project-id="{{$investment->project_id}}"> Rollover
 												</label>
+												@if($siteConfiguration->show_tokenization)
+												<label class="btn btn-sm btn-default" style="padding:5px;">
+													<input type="radio" class="rollover-switch" name="rollover_switch_{{$investment->project_id}}" value="tokenization" data-project-id="{{$investment->project_id}}"> Tokenization
+												</label>
+												 @endif
 											</div>
 										</td>
 										<td>
-											<form action="#" id="redemption_request_form_{{$investment->project_id}}" class="redemption-request-form">
-												<div class="input-group">
-													<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 100px;" required>
-													<div class="input-group-btn">
-														<input hidden name="project_id" value="{{$investment->project_id}}" />
-														<input hidden name="rollover_action" value="encash" />
-														<input hidden name="rollover_project_id" value="" />
-														<button class="btn btn-primary form-control" type="submit">Request</button>
+											<div style="" class="redemptions_{{$investment->project_id}}">
+												<form action="#" id="redemption_request_form_{{$investment->project_id}}" class="redemption-request-form">
+													<div class="input-group">
+														<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 85px;" required>
+														<div class="input-group-btn">
+															<input hidden name="project_id" value="{{$investment->project_id}}" />
+															<input hidden name="rollover_action" value="encash" />
+															<input hidden name="rollover_project_id" value="" />
+															<button class="btn btn-primary form-control" type="submit">Request</button>
+														</div>
 													</div>
-												</div>
-											</form>
+												</form>
+											</div>
+											<div class="tokenization_{{$investment->project_id}}" style="display: none;">
+												<form action="#" id="tokenization_request_form_{{$investment->project_id}}" class="tokenization-request-form">
+													<div class="input-group">
+														<input type="number" name="num_shares" min="1" max="{{ $investment->shares }}" step="1" class="form-control" placeholder="Shares" style="min-width: 85px;" required>
+														<div class="input-group-btn">
+															<input hidden name="project_id" value="{{$investment->project_id}}" />
+															<input hidden name="rollover_action" value="tokenization" />
+															<input hidden name="rollover_project_id" value="" />
+															<button class="btn btn-primary form-control" type="submit">Tokenization</button>
+														</div>
+													</div>
+												</form>
+											</div>
 										</td>
 									</tr>
 									@endforeach
@@ -397,32 +419,32 @@ function displayChart(name, dates, pricesClose) {
 			"order": [],
 			"iDisplayLength": 50,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			}
 		});
 		var positionsTable = $('#positionsTable').DataTable({
 			"order": [],
 			"iDisplayLength": 50,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			}
 		});
 		var applicationsTable = $('#applicationsTable').DataTable({
 			"order": [],
 			"iDisplayLength": 50,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			}
 		});
 		var redemptionsTable = $('#redemptionsTable').DataTable({
 			"order": [],
 			"iDisplayLength": 50,
 			"language": {
-			    "search": "",
-			    "searchPlaceholder": "Search",
+				"search": "",
+				"searchPlaceholder": "Search",
 			}
 		});
 
@@ -436,7 +458,11 @@ function displayChart(name, dates, pricesClose) {
 					keyboard: false,
 					backdrop: 'static'
 				});	
-			} else {
+			} else if(action === 'tokenization'){
+				$('.redemptions_'+projectId).attr('style','display:none;');
+				$('.tokenization_'+projectId).attr('style','');
+			}
+			else {
 				$('#redemption_request_form_' + projectId + ' input[name=rollover_project_id]').val('');
 			}
 			$('#redemption_request_form_' + projectId + ' input[name=rollover_action]').val(action);
@@ -491,95 +517,129 @@ function displayChart(name, dates, pricesClose) {
 			});
 		})
 
-		@if($investmentsWithoutMasterFund->count())
-	  	var marketValue = [];
-	  	var projectName = [];
-	    @foreach($investmentsWithoutMasterFund as $investment )
-	        marketValue.push(Math.round({{$investment->shares * $investment->project->share_per_unit_price}}));
-	        projectName.push('{{$investment->project->title}}');
-	    @endforeach
+		$('.tokenization-request-form').on('submit', function (e) {
+			e.preventDefault();
+			if (!confirm('Are you sure you want to submit tokenization request?')) {
+				return;
+			}
+			$('.loader-overlay').show();
+			let form = $(this);
+			let projectId = form.find('input[name=project_id]').val();
+			let rolloverAction = form.find('input[name=rollover_action]').val();
+			let uri = "{{ route('users.investments.requestTokenization') }}";
+			let method = 'POST';
+			let formdata = new FormData(form[0]);
+			$.ajax({
+				url: uri,
+				type: 'POST',
+				dataType: 'JSON',
+				data: formdata,
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
+				contentType: false,
+				processData: false
+			}).done(function(data){
+				$('.loader-overlay').hide();
+				if (!data.status) {
+					alert(data.message);
+					return;
+				}
+				alert('Tokenization Request successfully submitted for ' + data.data.shares + ' shares.');
+				location.reload();
+			});
+		})
 
-	    var sumOfMarketValues = marketValue.reduce(function(a, b){
-	        return a + b;
-	    }, 0);
+
+		@if($investmentsWithoutMasterFund->count())
+		var marketValue = [];
+		var projectName = [];
+		@foreach($investmentsWithoutMasterFund as $investment )
+		marketValue.push(Math.round({{$investment->shares * $investment->project->share_per_unit_price}}));
+		projectName.push('{{$investment->project->title}}');
+		@endforeach
+
+		var sumOfMarketValues = marketValue.reduce(function(a, b){
+			return a + b;
+		}, 0);
 
 	    // Create our number formatter.
-		var formatter = new Intl.NumberFormat('en-US', {
-		  style: 'currency',
-		  currency: 'USD',
-		});
+	    var formatter = new Intl.NumberFormat('en-US', {
+	    	style: 'currency',
+	    	currency: 'USD',
+	    });
 	    var pieChartTitle = 'Total Market Value - ' + formatter.format(sumOfMarketValues);
 
-  		var ctx = document.getElementById('myChart').getContext('2d');
-		var pieColors = [
-			'#08519c',
-            '#2171b5',
-            '#4292c6',
-            '#6baed6',
-            '#9ecae1',
-            '#a6cee6',
-            '#c6dbef',
-            '#c4dfef',
-            '#f7fbff',
-            '#e1eff7'
-		];
+	    var ctx = document.getElementById('myChart').getContext('2d');
+	    var pieColors = [
+	    '#08519c',
+	    '#2171b5',
+	    '#4292c6',
+	    '#6baed6',
+	    '#9ecae1',
+	    '#a6cee6',
+	    '#c6dbef',
+	    '#c4dfef',
+	    '#f7fbff',
+	    '#e1eff7'
+	    ];
 
-		var chart = new Chart(ctx, {
-			type: 'pie',
-			data: {
-				labels: projectName,
-		    	datasets: [{
-			  		backgroundColor: pieColors,
-		  		  	hoverBorderWidth: 8,
-			      	backgroundColor: pieColors,
-			     	hoverBackgroundColor: pieColors,
-			      	hoverBorderColor: pieColors,
-					borderColor: '#eee',
-					data: marketValue,
-				}]
-			},
-			options: {
-				animation: false,
-				responsive: true,
-			    layout: {
-			      padding: {
-			      	left: 0,
-		            right: 0,
-		            top: 10,
-		            bottom: 0
-					}			    
-			  	},
-			    legend: {
-			      display: true,
-			      position: 'right',
-			      align: 'middle'
-			    },	    
-				title: {
-					display: true,
-					text: pieChartTitle,
-					fontSize: 14,
-					padding: {
-						bottom: 20,
-					}
-				},
-				tooltips: {
-                    callbacks: {
-                        title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
-                        label: function (tooltipItem, data) {
-                            var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                            var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
+	    var chart = new Chart(ctx, {
+	    	type: 'pie',
+	    	data: {
+	    		labels: projectName,
+	    		datasets: [{
+	    			backgroundColor: pieColors,
+	    			hoverBorderWidth: 8,
+	    			backgroundColor: pieColors,
+	    			hoverBackgroundColor: pieColors,
+	    			hoverBorderColor: pieColors,
+	    			borderColor: '#eee',
+	    			data: marketValue,
+	    		}]
+	    	},
+	    	options: {
+	    		animation: false,
+	    		responsive: true,
+	    		layout: {
+	    			padding: {
+	    				left: 0,
+	    				right: 0,
+	    				top: 10,
+	    				bottom: 0
+	    			}			    
+	    		},
+	    		legend: {
+	    			display: true,
+	    			position: 'right',
+	    			align: 'middle'
+	    		},	    
+	    		title: {
+	    			display: true,
+	    			text: pieChartTitle,
+	    			fontSize: 14,
+	    			padding: {
+	    				bottom: 20,
+	    			}
+	    		},
+	    		tooltips: {
+	    			callbacks: {
+	    				title: function (tooltipItem, data) { return data.labels[tooltipItem[0].index]; },
+	    				label: function (tooltipItem, data) {
+	    					var amount = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+	    					var total = eval(data.datasets[tooltipItem.datasetIndex].data.join("+"));
                             // return '$' + amount + ' / ' + '$' + total + ' ( ' + parseFloat(amount * 100 / total).toFixed(2) + '% )';
                             return '$' + amount + ' ( ' + parseFloat(amount * 100 / total).toFixed(2) + '% )';
                         },
                     }
                 },
-        	}
-		});
+            }
+        });
 
 
-		
 
-		@endif
+
+	    @endif
 
 	});
 </script>

@@ -270,6 +270,7 @@ Route::post('/dashboard/import/contacts', ['as'=>'dashboard.import.contacts.csv'
 Route::get('/users/{user_id}/investments', ['as'=>'users.investments', 'uses'=>'UsersController@usersInvestments']);
 Route::get('/users/{user_id}/redemptions', ['as'=>'users.redemptions', 'uses'=>'UsersController@redemptions']);
 Route::post('/users/investments/request-redemption', ['as'=>'users.investments.requestRedemption', 'uses'=>'UsersController@requestRedemption']);
+Route::post('/users/investments/request-tokenization', ['as'=>'users.investments.requestTokenization', 'uses'=>'UsersController@requestTokenization']);
 Route::get('/users/{user_id}/notification', ['as'=>'users.notifications', 'uses'=>'UsersController@usersNotifications']);
 Route::get('/users/{user_id}/referral',['as'=>'users.referral','uses'=>'UsersController@referralUser']);
 Route::get('/pages/redirectNotification', ['as'=>'pages.redirectNotifications', 'uses'=>'PagesController@redirectUsersNotifications']);

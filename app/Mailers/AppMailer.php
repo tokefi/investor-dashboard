@@ -562,6 +562,23 @@ class AppMailer
         $this->deliver();
     }
 
+    public function sendTokenizationRequestEmailToAdmin($user, $project, $shares)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $recipients;
+        $this->view = 'emails.tokenizationRequestNotifyAdmin';
+        $this->subject = 'Tokenization request received';
+        $this->data = compact('user', 'project', 'shares');
+        $this->deliver();
+    }
+
     public function sendRedemptionRequestEmailToUser($user, $project, $shares)
     {
         $role = Role::findOrFail(1);
@@ -576,6 +593,24 @@ class AppMailer
         $this->bcc = $recipients;
         $this->view = 'emails.redemptionRequestNotifyUser';
         $this->subject = 'Redemption request received';
+        $this->data = compact('user', 'project', 'shares');
+        $this->deliverWithBcc();
+    }
+
+    public function sendTokenizationRequestEmailToUser($user, $project, $shares)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.tokenizationRequestNotifyUser';
+        $this->subject = 'Tokenization request submitted';
         $this->data = compact('user', 'project', 'shares');
         $this->deliverWithBcc();
     }
