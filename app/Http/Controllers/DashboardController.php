@@ -31,6 +31,7 @@ use App\ProjectSpvDetail;
 use App\RedemptionStatus;
 use App\UserRegistration;
 use App\InvestmentRequest;
+use App\TokenizationRequest;
 use App\Mailers\AppMailer;
 use App\RedemptionRequest;
 use App\SiteConfiguration;
@@ -2110,8 +2111,11 @@ class DashboardController extends Controller
             $q->where('project_site', url());
         })->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
         ->get();
-
-        return view('dashboard.redemptions.requests', compact('redemptionRequests', 'color'));
+        $tokenizationRequests = TokenizationRequest::whereHas('project', function ($q) {
+            $q->where('project_site', url());
+        })->orderBy('status_id', 'asc')->orderBy('created_at', 'asc')
+        ->get();
+        return view('dashboard.redemptions.requests', compact('redemptionRequests', 'color','tokenizationRequests'));
     }
 
     public function acceptRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)

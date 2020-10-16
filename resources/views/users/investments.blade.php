@@ -461,7 +461,7 @@ function displayChart(name, dates, pricesClose) {
 			} else if(action === 'tokenization'){
 				$('.redemptions_'+projectId).attr('style','display:none;');
 				$('.tokenization_'+projectId).attr('style','');
-				if (!confirm('Are you sure you want to submit redemption request?')) {
+				if (!confirm('Are you sure you want to submit tokenization request?')) {
 				return;
 			}
 			}
@@ -481,6 +481,9 @@ function displayChart(name, dates, pricesClose) {
 
 		$('.redemption-request-form').on('submit', function (e) {
 			e.preventDefault();
+			if (!confirm('Are you sure you want to submit redemptions request?')) {
+				return;
+			}
 			$('.loader-overlay').show();
 			let form = $(this);
 			let projectId = form.find('input[name=project_id]').val();
@@ -519,9 +522,6 @@ function displayChart(name, dates, pricesClose) {
 
 		$('.tokenization-request-form').on('submit', function (e) {
 			e.preventDefault();
-			if (!confirm('Are you sure you want to submit tokenization request?')) {
-				return;
-			}
 			$('.loader-overlay').show();
 			let form = $(this);
 			let projectId = form.find('input[name=project_id]').val();

@@ -94,6 +94,70 @@ Projects | Dashboard | @parent
                                 </td>
                             </tr>
                         @endforeach
+                        @if($tokenizationRequests !== Null)
+                        @foreach ($tokenizationRequests as $redemption)
+                            <tr style="@if($redemption->status_id != \App\RedemptionStatus::STATUS_PENDING) color: #ccc;  @endif">
+                                <td>{{ sprintf('%05d', $redemption->id) }}</td>
+                                <td>
+                                    <a href="/users/{{ $redemption->user_id }}">{{ $redemption->user->first_name }} {{ $redemption->user->last_name }}</a>
+                                    <br>{{$redemption->user->email}}<br>{{$redemption->user->phone_number}}
+                                </td>
+                                <td>
+                                    <a href="/projects/{{ $redemption->project_id }}">{{ $redemption->project->title }}</a><br>
+                                    <address>
+                                        {{$redemption->project->location->line_1}}, {{$redemption->project->location->line_2}}, {{$redemption->project->location->city}}, {{$redemption->project->location->postal_code}}, {{$redemption->project->location->country}}
+                                    </address>
+                                </td>
+                                <td class="text-center">{{ $redemption->request_amount }}</td>
+                                <td class="text-center">
+                                    @if($redemption->status_id == \App\RedemptionStatus::STATUS_PENDING)
+                                    {{ $redemption->project->share_per_unit_price }}
+                                    @else
+                                    {{ $redemption->price }}
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if($redemption->status_id == \App\RedemptionStatus::STATUS_REJECTED)
+                                    ${{ number_format(round($redemption->request_amount * $redemption->price, 2)) }}
+                                    @else
+                                    ${{ number_format(round($redemption->request_amount * $redemption->project->share_per_unit_price, 2)) }}
+                                    @endif
+                                </td>
+                                <td>{{ $redemption->created_at->toFormattedDateString() }}</td>
+                                <td>
+                                    {{ $redemption->type }}
+                                    @if ($redemption->type == 'ROLLOVER')
+                                        @if ($redemption->rollover_project_id)
+                                            to
+                                            <a href="{{ route('projects.show', $redemption->rollover_project_id) }}">{{ $redemption->rolloverProject->title }}</a>
+                                        @endif
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $redemption->status->name }}<br>
+                                    @if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)
+                                    <span class="badge"><strong>Accepted:</strong> {{ $redemption->accepted_amount }}/{{ $redemption->request_amount }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $redemption->comments }}</td>
+                                <td>
+                                    @if($redemption->status_id == \App\RedemptionStatus::STATUS_PENDING)
+                                         <button class="btn btn-success btn-block accept-redemption-btn" data-action="accept" data-project-id="{{ $redemption->project_id }}" data-shares="{{ $redemption->request_amount }}" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Accept</button>
+                                        <button class="btn btn-danger btn-block reject-redemption-btn" data-action="reject" data-project-id="{{ $redemption->project_id }}" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Reject</button>
+                                    @else
+                                        @if (($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE) ||
+                                            ($redemption->status_id == \App\RedemptionStatus::STATUS_APPROVED))
+                                            @if($redemption->is_money_sent)
+                                                <strong class="text-success"><i class="fa fa-check"> Money Sent</i></strong>
+                                            @else
+                                                <button class="btn btn-primary btn-block money_sent" data-redemption-id="{{ $redemption->id }}" @if($redemption->master_redemption) disabled @endif>Money Sent</button>
+                                            @endif
+                                        @endif
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -164,7 +228,7 @@ Projects | Dashboard | @parent
 	$(document).ready(function(){
 		$('#requestsTable').DataTable({
             "iDisplayLength": 25,
-            "order": [],
+            "order": [[6,'ASC']],
             "language": {
                 "search": "",
                 "searchPlaceholder": "Search",
