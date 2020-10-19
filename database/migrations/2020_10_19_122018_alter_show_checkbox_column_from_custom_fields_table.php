@@ -13,7 +13,9 @@ class AlterShowCheckboxColumnFromCustomFieldsTable extends Migration
     public function up()
     {
         Schema::table('custom_fields', function (Blueprint $table) {
-            $table->boolean('show_checkbox')->default(1);
+            if (Schema::hasColumn('custom_fields', 'show_checkbox')) {
+                $table->dropColumn('show_checkbox');
+            }
         });
     }
 
@@ -25,7 +27,7 @@ class AlterShowCheckboxColumnFromCustomFieldsTable extends Migration
     public function down()
     {
         Schema::table('custom_fields', function (Blueprint $table) {
-            $table->boolean('show_checkbox')->nullable()->default(0);
+
         });
     }
 }
