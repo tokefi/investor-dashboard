@@ -37,7 +37,7 @@
                                     <label for="is_required">Is Required ?</label>
                                 </div>
                                 <div class="col-sm-12">
-                                    <input type="checkbox" name="is_conditional" id="is_conditional" />
+                                    <input type="checkbox" name="is_conditional" id="is_conditional" checked />
                                     <label for="is_conditional">Is conditional on checkbox ?</label>
                                 </div>
                                 <div class="col-sm-12">
