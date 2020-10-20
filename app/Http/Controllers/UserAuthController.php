@@ -185,9 +185,7 @@ class UserAuthController extends Controller
     {
         $auth = false;
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active'=>1], $request->remember)) {
-            $request->merge([
-                'password'=>bcrypt($request->password)
-            ]);
+            $request->merge(['password'=>bcrypt($request->password)]);
             $auth = true;
             Auth::user()->update(['last_login'=> Carbon::now()]);
             Session::flash('loginaction', 'success.');
@@ -195,7 +193,6 @@ class UserAuthController extends Controller
             $project = Project::findOrFail($request->project_id);
             $user = Auth::user();
             $user_info = Auth::user();
-            $project = Project::findOrFail($request->project_id);
             $min_amount_invest = $project->investment->minimum_accepted_amount;
             if((int)$request->amount_to_invest < (int)$min_amount_invest)
             {
@@ -222,8 +219,7 @@ class UserAuthController extends Controller
                 $agent_investment = 1;
             }
         // If application store request received from request form
-            if($request->investment_request_id)
-            {
+            if($request->investment_request_id){
                 $investmentRequest = InvestmentRequest::find($request->investment_request_id);
                 if($investmentRequest) {
                     if(\App\Helpers\SiteConfigurationHelper::isSiteAdmin()){
@@ -258,11 +254,11 @@ class UserAuthController extends Controller
         $user->investments()->attach($project, ['investment_id'=>$project->investment->id,'amount'=>$amount, 'buy_rate' => $project->share_per_unit_price, 'project_site'=>url(),'investing_as'=>$request->investing_as, 'signature_data'=>$request->signature_data,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type,'interested_to_buy'=>$request->interested_to_buy,'agent_investment'=>$agent_investment, 'agent_id'=>$request->agent_id]);
         $investor = InvestmentInvestor::get()->last();
         if($project->master_child){
-          foreach($project->children as $child){
-            $percAmount = round($amount* ($child->allocation)/100 * $project->share_per_unit_price);
-            $childProject = Project::find($child->child);
-            $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(), 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
-          }
+            foreach($project->children as $child){
+                $percAmount = round($amount* ($child->allocation)/100 * $project->share_per_unit_price);
+                $childProject = Project::find($child->child);
+                $user->investments()->attach($childProject, ['investment_id'=>$childProject->investment->id,'amount'=>round($percAmount/$childProject->share_per_unit_price), 'buy_rate' => $childProject->share_per_unit_price, 'project_site'=>url(), 'signature_data'=>$request->signature_data, 'interested_to_buy'=>$request->interested_to_buy,'signature_data_type'=>$request->signature_data_type,'signature_type'=>$request->signature_type, 'agent_investment'=>$agent_investment, 'master_investment'=>$investor->id, 'agent_id'=>$request->agent_id]);
+            }
         }
         if($request->investing_as != 'Individual Investor'){
             $investing_joint = new InvestingJoint;
@@ -355,8 +351,8 @@ class UserAuthController extends Controller
         $investor->save();
         $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
         $this->dispatch(new SendReminderEmail($user,$project,$investor));
-        $amount = $amount * $project->share_per_unit_price;
         $shares = $amount;
+        $amount = $amount * $project->share_per_unit_price;
         $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
         $viewHtml = view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration','shares'))->render();
         return response()->json(array('success'=>true,'html'=>$viewHtml,'auth'=>$auth));
