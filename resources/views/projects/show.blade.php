@@ -22,7 +22,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap3/bootstrap-switch.min.css">
 <!-- Summernote -->
 {!! Html::style('/assets/plugins/summernote/summernote.css') !!}
-@parent0
+@parent
 <style>
 	#map {
 		height: 350px;
