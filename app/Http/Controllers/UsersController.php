@@ -568,12 +568,16 @@ class UsersController extends Controller
     {
         $investment_id = base64_decode($investment_id);
         $color = Color::where('project_site',url())->first();
-        $investment = InvestmentInvestor::find($investment_id);
+        $investmentDetails = InvestmentInvestor::findOrFail($investment_id);
+        $userId = $investmentDetails->user_id;
+        $projectId = $investmentDetails->project_id;
+        $investmentDetails = ModelHelper::getTotalInvestmentByUsersAndProject(array($userId), $projectId);
+        $investment = $investmentDetails->count() ? $investmentDetails->first() : null;
         // dd($investment->project);
-        $shareStart = $investment->share_number;
-        $shareStart =  explode('-',$shareStart);
-        $shareEnd = $shareStart[1];
-        $shareStart = $shareStart[0];
+        // $shareStart = $investment->share_number;
+        // $shareStart =  explode('-',$shareStart);
+        // $shareEnd = $shareStart[1];
+        // $shareStart = $shareStart[0];
         
         $allUserInvestments = InvestmentInvestor::where('user_id', $userId)->where('project_id', $projectId)->get();
         $allUserInvestmentIds = $allUserInvestments->pluck('id')->toArray();
