@@ -2469,7 +2469,7 @@ class DashboardController extends Controller
     {
         $tokenization = TokenizationRequest::findOrFail($tokenizationId);
 
-        if ($tokenization->status_id != TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE && $redemption->status_id != TokenizationStatus::STATUS_APPROVED) {
+        if ($tokenization->status_id != TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE && $tokenization->status_id != TokenizationStatus::STATUS_APPROVED) {
             return response()->json([
                 'status' => false,
                 'message' => 'Accept the tokenization first!'
