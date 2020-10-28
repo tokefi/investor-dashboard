@@ -233,7 +233,7 @@
 															<input hidden name="project_id" value="{{$investment->project_id}}" />
 															<input hidden name="rollover_action" value="tokenization" />
 															<input hidden name="rollover_project_id" value="" />
-															<button class="btn btn-primary form-control" type="submit">Tokenization</button>
+															<button class="btn btn-primary form-control" type="submit">Request</button>
 														</div>
 													</div>
 												</form>
@@ -292,7 +292,45 @@
 									</td>
 									<td>{{ $redemption->created_at->toFormattedDateString() }}</td>
 									<td>{{ $redemption->updated_at->diffForHumans() }}</td>
+									<td>{{ $redemption->type }}
+										<br>
+										{{ $redemption->status->name }}
+										<br>
+										@if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)
+										<span class="badge"><strong>Accepted:</strong> {{ $redemption->accepted_amount }}/{{ $redemption->request_amount }}</span>
+										@endif
+									</td>
+									<td>{{ $redemption->comments }}</td>
+								</tr>    
+								@endforeach
+								@foreach ($tokenizations as $redemption)
+								<tr style="@if($redemption->status_id != \App\RedemptionStatus::STATUS_PENDING) color: #ccc;  @endif">
+									<td>{{ sprintf('%05d', $redemption->id) }}</td>
 									<td>
+										<a href="/projects/{{ $redemption->project_id }}">{{ $redemption->project->title }}</a><br>
+										<address>
+											{{$redemption->project->location->line_1}}, {{$redemption->project->location->line_2}}, {{$redemption->project->location->city}}, {{$redemption->project->location->postal_code}}, {{$redemption->project->location->country}}
+										</address>
+									</td>
+									<td class="text-center">{{ $redemption->request_amount }}</td>
+									<td class="text-center">
+										@if($redemption->status_id == \App\RedemptionStatus::STATUS_PENDING)
+										{{ $redemption->project->share_per_unit_price }}
+										@else
+										{{ $redemption->price }}
+										@endif
+									</td>
+									<td class="text-center">
+										@if($redemption->status_id != \App\RedemptionStatus::STATUS_PENDING)
+										${{ number_format(round($redemption->request_amount * $redemption->price, 2)) }}
+										@else
+										${{ number_format(round($redemption->request_amount * $redemption->project->share_per_unit_price, 2)) }}
+										@endif
+									</td>
+									<td>{{ $redemption->created_at->toFormattedDateString() }}</td>
+									<td>{{ $redemption->updated_at->diffForHumans() }}</td>
+									<td>{{ $redemption->type }}
+										<br>
 										{{ $redemption->status->name }}
 										<br>
 										@if($redemption->status_id == \App\RedemptionStatus::STATUS_PARTIAL_ACCEPTANCE)
@@ -453,6 +491,8 @@ function displayChart(name, dates, pricesClose) {
 			let projectId = $(this).attr('data-project-id');
 			if (action == 'rollover') {
 				// show modal for rollover project selection
+				$('.redemptions_'+projectId).attr('style','');
+				$('.tokenization_'+projectId).attr('style','display:none;');
 				$('#rollover_project_modal #rollover_project_form').attr('data-project-id', projectId);
 				$('#rollover_project_modal').modal({
 					keyboard: false,

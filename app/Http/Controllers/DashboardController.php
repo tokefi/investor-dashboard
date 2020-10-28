@@ -51,7 +51,7 @@ use App\Helpers\SiteConfigurationHelper;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\ApplicationSections;
-
+use App\TokenizationStatus;
 
 class DashboardController extends Controller
 {
@@ -2237,6 +2237,125 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function acceptTokenizationRequest(Request $request, AppMailer $mailer, $tokenizationId)
+    {
+        $validator = Validator::make($request->all(), [
+            'num_shares'    => 'numeric|required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $masterTokenization = TokenizationRequest::findOrFail($tokenizationId);
+
+        $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($masterTokenization->user_id), $masterTokenization->project_id)->first();
+
+        if ($request->num_shares < 1 || $request->num_shares > $masterTokenization->request_amount || $request->num_shares > $investment->shares) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid tokenization amount.'
+            ]);
+        }
+
+        if ($request->num_shares != $masterTokenization->request_amount) {
+            // Partial redemption
+            $masterTokenization->accepted_amount = $request->num_shares;
+            $masterTokenization->price = $masterTokenization->project->share_per_unit_price;
+            $masterTokenization->status_id = TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE;
+            $masterTokenization->comments = $request->comments;
+            $masterTokenization->save();
+
+            // Create new redemption request with remaining amount
+            TokenizationRequest::create([
+                'user_id' => $masterTokenization->user_id,
+                'project_id' => $masterTokenization->project_id,
+                'request_amount' => ($masterTokenization->request_amount - $request->num_shares),
+                'status_id' => TokenizationStatus::STATUS_PENDING
+            ]);
+
+        } else {
+            // Whole amount redumption
+            $masterTokenization->accepted_amount = $masterTokenization->request_amount;
+            $masterTokenization->price = $masterTokenization->project->share_per_unit_price;
+            $masterTokenization->status_id = TokenizationStatus::STATUS_APPROVED;
+            $masterTokenization->comments = $request->comments;
+            $masterTokenization->save();
+        }
+
+        Transaction::create([
+            'user_id' => $masterTokenization->user_id,
+            'project_id' => $masterTokenization->project_id,
+            'transaction_type' => Transaction::REPURCHASE,
+            'transaction_date' => Carbon::now(),
+            'amount' => $masterTokenization->accepted_amount * $masterTokenization->price,
+            'rate' => $masterTokenization->price,
+            'number_of_shares' => $masterTokenization->request_amount,
+        ]);
+        //master child redemption accept
+        if($masterTokenization->project->master_child){
+            $master = TokenizationRequest::get()->last();
+            $childTokenizations = TokenizationRequest::where('master_tokenization',$tokenizationId)->get();
+            foreach($childTokenizations as $tokenization){
+                $shareTokenizationNumber = ($request->num_shares*$masterTokenization->project->share_per_unit_price*$tokenization->project->isChild->allocation/100)/$tokenization->project->share_per_unit_price;
+                $investment = \App\Helpers\ModelHelper::getTotalInvestmentByUsersAndProject(array($tokenization->user_id), $tokenization->project_id)->first();
+                if ($shareTokenizationNumber < 1 || $shareTokenizationNumber > $tokenization->request_amount ) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Invalid tokenization amount.'
+                    ]);
+                }
+                
+                if ($shareTokenizationNumber != $tokenization->request_amount) {
+            // Partial tokenization
+                    $tokenization->accepted_amount = $sharetokenizationNumber;
+                    $tokenization->price = $tokenization->project->share_per_unit_price;
+                    $tokenization->status_id = TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE;
+                    $tokenization->comments = $request->comments;
+                    $tokenization->save();
+
+            // Create new redemption request with remaining amount
+                    TokenizationRequest::create([
+                        'user_id' => $tokenization->user_id,
+                        'project_id' => $tokenization->project_id,
+                        'request_amount' => ($tokenization->request_amount - $sharetokenizationNumber),
+                        'status_id' => TokenizationStatus::STATUS_PENDING,
+                        'master_tokenization' => $master->id,
+                    ]);
+
+                } else {
+            // Whole amount redumption
+                    $tokenization->accepted_amount = $tokenization->request_amount;
+                    $tokenization->price = $tokenization->project->share_per_unit_price;
+                    $tokenization->status_id = TokenizationStatus::STATUS_APPROVED;
+                    $tokenization->comments = $request->comments;
+                    $tokenization->save();
+                }
+                Transaction::create([
+                    'user_id' => $tokenization->user_id,
+                    'project_id' => $tokenization->project_id,
+                    'transaction_type' => Transaction::REPURCHASE,
+                    'transaction_date' => Carbon::now(),
+                    'amount' => $tokenization->accepted_amount * $tokenization->price,
+                    'rate' => $tokenization->price,
+                    'number_of_shares' => $tokenization->accepted_amount,
+                ]);
+            }
+        }
+        
+        $mailer->sendTokenizationRequestAcceptedToUser($masterTokenization);
+        
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'shares' => $request->num_shares
+            ]
+        ]);
+    }
+
     public function rejectRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)
     {
         $validator = Validator::make($request->all(), [
@@ -2277,6 +2396,45 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function rejectTokenizationRequest(Request $request, AppMailer $mailer, $tokenizationId)
+    {
+        $validator = Validator::make($request->all(), [
+            'comments'      => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $tokenization = TokenizationRequest::findOrFail($tokenizationId);
+        $tokenization->price = $tokenization->project->share_per_unit_price;
+        $tokenization->status_id = TokenizationStatus::STATUS_REJECTED;
+        $tokenization->comments = $request->comments;
+        $tokenization->save();
+        //master child tokenization reject
+        if($tokenization->project->master_child){
+            $childtokenizations = TokenizationRequest::where('master_tokenization',$tokenizationId)->get();
+
+            foreach($childtokenizations as $childtokenization){
+                $childtokenization->price = $childtokenization->project->share_per_unit_price;
+                $childtokenization->status_id = TokenizationStatus::STATUS_REJECTED;
+                $childtokenization->comments = $request->comments;
+                $childtokenization->save();
+            }
+        }
+
+        $mailer->sendTokenizationRequestRejectedToUser($tokenization);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'shares' => $request->num_shares
+            ]
+        ]);
+    }
     public function moneySentForRedemptionRequest(Request $request, AppMailer $mailer, $redemptionId)
     {
         $redemption = RedemptionRequest::findOrFail($redemptionId);
@@ -2301,6 +2459,36 @@ class DashboardController extends Controller
         }
 
         $mailer->sendRedemptionMoneySentToUser($redemption);
+
+        return response()->json([
+            'status' => true
+        ]);
+    }
+
+    public function moneySentForTokenizationRequest(Request $request, AppMailer $mailer, $tokenizationId)
+    {
+        $tokenization = TokenizationRequest::findOrFail($tokenizationId);
+
+        if ($tokenization->status_id != TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE && $redemption->status_id != TokenizationStatus::STATUS_APPROVED) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Accept the tokenization first!'
+            ]);
+        }
+
+        $tokenization->is_money_sent = 1;
+        $tokenization->save();
+
+        if($tokenization->project->master_child){
+            $childTokenizations = TokenizationRequest::where('master_tokenization',$tokenizationId)->get();
+
+            foreach($childTokenizations as $childtokenization){
+                $childTokenization->is_money_sent = 1;
+                $childTokenization->save();
+            }
+        }
+
+        $mailer->sendTokenizationMoneySentToUser($tokenization);
 
         return response()->json([
             'status' => true
@@ -3041,8 +3229,8 @@ class DashboardController extends Controller
         // dd($request->checkbox_id,$request->field_id,$request->checkbox_value);
         $field = CheckboxConditional::where('custom_field_id',$request->field_id)->where('checkbox_id',$request->checkbox_id)->first();
         if(!$field){
-        CheckboxConditional::create(['checkbox_id'=>$request->checkbox_id,'custom_field_id'=>$request->field_id,'is_linked'=>$request->checkbox_value]);
-        return 1;
+            CheckboxConditional::create(['checkbox_id'=>$request->checkbox_id,'custom_field_id'=>$request->field_id,'is_linked'=>$request->checkbox_value]);
+            return 1;
         }
         $field->update(['is_linked'=>$request->checkbox_value]);
         return 1;

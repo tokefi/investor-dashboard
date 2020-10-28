@@ -1495,8 +1495,9 @@ $(document).ready(function(){
     					type: "POST",
     					url: "/users/login/offer",
     					data: offerData,
-    					datatype: 'html',
+    					datatype: 'json',
     					success: function (data) {
+    						console.log(data);
     						if(!data.success){
     							$('.loader-overlay').hide();
     							$('#loginModal #loginErrors').html('<div class="alert alert-danger text-center" style="color:red;">Authentication failed please check your password</div>');

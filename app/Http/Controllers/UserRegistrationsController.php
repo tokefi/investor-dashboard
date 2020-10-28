@@ -105,7 +105,7 @@ class UserRegistrationsController extends Controller
         }
 
             // Verify Captcha
-        $recaptcha = new ReCaptcha(env('CAPTCHA_SECRET'));
+        $recaptcha = new ReCaptcha("6LdvX9oZAAAAAGiZ_MAZD9YloHIOYhJVi-K1jGtM");
         $capResponse = $recaptcha->verify($request->get('g-recaptcha-response'), $_SERVER['REMOTE_ADDR']);
         if(!$capResponse->isSuccess()) {
             return redirect('/users/create')->withErrors(['g-recaptcha-response'=> 'Recaptcha timeout or duplicate.'])->withInput();
@@ -638,7 +638,7 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
                     $mailer->sendProjectEoiEmailToUser($project, $user_info);
                     return redirect()->route('users.success.eoi');
                 }else{
-                    dd($request->all());
+                    //dd($request->all());
                     $project = Project::findOrFail($request->project_id);
                     $user = Auth::user();
                     $agent_investment = 0;
@@ -810,9 +810,8 @@ public function userRegisterLoginFromOfferForm(Request $request, $id, AppMailer 
 
                     $this->dispatch(new SendInvestorNotificationEmail($user,$project, $investor));
                     $this->dispatch(new SendReminderEmail($user,$project,$investor));
-
-                    $amount = $amount * $project->share_per_unit_price;
                     $shares = $amount;
+                    $amount = $amount * $project->share_per_unit_price;
                     $siteConfiguration = \App\SiteConfiguration::where('project_site',url())->first();
                     return view('projects.gform.thankyou', compact('project', 'user', 'amount_5', 'amount','siteConfiguration','shares'));
                 }

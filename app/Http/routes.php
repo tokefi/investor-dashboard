@@ -318,6 +318,9 @@ Route::get('/dashboard/redemption/requests', ['as'=>'dashboard.redemption.reques
 Route::post('/dashboard/redemption/{redemption_id}/accept', ['as'=>'dashboard.redemption.accept', 'uses'=>'DashboardController@acceptRedemptionRequest']);
 Route::post('/dashboard/redemption/{redemption_id}/reject', ['as'=>'dashboard.redemption.reject', 'uses'=>'DashboardController@rejectRedemptionRequest']);
 Route::post('/dashboard/redemption/{redemption_id}/money-sent', ['as'=>'dashboard.redemption.moneysent', 'uses'=>'DashboardController@moneySentForRedemptionRequest']);
+Route::post('/dashboard/tokenization/{tokenization_id}/accept', ['as'=>'dashboard.tokenization.accept', 'uses'=>'DashboardController@acceptTokenizationRequest']);
+Route::post('/dashboard/tokenization/{tokenization_id}/reject', ['as'=>'dashboard.tokenization.reject', 'uses'=>'DashboardController@rejectTokenizationRequest']);
+Route::post('/dashboard/tokenization/{tokenization_id}/money-sent', ['as'=>'dashboard.tokenization.moneysent', 'uses'=>'DashboardController@moneySentForTokenizationRequest']);
 Route::post('/dashboard/projects/hideApplicationFillupRequest', ['as'=>'dashboard.investment.hideApplicationFillupRequest', 'uses'=>'DashboardController@hideApplicationFillupRequest']);
 Route::post('/configuration/uploadprojectProgressCircleImages', ['as'=>'configuration.uploadprojectProgressCircleImages', 'uses'=>'SiteConfigurationsController@uploadprojectProgressCircleImages']);
 Route::post('/configuration/uploadprospectus',['as'=>'configuration.uploadProspectus','uses'=>'SiteConfigurationsController@uploadProspectus']);

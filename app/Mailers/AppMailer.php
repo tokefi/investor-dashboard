@@ -633,6 +633,23 @@ class AppMailer
         $this->deliverWithBcc();
     }
 
+public function sendTokenizationRequestAcceptedToUser($tokenization)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $tokenization->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.tokenizationRequestAcceptedNotifyUser';
+        $this->subject = 'tokenization request Accepted';
+        $this->data = compact('tokenization');
+        $this->deliverWithBcc();
+    }
     public function sendRedemptionRequestRejectedToUser($redemption)
     {
         $role = Role::findOrFail(1);
@@ -651,6 +668,24 @@ class AppMailer
         $this->deliverWithBcc();
     }
 
+    public function sendTokenizationRequestRejectedToUser($tokenization)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $tokenization->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.tokenizationRequestRejectedNotifyUser';
+        $this->subject = 'Tokenization request Rejected';
+        $this->data = compact('tokenization');
+        $this->deliverWithBcc();
+    }
+
     public function sendRedemptionMoneySentToUser($redemption)
     {
         $role = Role::findOrFail(1);
@@ -666,6 +701,24 @@ class AppMailer
         $this->view = 'emails.redemptionMoneySentNotifyUser';
         $this->subject = 'Redemption request Money Sent';
         $this->data = compact('redemption');
+        $this->deliverWithBcc();
+    }
+    
+    public function sendTokenizationMoneySentToUser($tokenization)
+    {
+        $role = Role::findOrFail(1);
+        // $recipients = ['info@konkrete.io'];
+        $recipients = [];
+        foreach ($role->users as $adminUser) {
+            if($adminUser->registration_site == url()){
+                array_push($recipients, $adminUser->email);
+            }
+        }
+        $this->to = $tokenization->user->email;
+        $this->bcc = $recipients;
+        $this->view = 'emails.tokenizationMoneySentNotifyUser';
+        $this->subject = 'Tokenization request Money Sent';
+        $this->data = compact('tokenization');
         $this->deliverWithBcc();
     }
 
