@@ -561,7 +561,7 @@
                               <strong><span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-family:helvetica; font-weight:bolder; line-height:21px"><span style="font-size:20px">Dear {{$tokenization->user->first_name}},</span></span></span></strong>
 
                               <div style="font-size: 13px;text-align:justify; font-family:'Helvetica';font-weight:lighter;line-height:21px;"><br>
-                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">We have sent you tokenization amount of <strong>{{ $tokenization->request_amount }}</strong> shares at price <strong>${{ $tokenization->price }}</strong> for your investment in <strong>{{$tokenization->project->title}}</strong>.</span><br><br>
+                                <span style="color:#000"><span style="font-size:14px"><span style="font-family:helvetica; font-weight:lighter; line-height:21px; color: #000;">We have sent you tokenization amount of <strong>{{ $tokenization->accepted_amount }}</strong> shares at price <strong>${{ $tokenization->price }}</strong> for your investment in <strong>{{$tokenization->project->title}}</strong>.</span><br><br>
                                 <br>
                                 <span style="color:#000">Regards,</span><br>
                                 <span style="color:@if($siteColor=App\Helpers\SiteConfigurationHelper::getSiteThemeColors())#{{$siteColor->heading_color}}@else #282a73 @endif"><span style="font-size:16px"><span style="font-family:helvetica; font-weight:bold; line-height:21px">
