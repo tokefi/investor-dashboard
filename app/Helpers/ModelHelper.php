@@ -6,6 +6,7 @@ use App\InvestmentInvestor;
 use App\RedemptionRequest;
 use App\RedemptionStatus;
 use App\Price;
+use App\TokenizationRequest;
 use Carbon\Carbon;
 
 class ModelHelper
@@ -72,7 +73,11 @@ class ModelHelper
                 ->where('project_id', $item->project_id)
                 ->where('user_id', $item->user_id)
                 ->first();
-            $item->shares = $item->shares - $redemption->redemptions;
+                $tokenization = TokenizationRequest::select([\DB::raw("SUM(accepted_amount) as tokenizations")])
+                ->where('project_id', $item->project_id)
+                ->where('user_id', $item->user_id)
+                ->first();
+            $item->shares = $item->shares - $redemption->redemptions - $tokenization->tokenizations ;
             return $item;
         });
     }

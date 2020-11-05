@@ -2262,14 +2262,14 @@ class DashboardController extends Controller
         }
 
         if ($request->num_shares != $masterTokenization->request_amount) {
-            // Partial redemption
+            // Partial tokenization
             $masterTokenization->accepted_amount = $request->num_shares;
             $masterTokenization->price = $masterTokenization->project->share_per_unit_price;
             $masterTokenization->status_id = TokenizationStatus::STATUS_PARTIAL_ACCEPTANCE;
             $masterTokenization->comments = $request->comments;
             $masterTokenization->save();
 
-            // Create new redemption request with remaining amount
+            // Create new tokenization request with remaining amount
             TokenizationRequest::create([
                 'user_id' => $masterTokenization->user_id,
                 'project_id' => $masterTokenization->project_id,
@@ -2278,7 +2278,7 @@ class DashboardController extends Controller
             ]);
 
         } else {
-            // Whole amount redumption
+            // Whole amount tokenization
             $masterTokenization->accepted_amount = $masterTokenization->request_amount;
             $masterTokenization->price = $masterTokenization->project->share_per_unit_price;
             $masterTokenization->status_id = TokenizationStatus::STATUS_APPROVED;
@@ -2295,7 +2295,7 @@ class DashboardController extends Controller
             'rate' => $masterTokenization->price,
             'number_of_shares' => $masterTokenization->request_amount,
         ]);
-        //master child redemption accept
+        //master child tokenization accept
         if($masterTokenization->project->master_child){
             $master = TokenizationRequest::get()->last();
             $childTokenizations = TokenizationRequest::where('master_tokenization',$tokenizationId)->get();
@@ -2317,7 +2317,7 @@ class DashboardController extends Controller
                     $tokenization->comments = $request->comments;
                     $tokenization->save();
 
-            // Create new redemption request with remaining amount
+            // Create new tokenization request with remaining amount
                     TokenizationRequest::create([
                         'user_id' => $tokenization->user_id,
                         'project_id' => $tokenization->project_id,
@@ -2327,7 +2327,7 @@ class DashboardController extends Controller
                     ]);
 
                 } else {
-            // Whole amount redumption
+            // Whole amount tokenization
                     $tokenization->accepted_amount = $tokenization->request_amount;
                     $tokenization->price = $tokenization->project->share_per_unit_price;
                     $tokenization->status_id = TokenizationStatus::STATUS_APPROVED;
