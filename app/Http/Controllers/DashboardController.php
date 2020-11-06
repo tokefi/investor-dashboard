@@ -1751,6 +1751,15 @@ class DashboardController extends Controller
             $investing_joint->tfn = $request->tfn;
             $investing_joint->save();
         }
+    }else{
+        if($investment->investingJoint){
+            $investing_joint = $investment->investingJoint;
+            $investing_joint->update([
+                'joint_investor_first_name' => null,
+                'joint_investor_last_name' => null,
+                'investing_company' => null,
+                ]);
+        }
     }
 
     $updateUserDetails = $user->update([
