@@ -615,7 +615,7 @@
 										@endif</a>
 									</td>
 									<td>
-										<a href="{{route('user.view.application', [base64_encode($investment->id)])}}" target="_blank">
+										<a href="{{route('user.view.application', [base64_encode($shareInvestment->id)])}}" target="_blank">
 											Application form
 										</a>
 									</td>
