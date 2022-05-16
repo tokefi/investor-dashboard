@@ -1413,6 +1413,7 @@
 		// });
 
 		var shareRegistryTable = $('#shareRegistryTable').DataTable({
+			autoWidth: false,
 			"order": [[0, 'desc']],
 			"iDisplayLength": 50,
 			"aoColumnDefs": [
@@ -1432,6 +1433,7 @@
 			}
 		});
 		var investorsTable = $('#investorsTable').DataTable({
+			autoWidth: false,
 			"order": [3, 'desc'],
 			"iDisplayLength": 25,
 			"language": {
@@ -1440,6 +1442,7 @@
 			},
 		});
 		var transactionTable = $('#transactionTable').DataTable({
+			autoWidth: false,
 			"order": [[3, 'desc']],
 			"iDisplayLength": 25,
 			"language": {
@@ -1448,6 +1451,7 @@
 			},
 		});
 		var positionTable = $('#positionTable').DataTable({
+			autoWidth: false,
 			"iDisplayLength": 25,
 			"language": {
 				"search": "",
@@ -1455,6 +1459,7 @@
 			}
 		});
 		var eoiTable = $('#eoiTable').DataTable({
+			autoWidth: false,
 			"iDisplayLength": 25,
 			"language": {
 				"search": "",
@@ -1462,6 +1467,7 @@
 			},
 		});
 		var expression_of_interest_table = $('#expression_of_interest_table').DataTable({
+			autoWidth: false,
 			"iDisplayLength": 25,
 			"language": {
 				"search": "",
@@ -1469,6 +1475,7 @@
 			},
 		});
 		let newRegistryTable = $('#new_registry_table').DataTable({
+			autoWidth: false,
 			"iDisplayLength": 25,
 			"language": {
 				"search": "",
