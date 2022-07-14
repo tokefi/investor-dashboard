@@ -33,6 +33,15 @@ Edit Project | @parent
 								</div>
 							</div>
 							<div class="row">
+								<div class="form-group @if($errors->first('contract_address')){{'has-error'}} @endif">
+									{!!Form::label('contract_address', 'Application Contract Address', array('class'=>'col-sm-2 control-label'))!!}
+									<div class="col-sm-9">
+										{!! Form::text('contract_address', null, array('placeholder'=>'Application Contract Address', 'class'=>'form-control ', 'tabindex'=>'2')) !!}
+										{!! $errors->first('contract_address', '<small class="text-danger">:message</small>') !!}
+									</div>
+								</div>
+							</div>
+							<div class="row">
 								<div class="form-group @if($errors->first('description')){{'has-error'}} @endif">
 									{!!Form::label('description', 'Description', array('class'=>'col-sm-2 control-label'))!!}
 									<div class="col-sm-9">

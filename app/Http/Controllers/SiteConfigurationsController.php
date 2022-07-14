@@ -744,6 +744,7 @@ class SiteConfigurationsController extends Controller
 
         Project::where('id', $projectId)->update([
             'title' => $request->project_title_txt,
+            'contract_address' => $request->contract_address,
             'description' => $request->project_description_txt,
             'project_prospectus_text'=>$request->project_prospectus_txt,
             'edit_disclaimer'=>$request->add_disclaimer_txt,
@@ -828,6 +829,7 @@ class SiteConfigurationsController extends Controller
             }
             Project::where('id', $projectId)->update([
                 'title' => $request->project_title_txt,
+                'contract_address' => $request->contract_address,
                 'description' => $request->project_description_txt,
                 'button_label'=>$request->project_button_invest_txt,
                 'project_prospectus_text'=>$request->project_prospectus_txt,

@@ -120,12 +120,21 @@ Create New Project | @parent
 							</div>
 						</div>
 						<br>
+						<div class="row">
+							<div class=" @if($errors->first('contract_address')){{'has-error'}} @endif">
+								<div class="col-md-12">
+									<h4 class="first_color">Application Contract Address</h4>
+									{!! Form::text('contract_address', null, array('placeholder'=>'Contract Address', 'class'=>'form-control ', 'tabindex'=>'7')) !!}
+									{!! $errors->first('contract_address', '<small class="text-danger">:message</small>') !!}
+								</div>
+							</div>
+						</div>
 						<br>
 						<h4 class="first_color">Description</h4>
 						<div class="row">
 							<div class="form-group @if($errors->first('description')){{'has-error'}} @endif">
 								<div class=" col-sm-12">
-									{!! Form::textarea('description', null, array('placeholder'=>'Please describe the details of your Development', 'class'=>'form-control', 'tabindex'=>'7', 'rows'=>'5')) !!}
+									{!! Form::textarea('description', null, array('placeholder'=>'Please describe the details of your Development', 'class'=>'form-control', 'tabindex'=>'8', 'rows'=>'5')) !!}
 									{!! $errors->first('description', '<small class="text-danger">:message</small>') !!}
 								</div>
 							</div>
@@ -135,7 +144,7 @@ Create New Project | @parent
 						<div class="row">
 							<div class="form-group @if($errors->first('additional_info')){{'has-error'}} @endif">
 								<div class="col-sm-12">
-									{!! Form::textarea('additional_info', null, array('placeholder'=>'Please provide any additional information', 'class'=>'form-control', 'tabindex'=>'8', 'rows'=>'10')) !!}
+									{!! Form::textarea('additional_info', null, array('placeholder'=>'Please provide any additional information', 'class'=>'form-control', 'tabindex'=>'9', 'rows'=>'10')) !!}
 									{!! $errors->first('additional_info', '<small class="text-danger">:message</small>') !!}
 								</div>
 							</div>

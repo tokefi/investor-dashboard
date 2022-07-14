@@ -14,7 +14,7 @@ class Project extends Model
      * @var array
      */
 
-    protected $fillable = ['user_id','title', 'slug', 'description', 'type', 'additional_info', 'button_label', 'active', 'activated_on', 'start_date', 'completion_date', 'invite_only', 'developer_id','property_type', 'is_coming_soon', 'show_invest_now_button', 'show_download_pdf_page','project_site', 'project_rank', 'eb_project_rank', 'project_prospectus_text', 'share_vs_unit', 'md_vs_trustee', 'add_additional_form_content', 'project_thumbnail_text', 'additional_disclaimer', 'retail_vs_wholesale', 'eoi_button', 'custom_project_page_link', 'show_interested_to_buy_checkbox','share_per_unit_price','master_child','custodian', 'hide_project','payment_contract_address','payment_token','erc20_wallet_address','erc20_contract_address','erc20_project_token','payment_contract_address','payment_token'];
+    protected $fillable = ['user_id','title', 'slug', 'description', 'type', 'additional_info', 'button_label', 'active', 'activated_on', 'start_date', 'completion_date', 'invite_only', 'developer_id','property_type', 'is_coming_soon', 'show_invest_now_button', 'show_download_pdf_page','project_site', 'project_rank', 'eb_project_rank', 'project_prospectus_text', 'share_vs_unit', 'md_vs_trustee', 'add_additional_form_content', 'project_thumbnail_text', 'additional_disclaimer', 'retail_vs_wholesale', 'eoi_button', 'custom_project_page_link', 'show_interested_to_buy_checkbox','share_per_unit_price','master_child','custodian', 'hide_project','payment_contract_address','payment_token','erc20_wallet_address','erc20_contract_address','erc20_project_token','payment_contract_address','payment_token', 'contract_address'];
 
      /**
      * boolean fields

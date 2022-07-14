@@ -66,6 +66,7 @@ class ProjectsController extends Controller
         $projects = Project::all();
         $pledged_investments = InvestmentInvestor::all();
         return view('projects.index', compact('projects', 'pledged_investments','color'));
+        $user = Auth::user();
     }
 
     /**
@@ -232,6 +233,13 @@ class ProjectsController extends Controller
     public function show($id, $editFlag = false)
     {
         $user_id = Auth::user();
+        $user = Auth::user();
+        $idDoc = $user->idDoc;
+        $investing_as = 0;
+        if($idDoc = isset($idDoc))
+        {
+            $investing_as = $idDoc->investing_as;
+        }
         $project = Project::findOrFail($id);
         // $project_prog = $project->project_progs;
         $project_prog = ProjectProg::where('project_id', $id)->orderBy('updated_date', 'DESC')->get();
@@ -310,7 +318,7 @@ class ProjectsController extends Controller
                 if($editFlag){
                     return view('projects.showedit', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog'));
                 }
-                return view('projects.show', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog'));
+                return view('projects.show', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog', 'user', 'investing_as'));
             } else {
                 return redirect()->route('users.show', Auth::user())->withMessage('<p class="alert alert-warning text-center">This is an Invite Only Project, You do not have access to this project.<br>Please click <a href="/#projects">here</a> to see other projects.</p>');
             }
@@ -318,7 +326,7 @@ class ProjectsController extends Controller
         if($editFlag){
             return view('projects.showedit', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog'));
         }
-        return view('projects.show', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog'));
+        return view('projects.show', compact('siteConfiguration', 'project', 'pledged_amount', 'completed_percent', 'number_of_investors','color','project_prog', 'user', 'investing_as'));
     }
     /**
      * Display the specified resource.

@@ -265,15 +265,17 @@
 					<div class="col-md-4 project-invest-button-field" style="margin-top:0%;" id="express_interest">
 						<br>
 						@if($project->investment)
-						<a href="@if($project->eoi_button) {{route('projects.eoi', $project)}} @else {{route('projects.interest', $project)}} @endif" style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif  " @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b class="btn-hover-default-color font-color">
-							@if($project->is_funding_closed)
+						<a
+						href="https://app.tokefi.xyz/form?q=<?php echo urlencode($project['contract_address']);?>&firstName=<?php echo urlencode($user['first_name']);?>&lastName=<?php echo urlencode($user['last_name']);?>&phoneNumber=<?php echo urlencode($user['phone_number']);?>&email=<?php echo urlencode($user['email']);?>&line1=<?php echo urlencode($user['line_1']);?>&line2=<?php echo urlencode($user['line_2']);?>&city=<?php echo urlencode($user['city']);?>&state=<?php echo urlencode($user['state']);?>&postalCode=<?php echo urlencode($user['postal_code']);?>&country=<?php echo urlencode($user['country']);?>&investingAs=<?php echo urlencode($investing_as);?>"
+						 style="font-size:1.375em;letter-spacing:2px; border-radius: 50px !important;" class="btn btn-block btn-lg pulse-button text-center second_color_btn @if(!$project->show_invest_now_button || $project->is_funding_closed) disabled @endif  " @if(Auth::user() && Auth::user()->investments->contains($project))  @endif><b class="btn-hover-default-color font-color">
+							@if($project->is_funding_closed)	
 							Funding Closed
 							@elseif($project->button_label)
 							<?php echo $project->button_label; ?>
 							@else
-							Invest Now
+							Invest Now!
 							@endif
-						</b></a>
+						</b></a>	
 						<h6 ><small style="font-size:0.85em; " class="font-color">* Note that this is a No Obligation Expression of interest, you get to review the @if($project->project_prospectus_text!='') {{$project->project_prospectus_text}} @elseif ($siteConfiguration->prospectus_text!='') {{$siteConfiguration->prospectus_text}} @else Prospectus @endif before making any decisions</small></h6>
 						@else
 						<a href="{{route('projects.interest', [$project])}}" class="btn btn-block btn-primary" disabled>NO Investment Policy Yet</a>

@@ -122,6 +122,9 @@
 						<span class="text-left project-description-field font-color" style=" font-size:0.875em;">
 							<textarea type="text" name="project_description_txt" id="project_description_txt" class="form-control" >{{$project->description}}</textarea>
 						</span>
+						<h2 class="text-left second_color" style="font-size:2.625em; color:#fed405;">
+							<input type="text" placeholder="Contract Address" name="contract_address" class="form-control" value="{{$project->contract_address}}" style="font-size: 15px;">
+						</h2>
 						<br>
 					</div>
 					<div class="col-md-4 col-md-offset-4 col-sm-6 text-center project-close-date-field">
