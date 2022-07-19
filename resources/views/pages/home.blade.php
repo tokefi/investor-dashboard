@@ -766,7 +766,7 @@
 															<div class="project-thumbnail-txt"></div>
 														</form>
 														<a 
-														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if(Auth::guest()) href="{{route('users.login')}}"@endif
 														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
@@ -893,7 +893,7 @@
 															<div class="project-thumbnail-txt"></div>
 														</form>
 														<a 
-														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if(Auth::guest()) href="{{route('users.login')}}"@endif
 														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
@@ -1017,7 +1017,7 @@
 															<div class="project-thumbnail-txt"></div>
 														</form>
 														<a 
-														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if(Auth::guest()) href="{{route('users.login')}}"@endif
 														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
