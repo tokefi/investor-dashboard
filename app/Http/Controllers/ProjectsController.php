@@ -232,6 +232,9 @@ class ProjectsController extends Controller
      */
     public function show($id, $editFlag = false)
     {
+        if(!Auth::user()) {
+            return redirect()->to('/users/login');
+        }
         $user_id = Auth::user();
         $user = Auth::user();
         $idDoc = $user->idDoc;
@@ -240,6 +243,31 @@ class ProjectsController extends Controller
         {
             $investing_as = $idDoc->investing_as;
         }
+        // $project_prog = $project->project_progs;
+        // // $idDoc = false;
+        // // $idDoc = new stdClass();
+        // $idDoc = (object)[]; // (object)['a' => 'new object'];
+        // $idDoc->investing_as = 0;
+        // if($user) {
+        //  $idDoc = $user->idDoc;
+        // }
+        // $idDoc = json_decode(json_encode($idDoc),true);
+        // $json = json_encode($idDoc);
+        // $result = json_decode($json);
+        // $investing_as = $result['investing_as'];
+
+        // $investing_as = 0;
+        // $user = Auth::user();
+        // $idDoc = $user->idDoc;
+        // $investing_as = 0;
+        // if(
+        //     property_exists($idDoc, 'investing_as')
+        //     //is_object($idDoc) // && $idDoc = isset($idDoc)
+        // )
+        // {
+        // $investing_as = $idDoc->investing_as ? $idDoc->investing_as : 0;
+        // $idDoc =  json_decode($idDoc, true);
+        // }
         $project = Project::findOrFail($id);
         // $project_prog = $project->project_progs;
         $project_prog = ProjectProg::where('project_id', $id)->orderBy('updated_date', 'DESC')->get();

@@ -765,7 +765,9 @@
 															{{csrf_field()}}
 															<div class="project-thumbnail-txt"></div>
 														</form>
-														<a @if($project->is_coming_soon) @if(Auth::user())
+														<a 
+														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
 															href="javascript:void(0);"
@@ -833,7 +835,8 @@
 												<div class="edit-button-style edit-project-thumb-img" style="z-index: 10; position: inherit;" action="project-img-{{$project->id}}" projectid="{{$project->id}}"><a data-toggle="tooltip" title="Edit Project Image" data-placement="right"><i class="fa fa fa-edit fa-lg"></i></a></div>
 												@endif
 												@endif
-												<a @if($project->is_coming_soon) @if(Auth::user())
+												<a @if($project->is_coming_soon) 
+												@if(Auth::user())
 													@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 													@else
 													href="javascript:void(0);"
@@ -889,7 +892,9 @@
 															{{csrf_field()}}
 															<div class="project-thumbnail-txt"></div>
 														</form>
-														<a @if($project->is_coming_soon) @if(Auth::user())
+														<a 
+														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
 															href="javascript:void(0);"
@@ -1011,7 +1016,9 @@
 															{{csrf_field()}}
 															<div class="project-thumbnail-txt"></div>
 														</form>
-														<a @if($project->is_coming_soon) @if(Auth::user())
+														<a 
+														@if(Auth::guest()) href="{{route('users.login', [$project])}}"@endif
+														@if($project->is_coming_soon) @if(Auth::user())
 															@if(App\Helpers\SiteConfigurationHelper::isSiteAdmin()) href="{{route('projects.show', [$project])}}" @else href="javascript:void(0);"@endif
 															@else
 															href="javascript:void(0);"
